@@ -86,6 +86,9 @@ public class UnitController : MonoBehaviour {
 		rb.isKinematic = false;
 	}
 
+
+	// targeting
+
 	public void SetCurrentTarget(UnitController target, bool friendly) {
 		if (friendly) {
 			if (currentFriendlyTarget != null)
@@ -93,6 +96,7 @@ public class UnitController : MonoBehaviour {
 
 			currentFriendlyTarget = target;
 			target.ShowTargetStand(true, true);
+
 		}
 
 		else {
@@ -126,6 +130,23 @@ public class UnitController : MonoBehaviour {
 				cam.rect = CameraViewports.GetAllyViewport();
 			else
 				cam.rect = CameraViewports.GetEnemyViewport();
+		}
+	}
+
+	public UnitController GetTarget(bool friendly) {
+		if (friendly)
+			return this.currentFriendlyTarget;
+		else
+			return this.currentEnemyTarget;
+	}
+
+	public void DealsDamageTo(UnitController target, int damage) {
+		target.unitInfo.currentHealth -= damage;
+		
+		if (target.unitInfo.currentHealth < 0) {
+			Transform spawnLoc = GameController.GetRandomSpawnPoint();
+			target.transform.SetPositionAndRotation(spawnLoc.position, spawnLoc.rotation);
+			target.unitInfo.currentHealth = target.unitInfo.maxHealth;
 		}
 	}
 

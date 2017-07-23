@@ -734,11 +734,17 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4865847075183408, guid: 7ac39a7a09083744089ac6a880185495, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7ac39a7a09083744089ac6a880185495, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &130649419 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114041252439258722, guid: d341f9d3ff3f4b94781cf69d97c8246d,
+    type: 2}
+  m_PrefabInternal: {fileID: 192657719}
+  m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &186507422
 GameObject:
   m_ObjectHideFlags: 0
@@ -959,6 +965,10 @@ Prefab:
     - target: {fileID: 1494902698522170, guid: d341f9d3ff3f4b94781cf69d97c8246d, type: 2}
       propertyPath: m_Name
       value: AllyHealthbar2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287515123879760, guid: d341f9d3ff3f4b94781cf69d97c8246d, type: 2}
+      propertyPath: m_Name
+      value: AllySlider2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d341f9d3ff3f4b94781cf69d97c8246d, type: 2}
@@ -1453,6 +1463,10 @@ Prefab:
       propertyPath: m_Name
       value: AllyHealthbar3
       objectReference: {fileID: 0}
+    - target: {fileID: 1287515123879760, guid: d341f9d3ff3f4b94781cf69d97c8246d, type: 2}
+      propertyPath: m_Name
+      value: AllySlider3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d341f9d3ff3f4b94781cf69d97c8246d, type: 2}
   m_IsPrefabParent: 0
@@ -1528,7 +1542,7 @@ Transform:
   m_LocalScale: {x: 10, y: 1, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &356823007
 GameObject:
@@ -1967,6 +1981,10 @@ Prefab:
     - target: {fileID: 1494902698522170, guid: d341f9d3ff3f4b94781cf69d97c8246d, type: 2}
       propertyPath: m_Name
       value: AllyHealthbar4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287515123879760, guid: d341f9d3ff3f4b94781cf69d97c8246d, type: 2}
+      propertyPath: m_Name
+      value: AllySlider4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d341f9d3ff3f4b94781cf69d97c8246d, type: 2}
@@ -2464,6 +2482,12 @@ Transform:
   m_PrefabParentObject: {fileID: 4209793359281292, guid: 9abb86bc3b819c748866d523883fcd84,
     type: 2}
   m_PrefabInternal: {fileID: 670383901}
+--- !u!114 &685020449 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114711170253524320, guid: a56f4f497a0edfc429b238996bc5522d,
+    type: 2}
+  m_PrefabInternal: {fileID: 991357468}
+  m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &698071257
 GameObject:
   m_ObjectHideFlags: 0
@@ -2969,8 +2993,9 @@ MonoBehaviour:
   ownerPrefab: {fileID: 1149659272418656, guid: 1b64ea0b5354f754f9eea2c6ccbad286,
     type: 2}
   startingTeamForPlayer: 0
-  numberOfAllies: 3
+  numberOfAllies: 4
   numberOfEnemies: 4
+  player: {fileID: 1871845896}
 --- !u!4 &854639378
 Transform:
   m_ObjectHideFlags: 0
@@ -2982,7 +3007,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &889912923
 Prefab:
@@ -3473,6 +3498,10 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1162234178572348, guid: a56f4f497a0edfc429b238996bc5522d, type: 2}
+      propertyPath: m_Name
+      value: EnemySlider2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a56f4f497a0edfc429b238996bc5522d, type: 2}
   m_IsPrefabParent: 0
@@ -3681,6 +3710,10 @@ Prefab:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1162234178572348, guid: a56f4f497a0edfc429b238996bc5522d, type: 2}
+      propertyPath: m_Name
+      value: EnemySlider1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a56f4f497a0edfc429b238996bc5522d, type: 2}
   m_IsPrefabParent: 0
@@ -3689,6 +3722,12 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224230130956796716, guid: a56f4f497a0edfc429b238996bc5522d,
     type: 2}
   m_PrefabInternal: {fileID: 1048850505}
+--- !u!114 &1056553002 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114711170253524320, guid: a56f4f497a0edfc429b238996bc5522d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1582440020}
+  m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &1077503846
 Prefab:
   m_ObjectHideFlags: 0
@@ -3843,7 +3882,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 2}
@@ -4466,6 +4505,18 @@ Transform:
   m_PrefabParentObject: {fileID: 4590571276456504, guid: 5ecd8219303331b4680b199b2e63b1e5,
     type: 2}
   m_PrefabInternal: {fileID: 1175585814}
+--- !u!114 &1191457580 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114041252439258722, guid: d341f9d3ff3f4b94781cf69d97c8246d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1764379941}
+  m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!114 &1202001385 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114041252439258722, guid: d341f9d3ff3f4b94781cf69d97c8246d,
+    type: 2}
+  m_PrefabInternal: {fileID: 413702793}
+  m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &1202983775
 GameObject:
   m_ObjectHideFlags: 0
@@ -4889,7 +4940,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4865847075183408, guid: 7ac39a7a09083744089ac6a880185495, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1909854169670290, guid: 7ac39a7a09083744089ac6a880185495, type: 2}
       propertyPath: m_Name
@@ -4919,7 +4970,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1356544080}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.0000000037252899, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4940,7 +4991,7 @@ Transform:
   - {fileID: 2007384242}
   - {fileID: 1323282055}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1374023674
 GameObject:
@@ -5662,6 +5713,10 @@ Prefab:
       propertyPath: m_Name
       value: EnemyHealthbar3
       objectReference: {fileID: 0}
+    - target: {fileID: 1162234178572348, guid: a56f4f497a0edfc429b238996bc5522d, type: 2}
+      propertyPath: m_Name
+      value: EnemySlider3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a56f4f497a0edfc429b238996bc5522d, type: 2}
   m_IsPrefabParent: 0
@@ -5818,6 +5873,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1651381011}
+--- !u!114 &1682695214 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114711170253524320, guid: a56f4f497a0edfc429b238996bc5522d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1048850505}
+  m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &1687802741
 Prefab:
   m_ObjectHideFlags: 0
@@ -6177,12 +6238,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 078b094d1cec55741bfa7b3dc159fafe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allyTargetPanel: {fileID: 1886391747}
+  gameController: {fileID: 854639377}
+  player: {fileID: 1871845896}
   allyTargetHealthbarSlider: {fileID: 398324337}
-  allies: []
-  enemyTargetPanel: {fileID: 68014923}
   enemyTargetHealthbarSlider: {fileID: 1232050844}
-  enemies: []
+  allySliderList:
+  - {fileID: 1191457580}
+  - {fileID: 130649419}
+  - {fileID: 1888275425}
+  - {fileID: 1202001385}
+  enemySliderList:
+  - {fileID: 1682695214}
+  - {fileID: 685020449}
+  - {fileID: 1056553002}
+  - {fileID: 1853293632}
 --- !u!1001 &1764379941
 Prefab:
   m_ObjectHideFlags: 0
@@ -6290,6 +6359,14 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1494902698522170, guid: d341f9d3ff3f4b94781cf69d97c8246d, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287515123879760, guid: d341f9d3ff3f4b94781cf69d97c8246d, type: 2}
+      propertyPath: m_Name
+      value: AllySlider1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d341f9d3ff3f4b94781cf69d97c8246d, type: 2}
   m_IsPrefabParent: 0
@@ -6353,7 +6430,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1832509954
 Prefab:
@@ -6406,6 +6483,18 @@ Transform:
   m_PrefabParentObject: {fileID: 4590571276456504, guid: 5ecd8219303331b4680b199b2e63b1e5,
     type: 2}
   m_PrefabInternal: {fileID: 1832509954}
+--- !u!114 &1853293632 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114711170253524320, guid: a56f4f497a0edfc429b238996bc5522d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1886591777}
+  m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!114 &1871845896 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114718962549002890, guid: 1b64ea0b5354f754f9eea2c6ccbad286,
+    type: 2}
+  m_PrefabInternal: {fileID: 2100784378}
+  m_Script: {fileID: 11500000, guid: 47ce031595d7b5f4ba81fd55d936ccc2, type: 3}
 --- !u!1 &1886391745
 GameObject:
   m_ObjectHideFlags: 0
@@ -6610,6 +6699,10 @@ Prefab:
       propertyPath: m_Name
       value: EnemyHealthbar4
       objectReference: {fileID: 0}
+    - target: {fileID: 1162234178572348, guid: a56f4f497a0edfc429b238996bc5522d, type: 2}
+      propertyPath: m_Name
+      value: EnemySlider4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a56f4f497a0edfc429b238996bc5522d, type: 2}
   m_IsPrefabParent: 0
@@ -6623,6 +6716,12 @@ Transform:
   m_PrefabParentObject: {fileID: 4590571276456504, guid: 5ecd8219303331b4680b199b2e63b1e5,
     type: 2}
   m_PrefabInternal: {fileID: 1382051057}
+--- !u!114 &1888275425 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114041252439258722, guid: d341f9d3ff3f4b94781cf69d97c8246d,
+    type: 2}
+  m_PrefabInternal: {fileID: 342021514}
+  m_Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &1918269291
 Prefab:
   m_ObjectHideFlags: 0
@@ -6948,13 +7047,18 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4469434790349630, guid: 1b64ea0b5354f754f9eea2c6ccbad286, type: 2}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 114988684304174274, guid: 1b64ea0b5354f754f9eea2c6ccbad286,
         type: 2}
       propertyPath: sceneViewMask
       value: 
       objectReference: {fileID: 350735359}
+    - target: {fileID: 114347136507757114, guid: 1b64ea0b5354f754f9eea2c6ccbad286,
+        type: 2}
+      propertyPath: damage
+      value: 40
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1b64ea0b5354f754f9eea2c6ccbad286, type: 2}
   m_IsPrefabParent: 0
@@ -6998,7 +7102,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2132818606
 Prefab:

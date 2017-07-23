@@ -85,11 +85,13 @@ public class AttackRoutine : MonoBehaviour {
 	}
 
 	private void Fire() {
-		GameObject projectile = Instantiate(projectilePrefab,
+		GameObject projectileObject = Instantiate(projectilePrefab,
 			spawnerObject.transform.position,
 			spawnerObject.transform.rotation);
 		
-		projectile.GetComponent<ProjectileBehaviour>().SetTarget(target.body.gameObject);
+		ProjectileBehaviour projectile = projectileObject.GetComponent<ProjectileBehaviour>();
+		projectile.Initialize(caster, target);
+
 		//SetImmobile(0.3f);	
 	}
 

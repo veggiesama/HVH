@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileBehaviour : MonoBehaviour {
-	private GameObject target;
+	private UnitController target, attacker;
+	private GameObject targetObject;
+
 	private Rigidbody rb;
 	public float speed;
+	private AttackInfo attackInfo;
+
 
 	// Use this for initialization
 	void Start () {
@@ -17,13 +21,22 @@ public class ProjectileBehaviour : MonoBehaviour {
 		rb.velocity = transform.forward * speed;
 	}
 
-	public void SetTarget(GameObject target) {
-		this.target = target; 
+	public void Initialize(UnitController attacker, UnitController target) {
+		this.attacker = attacker;
+		this.target = target;
+		this.targetObject = target.body.gameObject;
+
+		// if enemy is deleted mid-shot, this might save us? who knows
+		//this.attackInfo = Instantiate<AttackInfo>(attacker.attackInfo);
 	}
-	
+
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.Equals(target))
+		Debug.Log("OnTriggerEnter!");
+		attacker.DealsDamageTo(target, attacker.attackInfo.damage);
+
+		//attackInfo.damage 
+		if (other.gameObject.Equals(targetObject))
 			Destroy(this.gameObject);
 	}
 }

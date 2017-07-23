@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UnitInfo : MonoBehaviour {
 	public float maxHealth = 100.0f;
-	[HideInInspector] public float currentHealth;
+	/*[HideInInspector]*/ public float currentHealth;
 
 	public float healthRegen = 1.0f;
 	public int armor = 0;

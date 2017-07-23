@@ -10,10 +10,18 @@ public class GameController : MonoBehaviour {
 	public int numberOfAllies;
 	public int numberOfEnemies;
 	
-	private GameObject player;
+	public OwnerController player;
 
-	private Dictionary<Allies, UnitController> allies;
-	private Dictionary<Enemies, UnitController> enemies;
+	public Dictionary<Allies, UnitController> allies;
+	public Dictionary<Enemies, UnitController> enemies;
+
+	public UnitController GetAlly(Allies position) {
+		return this.allies[position];
+	}
+
+	public UnitController GetEnemy(Enemies position) {
+		return this.enemies[position];
+	}
 
 	//private List<GameObject> allies;
 	//private GameObject[] enemies;
@@ -23,7 +31,12 @@ public class GameController : MonoBehaviour {
 		allies = new Dictionary<Allies, UnitController>();
 		enemies = new Dictionary<Enemies, UnitController>();
 
+		allies.Add(Allies.ALLY_1, player.unit);
 		foreach (Allies ally in System.Enum.GetValues(typeof(Allies)))  {
+			// skip the first iteration; that's the player's healthbar
+			if (ally == Allies.ALLY_1)
+				continue;
+
 			if (allies != null && allies.Count >= numberOfAllies)
 				break;
 
@@ -33,7 +46,8 @@ public class GameController : MonoBehaviour {
 
 			owner.MakeNPC();
 			owner.SetTeam(Teams.GOODGUYS);
-			owner.unit.body.GetComponent<Renderer>().material.color = Color.Lerp(Color.black, Color.cyan, Random.Range(0.2f, 1.0f));
+			owner.unit.body.GetComponent<Renderer>().material.color =
+				Color.Lerp(Color.black, Color.cyan, Random.Range(0.2f, 1.0f));
 		}
 
 		foreach (Enemies enemy in System.Enum.GetValues(typeof(Enemies)))  {
@@ -46,7 +60,8 @@ public class GameController : MonoBehaviour {
 
 			owner.MakeNPC();
 			owner.SetTeam(Teams.BADGUYS);
-			owner.unit.body.GetComponent<Renderer>().material.color = Color.Lerp(Color.black, Color.magenta, Random.Range(0.2f, 1.0f));;
+			owner.unit.body.GetComponent<Renderer>().material.color =
+				Color.Lerp(Color.black, Color.magenta, Random.Range(0.2f, 1.0f));;
 		}
 		/*
 		for (int i = 1; i <= numberOfAllies; i++) {
@@ -71,7 +86,7 @@ public class GameController : MonoBehaviour {
 		
 	}
 
-	private Transform GetRandomSpawnPoint() {
+	public static Transform GetRandomSpawnPoint() {
 		GameObject[] allSpawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
 		int rng = Random.Range(0, allSpawnPoints.Length);
 
