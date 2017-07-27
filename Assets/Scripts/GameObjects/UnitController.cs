@@ -16,9 +16,12 @@ public class UnitController : MonoBehaviour {
 	[HideInInspector] public AttackInfo attackInfo;
 	private Camera cam; 
 
+	public List<AbilityController> abilityControllerList;
+	private Dictionary<AbilitySlots, AbilityController> abilities;
+
 	private bool isJumping = false;
 	//private bool isImmobile = false;
-
+	private bool isDying = false;
 
 	// Use this for initialization
 	void Start () {
@@ -27,6 +30,7 @@ public class UnitController : MonoBehaviour {
 		unitInfo = GetComponent<UnitInfo>();
 		attackInfo = GetComponent<AttackInfo>();
 		cam = GetComponentInChildren<Camera>(true);
+		abilities = Util.DictionaryBindAbilitySlotsToAbilityControllers(abilityControllerList);
 
 		// sniper = 0.135s to turn 180 degrees, or 1350 degrees/sec
 		// NS = 0.188s to turn 180 degrees, or 960 degrees/sec
@@ -41,15 +45,16 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public bool IsReadyForNav() {
-		return agent != null &&
+		return !isJumping &&
+			agent != null &&
 			agent.isOnNavMesh;
 	}
 
 	public void MoveTo(Vector3 destination) {
 		if (IsReadyForNav())
 			agent.destination = destination;
-		else
-			Debug.Log("MoveTo called, but Agent not ready for navigation.");
+		//else
+			//Debug.Log("MoveTo called, but Agent not ready for navigation.");
 	}
 	
 	public Vector3 GetDestination() {
@@ -57,35 +62,40 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public void DoAbility(AbilitySlots ability) {
+
+		if (this.abilities.ContainsKey(ability))
+			this.abilities[ability].Cast();
+		else
+			print("No ability in slot.");
+
+		/*
 		if (ability == AbilitySlots.ABILITY_1) { // shoot
 			if (currentEnemyTarget != null) {
-				AttackRoutine atk = Instantiate(attackRoutinePrefab) as AttackRoutine;
+				AttackRoutine atk = (AttackRoutine) Instantiate(attackRoutinePrefab);
 				atk.transform.parent = this.transform;
 				atk.Initialize(this, currentEnemyTarget);
 			}
 		}
 		else if (ability == AbilitySlots.ABILITY_3) { // jump
 			StartCoroutine( Jump(1.95f) );
-		}
+		}*/
 	}
 
-	public IEnumerator Jump(float end) {
-		if (isJumping)
-			yield break;
+	// jumping
 
+	public void StartJump(float forceUpwards, float forceForwards) {
 		isJumping = true;
 		agent.enabled = false;
 		rb.isKinematic = false;
 		rb.AddForce(Vector3.up * 500.0f);
 		rb.AddForce(rb.transform.forward * 300.0f);
+	}
 
-		yield return new WaitForSeconds(end);
-
+	public void EndJump() {
 		isJumping = false;
 		agent.enabled = true;
 		rb.isKinematic = false;
 	}
-
 
 	// targeting
 
@@ -133,21 +143,47 @@ public class UnitController : MonoBehaviour {
 		}
 	}
 
-	public UnitController GetTarget(bool friendly) {
-		if (friendly)
-			return this.currentFriendlyTarget;
+	public UnitController GetTarget(AbilityTargetTeams targetTeam) {
+		if (targetTeam == AbilityTargetTeams.ALLY)
+			return currentFriendlyTarget;
+		else if (targetTeam == AbilityTargetTeams.ENEMY)
+			return currentEnemyTarget;
 		else
-			return this.currentEnemyTarget;
+			return null;
 	}
 
-	public void DealsDamageTo(UnitController target, int damage) {
-		target.unitInfo.currentHealth -= damage;
+	public void ReceivesDamage(int damage, UnitController target) {
+		this.unitInfo.currentHealth -= damage;
 		
-		if (target.unitInfo.currentHealth < 0) {
-			Transform spawnLoc = GameController.GetRandomSpawnPoint();
-			target.transform.SetPositionAndRotation(spawnLoc.position, spawnLoc.rotation);
-			target.unitInfo.currentHealth = target.unitInfo.maxHealth;
+		if (this.unitInfo.currentHealth < 0) {
+			StartCoroutine ( Die(target) );
 		}
+	}
+
+	public IEnumerator Die(UnitController killer) {
+		if (isDying)
+			yield break;
+		
+		//print("IsDying!");
+		isDying = true;
+		agent.enabled = false;
+		rb.isKinematic = false;
+		rb.constraints = RigidbodyConstraints.None;
+		rb.AddForce(Vector3.up * Random.Range(25.0f, 100.0f));
+		rb.AddForce((this.GetBodyPosition() - killer.GetBodyPosition()) * 50.0f);
+
+		yield return new WaitForSeconds(3.0f);
+
+		Transform spawnLoc = GameController.GetRandomSpawnPoint();
+		this.body.transform.SetPositionAndRotation(spawnLoc.position, spawnLoc.rotation);
+		this.unitInfo.currentHealth = this.unitInfo.maxHealth;
+
+		rb.constraints = RigidbodyConstraints.FreezeRotationX |
+			RigidbodyConstraints.FreezeRotationY |
+			RigidbodyConstraints.FreezeRotationZ;
+		rb.isKinematic = true;
+		agent.enabled = true;
+		isDying = false;
 	}
 
 	// Misc.
@@ -163,7 +199,6 @@ public class UnitController : MonoBehaviour {
 	public Vector3 GetBodyPosition() {
 		return body.transform.position;
 	}
-
 
 	/*
 	public void SetImmobile(float seconds) {

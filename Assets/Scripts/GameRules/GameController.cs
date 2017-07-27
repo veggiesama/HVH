@@ -92,4 +92,9 @@ public class GameController : MonoBehaviour {
 
 		return allSpawnPoints[rng].transform;
 	}
+
+	// TODO: update when MP becomes a thing
+	public static OwnerController GetLocalOwner() {
+		return GameObject.Find("Owner").GetComponent<OwnerController>();
+	}
 }

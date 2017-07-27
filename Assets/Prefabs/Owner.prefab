@@ -206,7 +206,6 @@ GameObject:
   - component: {fileID: 20993962431054968}
   - component: {fileID: 124549120071294482}
   - component: {fileID: 92876261433409216}
-  - component: {fileID: 114892756494868644}
   m_Layer: 0
   m_Name: Target Camera
   m_TagString: Untagged
@@ -716,7 +715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 100
-  damage: 5
+  damage: 40
   swingSpeed: 0.7
   backswingSpeed: 0.3
   projectilePrefab: {fileID: 1392497764110654, guid: c9e55555ef616bf46b4830720868c7b6,
@@ -782,17 +781,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b8f810968a52feb4f9d16dd472dccc33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114892756494868644
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1574802763122534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c396aba43e5a51346976f8de7e6e5324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114988684304174274

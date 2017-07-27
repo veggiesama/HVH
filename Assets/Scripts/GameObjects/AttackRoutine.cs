@@ -34,7 +34,7 @@ public class AttackRoutine : MonoBehaviour {
 
 		spawnerObject = caster.attackInfo.spawnerObject;
 		projectilePrefab = caster.attackInfo.projectilePrefab;
-		castbar = GameObject.Find("CastbarPanel").GetComponent<CastbarController>();
+		castbar = GameObject.Find("CastbarContainer").GetComponent<CastbarController>();
 
 		StartCoroutine( DoAttackLogic() );
 	}
@@ -87,8 +87,9 @@ public class AttackRoutine : MonoBehaviour {
 	private void Fire() {
 		GameObject projectileObject = Instantiate(projectilePrefab,
 			spawnerObject.transform.position,
-			spawnerObject.transform.rotation);
-		
+			spawnerObject.transform.rotation,
+			caster.transform);
+
 		ProjectileBehaviour projectile = projectileObject.GetComponent<ProjectileBehaviour>();
 		projectile.Initialize(caster, target);
 

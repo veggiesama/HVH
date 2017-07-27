@@ -13,6 +13,8 @@ public class UnitInfo : MonoBehaviour {
 	public float turnRate = 0.7f;
 	public int size = 1; // TODO: enum
 
+
+
 	// Use this for initialization
 	void Start () {
 		currentHealth = maxHealth;

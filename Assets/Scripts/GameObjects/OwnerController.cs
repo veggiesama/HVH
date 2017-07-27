@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 public class OwnerController : MonoBehaviour {
 	public UnitController unit;
@@ -47,7 +48,7 @@ public class OwnerController : MonoBehaviour {
 		}
 
 		if (Input.GetButtonDown("Ability 2")) {
-			//
+			this.unit.DoAbility(AbilitySlots.ABILITY_2);
 		}
 
 		if (Input.GetButtonDown("Ability 3")) {
@@ -55,15 +56,15 @@ public class OwnerController : MonoBehaviour {
 		}
 
 		if (Input.GetButtonDown("Ability 4")) {
-			//
+			this.unit.DoAbility(AbilitySlots.ABILITY_4);
 		}
 
 		if (Input.GetButtonDown("Ability 5")) {
-			//
+			this.unit.DoAbility(AbilitySlots.ABILITY_5);
 		}
 
 		if (Input.GetButtonDown("Ability 6")) {
-			//
+			this.unit.DoAbility(AbilitySlots.ABILITY_6);
 		}
 
 		if (Input.GetButtonDown("Item 1")) {
@@ -100,7 +101,21 @@ public class OwnerController : MonoBehaviour {
 	//	return !isNPC; // && !isImmobile;
 	//}
 	
+	public void UI_ClickedAbilityButton(AbilitySlots slot) {
+		//print("Owner null: " + (this == this.isActiveAndEnabled) + ", Unit null: " + (this.unit.isActiveAndEnabled == null) );
+		//AbilitySlots slot = EventSystem.current.currentSelectedGameObject.GetComponent<AbilityButtonInfo>().abilitySlot;
+		this.unit.DoAbility(slot);
+	}
+
+	// check if UI should block raycast into world
+	public bool DoesUIBlockClick() {
+		return EventSystem.current.IsPointerOverGameObject();
+	}
+
 	public void MoveToMouseCursor() {
+		if(DoesUIBlockClick())
+			return;
+
 		RaycastHit hit;
 		Ray ray = (Ray)Camera.main.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out hit, 100)) {
@@ -117,8 +132,12 @@ public class OwnerController : MonoBehaviour {
 	}
 
 	public void SelectAtMouseCursor() {
+		if(DoesUIBlockClick())
+			return;
+
 		RaycastHit hit;
 		Ray ray = (Ray)Camera.main.ScreenPointToRay(Input.mousePosition);
+
 		if (Physics.Raycast(ray, out hit, 100)) {
 			//Debug.DrawLine(Camera.main.transform.position, hit.point, Color.red, 1.0f);
 			GameObject targetObject = hit.transform.gameObject;

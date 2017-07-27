@@ -47,8 +47,8 @@ public class HealthController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		UnitController allyTarget = player.unit.GetTarget(true);
-		UnitController enemyTarget = player.unit.GetTarget(false);
+		UnitController allyTarget = player.unit.GetTarget(AbilityTargetTeams.ALLY);
+		UnitController enemyTarget = player.unit.GetTarget(AbilityTargetTeams.ENEMY);
 
 		if (allyTarget != null) {
 			allyTargetHealthbarSlider.gameObject.SetActive(true);
