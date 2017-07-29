@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FieldOfView : MonoBehaviour {
 
-	public GameObject sceneViewMask;
+	private GameObject sceneViewMask;
 
 	public float viewRadius;
 	[Range(0,360)]
@@ -26,7 +26,9 @@ public class FieldOfView : MonoBehaviour {
 	Mesh viewMesh;
 
 	void Start() {
-		sceneViewMask.SetActive(false);
+		sceneViewMask = GameController.GetSceneMask();
+		if (sceneViewMask != null)
+			sceneViewMask.SetActive(false);
 
 		viewMesh = new Mesh();
 		viewMesh.name = "View Mesh";

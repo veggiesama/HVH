@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class AbilityLeap : AbilityController {
 
-	public float duration;
 	public float forceUpwards;
 	public float forceForwards;
 
 	public override void Cast() {
+		base.Cast();
 		StartCoroutine( Jump() );
 	}
 
@@ -17,7 +17,7 @@ public class AbilityLeap : AbilityController {
 			yield break;
 
 		caster.StartJump(forceUpwards, forceForwards);
-		yield return new WaitForSeconds(duration);
+		yield return new WaitForSeconds(abilityInfo.duration);
 		caster.EndJump();
 	}
 

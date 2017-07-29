@@ -54,8 +54,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityInfo: {fileID: 0}
   caster: {fileID: 0}
+  allyTarget: {fileID: 0}
+  enemyTarget: {fileID: 0}
   unitInfo: {fileID: 0}
-  duration: 3
   forceUpwards: 500
   forceForwards: 300
 --- !u!114 &114703818252263042
@@ -77,4 +78,4 @@ MonoBehaviour:
   damage: 0
   cooldown: 10
   channelTime: 0
-  duration: 0
+  duration: 3

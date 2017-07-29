@@ -7,7 +7,6 @@ public class UnitController : MonoBehaviour {
 
 	public BodyController body;
 	public MeshRenderer targetFriendlyStand, targetEnemyStand;
-	public AttackRoutine attackRoutinePrefab;
 	private UnitController currentFriendlyTarget, currentEnemyTarget;
 
 	private NavMeshAgent agent;
@@ -17,20 +16,20 @@ public class UnitController : MonoBehaviour {
 	private Camera cam; 
 
 	public List<AbilityController> abilityControllerList;
-	private Dictionary<AbilitySlots, AbilityController> abilities;
+	public Dictionary<AbilitySlots, AbilityController> abilities;
 
 	private bool isJumping = false;
-	//private bool isImmobile = false;
+	private bool isImmobile = false;
 	private bool isDying = false;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		rb = body.GetComponent<Rigidbody>();
 		agent = body.GetComponent<NavMeshAgent>();
 		unitInfo = GetComponent<UnitInfo>();
 		attackInfo = GetComponent<AttackInfo>();
 		cam = GetComponentInChildren<Camera>(true);
-		abilities = Util.DictionaryBindAbilitySlotsToAbilityControllers(abilityControllerList);
+		abilities = Util.DictionaryBindAbilitySlotsToAbilityControllers(abilityControllerList, this.gameObject);
 
 		// sniper = 0.135s to turn 180 degrees, or 1350 degrees/sec
 		// NS = 0.188s to turn 180 degrees, or 960 degrees/sec
@@ -45,7 +44,7 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public bool IsReadyForNav() {
-		return !isJumping &&
+		return !isJumping && !isImmobile && !isDying &&
 			agent != null &&
 			agent.isOnNavMesh;
 	}
@@ -63,26 +62,19 @@ public class UnitController : MonoBehaviour {
 
 	public void DoAbility(AbilitySlots ability) {
 
-		if (this.abilities.ContainsKey(ability))
-			this.abilities[ability].Cast();
-		else
-			print("No ability in slot.");
-
-		/*
-		if (ability == AbilitySlots.ABILITY_1) { // shoot
-			if (currentEnemyTarget != null) {
-				AttackRoutine atk = (AttackRoutine) Instantiate(attackRoutinePrefab);
-				atk.transform.parent = this.transform;
-				atk.Initialize(this, currentEnemyTarget);
+		if (this.abilities.ContainsKey(ability)) {
+			if (this.abilities[ability].cooldownTimeRemaining <= 0) {
+				this.abilities[ability].Cast();
+			}
+			else {
+				print("Ability on cooldown.");
 			}
 		}
-		else if (ability == AbilitySlots.ABILITY_3) { // jump
-			StartCoroutine( Jump(1.95f) );
-		}*/
+		else
+			print("No ability in slot.");
 	}
 
 	// jumping
-
 	public void StartJump(float forceUpwards, float forceForwards) {
 		isJumping = true;
 		agent.enabled = false;
@@ -98,7 +90,6 @@ public class UnitController : MonoBehaviour {
 	}
 
 	// targeting
-
 	public void SetCurrentTarget(UnitController target, bool friendly) {
 		if (friendly) {
 			if (currentFriendlyTarget != null)
@@ -152,11 +143,12 @@ public class UnitController : MonoBehaviour {
 			return null;
 	}
 
-	public void ReceivesDamage(int damage, UnitController target) {
+	// damage
+	public void ReceivesDamage(float damage, UnitController attacker) {
 		this.unitInfo.currentHealth -= damage;
 		
 		if (this.unitInfo.currentHealth < 0) {
-			StartCoroutine ( Die(target) );
+			StartCoroutine ( Die(attacker) );
 		}
 	}
 
@@ -200,18 +192,14 @@ public class UnitController : MonoBehaviour {
 		return body.transform.position;
 	}
 
-	/*
 	public void SetImmobile(float seconds) {
 		isImmobile = true;
 		agent.velocity = Vector3.zero;
 		agent.destination = agent.transform.position;
-		StartCoroutine( DisableImmobile(seconds) );
+		Invoke("DisableImmobile", seconds);
 	}
 
-	private IEnumerator DisableImmobile(float seconds) {
-		yield return new WaitForSeconds(seconds);
+	public void DisableImmobile() {
 		isImmobile = false;
 	}
-	*/
-
 }

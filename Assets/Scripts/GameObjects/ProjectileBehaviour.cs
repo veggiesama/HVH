@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ProjectileBehaviour : MonoBehaviour {
+	protected AbilityController ability;
 	protected UnitController target, attacker;
 	protected GameObject targetObject;
 	protected Vector3 targetLocation;
@@ -10,6 +11,8 @@ public abstract class ProjectileBehaviour : MonoBehaviour {
 	protected Rigidbody rb;
 	protected AttackInfo attackInfo;
 	protected bool hasCollided = false;
+
+	protected float projectileSpeed, timeToHitTarget, immobileDuration;
 
 	// Use this for initialization
 	protected virtual void Start () {
@@ -20,16 +23,20 @@ public abstract class ProjectileBehaviour : MonoBehaviour {
 	protected abstract void FixedUpdate();
 
 	// target unit
-	public virtual void Initialize(UnitController attacker, UnitController target) {
-		this.attacker = attacker;
+	public virtual void Initialize(AbilityController ability, UnitController target) {
+		this.ability = ability;
+		this.attacker = ability.caster;
 		this.target = target;
 		this.targetObject = target.body.gameObject;
+		this.projectileSpeed =  ((AbilityFire)ability).projectileSpeed;
 	}
 
 	// target location
-	public virtual void Initialize(UnitController attacker, Vector3 targetLocation) {
-		this.attacker = attacker;
+	public virtual void Initialize(AbilityController ability, Vector3 targetLocation) {
+		this.ability = ability;
+		this.attacker = ability.caster;
 		this.targetLocation = targetLocation;
+		this.timeToHitTarget = ((AbilityNet)ability).timeToHitTarget;
 	}
 
 	public void DestroySelf() {

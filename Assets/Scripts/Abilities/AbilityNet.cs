@@ -5,8 +5,10 @@ using UnityEngine;
 public class AbilityNet : AbilityController {
 
 	public GameObject projectilePrefab;
+	public float timeToHitTarget;
 
 	public override void Cast() {
+		base.Cast();
 		RaycastHit hit;
 		Ray ray = (Ray)Camera.main.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out hit, 100)) {
@@ -16,7 +18,7 @@ public class AbilityNet : AbilityController {
 				caster.transform);
 
 			GrenadeBehaviour projectile = projectileObject.GetComponent<GrenadeBehaviour>();
-			projectile.Initialize(caster, hit.point);
+			projectile.Initialize(this, hit.point);
 		}
 	}
 

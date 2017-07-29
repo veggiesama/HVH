@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour {
 
 	public GameObject ownerPrefab;
+	public GameObject sceneViewMask;
 	public Teams startingTeamForPlayer;
 
 	public int numberOfAllies;
@@ -21,6 +22,10 @@ public class GameController : MonoBehaviour {
 
 	public UnitController GetEnemy(Enemies position) {
 		return this.enemies[position];
+	}
+
+	public static GameObject GetSceneMask() {
+		return GameObject.Find("SceneViewMask");
 	}
 
 	//private List<GameObject> allies;
@@ -63,21 +68,6 @@ public class GameController : MonoBehaviour {
 			owner.unit.body.GetComponent<Renderer>().material.color =
 				Color.Lerp(Color.black, Color.magenta, Random.Range(0.2f, 1.0f));;
 		}
-		/*
-		for (int i = 1; i <= numberOfAllies; i++) {
-			Transform spawnLoc = GetRandomSpawnPoint();
-			allies.Add()
-			allies.Add( Instantiate(ownerPrefab, spawnLoc.position, spawnLoc.rotation) );
-			OwnerController owner = allies[i].GetComponent<OwnerController>();
-			owner.MakeNPC();
-		}*/
-		/*
-		for (int i = 1; i <= numberOfEnemies; i++) {
-			Transform spawnLoc = GetRandomSpawnPoint();
-			enemies[i] = (GameObject) Instantiate(ownerPrefab, spawnLoc.position, spawnLoc.rotation);
-
-		}*/
-
 
 	}
 	
@@ -95,6 +85,6 @@ public class GameController : MonoBehaviour {
 
 	// TODO: update when MP becomes a thing
 	public static OwnerController GetLocalOwner() {
-		return GameObject.Find("Owner").GetComponent<OwnerController>();
+		return GameObject.FindGameObjectWithTag("Player").GetComponent<OwnerController>();
 	}
 }

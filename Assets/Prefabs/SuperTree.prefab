@@ -21,12 +21,12 @@ GameObject:
   - component: {fileID: 4708634034009550}
   - component: {fileID: 33605934801974972}
   - component: {fileID: 23199598260956680}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: Trunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 8
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1909854169670290
 GameObject:
@@ -37,12 +37,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4865847075183408}
   - component: {fileID: 65956107759518068}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: SuperTree
   m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4708634034009550
 Transform:

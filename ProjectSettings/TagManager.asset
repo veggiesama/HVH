@@ -19,9 +19,9 @@ TagManager:
   - 
   - 
   - VisionBlockers
-  - Targets
-  - LightMask
-  - Invisible
+  - PhysicsNoclip
+  - 
+  - 
   - 
   - 
   - 

@@ -7,7 +7,7 @@ using UnityEngine;
 public static class Util {
 
 	// takes a public list of AbilityControllers and stitches them to enumerated AbilitySlots (ABILITY_1, etc.)
-	public static Dictionary<AbilitySlots, AbilityController> DictionaryBindAbilitySlotsToAbilityControllers(List<AbilityController> abilityControllerList) {
+	public static Dictionary<AbilitySlots, AbilityController> DictionaryBindAbilitySlotsToAbilityControllers(List<AbilityController> abilityControllerList, GameObject parent) {
 		
 		Dictionary<AbilitySlots, AbilityController> abilityDictionary =
 			new Dictionary<AbilitySlots, AbilityController>();

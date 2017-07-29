@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class BulletBehaviour : ProjectileBehaviour {
 
-	public float projectileSpeed;
-
 	//public override void Initialize(UnitController attacker, UnitController target) {
 	//	base.Initialize(attacker, target);
 	//}

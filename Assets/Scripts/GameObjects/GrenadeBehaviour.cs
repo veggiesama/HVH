@@ -3,28 +3,56 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GrenadeBehaviour : ProjectileBehaviour {
-
-	public GameObject bulletSpawner;
-	public float timeToHitTarget;
+	public float rotationalSpeed;
+	private Transform childTransform;
 
 	protected override void Start() {
 		base.Start();
 
-		Vector3 throwSpeed = calculateBestThrowSpeed(
+		childTransform = transform.GetChild(0);
+
+		Vector3 throwVector = calculateBestThrowSpeed(
 			attacker.GetBodyPosition(),
 			targetLocation,
 			timeToHitTarget);
 
-		rb.AddForce(throwSpeed, ForceMode.VelocityChange);
+		rb.AddForce(throwVector, ForceMode.VelocityChange);
+
+		// prevent early triggering
+		GetComponent<BoxCollider>().enabled = false;
+		Invoke("EnableCollider", timeToHitTarget * 0.75f);
+	}
+
+	private void EnableCollider() {
+		GetComponent<BoxCollider>().enabled = true;
 	}
 
 	protected override void FixedUpdate () {
+		childTransform.Rotate(Vector3.up, rotationalSpeed * Time.deltaTime);
 	}
-	
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if (!other.gameObject.CompareTag("Body"))
+			return; //Debug.Log("Not a body.");
+
+		if (attacker.body.gameObject == other.gameObject)
+			return; //Debug.Log("Clipping self.");
+
+		if (hasCollided)
+			return; //Debug.Log("Double-tap!");
+
+		hasCollided = true;
+		target = other.gameObject.GetComponentInParent<UnitController>();
+		target.SetImmobile(ability.abilityInfo.duration);
+
+		Destroy(this.gameObject);
+	}
+
 	// http://answers.unity3d.com/questions/248788/calculating-ball-trajectory-in-full-3d-world.html
-	private Vector3 calculateBestThrowSpeed(Vector3 origin, Vector3 target, float timeToTarget) {
+	private Vector3 calculateBestThrowSpeed(Vector3 origin, Vector3 destination, float timeToTarget) {
 		// calculate vectors
-		Vector3 toTarget = target - origin;
+		Vector3 toTarget = destination - origin;
 		Vector3 toTargetXZ = toTarget;
 		toTargetXZ.y = 0;
      
