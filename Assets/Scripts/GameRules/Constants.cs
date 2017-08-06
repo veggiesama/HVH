@@ -36,7 +36,7 @@ public enum AbilityTargetTeams {
 };
 
 public enum DamageTypes {
-	NORMAL, MAGICAL, PURE
+	NONE, NORMAL, MAGICAL, PURE
 };
 
 

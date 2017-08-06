@@ -19,7 +19,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4373126973992444}
-  - component: {fileID: 114312616452203306}
   - component: {fileID: 114405826879952676}
   m_Layer: 0
   m_Name: Fire
@@ -41,26 +40,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114312616452203306
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1638288187977624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7483ff206e8debd4ca852a6f254eadb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetType: 1
-  targetTeam: 2
-  level: 1
-  damageType: 0
-  castTime: 0
-  damage: 0
-  cooldown: 1
-  channelTime: 0
-  duration: 0
 --- !u!114 &114405826879952676
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -72,9 +51,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da66a099a7eb794281b9c62ee780369, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityInfo: {fileID: 0}
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}
   unitInfo: {fileID: 0}
+  targetLocation: {x: 0, y: 0, z: 0}
+  cooldownTimeRemaining: 0
+  targetType: 1
+  targetTeam: 2
+  damageType: 1
+  damage: 0
+  cooldown: 1
+  castRange: 10
+  castTime: 0
+  duration: 0
   projectileSpeed: 30

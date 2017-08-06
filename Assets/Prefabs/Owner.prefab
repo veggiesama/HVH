@@ -172,23 +172,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1481540874382858
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4134568443413088}
-  - component: {fileID: 114161049234657070}
-  - component: {fileID: 114070223695838068}
-  m_Layer: 0
-  m_Name: Leap
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1524426759739312
 GameObject:
   m_ObjectHideFlags: 1
@@ -262,66 +245,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!1 &1827670486208098
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4356063884518500}
-  - component: {fileID: 114147529654532174}
-  - component: {fileID: 114326436705183218}
-  m_Layer: 0
-  m_Name: Fire
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1861525272646752
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4278855464871990}
-  - component: {fileID: 114575854227287702}
-  - component: {fileID: 114101026132357556}
-  m_Layer: 0
-  m_Name: Throw net
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4134568443413088
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1481540874382858}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4848193700286382}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4278855464871990
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1861525272646752}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4848193700286382}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4308561889161012
 Transform:
   m_ObjectHideFlags: 1
@@ -347,19 +270,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4445215210010622}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4356063884518500
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1827670486208098}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4848193700286382}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4445215210010622
 Transform:
@@ -497,10 +407,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4356063884518500}
-  - {fileID: 4134568443413088}
-  - {fileID: 4278855464871990}
+  m_Children: []
   m_Father: {fileID: 4561490922741848}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -825,103 +732,6 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1574802763122534}
   m_Enabled: 1
---- !u!114 &114070223695838068
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1481540874382858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d962c0b77b1e8d54f9056027b0853f3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  abilityInfo: {fileID: 0}
-  caster: {fileID: 0}
-  allyTarget: {fileID: 0}
-  enemyTarget: {fileID: 0}
-  unitInfo: {fileID: 0}
-  cooldownTimeRemaining: 0
-  forceUpwards: 500
-  forceForwards: 300
---- !u!114 &114101026132357556
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1861525272646752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e350fd9839cf096408d6fc634893f922, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  abilityInfo: {fileID: 0}
-  caster: {fileID: 0}
-  allyTarget: {fileID: 0}
-  enemyTarget: {fileID: 0}
-  unitInfo: {fileID: 0}
-  cooldownTimeRemaining: 0
-  projectilePrefab: {fileID: 1614867261836170, guid: fcb164ba73590584a93f4ba723df8fa0,
-    type: 2}
-  timeToHitTarget: 2
---- !u!114 &114147529654532174
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1827670486208098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7483ff206e8debd4ca852a6f254eadb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetType: 1
-  targetTeam: 2
-  level: 1
-  damageType: 0
-  castTime: 0
-  damage: 0
-  cooldown: 1
-  channelTime: 0
-  duration: 0
---- !u!114 &114161049234657070
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1481540874382858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7483ff206e8debd4ca852a6f254eadb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetType: 0
-  targetTeam: 0
-  level: 1
-  damageType: 0
-  castTime: 0
-  damage: 0
-  cooldown: 10
-  channelTime: 0
-  duration: 3
---- !u!114 &114326436705183218
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1827670486208098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1da66a099a7eb794281b9c62ee780369, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  abilityInfo: {fileID: 0}
-  caster: {fileID: 0}
-  allyTarget: {fileID: 0}
-  enemyTarget: {fileID: 0}
-  unitInfo: {fileID: 0}
-  cooldownTimeRemaining: 0
-  projectileSpeed: 30
 --- !u!114 &114347136507757114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -975,39 +785,7 @@ MonoBehaviour:
   targetEnemyStand: {fileID: 23491646578006760}
   unitInfo: {fileID: 0}
   attackInfo: {fileID: 0}
-  abilityControllerList:
-  - {fileID: 114326436705183218}
-  - {fileID: 114101026132357556}
-  - {fileID: 114070223695838068}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
---- !u!114 &114575854227287702
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1861525272646752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7483ff206e8debd4ca852a6f254eadb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetType: 1
-  targetTeam: 2
-  level: 1
-  damageType: 0
-  castTime: 0
-  damage: 0
-  cooldown: 6
-  channelTime: 0
-  duration: 3
+  abilityPrefabList: []
 --- !u!114 &114718962549002890
 MonoBehaviour:
   m_ObjectHideFlags: 1

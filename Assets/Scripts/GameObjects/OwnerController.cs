@@ -144,13 +144,13 @@ public class OwnerController : MonoBehaviour {
 			if (targetObject.tag == "Body") {
 				UnitController targetUnit = targetObject.GetComponent<BodyController>().GetUnitController();
 				if (this.unit.GetTeam() == targetUnit.GetTeam())	 
-					this.unit.SetCurrentTarget(targetUnit, true); // friendly
+					this.unit.SetCurrentTarget(targetUnit, AbilityTargetTeams.ALLY);
 				else										 
-					this.unit.SetCurrentTarget(targetUnit, false); // enemy
+					this.unit.SetCurrentTarget(targetUnit, AbilityTargetTeams.ENEMY);
 			}
 			// no target unselects enemies, retains friends
 			else {
-				this.unit.SetCurrentTarget(null, false);
+				this.unit.SetCurrentTarget(null, AbilityTargetTeams.ENEMY);
 			}
 		}	
 	}

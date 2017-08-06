@@ -26,11 +26,8 @@ public class AbilityFire : AbilityController {
 	}
 
 	// you must initialize after instantiation
-	public override void Cast() {
-		base.Cast();
-
-		if (enemyTarget == null)
-			return;
+	public override bool Cast() {
+		if (!base.Cast()) return false;
 		
 		waitedForSwing = true;
 		waitedForBackswing = true;
@@ -43,6 +40,7 @@ public class AbilityFire : AbilityController {
 		projectilePrefab = caster.attackInfo.projectilePrefab;
 
 		StartCoroutine( DoAttackLogic() );
+		return true;
 	}
 
 	private IEnumerator DoAttackLogic() {

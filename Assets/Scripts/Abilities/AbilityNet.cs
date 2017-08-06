@@ -7,19 +7,18 @@ public class AbilityNet : AbilityController {
 	public GameObject projectilePrefab;
 	public float timeToHitTarget;
 
-	public override void Cast() {
-		base.Cast();
-		RaycastHit hit;
-		Ray ray = (Ray)Camera.main.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out hit, 100)) {
-			GameObject projectileObject = Instantiate(projectilePrefab,
-				caster.attackInfo.spawnerObject.transform.position,
-				caster.attackInfo.spawnerObject.transform.rotation,
-				caster.transform);
+	public override bool Cast() {
+		if (!base.Cast()) return false;
 
-			GrenadeBehaviour projectile = projectileObject.GetComponent<GrenadeBehaviour>();
-			projectile.Initialize(this, hit.point);
-		}
+		GameObject projectileObject = Instantiate(projectilePrefab,
+			caster.attackInfo.spawnerObject.transform.position,
+			caster.attackInfo.spawnerObject.transform.rotation,
+			caster.transform);
+
+		GrenadeBehaviour projectile = projectileObject.GetComponent<GrenadeBehaviour>();
+		projectile.Initialize(this, targetLocation);
+
+		return true;
 	}
 
 }
