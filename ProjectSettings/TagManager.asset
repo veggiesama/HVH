@@ -20,6 +20,14 @@ TagManager:
   - 
   - VisionBlockers
   - PhysicsNoclip
+  - PhysicsIgnoreTrees
+  - 
+  - 
+  - 
+  - 
+  - 
+  - Terrain
+  - Tree
   - 
   - 
   - 
@@ -31,16 +39,8 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - HideFromGameCameras
+  - HideFromGame
+  - HideFromEditor
   - UnselectableInEditor
   m_SortingLayers:
   - name: Default

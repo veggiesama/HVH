@@ -8,9 +8,6 @@ public class GameController : MonoBehaviour {
 	public GameObject sceneViewMask;
 	public Teams startingTeamForPlayer;
 
-	public int numberOfAllies;
-	public int numberOfEnemies;
-	
 	public OwnerController player;
 
 	public Dictionary<Allies, UnitController> allies;
@@ -33,6 +30,17 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		GameObject[] editorOnlyObjects = GameObject.FindGameObjectsWithTag("EditorOnly");
+		foreach(GameObject obj in editorOnlyObjects) {
+			foreach (MeshRenderer mesh in obj.GetComponentsInChildren<MeshRenderer>()) {
+				mesh.enabled = false;
+			}
+		}
+
+		if (Constants.SpawnNPCs) SpawnNPCs();
+	}
+	
+	private void SpawnNPCs() {
 		allies = new Dictionary<Allies, UnitController>();
 		enemies = new Dictionary<Enemies, UnitController>();
 
@@ -42,9 +50,6 @@ public class GameController : MonoBehaviour {
 			if (ally == Allies.ALLY_1)
 				continue;
 
-			if (allies != null && allies.Count >= numberOfAllies)
-				break;
-
 			Transform spawnLoc = GetRandomSpawnPoint();
 			OwnerController owner = Instantiate(ownerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<OwnerController>();
 			allies.Add(ally, owner.unit);
@@ -52,13 +57,10 @@ public class GameController : MonoBehaviour {
 			owner.MakeNPC();
 			owner.SetTeam(Teams.GOODGUYS);
 			owner.unit.body.GetComponent<Renderer>().material.color =
-				Color.Lerp(Color.black, Color.cyan, Random.Range(0.2f, 1.0f));
+				Color.Lerp(Color.blue, Color.cyan, Random.Range(0.2f, 1.0f));
 		}
 
 		foreach (Enemies enemy in System.Enum.GetValues(typeof(Enemies)))  {
-			if (enemies != null && enemies.Count >= numberOfEnemies)
-				break;
-
 			Transform spawnLoc = GetRandomSpawnPoint();
 			OwnerController owner = Instantiate(ownerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<OwnerController>();
 			enemies.Add(enemy, owner.unit);
@@ -66,11 +68,10 @@ public class GameController : MonoBehaviour {
 			owner.MakeNPC();
 			owner.SetTeam(Teams.BADGUYS);
 			owner.unit.body.GetComponent<Renderer>().material.color =
-				Color.Lerp(Color.black, Color.magenta, Random.Range(0.2f, 1.0f));;
+				Color.Lerp(Color.red, Color.magenta, Random.Range(0.2f, 1.0f));;
 		}
-
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		

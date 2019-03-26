@@ -44,4 +44,10 @@ public static class Util {
 	public static bool IsNullVector(Vector3 vec) {
 		return vec.Equals(Vector3.zero);
 	}
+
+	public static Vector3 GetRandomVectorAround(UnitController unit, float distance) {
+		Vector2 rng = Random.insideUnitCircle;
+		return unit.GetBodyPosition() + new Vector3(rng.x, 0, rng.y) * distance;
+	}
+
 }

@@ -9,7 +9,8 @@ public class AbilityButtonInfo : MonoBehaviour {
 	private string originalText;
 	private Text textComponent;
 	private Button button;
-	private AbilityController ability;
+	private Ability ability;
+	private UnitController unit;
 
 	private void Start()
 	{
@@ -20,11 +21,16 @@ public class AbilityButtonInfo : MonoBehaviour {
 
 		textComponent = GetComponentInChildren<Text>();
 		originalText = textComponent.text;
+		unit = GameController.GetLocalOwner().unit;
 
-		if (GameController.GetLocalOwner().unit.abilities.ContainsKey(abilitySlot))
-			ability = GameController.GetLocalOwner().unit.abilities[abilitySlot];
-		else
+		if (unit.HasAbilityInSlot(abilitySlot)) {
+			ability = unit.GetAbilityInSlot(abilitySlot);
+			button.enabled = true;
+		}
+		else {
 			ability = null;
+			button.enabled = false;
+		}
 	}
 
 	// TODO: doesn't need to update every frame
@@ -32,7 +38,7 @@ public class AbilityButtonInfo : MonoBehaviour {
 	{
 		if (ability == null) return;
 
-		float cdRemaining = ability.cooldownTimeRemaining;
+		float cdRemaining = ability.GetCooldown();
 		if (cdRemaining > 0) {
 			textComponent.text = string.Format("{0:0.0}", cdRemaining);
 			button.interactable = false;

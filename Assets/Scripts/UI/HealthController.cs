@@ -47,6 +47,8 @@ public class HealthController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if (!Constants.SpawnNPCs) return;
+
 		UnitController allyTarget = player.unit.GetTarget(AbilityTargetTeams.ALLY);
 		UnitController enemyTarget = player.unit.GetTarget(AbilityTargetTeams.ENEMY);
 
