@@ -19,7 +19,7 @@ public class Net : Ability, IProjectileAbility {
 		castRange = 30f;
 		castTime = 0f;
 		duration = 3f;
-		bypassOrderQueue = false;
+		doNotCancelOrderQueue = false;
 
 		projectilePrefab = null;
 		projectileSpeed = 0f;

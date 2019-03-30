@@ -23,7 +23,7 @@ public class Leap : Ability {
 		castRange = 0f;
 		castTime = 0f;
 		duration = 1.1f;
-		bypassOrderQueue = true;
+		doNotCancelOrderQueue = true;
 
 		projectilePrefab = null;
 		projectileSpeed = 0;

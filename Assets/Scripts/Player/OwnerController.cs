@@ -8,11 +8,11 @@ public class OwnerController : MonoBehaviour {
 	public UnitController unit;
 	public bool isNPC = false; // inspector
 	public Teams team;
-	public Camera cam;
+	private MouseTargeter mouseTargeter;
 
 	// Use this for initialization
 	void Start () {
-		cam = GetComponentInChildren<Camera>();
+		mouseTargeter = GetComponent<MouseTargeter>();
 	}
 
 	// Update is called once per frame. Use for input. Physics unstable.
@@ -21,18 +21,25 @@ public class OwnerController : MonoBehaviour {
 
 		// always register selections, even while disabled
 		if (Input.GetButtonDown("L-Click")) {
-			SelectAtMouseCursor();
+
+			if(!mouseTargeter.IsTargetingEnabled()) 
+				SelectAtMouseCursor();
+			else
+				unit.DoAbility(mouseTargeter.storedSlot);
 		}
 
 		//if (!CanIssueCommands())
 		//	return;
 
 		if (Input.GetButtonDown("R-Click")) {
-			MoveToMouseCursor();
+			if(!mouseTargeter.IsTargetingEnabled()) 
+				MoveToMouseCursor();
+			else
+				SetMouseTargeting(false);
 		}
 
 		if (Input.GetButtonDown("Attack")) {
-			this.unit.DoAbility(AbilitySlots.ATTACK);
+			unit.DoAbility(AbilitySlots.ATTACK);
 		}
 
 		if (Input.GetButtonDown("MoveAttack")) {
@@ -44,31 +51,31 @@ public class OwnerController : MonoBehaviour {
 		}
 
 		if (Input.GetButtonDown("Stop")) {
-			this.unit.Stop();
+			unit.Stop();
 		}
 
 		if (Input.GetButtonDown("Ability 1")) {
-			this.unit.DoAbility(AbilitySlots.ABILITY_1);
+			unit.DoAbility(AbilitySlots.ABILITY_1);
 		}
 
 		if (Input.GetButtonDown("Ability 2")) {
-			this.unit.DoAbility(AbilitySlots.ABILITY_2);
+			unit.DoAbility(AbilitySlots.ABILITY_2);
 		}
 
 		if (Input.GetButtonDown("Ability 3")) {
-			this.unit.DoAbility(AbilitySlots.ABILITY_3);
+			unit.DoAbility(AbilitySlots.ABILITY_3);
 		}
 
 		if (Input.GetButtonDown("Ability 4")) {
-			this.unit.DoAbility(AbilitySlots.ABILITY_4);
+			unit.DoAbility(AbilitySlots.ABILITY_4);
 		}
 
 		if (Input.GetButtonDown("Ability 5")) {
-			this.unit.DoAbility(AbilitySlots.ABILITY_5);
+			unit.DoAbility(AbilitySlots.ABILITY_5);
 		}
 
 		if (Input.GetButtonDown("Ability 6")) {
-			this.unit.DoAbility(AbilitySlots.ABILITY_6);
+			unit.DoAbility(AbilitySlots.ABILITY_6);
 		}
 
 		if (Input.GetButtonDown("Item 1")) {
@@ -102,7 +109,7 @@ public class OwnerController : MonoBehaviour {
 	public void UI_ClickedAbilityButton(AbilitySlots slot) {
 		//print("Owner null: " + (this == this.isActiveAndEnabled) + ", Unit null: " + (this.unit.isActiveAndEnabled == null) );
 		//AbilitySlots slot = EventSystem.current.currentSelectedGameObject.GetComponent<AbilityButtonInfo>().abilitySlot;
-		this.unit.DoAbility(slot);
+		unit.DoAbility(slot);
 	}
 
 	// check if UI should block raycast into world
@@ -122,7 +129,7 @@ public class OwnerController : MonoBehaviour {
 	public void SelectAtMouseCursor() {
 		if(DoesUIBlockClick()) return;
 
-		UnitController targetUnit = GetUnitAtMouseLocation();
+		UnitController targetUnit = mouseTargeter.GetUnitAtMouseLocation();
 		if (targetUnit != null) {
 			if (unit.GetTeam() == targetUnit.GetTeam())	 
 				unit.SetCurrentTarget(targetUnit, AbilityTargetTeams.ALLY);
@@ -132,50 +139,33 @@ public class OwnerController : MonoBehaviour {
 		
 		// no target unselects enemies, retains friends
 		else { 
-			this.unit.SetCurrentTarget(null, AbilityTargetTeams.ENEMY);
+			unit.SetCurrentTarget(null, AbilityTargetTeams.ENEMY);
 		}
-	}
-
-	public UnitController GetUnitAtMouseLocation() {
-		int layerMask = ~((int)LayerMasks.TERRAIN | (int)LayerMasks.TREE); // cast at everything except terrain + tree
-		Ray ray = (Ray)cam.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out RaycastHit hit, Constants.RaycastLength, layerMask)) {
-			GameObject targetObject = hit.transform.gameObject;
-			if (targetObject.tag == "Body") {
-				UnitController targetUnit = targetObject.GetComponent<BodyController>().GetUnitController();
-				return targetUnit;
-			}
-		}
-
-		return null;
-	}
-
-	public Vector3 GetMouseLocationToGround() {
-		if (isNPC) return GetNPCLocationToGround();
-
-		int layerMask = (int)LayerMasks.TERRAIN; //LayerMask.GetMask("Terrain"); // 1 << (int)Layers.GROUND;
-		Ray ray = (Ray)cam.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out RaycastHit hit, Constants.RaycastLength, layerMask)) {
-			return hit.point;
-		}
-
-		return Util.GetNullVector();
 	}
 
 	public Teams GetTeam() {
-		return this.team;
+		return team;
 	} 
 
 	public void SetTeam(Teams team) {
 		this.team = team;
 	}
 
-	private Vector3 GetNPCLocationToGround() {
-		RaycastHit hit;
-		Vector3 rngOrigin = Util.GetRandomVectorAround(unit, 10.0f);
-		int layerMask = LayerMask.GetMask("Terrain");
-		Physics.Raycast(rngOrigin, Vector3.down, out hit, 100f, layerMask);
-		return hit.point;
+	public Tree GetTreeAtMouseLocation() {
+		return mouseTargeter.GetTreeAtMouseLocation();
+	}
+
+	public Vector3 GetMouseLocationToGround() {
+		if (isNPC) return mouseTargeter.GetNPCLocationToGround();
+		return mouseTargeter.GetMouseLocationToGround();
+	}
+
+	public bool IsMouseTargeting() {
+		return mouseTargeter.IsTargetingEnabled();
+	}
+
+	public void SetMouseTargeting(bool enable, Ability ability = null, AbilitySlots slot = AbilitySlots.NONE) {
+		mouseTargeter.SetMouseTargeting(enable, ability, slot);
 	}
 
 	public void MakeNPC() {
@@ -190,8 +180,9 @@ public class OwnerController : MonoBehaviour {
 	}
 
 	private void PewPewNPCs() {
-		this.unit.DoAbility(AbilitySlots.ATTACK);
+		unit.DoAbility(AbilitySlots.ATTACK);
 	}
+
 }
 
 /// <summary>

@@ -18,12 +18,15 @@ public class BodyController : MonoBehaviour {
 		
 	}
 
-	public UnitController GetUnitController() {
-		return transform.parent.GetComponent<UnitController>();
+	private void FixedUpdate() {
+		if (unit.IsMouseLooking()) {
+			Vector3 mousePosition = unit.GetOwnerController().GetMouseLocationToGround();
+			unit.body.FixedUpdate_ForceTurn(mousePosition);
+		}
 	}
 
-	public Vector3 GetBodyPosition() {
-		return transform.position;
+	public UnitController GetUnitController() {
+		return transform.parent.GetComponent<UnitController>();
 	}
 
 	// performances
@@ -36,7 +39,7 @@ public class BodyController : MonoBehaviour {
 
 		rb.AddForce(Vector3.up * upwardMagnitude);
 		if (!Util.IsNullVector(killedFromDirection))
-			rb.AddForce((GetBodyPosition() - killedFromDirection).normalized * impactMagnitude);
+			rb.AddForce((transform.position - killedFromDirection).normalized * impactMagnitude);
 	}
 
 	public void PerformLaunch(Vector3 velocityVector) {
@@ -70,14 +73,22 @@ public class BodyController : MonoBehaviour {
 	}
 
 	public void FixedUpdate_ForceTurn(Vector3 targetPosition) {
-		float turnDampening = 1f;
-		Quaternion wantedRotation = Quaternion.LookRotation(targetPosition - GetBodyPosition());
+		float turnDampening = 0.5f;
+
+		targetPosition.y = transform.position.y; // adjust to same plane
+		Quaternion wantedRotation = Quaternion.LookRotation(targetPosition - transform.position);
 		float step = unit.unitInfo.turnRate * Time.fixedDeltaTime * turnDampening;
 		unit.body.transform.rotation = Quaternion.RotateTowards(unit.body.transform.rotation, wantedRotation, step);
 									// Quaternion.Lerp(unit.body.transform.rotation, wantedRotation, percentageComplete);
 	}
 
+	public bool IsFacing(Vector3 targetPosition) {
+		if (targetPosition.Equals(default)) return true;
 
+		targetPosition.y = transform.position.y; // adjust to same plane
+		Quaternion wantedRotation = Quaternion.LookRotation(targetPosition - transform.position);
+		return Quaternion.Angle(transform.rotation, wantedRotation) < Constants.FrontAngle;
+	}
 
 	// THIS IS ALL SHIT
 

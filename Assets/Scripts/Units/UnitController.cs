@@ -6,7 +6,6 @@ using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public class UnitController : MonoBehaviour {
-
 	[HideInInspector] public BodyController body;
 	[HideInInspector] public NavMeshAgent agent;
 	[HideInInspector] public UnitInfo unitInfo;
@@ -93,36 +92,62 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public void DoAbility(AbilitySlots slot) {
-		if (IsOrderRestricted()) return;
-		if (HasAbilityInSlot(slot)) {
-			Ability ability = GetAbilityInSlot(slot);
-			Order castOrder;
-			switch (ability.targetType)
-			{
-				case AbilityTargetTypes.POINT:
-					castOrder = ScriptableObject.CreateInstance<CastPosition>();
-					castOrder.Initialize(gameObject, ability, GetOwnerController().GetMouseLocationToGround() );
-					break;
-				default:
-					castOrder = ScriptableObject.CreateInstance<CastNoTarget>();
-					castOrder.Initialize(gameObject, ability);
-					break;
-			}
-
-			orderQueue.Add(castOrder, ability.bypassOrderQueue);
-
-			//CastResults castResults = this.abilities[ability].Cast();
-			//if (castResults == CastResults.FAILURE_NOT_FACING_TARGET) {
-			//	//Debug.Log("Not facing target. Trying again.");
-			//	isTryingToDoAbility = true;
-			//	StartCoroutine( TryDoAbility(ability) );
-			//}
-			//else if (castResults == CastResults.SUCCESS) {
-			//	//Debug.Log("Successful cast!");
-			//}
+		if (IsOrderRestricted()) {
+			Debug.Log("Order restricted.");
+			return;
 		}
-		else
-			print("No ability in slot.");
+		if (!HasAbilityInSlot(slot)) {
+			Debug.Log("No ability in slot.");
+			return;
+		}
+
+		Ability ability = GetAbilityInSlot(slot);
+		OwnerController owner = GetOwnerController();
+
+		if (!ability.IsCooldownReady()) {
+			Debug.Log("Cooldown not ready.");
+			return;
+		}
+
+		if (!ability.quickCast && !owner.IsMouseTargeting()) {
+			owner.SetMouseTargeting(true, ability, slot);
+			return;
+		}
+		if (owner.IsMouseTargeting())
+			owner.SetMouseTargeting(false);
+
+		Order castOrder;
+		switch (ability.targetType)
+		{
+			case AbilityTargetTypes.AREA:
+				castOrder = ScriptableObject.CreateInstance<CastPosition>();
+				((CastPosition)castOrder).Initialize(gameObject, ability, owner.GetMouseLocationToGround());
+				break;
+			case AbilityTargetTypes.POINT:
+				castOrder = ScriptableObject.CreateInstance<CastPosition>();
+				((CastPosition)castOrder).Initialize(gameObject, ability, owner.GetMouseLocationToGround());
+				break;
+			case AbilityTargetTypes.UNIT:
+				castOrder = ScriptableObject.CreateInstance<CastTarget>();
+				((CastTarget)castOrder).Initialize(gameObject, ability, currentFriendlyTarget, currentEnemyTarget);
+				break;
+			case AbilityTargetTypes.TREE:
+				Tree tree = owner.GetTreeAtMouseLocation();
+				if (tree == null) {
+					Debug.Log("Invalid target (not a tree).");
+					return;
+				}
+				castOrder = ScriptableObject.CreateInstance<CastTree>();
+				((CastTree)castOrder).Initialize(gameObject, ability, tree);
+				break;
+			default:
+				castOrder = ScriptableObject.CreateInstance<CastNoTarget>();
+				((CastNoTarget)castOrder).Initialize(gameObject, ability);
+				break;
+		}
+		 
+		orderQueue.Add(castOrder, ability.doNotCancelOrderQueue);
+
 	}
 
 	// targeting
@@ -178,6 +203,7 @@ public class UnitController : MonoBehaviour {
 			case AbilityTargetTeams.ENEMY:
 				return currentEnemyTarget;
 			default:
+				Debug.Log("Get both targets not supported yet");
 				return null;
 		}
 	}
@@ -212,10 +238,7 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public bool IsFacing(Vector3 targetPosition) {
-		float angle = Constants.FrontAngle;
-		targetPosition.y = body.transform.position.y; // adjust to same plane
-		Quaternion wantedRotation = Quaternion.LookRotation(targetPosition - body.transform.position);
-		return Quaternion.Angle(body.transform.rotation, wantedRotation) < angle;
+		return body.IsFacing(targetPosition);
 	}
 
 	public void TurnToFace(Vector3 targetPosition) {
@@ -257,6 +280,9 @@ public class UnitController : MonoBehaviour {
 		agent.updateRotation = true;
 
 		if (!agent.isOnNavMesh) {
+		//	agent.FindClosestEdge(out NavMeshHit hit);
+		//	Debug.DrawLine(hit.position, Vector3.up, Color.cyan, 3.0f, false);
+
 			ApplyStatusEffect(onDeathStatusEffect, null, null);
 		}
 	}
@@ -314,5 +340,15 @@ public class UnitController : MonoBehaviour {
 
 	public Ability GetAbilityInSlot(AbilitySlots slot) {
 		return abilityManager.GetAbilityInSlot(slot);
+	}
+
+	private bool lockFacingToMouse = false;
+
+	public void SetMouseLook(bool enable) {
+		lockFacingToMouse = enable;
+	}
+
+	public bool IsMouseLooking() {
+		return lockFacingToMouse;
 	}
 }

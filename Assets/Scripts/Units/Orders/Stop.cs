@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Stop : Order {
 	public void Initialize(GameObject obj) {
-		base.Initialize(obj, null, default);
+		base.Initialize(obj);
 		this.orderType = OrderTypes.STOP;
 	}
 

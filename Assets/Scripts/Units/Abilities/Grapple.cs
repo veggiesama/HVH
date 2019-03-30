@@ -16,12 +16,12 @@ public class Grapple : Ability {
 	public LineRenderer ropePrefab;
 	private LineRenderer rope;
 	private float ropeLength = 0f;
-	private float ropeLengthLast = 999f;
+	private float ropeLengthLast = 0f;
 
 	public override void Reset()
 	{
 		abilityName = "Grapple";
-		targetType = AbilityTargetTypes.POINT;
+		targetType = AbilityTargetTypes.TREE;
 		targetTeam = AbilityTargetTeams.NONE;
 		damageType = DamageTypes.NONE;
 		damage = 0;
@@ -29,7 +29,7 @@ public class Grapple : Ability {
 		castRange = 100f;
 		castTime = 0f;
 		duration = 0f;
-		bypassOrderQueue = false;
+		doNotCancelOrderQueue = false;
 
 		projectilePrefab = null;
 		projectileSpeed = 5f;
@@ -50,25 +50,31 @@ public class Grapple : Ability {
 		CastResults baseCastResults = base.Cast(castOrder);
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 		if (caster.IsAirborn()) return CastResults.FAILURE_ALREADY_AIRBORN;
-		
-		Vector3 targetLocationAdjusted = castOrder.targetLocation;
-		targetLocationAdjusted.y = caster.GetBodyPosition().y;
-		Vector3 direction = targetLocationAdjusted - caster.GetBodyPosition(); // to - from = direction
 
-		int layerMask = LayerMask.GetMask("Tree");
-		if (Physics.Raycast(caster.GetBodyPosition(), direction, out RaycastHit hit, castRange, layerMask)) {
-			Debug.DrawLine(caster.GetBodyPosition(), direction * castRange, Color.green, 2.0f);
-			Vector3 fromAnchor = hit.collider.GetComponent<TreeAnchor>().GetAnchorPoint();
-			Debug.DrawLine(caster.GetBodyPosition(), fromAnchor, Color.yellow, 2.0f);
-
-			BeginLaunch(fromAnchor);
-
-		}
-		else {
-			Debug.DrawRay(caster.GetBodyPosition(), direction * castRange, Color.red, 2.0f);
-		}
+		Vector3 fromAnchor = castOrder.tree.GetAnchorPoint();
+		Debug.DrawLine(caster.GetBodyPosition(), fromAnchor, Color.yellow, 2.0f);
+		BeginLaunch(fromAnchor);
 
 		return CastResults.SUCCESS;
+	}
+
+	public override void Update() {
+		base.Update();
+
+		//Debug.Log("Current safety timer: " + currentSafetyTimer);
+
+		if (!isLaunching) return;
+
+		if (rope != null) {
+			UpdateRope();
+		}
+
+		if (currentSafetyTimer > 0) {
+			currentSafetyTimer -= Time.deltaTime;
+			if (currentSafetyTimer <= 0) {
+				EndLaunch();
+			}
+		}
 	}
 
 	private void BeginLaunch(Vector3 anchor) {
@@ -96,6 +102,11 @@ public class Grapple : Ability {
 
 		Vector3 debugVecEnd = caster.GetBodyPosition();
 		Debug.Log("Launch distance: " + Util.GetDistanceIn2D(debugVecStart, debugVecEnd));
+		
+		// cleanup
+		currentSafetyTimer = 0;
+		ropeLengthLast = 0;
+		DestroyRope();
 	}
 
 	// allows body to hilariously bounce
@@ -103,7 +114,7 @@ public class Grapple : Ability {
 		if (Util.GetDistanceIn2D(debugVecStart, caster.GetBodyPosition()) < 1.0f) return;
 
 		float magnitude = col.relativeVelocity.magnitude;
-		Debug.Log("MAGNITUDE:" + magnitude);
+		//Debug.Log("MAGNITUDE:" + magnitude);
 		currentSafetyTimer = safetyPostCollisionTimer; // if body lands too softly after bounce, end launch through Update()
 
 		if (col.gameObject.layer == LayerMask.NameToLayer("Terrain") &&
@@ -113,28 +124,20 @@ public class Grapple : Ability {
 		}
 	}
 
-	public override void Update() {
-		base.Update();
+	private void DestroyRope() {
+		if (rope != null) Destroy(rope);
+		ropeLengthLast = 0f;
+	}
 
-		if (!isLaunching) return;
+	private void UpdateRope() {
+		rope.SetPosition(0, caster.attackInfo.spawnerObject.transform.position);
+		ropeLength = Util.GetDistanceIn2D(rope.GetPosition(0), rope.GetPosition(1));
 
-		if (rope != null) {
-			rope.SetPosition(0, caster.attackInfo.spawnerObject.transform.position);
-			ropeLength = Util.GetDistanceIn2D(rope.GetPosition(0), rope.GetPosition(1));
-
-			if (ropeLength <= ropeLengthLast) // rope is shrinking
-				ropeLengthLast = ropeLength;
-			else { // rope snaps
-				Destroy(rope);
-				ropeLengthLast = 999f;
-			}
-		}
-
-		if (currentSafetyTimer > 0) {
-			currentSafetyTimer -= Time.deltaTime;
-			if (currentSafetyTimer <= 0) {
-				EndLaunch();
-			}
+		if (ropeLengthLast == 0 || ropeLength <= ropeLengthLast) // rope is shrinking
+			ropeLengthLast = ropeLength;
+		else { // rope snaps
+			DestroyRope();
+			castOrder.tree.DestroyThisTree();
 		}
 	}
 }

@@ -45,10 +45,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 1
-  m_Height: 12
+  m_Radius: 1.3
+  m_Height: 6
   m_Direction: 1
-  m_Center: {x: 0, y: 3, z: 0}
+  m_Center: {x: 0, y: 3.5, z: 0}
 --- !u!208 &208538138349080336
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -78,6 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilityAnchor: {fileID: 6769245026658641500}
+  meshRenderer: {fileID: 23821768215988734}
 --- !u!1 &1520426402600778
 GameObject:
   m_ObjectHideFlags: 0

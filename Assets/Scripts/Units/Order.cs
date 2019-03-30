@@ -8,16 +8,21 @@ public abstract class Order : ScriptableObject {
 
 	protected OrderQueue queue;
 	protected UnitController unit;
-	protected UnitController target;
+	protected UnitController allyTarget;
+	protected UnitController enemyTarget;
 	public Vector3 targetLocation;
 	protected Ability ability;
+	public Tree tree;
 
-	public virtual void Initialize(GameObject obj, Ability ability = null, Vector3 targetLocation = default) {
+	public virtual void Initialize(GameObject obj, Ability ability = null, Vector3 targetLocation = default,
+	  UnitController allyTarget = null, UnitController enemyTarget = null, Tree tree = null) {
 		this.queue = obj.GetComponentInChildren<OrderQueue>();
 		this.unit = obj.GetComponent<UnitController>();
-		
-		if (ability != null) this.ability = ability;
-		if (targetLocation != default) this.targetLocation = targetLocation;
+		this.ability = ability;
+		this.targetLocation = targetLocation;
+		this.allyTarget = allyTarget;
+		this.enemyTarget = enemyTarget;
+		this.tree = tree;
 	}
 
 	public abstract void Update();

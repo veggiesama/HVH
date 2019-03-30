@@ -17,6 +17,7 @@ public class MoveToPosition : Order {
 
 		if (unit.IsReadyForNav()) {
 			unit.agent.destination = targetLocation;
+			return;
 		}
 	}
 

@@ -29,7 +29,8 @@ public enum LayerMasks {
 public enum AbilitySlots {
 	ATTACK,
 	ABILITY_1, ABILITY_2, ABILITY_3, ABILITY_4, ABILITY_5, ABILITY_6,
-	ITEM_1, ITEM_2, ITEM_3, ITEM_4, ITEM_5, ITEM_6
+	ITEM_1, ITEM_2, ITEM_3, ITEM_4, ITEM_5, ITEM_6,
+	NONE
 };
 
 
@@ -49,7 +50,7 @@ public enum Enemies {
 
 // abilities
 public enum AbilityTargetTypes {
-	NONE, UNIT, POINT, PASSIVE, CHANNELLED, SHAPE
+	NONE, UNIT, POINT, TREE, AREA
 };
 
 public enum AbilityTargetTeams {
@@ -62,7 +63,7 @@ public enum DamageTypes {
 
 public enum OrderTypes {
 	NONE, MOVE_TO_POSITION,	MOVE_TO_TARGET, CAST_POSITION, CAST_TARGET, CAST_NO_TARGET, STOP,
-	TURN_TO_FACE
+	TURN_TO_FACE, CAST_TREE
 }
 
 public enum StatusEffectTypes {

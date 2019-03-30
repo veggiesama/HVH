@@ -16,7 +16,7 @@ public class Swipe : Ability, IProjectileAbility {
 		castRange = 0f;
 		castTime = 0f;
 		duration = 0.5f;
-		bypassOrderQueue = true;
+		doNotCancelOrderQueue = true;
 
 		projectilePrefab = null;
 		projectileSpeed = 0f;
@@ -48,12 +48,17 @@ public class Swipe : Ability, IProjectileAbility {
 	public override void FixedUpdate() {
 		base.FixedUpdate();
 		if (this.durationRemaining > 0 && caster.HasStatusEffect(StatusEffectTypes.AIRBORN)) {
-			Vector3 mousePosition = caster.GetOwnerController().GetMouseLocationToGround();
-			caster.body.FixedUpdate_ForceTurn(mousePosition);
-			/*Quaternion wantedRotation = Quaternion.LookRotation(caster.GetOwnerController().GetMouseLocationToGround() - caster.GetBodyPosition());
-			float step = caster.unitInfo.turnRate * Time.fixedDeltaTime;
-			caster.body.transform.rotation = Quaternion.RotateTowards(caster.body.transform.rotation, wantedRotation, step);*/
+			caster.SetMouseLook(true);
 		}
+		else {
+			caster.SetMouseLook(false);
+		}
+	}
+
+	protected override void OnDurationEnd()
+	{
+		base.OnDurationEnd();
+		caster.SetMouseLook(false);
 	}
 
 	public bool OnHitEnemy(UnitController unit)

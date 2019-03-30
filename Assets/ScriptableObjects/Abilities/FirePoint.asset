@@ -18,7 +18,6 @@ MonoBehaviour:
   enemyTarget: {fileID: 0}
   unitInfo: {fileID: 0}
   abilityManager: {fileID: 0}
-  cooldownTimeRemaining: 0
   targetType: 2
   targetTeam: 0
   damageType: 1
@@ -27,7 +26,8 @@ MonoBehaviour:
   castRange: 100
   castTime: 0
   duration: 0
-  bypassOrderQueue: 1
+  quickCast: 1
+  doNotCancelOrderQueue: 1
   projectilePrefab: {fileID: 1392497764110654, guid: c9e55555ef616bf46b4830720868c7b6,
     type: 3}
   projectileSpeed: 5

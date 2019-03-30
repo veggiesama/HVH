@@ -26,7 +26,8 @@ MonoBehaviour:
   castRange: 0
   castTime: 0
   duration: 1.1
-  bypassOrderQueue: 1
+  quickCast: 1
+  doNotCancelOrderQueue: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0
   projectileTimeAlive: 0
