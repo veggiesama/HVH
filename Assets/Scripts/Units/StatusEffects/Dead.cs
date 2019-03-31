@@ -21,10 +21,7 @@ public class Dead : StatusEffect {
 	public override void Apply()
 	{
 		base.Apply();
-
-		//print("IsDying!");
-		//agent.enabled = false;
-
+		unit.CancelAllOrders();
 		unit.SetOrderRestricted(true);
 		unit.DetachFromNav();
 		unit.EnableNav(false);

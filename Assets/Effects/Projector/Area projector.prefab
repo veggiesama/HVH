@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 131443334917019958}
   m_Layer: 0
   m_Name: Area projector
-  m_TagString: Untagged
+  m_TagString: PlayerOnly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &131443334909646804
 Transform:
   m_ObjectHideFlags: 0
@@ -41,7 +41,7 @@ Projector:
   m_Enabled: 1
   serializedVersion: 2
   m_NearClipPlane: 0.1
-  m_FarClipPlane: 10
+  m_FarClipPlane: 20
   m_FieldOfView: 30
   m_AspectRatio: 1
   m_Orthographic: 1

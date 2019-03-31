@@ -16,13 +16,14 @@ public class MoveToPosition : Order {
 		}
 
 		if (unit.IsReadyForNav()) {
-			unit.agent.destination = targetLocation;
+			unit.agent.SetDestination(targetLocation);
 			return;
 		}
 	}
 
 	public override void Update()
 	{
+
 		if (!unit.agent.pathPending && !unit.agent.hasPath) {
 			End();
 		}
@@ -30,8 +31,7 @@ public class MoveToPosition : Order {
 
 	public override void FixedUpdate() {}
 
-	public override void Suspend()
-	{
+	public override void Suspend(OrderTypes suspendedBy) {
 	}
 
 	public override void End() {

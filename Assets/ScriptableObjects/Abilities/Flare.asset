@@ -24,7 +24,7 @@ MonoBehaviour:
   damage: 0
   cooldown: 1
   castRange: 30
-  castTime: 0
+  castTime: 1
   duration: 6
   aoeRadius: 4
   quickCast: 0
@@ -33,3 +33,9 @@ MonoBehaviour:
   projectileSpeed: 0
   projectileTimeAlive: 0
   grenadeTimeToHitTarget: 0
+  aoeGeneratorPrefab: {fileID: 2635110162860501582, guid: 048b36c36f0f2ab428f5cef029e931c4,
+    type: 3}
+  reappliesEvery: 3
+  statusEffects:
+  - {fileID: 11400000, guid: 05fe61df5a953a048818baed427f37bf, type: 2}
+  - {fileID: 11400000, guid: a2c024c32d1d9ad48b525321e3c76286, type: 2}

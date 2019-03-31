@@ -64,13 +64,14 @@ public abstract class ProjectileBehaviour : MonoBehaviour {
 		if (proj == null) return; // not a projectile ability
 
 		// collided with tree
-		if (other.gameObject.CompareTag("Tree")) {
-			TreeHandler handler = other.GetComponentInParent<TreeHandler>();
-			proj.OnHitTree(handler, other.gameObject);
+		if (Util.IsTree(other.gameObject)) {
+			Tree tree = other.gameObject.GetComponent<Tree>();
+			//TreeHandler handler = other.GetComponentInParent<TreeHandler>();
+			proj.OnHitTree(tree);
 			return;
 		}
 
-		if (!other.gameObject.CompareTag("Body"))
+		if (!Util.IsBody(other.gameObject))
 			return; //Debug.Log("Collided with non-body.");
 
 		if (attacker.body.gameObject == other.gameObject)

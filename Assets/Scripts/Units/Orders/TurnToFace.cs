@@ -12,22 +12,20 @@ public class TurnToFace : Order {
 	{
 	}
 
-	public override void Update()
-	{
-	}
-
-	public override void FixedUpdate() {
-		if (!unit.IsMouseLooking())
-			unit.body.FixedUpdate_ForceTurn(targetLocation);
-
+	public override void Update() {
 		if (unit.IsFacing(targetLocation)) {
 			End();
 		}
 	}
 
-	public override void Suspend()
+	public override void FixedUpdate() {
+		if (!unit.IsMouseLooking())
+			unit.body.FixedUpdate_ForceTurn(targetLocation);
+	}
+
+	public override void Suspend(OrderTypes suspendedBy)
 	{
-		End();
+		//End();
 	}
 
 	public override void End() {

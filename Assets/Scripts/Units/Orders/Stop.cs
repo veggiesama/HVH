@@ -20,7 +20,7 @@ public class Stop : Order {
 
 	public override void FixedUpdate() {}
 
-	public override void Suspend()
+	public override void Suspend(OrderTypes suspendedBy)
 	{
 	}
 

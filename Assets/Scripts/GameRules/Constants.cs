@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class Constants {
+	public static float TreeRespawnTime = 6.0f;
 	public static float ProjectileSelfDestructTime = 6.0f;
 	public static float FrontAngle = 15.0f; //30.0f;
 	public static bool SpawnNPCs = false;

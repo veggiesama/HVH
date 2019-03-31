@@ -37,6 +37,11 @@ public abstract class StatusEffect : ScriptableObject {
 	}
 
 	public virtual void Update() {
+		if (this.type != StatusEffectTypes.DEAD && unit.HasStatusEffect(StatusEffectTypes.DEAD)) {
+			End();
+			return;
+		}
+
 		if (duration > 0) {
 			remainingTime -= Time.deltaTime;
 			if (remainingTime <= 0)
@@ -55,5 +60,6 @@ public abstract class StatusEffect : ScriptableObject {
 	public virtual void End() {
 		statusEffectManager.AddToRemovalList(this);
 	}
+
 }
  

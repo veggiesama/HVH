@@ -12,7 +12,7 @@ public class Grapple : Ability {
 	public float safetyPostCollisionTimer;
 	private float currentSafetyTimer = 0;
 	private bool isLaunching = false;
-	private Vector3 debugVecStart;
+	private Vector3 casterStartingPosition;
 	public LineRenderer ropePrefab;
 	private LineRenderer rope;
 	private float ropeLength = 0f;
@@ -86,7 +86,7 @@ public class Grapple : Ability {
 		caster.body.OnCollisionEventHandler += OnBodyCollision; // event sub
 		isLaunching = true;
 
-		debugVecStart = caster.GetBodyPosition();
+		casterStartingPosition = caster.GetBodyPosition();
 
 		rope = Instantiate(ropePrefab);
 		rope.SetPosition(0, caster.attackInfo.spawnerObject.transform.position);
@@ -100,8 +100,8 @@ public class Grapple : Ability {
 		caster.body.OnCollisionEventHandler -= OnBodyCollision; // event unsub
 		isLaunching = false;
 
-		Vector3 debugVecEnd = caster.GetBodyPosition();
-		Debug.Log("Launch distance: " + Util.GetDistanceIn2D(debugVecStart, debugVecEnd));
+		Vector3 casterEndingPosition = caster.GetBodyPosition();
+		//Debug.Log("Launch distance: " + Util.GetDistanceIn2D(casterStartingPosition, casterEndingPosition));
 		
 		// cleanup
 		currentSafetyTimer = 0;
@@ -111,7 +111,7 @@ public class Grapple : Ability {
 
 	// allows body to hilariously bounce
 	private void OnBodyCollision(Collision col) {
-		if (Util.GetDistanceIn2D(debugVecStart, caster.GetBodyPosition()) < 1.0f) return;
+		if (Util.GetDistanceIn2D(casterStartingPosition, caster.GetBodyPosition()) < 1.0f) return;
 
 		float magnitude = col.relativeVelocity.magnitude;
 		//Debug.Log("MAGNITUDE:" + magnitude);
@@ -136,8 +136,8 @@ public class Grapple : Ability {
 		if (ropeLengthLast == 0 || ropeLength <= ropeLengthLast) // rope is shrinking
 			ropeLengthLast = ropeLength;
 		else { // rope snaps
+			castOrder.tree.DestroyThisTree(casterStartingPosition);
 			DestroyRope();
-			castOrder.tree.DestroyThisTree();
 		}
 	}
 }

@@ -25,16 +25,18 @@ public abstract class Order : ScriptableObject {
 		this.tree = tree;
 	}
 
+	// do NOT call End() from inside Excecute. At least one Update() should pass.
+	public abstract void Execute();
+
 	public abstract void Update();
 
 	public abstract void FixedUpdate();
 
-	public abstract void Execute();
-
 	// occurs when the ability is forced out of its first-place position in the queue; do cleanup if needed
-	public abstract void Suspend();
+	public abstract void Suspend(OrderTypes suspendedBy);
 
 	public virtual void End() {
-		queue.CompleteOrder();
+		//Debug.Log("Ending order " + orderType);
+		queue.CompleteOrder(this);
 	}
 }

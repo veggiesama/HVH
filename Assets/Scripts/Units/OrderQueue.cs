@@ -13,44 +13,45 @@ public class OrderQueue : MonoBehaviour {
     void Update()
     {
         if (queue.Count == 0) return;
-		if (doingOrder) { 
+		
+		if (doingOrder)
 			queue[0].Update();
-			return;
-		}
-
-		//Debug.Log("Executing next order.");
-		ExecuteNextOrder();
+		else 
+			ExecuteNextOrder();
     }
 
 	void FixedUpdate()
 	{
 	    if (queue.Count == 0) return;
-		if (doingOrder) { 
+		if (doingOrder)
 			queue[0].FixedUpdate();
-			return;
-		}
 	}
 
-	// public functions
-	public void Add(Order order, bool bypassQueue = false) {
-		//Debug.Log("# " + queue.Count + ", Interrupts: " + order.interrupts);
+	public void Add(Order order, bool doNotCancelOrderQueue = false) {
 
-		bool shiftQueuing = Input.GetButton("Queue (Hold)");
-
-		if (bypassQueue && !shiftQueuing) {
-			if (queue.Count > 0)
-				queue[0].Suspend();
-
-			queue.Insert(0, order);
-			ExecuteNextOrder();
-			return;
+		// new order is shift+queued to the back of queue
+	   	bool shiftQueueing = Input.GetButton("Queue (Hold)");
+		if (shiftQueueing) {
+			QueueNewOrder(order);
 		}
 
-		if (queue.Count > 0 && !shiftQueuing) {
+		// new order preserves current order queue
+		else if (doNotCancelOrderQueue) {
+			SuspendCurrentOrder(order.orderType);
+			BeginNewOrder(order);
+		}
+
+		// new order interrupts existing orders
+		else if (queue.Count > 0) {
 			CancelAllOrders();
+			BeginNewOrder(order);
 		}
 
-		queue.Add(order);	
+		// new order is only order
+		else {
+			BeginNewOrder(order);
+		}
+
 	}
 
 	private void ExecuteNextOrder() {
@@ -58,17 +59,35 @@ public class OrderQueue : MonoBehaviour {
 		doingOrder = true;
 	}
 
-	public void CompleteOrder() {
-		queue.RemoveAt(0);
+	private void BeginNewOrder(Order order) {
+		queue.Insert(0, order);
 		doingOrder = false;
+		//ExecuteNextOrder();
 	}
 
-	public void CancelOrder() {
-		queue.RemoveAt(0);
-		doingOrder = false;
+	private void QueueNewOrder(Order order) {
+		queue.Add(order);
+	}
+
+	private void SuspendCurrentOrder(OrderTypes suspendedBy) {
+		if (queue.Count > 0)
+			queue[0].Suspend(suspendedBy);
+	}
+
+	//public void CompleteOrder() {
+	//	queue.RemoveAt(0);
+	//	doingOrder = false;
+	//}
+
+	public void CompleteOrder(Order order) {
+		int index = queue.IndexOf(order);
+		queue.RemoveAt(index);
+		if (index == 0)
+			doingOrder = false;
 	}
 
 	public void CancelAllOrders() {
+		SuspendCurrentOrder(OrderTypes.NONE);
 		queue.Clear();
 		doingOrder = false;
 	}

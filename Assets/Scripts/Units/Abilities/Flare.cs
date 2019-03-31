@@ -5,8 +5,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Abilities/Flare")]
 public class Flare : Ability {
 
-	//[Header("Flare")]
+	[Header("Flare")]
 	//public Immobilized netImmobilizedStatus;
+	public GameObject aoeGeneratorPrefab;
+	private AOEGenerator aoeGenerator;
+	public float reappliesEvery;
+	public StatusEffect[] statusEffects;
 
 	public override void Reset()
 	{
@@ -32,15 +36,10 @@ public class Flare : Ability {
 		CastResults baseCastResults = base.Cast(castOrder);
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
-		Debug.Log("Cast flare");
-
-		TrackDuration();
+		aoeGenerator = Instantiate(aoeGeneratorPrefab, castOrder.targetLocation, Quaternion.identity, caster.transform).GetComponent<AOEGenerator>();
+		aoeGenerator.Initialize(caster, this, statusEffects, reappliesEvery, true);
 
 		return CastResults.SUCCESS;
-	}
-
-	protected override void OnDurationEnd () {
-		
 	}
 
 }

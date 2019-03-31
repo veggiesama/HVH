@@ -50,4 +50,12 @@ public static class Util {
 		return unit.GetBodyPosition() + new Vector3(rng.x, 0, rng.y) * distance;
 	}
 
+	public static bool IsBody(GameObject gameObject) {
+		return gameObject.tag == "Body";
+	}
+
+	public static bool IsTree(GameObject gameObject) {
+		return gameObject.tag == "Tree";
+	}
+
 }

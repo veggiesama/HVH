@@ -161,6 +161,7 @@ public class OwnerController : MonoBehaviour {
 	}
 
 	public bool IsMouseTargeting() {
+		if (isNPC) return false;
 		return mouseTargeter.IsTargetingEnabled();
 	}
 
@@ -181,6 +182,10 @@ public class OwnerController : MonoBehaviour {
 
 	private void PewPewNPCs() {
 		unit.DoAbility(AbilitySlots.ATTACK);
+	}
+
+	public CastbarController GetCastbar() {
+		return GetComponentInChildren<CastbarController>();
 	}
 
 }

@@ -75,9 +75,9 @@ public class Swipe : Ability, IProjectileAbility {
 		return false;
 	}
 
-	public bool OnHitTree(TreeHandler treeHandler, GameObject tree)
+	public bool OnHitTree(Tree tree)
 	{
-		treeHandler.DestroyTree(tree);
+		tree.DestroyThisTree(caster.GetBodyPosition());
 		return false;
 	}
 }

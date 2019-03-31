@@ -54,9 +54,9 @@ public class Net : Ability, IProjectileAbility {
 		return true;
 	}
 
-	public bool OnHitTree(TreeHandler treeHandler, GameObject tree)	{
-		Debug.Log("Hit tree.");
-		treeHandler.DestroyTree(tree);
+	public bool OnHitTree(Tree tree) {
+		//Debug.Log("Hit tree.");
+		//tree.DestroyThisTree();
 		return false;
 	}
 }

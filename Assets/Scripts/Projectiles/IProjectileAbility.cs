@@ -5,6 +5,6 @@ using UnityEngine;
 public interface IProjectileAbility {
 	bool OnHitEnemy(UnitController unit);
 	bool OnHitAlly(UnitController unit);
-	bool OnHitTree(TreeHandler treeHandler, GameObject tree);
+	bool OnHitTree(Tree tree);
 }
 

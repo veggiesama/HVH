@@ -22,7 +22,7 @@ public class Stunned : StatusEffect {
 	public override void Apply()
 	{
 		base.Apply();
-		unit.ForceStop();
+		unit.ForceStop(); // TODO: fix
 		unit.CancelAllOrders();
 		unit.SetOrderRestricted(true);
 	}

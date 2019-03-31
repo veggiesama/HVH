@@ -87,13 +87,13 @@ public class UnitController : MonoBehaviour {
 	public void ForceStop() {
 		if (IsReadyForNav())
 			agent.ResetPath();
-		else
-			Debug.Log("Can't force stop unit. Not ready for nav.");
+		else {}
+			//Debug.Log("Can't force stop unit. Not ready for nav.");
 	}
 
 	public void DoAbility(AbilitySlots slot) {
 		if (IsOrderRestricted()) {
-			Debug.Log("Order restricted.");
+			//Debug.Log("Order restricted.");
 			return;
 		}
 		if (!HasAbilityInSlot(slot)) {
@@ -105,7 +105,7 @@ public class UnitController : MonoBehaviour {
 		OwnerController owner = GetOwnerController();
 
 		if (!ability.IsCooldownReady()) {
-			Debug.Log("Cooldown not ready.");
+			//Debug.Log("Cooldown not ready.");
 			return;
 		}
 
@@ -350,5 +350,9 @@ public class UnitController : MonoBehaviour {
 
 	public bool IsMouseLooking() {
 		return lockFacingToMouse;
+	}
+	
+	public bool SharesTeamWith(UnitController unit) {
+		return (this.GetTeam() == unit.GetTeam());
 	}
 }

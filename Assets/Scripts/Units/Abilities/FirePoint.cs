@@ -65,7 +65,7 @@ public class FirePoint : Ability, IProjectileAbility {
 		return true;
 	}
 
-	public bool OnHitTree(TreeHandler treeHandler, GameObject tree)
+	public bool OnHitTree(Tree tree)
 	{
 		return false;
 	}
