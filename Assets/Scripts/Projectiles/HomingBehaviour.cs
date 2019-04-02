@@ -13,7 +13,7 @@ public class HomingBehaviour : ProjectileBehaviour {
 		rb.velocity = transform.forward * projectileSpeed;
 	}
 
-	private void OnTriggerEnter(Collider other)
+	protected override void OnTriggerEnter(Collider other)
 	{
 		if (!other.gameObject.Equals(targetObject)) { 
 			return; //Debug.Log("Passed through wrong target.");

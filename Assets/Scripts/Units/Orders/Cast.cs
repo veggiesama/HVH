@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class Cast : Order {
-	private CastbarController castbar;
+	private UIController uiController;
 	private float currentTimer = 0;
 	private bool failCast = false;
 	
 	public override void Initialize(GameObject obj, Ability ability, Vector3 targetLocation, UnitController allyTarget, UnitController enemyTarget, Tree tree) {
 		base.Initialize(obj, ability, targetLocation, allyTarget, enemyTarget, tree);
 		this.orderType = OrderTypes.NONE;
-		castbar = unit.GetOwnerController().GetCastbar();
+		uiController = unit.GetOwnerController().uiController;
 	}
 
 	public override void Execute()
@@ -52,7 +52,7 @@ public class Cast : Order {
 
 		if (ability.castTime > 0) {
 			unit.ForceStop();
-			castbar.SetEnabled(true);
+			uiController.EnableCastbar(true);
 			currentTimer = ability.castTime;
 		}
 	}
@@ -65,11 +65,11 @@ public class Cast : Order {
 
 		if (currentTimer > 0) {
 			currentTimer -= Time.deltaTime;
-			castbar.UpdateCastbar(currentTimer / ability.castTime);
+			uiController.UpdateCastbar(currentTimer / ability.castTime);
 		}
 		else {
 			FinishCasting();
-			castbar.SetEnabled(false);
+			uiController.EnableCastbar(false);
 		}		
 	}
 
@@ -78,7 +78,7 @@ public class Cast : Order {
 	public override void Suspend(OrderTypes suspendedBy) {
 		if (ability.castTime > 0) {
 			if (suspendedBy == OrderTypes.TURN_TO_FACE) return;
-			castbar.SetEnabled(false);
+			uiController.EnableCastbar(false);
 			ability.StartCooldown();
 			failCast = true; // cancelling a spell
 		}

@@ -1,18 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class MouseTargeter : MonoBehaviour
-{	public Camera cam;
+public class MouseTargeter : MonoBehaviour {
+	public Camera cam;
  	private OwnerController owner;
 
 	public Texture2D normalCursor = null;
 	public Texture2D targetCursor;
 	public Projector areaProjector;
 
+	[HideInInspector] public AbilitySlots storedSlot;
+	[HideInInspector] public Ability storedAbility;
 	private bool targetingEnabled = false;
-	public AbilitySlots storedSlot;
-	public Ability storedAbility;
 	private Tree lastTree;
 	private UnitController lastUnit;
 

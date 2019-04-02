@@ -3,21 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
+using Mirror;
 
-public class OwnerController : MonoBehaviour {
+public class OwnerController : NetworkBehaviour {
 	public UnitController unit;
 	public bool isNPC = false; // inspector
 	public Teams team;
 	private MouseTargeter mouseTargeter;
+	public GameObject camObject;
+	public UIController uiController;
 
 	// Use this for initialization
 	void Start () {
 		mouseTargeter = GetComponent<MouseTargeter>();
+
+		if (isLocalPlayer) {
+			camObject.SetActive(true);
+			uiController.gameObject.SetActive(true);
+		}
 	}
 
 	// Update is called once per frame. Use for input. Physics unstable.
 	void Update () {
 		if (isNPC) return;
+		if (!isLocalPlayer) return;
 
 		// always register selections, even while disabled
 		if (Input.GetButtonDown("L-Click")) {
@@ -182,10 +191,6 @@ public class OwnerController : MonoBehaviour {
 
 	private void PewPewNPCs() {
 		unit.DoAbility(AbilitySlots.ATTACK);
-	}
-
-	public CastbarController GetCastbar() {
-		return GetComponentInChildren<CastbarController>();
 	}
 
 }

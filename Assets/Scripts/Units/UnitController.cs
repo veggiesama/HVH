@@ -20,8 +20,6 @@ public class UnitController : MonoBehaviour {
 
 	private Dead onDeathStatusEffect;
 
-	//public List<Ability> abilityPrefabList;
-
 	public Ability startingAttackAbility;
 	public List<Ability> startingAbilitiesList;
 	public List<Ability> startingItemsList;
@@ -32,21 +30,18 @@ public class UnitController : MonoBehaviour {
 		throw new NotImplementedException();
 	}
 
-	//public Dictionary<AbilitySlots, Ability> abilities;
-
 	private Quaternion wantedRotation;
 	private bool orderRestricted = false;
 
 
 	// Use this for initialization
-	void Awake () {
+	void Start () {
 		body = GetComponentInChildren<BodyController>();
 		agent = body.GetComponent<NavMeshAgent>();
 		unitInfo = GetComponent<UnitInfo>();
 		attackInfo = GetComponent<AttackInfo>();
 		faceCam = GetComponentInChildren<Camera>(true);
 
-		//abilities = BindAbilitiesToAbilitySlots(abilityPrefabList);
 
 		abilityManager = GetComponentInChildren<AbilityManager>();
 		orderQueue = GetComponentInChildren<OrderQueue>();

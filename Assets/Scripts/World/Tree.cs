@@ -11,9 +11,9 @@ public class Tree : MonoBehaviour {
 	private TreeHandler treeHandler;
 	private Vector3 destroyedFromDirection;
 
-	private void Awake() {
+	private void Start() {
 		treeHandler = GetComponentInParent<TreeHandler>();
-		MaterialsLibrary matLib = GameObject.Find("MaterialsLibrary").GetComponent<MaterialsLibrary>();
+		MaterialsLibrary matLib = ReferenceManager.Instance.MaterialsLibrary;
 		treeMaterial = matLib.treeMaterial;
 		highlightedTreeMaterial = matLib.highlightedTreeMaterial;
 	}
