@@ -5,18 +5,18 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+	private GameObject uiCanvas;
 	private Slider castbar;
 
     // Start is called before the first frame update
     void Start()
     {
-		castbar = ReferenceManager.Instance.Castbar;
-		ShowHUD();
-	}
+		uiCanvas = GameObject.Find("UI Canvas");
+		castbar = uiCanvas.GetComponent<UICanvas>().castbar;
 
-	void ShowHUD() {
-		foreach (GameObject obj in ReferenceManager.Instance.UICanvasList) {
-			obj.SetActive(true);
+		// show each hud container
+		for (int n = 0; n < uiCanvas.transform.childCount; n++) {
+			uiCanvas.transform.GetChild(n).gameObject.SetActive(true);
 		}
 	}
 

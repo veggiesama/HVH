@@ -193,6 +193,19 @@ public class OwnerController : NetworkBehaviour {
 		unit.DoAbility(AbilitySlots.ATTACK);
 	}
 
+	public void DestroyTree(Tree tree, Vector3 destroyedFromDirection = default, float delay = 0f) {
+		int treeSiblingIndex = tree.GetSiblingIndex();
+		GameObject treeHandlerGO = tree.GetTreeHandlerGO();
+		Debug.Log("Owner::DestroyTree()");
+		Cmd_DestroyTree(treeHandlerGO, treeSiblingIndex, destroyedFromDirection, delay);
+	}
+
+	[Command]
+	public void Cmd_DestroyTree(GameObject treeHandlerGO, int treeSiblingIndex, Vector3 destroyedFromDirection, float delay) {
+		Debug.Log("COMMAND: Owner::Cmd_DestroyTree()");
+		treeHandlerGO.GetComponent<TreeHandler>().Rpc_DestroyTree(treeSiblingIndex, destroyedFromDirection, delay);
+	}
+
 }
 
 /// <summary>

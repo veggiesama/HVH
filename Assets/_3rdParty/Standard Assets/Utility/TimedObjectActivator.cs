@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
+#pragma warning disable 618
 namespace UnityStandardAssets.Utility
 {
     public class TimedObjectActivator : MonoBehaviour

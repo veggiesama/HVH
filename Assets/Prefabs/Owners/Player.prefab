@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 114405757848887420}
   - component: {fileID: 114347136507757114}
   - component: {fileID: 114439122746566608}
+  - component: {fileID: 3591204734762448323}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -212,6 +213,8 @@ MonoBehaviour:
   movementSpeedOriginal: 0
   turnRate: 1350
   size: 1
+  onDeathStatusEffect: {fileID: 11400000, guid: a2c024c32d1d9ad48b525321e3c76286,
+    type: 2}
 --- !u!114 &114347136507757114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,6 +266,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
+--- !u!114 &3591204734762448323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094043218024888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20db0654837875d48b087970ad4151e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  invisibility: {fileID: 2100000, guid: 02978b8d60498ea49b30feeb2099be1c, type: 2}
 --- !u!1 &1149659272418656
 GameObject:
   m_ObjectHideFlags: 0
@@ -923,7 +939,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1574802763122534}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}

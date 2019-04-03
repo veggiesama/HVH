@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
-
+#pragma warning disable 618
 namespace UnityStandardAssets.Utility
 {
     public class SimpleMouseRotator : MonoBehaviour

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 
 #endif
-
+#pragma warning disable 618
 namespace UnityStandardAssets.Utility
 {
     public class WaypointCircuit : MonoBehaviour

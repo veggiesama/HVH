@@ -136,7 +136,7 @@ public class Grapple : Ability {
 		if (ropeLengthLast == 0 || ropeLength <= ropeLengthLast) // rope is shrinking
 			ropeLengthLast = ropeLength;
 		else { // rope snaps
-			castOrder.tree.DestroyThisTree(casterStartingPosition);
+			caster.GetOwnerController().DestroyTree(castOrder.tree, caster.GetBodyPosition(), 0);
 			DestroyRope();
 		}
 	}

@@ -55,7 +55,7 @@ public class AOEGenerator : MonoBehaviour {
 			else if (destroysTrees && Util.IsTree(col.gameObject)) {
 				float rng = Random.Range(0, reappliesEvery * 0.2f); // destroy each tree at a random time before next Pulse()
 				Tree tree = col.gameObject.GetComponent<Tree>();
-				tree.DestroyThisTree(transform.position, rng);
+				sourceUnit.GetOwnerController().DestroyTree(tree, transform.position, rng);
 			}
 		}
 	}

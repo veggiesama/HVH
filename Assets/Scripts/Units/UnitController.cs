@@ -18,8 +18,7 @@ public class UnitController : MonoBehaviour {
 	private AbilityManager abilityManager;
 	private MeshRenderer targetFriendlyStand, targetEnemyStand;
 
-	private Dead onDeathStatusEffect;
-
+	[Header("Abilities")]
 	public Ability startingAttackAbility;
 	public List<Ability> startingAbilitiesList;
 	public List<Ability> startingItemsList;
@@ -42,14 +41,12 @@ public class UnitController : MonoBehaviour {
 		attackInfo = GetComponent<AttackInfo>();
 		faceCam = GetComponentInChildren<Camera>(true);
 
-
 		abilityManager = GetComponentInChildren<AbilityManager>();
 		orderQueue = GetComponentInChildren<OrderQueue>();
 		statusEffectManager = GetComponentInChildren<StatusEffectManager>();
 
 		targetFriendlyStand = transform.Find("Body/FX/Target friendly stand").GetComponent<MeshRenderer>();
 		targetEnemyStand = transform.Find("Body/FX/Target enemy stand").GetComponent<MeshRenderer>();
-		onDeathStatusEffect = GameObject.Find("StatusEffectsLibrary").GetComponent<StatusEffectsLibrary>().unitDeath;
 
 		// sniper = 0.135s to turn 180 degrees, or 1350 degrees/sec
 		// NS = 0.188s to turn 180 degrees, or 960 degrees/sec
@@ -207,10 +204,10 @@ public class UnitController : MonoBehaviour {
 	public void ReceivesDamage(float damage, UnitController attacker) {
 		
 		if (!HasStatusEffect(StatusEffectTypes.INVULNERABLE))
-			this.unitInfo.currentHealth -= damage;
+			unitInfo.currentHealth -= damage;
 		
-		if (this.unitInfo.currentHealth < 0) {
-			ApplyStatusEffect(onDeathStatusEffect, null, null);
+		if (unitInfo.currentHealth < 0) {
+			ApplyStatusEffect(unitInfo.onDeathStatusEffect, null, null);
 		}
 	}
 
@@ -278,7 +275,7 @@ public class UnitController : MonoBehaviour {
 		//	agent.FindClosestEdge(out NavMeshHit hit);
 		//	Debug.DrawLine(hit.position, Vector3.up, Color.cyan, 3.0f, false);
 
-			ApplyStatusEffect(onDeathStatusEffect, null, null);
+			ApplyStatusEffect(unitInfo.onDeathStatusEffect, null, null);
 		}
 	}
 

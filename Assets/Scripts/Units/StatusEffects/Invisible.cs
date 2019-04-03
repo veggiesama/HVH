@@ -31,7 +31,7 @@ public class Invisible : StatusEffect {
 		base.Initialize(obj, ability, inflictor);
 
 		rend = unit.body.GetComponent<Renderer>();
-		transMat = ReferenceManager.Instance.MaterialsLibrary.invisibilityMaterial;
+		transMat = unit.GetComponent<UnitMaterials>().invisibility;
 		originalMat = rend.material;
 		if (rend.material.HasProperty("_Color")) {
 			originalColor = rend.material.GetColor("_Color");
