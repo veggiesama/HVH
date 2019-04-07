@@ -215,6 +215,8 @@ MonoBehaviour:
   size: 1
   onDeathStatusEffect: {fileID: 11400000, guid: a2c024c32d1d9ad48b525321e3c76286,
     type: 2}
+  onAirbornStatusEffect: {fileID: 11400000, guid: 602ec8d7899e5e644a690f77dc709914,
+    type: 2}
 --- !u!114 &114347136507757114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,7 +260,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a30be00ac1b3bbd40a1e4c63b5a412ee, type: 2}
   - {fileID: 11400000, guid: 9b1704880fe3fa249872b713fc810c38, type: 2}
   - {fileID: 11400000, guid: c681a514064dbec49a0bf9da1bb1c09c, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
+  - {fileID: 11400000, guid: bd2b85926ef9a814884418a361399750, type: 2}
   startingItemsList:
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
@@ -288,7 +290,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4469434790349630}
-  - component: {fileID: 114718962549002890}
+  - component: {fileID: 6566323531447257736}
   - component: {fileID: 885585859267659497}
   - component: {fileID: 8879444565007247646}
   - component: {fileID: 8180814785948654849}
@@ -317,7 +319,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114718962549002890
+--- !u!114 &6566323531447257736
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -326,15 +328,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1149659272418656}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47ce031595d7b5f4ba81fd55d936ccc2, type: 3}
+  m_Script: {fileID: 11500000, guid: 9935ca2e6c5d4b54ba3586fb48fe2158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncInterval: 0.1
   unit: {fileID: 114439122746566608}
-  isNPC: 0
-  team: 0
-  camObject: {fileID: 1860743903889731771}
   uiController: {fileID: 3320323539532053525}
+  camObject: {fileID: 1860743903889731771}
+  isDisconnected: 0
+  isUnassigned: 0
 --- !u!114 &885585859267659497
 MonoBehaviour:
   m_ObjectHideFlags: 0

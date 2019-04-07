@@ -22,6 +22,7 @@ public class Airborn : StatusEffect {
 	{
 		base.Apply();
 		unit.DetachFromNav();
+		unit.body.SetTreeClipOnly();
 	}
 
 	public override void Update() {
@@ -36,6 +37,7 @@ public class Airborn : StatusEffect {
 
 	public override void End() {
 		unit.AttachToNav();
+		unit.body.ResetBody();
 		base.End();
 	}
 }

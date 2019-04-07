@@ -25,6 +25,8 @@ public class FirePoint : Ability, IProjectileAbility {
 		castRange = 100f;
 		castTime = 0f;
 		duration = 0f;
+		aoeRadius = 0f;
+		quickCast = true;
 		doNotCancelOrderQueue = true;
 
 		projectilePrefab = null;

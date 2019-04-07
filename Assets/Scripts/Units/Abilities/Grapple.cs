@@ -29,9 +29,11 @@ public class Grapple : Ability {
 		castRange = 100f;
 		castTime = 0f;
 		duration = 0f;
+		aoeRadius = 0f;
+		quickCast = false;
 		doNotCancelOrderQueue = false;
 
-		projectilePrefab = null;
+		projectilePrefab = null; // set on scriptableObject
 		projectileSpeed = 5f;
 		projectileTimeAlive = 10f;
 		grenadeTimeToHitTarget = 0;
@@ -136,7 +138,7 @@ public class Grapple : Ability {
 		if (ropeLengthLast == 0 || ropeLength <= ropeLengthLast) // rope is shrinking
 			ropeLengthLast = ropeLength;
 		else { // rope snaps
-			caster.GetOwnerController().DestroyTree(castOrder.tree, caster.GetBodyPosition(), 0);
+			caster.GetPlayer().DestroyTree(castOrder.tree, caster.GetBodyPosition(), 0);
 			DestroyRope();
 		}
 	}

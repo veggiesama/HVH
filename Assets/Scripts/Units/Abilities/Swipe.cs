@@ -18,10 +18,9 @@ public class Swipe : Ability, IProjectileAbility {
 		duration = 0.5f;
 		doNotCancelOrderQueue = true;
 
-		projectilePrefab = null;
+		projectilePrefab = null; // set on scriptableobject
 		projectileSpeed = 0f;
 		projectileTimeAlive = 0.5f;
-		grenadeTimeToHitTarget = 0;
 	}
 
 	public override void Initialize(GameObject obj) {
@@ -77,7 +76,7 @@ public class Swipe : Ability, IProjectileAbility {
 
 	public bool OnHitTree(Tree tree)
 	{
-		caster.GetOwnerController().DestroyTree(tree, caster.GetBodyPosition(), 0);
+		caster.GetPlayer().DestroyTree(tree, caster.GetBodyPosition(), 0);
 		return false;
 	}
 }

@@ -11,7 +11,7 @@ public class Cast : Order {
 	public override void Initialize(GameObject obj, Ability ability, Vector3 targetLocation, UnitController allyTarget, UnitController enemyTarget, Tree tree) {
 		base.Initialize(obj, ability, targetLocation, allyTarget, enemyTarget, tree);
 		this.orderType = OrderTypes.NONE;
-		uiController = unit.GetOwnerController().uiController;
+		uiController = unit.GetPlayer().uiController;
 	}
 
 	public override void Execute()

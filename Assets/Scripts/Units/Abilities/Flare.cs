@@ -24,12 +24,8 @@ public class Flare : Ability {
 		castTime = 0f;
 		duration = 6f;
 		aoeRadius = 4f;
+		quickCast = false;
 		doNotCancelOrderQueue = false;
-
-		projectilePrefab = null;
-		projectileSpeed = 0f;
-		projectileTimeAlive = 0f;
-		grenadeTimeToHitTarget = 0f;
 	}
 
 	public override CastResults Cast(Order castOrder) {

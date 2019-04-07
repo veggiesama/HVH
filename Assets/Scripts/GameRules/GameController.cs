@@ -4,21 +4,20 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour {
 
-	public GameObject ownerPrefab;
+	[HideInInspector] public Player localPlayer;
+	public GameObject playerPrefab;
 	public GameObject sceneViewMask;
-	public Teams startingTeamForPlayer;
+	//public Teams startingTeamForPlayer;
 
-	public OwnerController player;
+	public Dictionary<DwarfTeamSlots, Player> dwarfTeamPlayers;
+	public Dictionary<MonsterTeamSlots, Player> monsterTeamPlayers;
 
-	public Dictionary<Allies, UnitController> allies;
-	public Dictionary<Enemies, UnitController> enemies;
-
-	public UnitController GetAlly(Allies position) {
-		return this.allies[position];
+	public Player GetDwarf(DwarfTeamSlots position) {
+		return this.dwarfTeamPlayers[position];
 	}
 
-	public UnitController GetEnemy(Enemies position) {
-		return this.enemies[position];
+	public Player GetMonster(MonsterTeamSlots position) {
+		return this.monsterTeamPlayers[position];
 	}
 
 	public static GameObject GetSceneMask() {
@@ -36,46 +35,42 @@ public class GameController : MonoBehaviour {
 				mesh.enabled = false;
 			}
 		}
+		//Invoke("SpawnUnassignedPlayers", 3.0f);
+	}
 
-		if (Constants.SpawnNPCs) SpawnNPCs();
+	public void SpawnUnassignedPlayers() {
+		dwarfTeamPlayers = new Dictionary<DwarfTeamSlots, Player>();
+		monsterTeamPlayers = new Dictionary<MonsterTeamSlots, Player>();
+
+		foreach (DwarfTeamSlots slot in System.Enum.GetValues(typeof(DwarfTeamSlots)))  {
+			Transform spawnLoc = GetRandomSpawnPoint();
+			Player unassignedPlayer = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<Player>();
+			dwarfTeamPlayers.Add(slot, unassignedPlayer);
+
+			unassignedPlayer.MakeNPC();
+			unassignedPlayer.SetTeam(Teams.DWARVES);
+			Debug.Log("Unable to change color");
+			//unassignedPlayer.unit.body.GetComponent<Renderer>().material.color =
+			//	Color.Lerp(Color.blue, Color.cyan, Random.Range(0.2f, 1.0f));
+		}
+
+		foreach (MonsterTeamSlots slot in System.Enum.GetValues(typeof(MonsterTeamSlots)))  {
+			Transform spawnLoc = GetRandomSpawnPoint();
+			Player unassignedPlayer = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<Player>();
+			monsterTeamPlayers.Add(slot, unassignedPlayer);
+
+			//unassignedPlayer.MakeNPC();
+			unassignedPlayer.MakeNPC();
+			unassignedPlayer.SetTeam(Teams.MONSTERS);
+			unassignedPlayer.SetTeam(Teams.MONSTERS);
+			//unassignedPlayer.unit.body.GetComponent<Renderer>().material.color =
+			//	Color.Lerp(Color.red, Color.magenta, Random.Range(0.2f, 1.0f));;
+
+		}		
 	}
 	
-	private void SpawnNPCs() {
-		allies = new Dictionary<Allies, UnitController>();
-		enemies = new Dictionary<Enemies, UnitController>();
-
-		allies.Add(Allies.ALLY_1, player.unit);
-		foreach (Allies ally in System.Enum.GetValues(typeof(Allies)))  {
-			// skip the first iteration; that's the player's healthbar
-			if (ally == Allies.ALLY_1)
-				continue;
-
-			Transform spawnLoc = GetRandomSpawnPoint();
-			OwnerController owner = Instantiate(ownerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<OwnerController>();
-			allies.Add(ally, owner.unit);
-
-			owner.MakeNPC();
-			owner.SetTeam(Teams.GOODGUYS);
-			owner.unit.body.GetComponent<Renderer>().material.color =
-				Color.Lerp(Color.blue, Color.cyan, Random.Range(0.2f, 1.0f));
-		}
-
-		foreach (Enemies enemy in System.Enum.GetValues(typeof(Enemies)))  {
-			Transform spawnLoc = GetRandomSpawnPoint();
-			OwnerController owner = Instantiate(ownerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<OwnerController>();
-			enemies.Add(enemy, owner.unit);
-
-			owner.MakeNPC();
-			owner.SetTeam(Teams.BADGUYS);
-			owner.unit.body.GetComponent<Renderer>().material.color =
-				Color.Lerp(Color.red, Color.magenta, Random.Range(0.2f, 1.0f));;
-		}
-	}
-
 	// Update is called once per frame
-	void Update () {
-		
-	}
+	//void Update () {}
 
 	public static Transform GetRandomSpawnPoint() {
 		GameObject[] allSpawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
@@ -84,8 +79,27 @@ public class GameController : MonoBehaviour {
 		return allSpawnPoints[rng].transform;
 	}
 
-	// TODO: update when MP becomes a thing
-	public static OwnerController GetLocalOwner() {
-		return GameObject.FindGameObjectWithTag("Player").GetComponent<OwnerController>();
+	//public static OwnerController GetLocalOwner() {
+	//	return GameObject.FindGameObjectWithTag("Player").GetComponent<OwnerController>();
+	//}
+
+	public Player GetNextUnassignedPlayer() {
+		foreach (KeyValuePair<DwarfTeamSlots, Player> kv in dwarfTeamPlayers) {
+			DwarfTeamSlots slot = kv.Key;
+			Player player = kv.Value;
+
+			if (dwarfTeamPlayers[slot].isUnassigned)
+				return dwarfTeamPlayers[slot];
+		}
+
+		foreach (KeyValuePair<MonsterTeamSlots, Player> kv in monsterTeamPlayers) {
+			MonsterTeamSlots slot = kv.Key;
+			Player player = kv.Value;
+
+			if (monsterTeamPlayers[slot].isUnassigned)
+				return monsterTeamPlayers[slot];
+		}
+
+		return null;
 	}
 }

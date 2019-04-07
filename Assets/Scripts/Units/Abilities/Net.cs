@@ -19,11 +19,11 @@ public class Net : Ability, IProjectileAbility {
 		castRange = 30f;
 		castTime = 0f;
 		duration = 3f;
+		aoeRadius = 0f;
+		quickCast = false;
 		doNotCancelOrderQueue = false;
 
-		projectilePrefab = null;
-		projectileSpeed = 0f;
-		projectileTimeAlive = 0f;
+		projectilePrefab = null; // set on scriptableObject
 		grenadeTimeToHitTarget = 2f;
 	}
 

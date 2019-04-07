@@ -6,33 +6,33 @@ using UnityEngine.UI;
 public class HealthController : MonoBehaviour {
 
 	public GameController gameController;
-	public OwnerController player;
+	public Player player;
 
 	public Slider allyTargetHealthbarSlider, enemyTargetHealthbarSlider;
 	
 	// pulling lists from inspector to force into dictionaries
 	public List<Slider> allySliderList;
 	public List<Slider> enemySliderList;
-	private Dictionary<Allies, Slider> allies;
-	private Dictionary<Enemies, Slider> enemies;
+	private Dictionary<DwarfTeamSlots, Slider> allies;
+	private Dictionary<MonsterTeamSlots, Slider> enemies;
 
 	// Use this for initialization
 	void Start () {
-		allies = new Dictionary<Allies, Slider>();
-		enemies = new Dictionary<Enemies, Slider>();
+		allies = new Dictionary<DwarfTeamSlots, Slider>();
+		enemies = new Dictionary<MonsterTeamSlots, Slider>();
 
 		allyTargetHealthbarSlider.gameObject.SetActive(false);
 		enemyTargetHealthbarSlider.gameObject.SetActive(false);
 
 		int n = 0;
 		foreach (Slider slider in allySliderList) {
-			allies.Add((Allies)n, slider);
+			allies.Add((DwarfTeamSlots)n, slider);
 			n++;
 		}
 
 		n = 0;
 		foreach (Slider slider in enemySliderList) {
-			enemies.Add((Enemies)n, slider);
+			enemies.Add((MonsterTeamSlots)n, slider);
 			n++;
 		}
 
@@ -68,16 +68,16 @@ public class HealthController : MonoBehaviour {
 			enemyTargetHealthbarSlider.gameObject.SetActive(false);
 		}
 
-		foreach (Allies key in gameController.allies.Keys) {
+		foreach (DwarfTeamSlots key in gameController.dwarfTeamPlayers.Keys) {
 			Slider slider = allies[key];
-			UnitController unit = gameController.allies[key];
+			UnitController unit = gameController.dwarfTeamPlayers[key].unit;
 			slider.gameObject.SetActive(true);
 			slider.value = unit.unitInfo.currentHealth / unit.unitInfo.maxHealth;
 		}
 
-		foreach (Enemies key in gameController.enemies.Keys) {
+		foreach (MonsterTeamSlots key in gameController.monsterTeamPlayers.Keys) {
 			Slider slider = enemies[key];
-			UnitController unit = gameController.enemies[key];
+			UnitController unit = gameController.monsterTeamPlayers[key].unit;
 			slider.gameObject.SetActive(true);
 			slider.value = unit.unitInfo.currentHealth / unit.unitInfo.maxHealth;
 		}

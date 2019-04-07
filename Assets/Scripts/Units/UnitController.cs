@@ -31,7 +31,7 @@ public class UnitController : MonoBehaviour {
 
 	private Quaternion wantedRotation;
 	private bool orderRestricted = false;
-
+	private float knockbackSafetyTimer = 0f;
 
 	// Use this for initialization
 	void Start () {
@@ -57,7 +57,7 @@ public class UnitController : MonoBehaviour {
 	}
 	
 	// UPDATE
-	private void Update () {}
+	//private void Update () {}
 	private void FixedUpdate() {}
 
 	// ORDERS
@@ -94,37 +94,37 @@ public class UnitController : MonoBehaviour {
 		}
 
 		Ability ability = GetAbilityInSlot(slot);
-		OwnerController owner = GetOwnerController();
+		Player player = GetPlayer();
 
 		if (!ability.IsCooldownReady()) {
 			//Debug.Log("Cooldown not ready.");
 			return;
 		}
 
-		if (!ability.quickCast && !owner.IsMouseTargeting()) {
-			owner.SetMouseTargeting(true, ability, slot);
+		if (!ability.quickCast && !player.IsMouseTargeting()) {
+			player.SetMouseTargeting(true, ability, slot);
 			return;
 		}
-		if (owner.IsMouseTargeting())
-			owner.SetMouseTargeting(false);
+		if (player.IsMouseTargeting())
+			player.SetMouseTargeting(false);
 
 		Order castOrder;
 		switch (ability.targetType)
 		{
 			case AbilityTargetTypes.AREA:
 				castOrder = ScriptableObject.CreateInstance<CastPosition>();
-				((CastPosition)castOrder).Initialize(gameObject, ability, owner.GetMouseLocationToGround());
+				((CastPosition)castOrder).Initialize(gameObject, ability, player.GetMouseLocationToGround());
 				break;
 			case AbilityTargetTypes.POINT:
 				castOrder = ScriptableObject.CreateInstance<CastPosition>();
-				((CastPosition)castOrder).Initialize(gameObject, ability, owner.GetMouseLocationToGround());
+				((CastPosition)castOrder).Initialize(gameObject, ability, player.GetMouseLocationToGround());
 				break;
 			case AbilityTargetTypes.UNIT:
 				castOrder = ScriptableObject.CreateInstance<CastTarget>();
 				((CastTarget)castOrder).Initialize(gameObject, ability, currentFriendlyTarget, currentEnemyTarget);
 				break;
 			case AbilityTargetTypes.TREE:
-				Tree tree = owner.GetTreeAtMouseLocation();
+				Tree tree = player.GetTreeAtMouseLocation();
 				if (tree == null) {
 					Debug.Log("Invalid target (not a tree).");
 					return;
@@ -214,11 +214,11 @@ public class UnitController : MonoBehaviour {
 	// Misc.
 
 	public Teams GetTeam() {
-		return GetOwnerController().GetTeam();
+		return GetPlayer().GetTeam();
 	}
 
-	public OwnerController GetOwnerController() {
-		return transform.parent.GetComponent<OwnerController>();
+	public Player GetPlayer() {
+		return transform.parent.GetComponent<Player>();
 	}
 
 	public Vector3 GetBodyPosition() {
@@ -235,7 +235,7 @@ public class UnitController : MonoBehaviour {
 
 	public void TurnToFace(Vector3 targetPosition) {
 		TurnToFace turnOrder = ScriptableObject.CreateInstance<TurnToFace>();
-		turnOrder.Initialize(gameObject, targetPosition); //GetOwnerController().GetMouseLocationToGround());
+		turnOrder.Initialize(gameObject, targetPosition);
 		orderQueue.Add(turnOrder, true);
 	}
 
@@ -347,4 +347,23 @@ public class UnitController : MonoBehaviour {
 	public bool SharesTeamWith(UnitController unit) {
 		return (this.GetTeam() == unit.GetTeam());
 	}
+
+	public void Knockback(Vector3 velocityVector, Ability ability, UnitController inflictor) {
+		ApplyStatusEffect(unitInfo.onAirbornStatusEffect, ability, inflictor);
+		body.PerformAirborn(velocityVector);
+		body.OnCollisionEventHandler += OnKnockbackCollision; // event sub
+
+		//EnableNav(false);
+	}
+	
+	public void OnKnockbackCollision(Collision col) {
+		EndKnockback();
+	}
+
+	public void EndKnockback() {
+		RemoveStatusEffect(unitInfo.onAirbornStatusEffect.statusName);
+		body.OnCollisionEventHandler -= OnKnockbackCollision; // event unsub
+		//EnableNav(true);
+	}
+
 }

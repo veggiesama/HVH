@@ -21,7 +21,7 @@ public class BodyController : MonoBehaviour {
 
 	private void FixedUpdate() {
 		if (unit.IsMouseLooking()) {
-			Vector3 mousePosition = unit.GetOwnerController().GetMouseLocationToGround();
+			Vector3 mousePosition = unit.GetPlayer().GetMouseLocationToGround();
 			unit.body.FixedUpdate_ForceTurn(mousePosition);
 		}
 	}

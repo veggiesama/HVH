@@ -8,6 +8,7 @@ public class Leap : Ability {
 	//public float forceUpwards;
 	//public float forceForwards;
 
+	[Header("Leap")]
 	public float leapDistance;
 	public StatusEffect airbornStatusEffect;
 	private float jumpingTimer = 0f;
@@ -23,12 +24,9 @@ public class Leap : Ability {
 		castRange = 0f;
 		castTime = 0f;
 		duration = 1.1f;
+		aoeRadius = 0f;
+		quickCast = true;
 		doNotCancelOrderQueue = true;
-
-		projectilePrefab = null;
-		projectileSpeed = 0;
-		projectileTimeAlive = 0;
-		grenadeTimeToHitTarget = 0;
 
 		leapDistance = 20f;
 	}

@@ -5,7 +5,7 @@ using Mirror;
 
 public class MouseTargeter : MonoBehaviour {
 	public Camera cam;
- 	private OwnerController owner;
+ 	private Player player;
 
 	public Texture2D normalCursor = null;
 	public Texture2D targetCursor;
@@ -20,8 +20,8 @@ public class MouseTargeter : MonoBehaviour {
 	// Start is called before the first frame update
     void Start()
     {
-        owner = GetComponent<OwnerController>();
-		cam = GetComponentInChildren<Camera>();
+        player = GetComponent<Player>();
+		cam = player.camObject.GetComponent<Camera>();
     }
 
     // Update is called once per frame
@@ -125,7 +125,7 @@ public class MouseTargeter : MonoBehaviour {
 
 	public Vector3 GetNPCLocationToGround() {
 		RaycastHit hit;
-		Vector3 rngOrigin = Util.GetRandomVectorAround(owner.unit, 10.0f);
+		Vector3 rngOrigin = Util.GetRandomVectorAround(player.unit, 10.0f);
 		int layerMask = LayerMask.GetMask("Terrain");
 		Physics.Raycast(rngOrigin, Vector3.down, out hit, 100f, layerMask);
 		return hit.point;

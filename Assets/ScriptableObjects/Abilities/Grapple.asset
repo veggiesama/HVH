@@ -26,11 +26,13 @@ MonoBehaviour:
   castRange: 100
   castTime: 0
   duration: 0
+  aoeRadius: 0
   quickCast: 0
   doNotCancelOrderQueue: 0
   projectilePrefab: {fileID: 0}
   projectileSpeed: 5
   projectileTimeAlive: 10
+  projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
   airbornStatusEffect: {fileID: 11400000, guid: 602ec8d7899e5e644a690f77dc709914,
     type: 2}

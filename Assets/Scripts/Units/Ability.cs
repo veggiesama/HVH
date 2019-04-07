@@ -31,6 +31,8 @@ public abstract class Ability : ScriptableObject {
 	public GameObject projectilePrefab = null;
 	public float projectileSpeed = 0;
 	public float projectileTimeAlive = 0;
+	public float projectileTimeUntilFullGrowth = 0;
+	public Vector3 projectileGrowthFactor = new Vector3(1, 1, 1);
 	public float grenadeTimeToHitTarget = 0;
 
 	public abstract void Reset();

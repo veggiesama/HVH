@@ -8,6 +8,9 @@ public static class Constants {
 	public static float FrontAngle = 15.0f; //30.0f;
 	public static bool SpawnNPCs = false;
 	public static int RaycastLength = 100;
+
+	public static int DwarvesTotal = 4;
+	public static int MonstersTotal = 1;
 }
 
 // Casting abilities
@@ -37,14 +40,14 @@ public enum AbilitySlots {
 
 // Teams, allies, enemies
 public enum Teams {
-	GOODGUYS, BADGUYS, NEUTRALS
+	DWARVES, MONSTERS, NEUTRALS, OBSERVERS
 };
 
-public enum Allies {
+public enum DwarfTeamSlots {
 	ALLY_1, ALLY_2, ALLY_3, ALLY_4
 };
 
-public enum Enemies {
+public enum MonsterTeamSlots {
 	ENEMY_1, ENEMY_2, ENEMY_3, ENEMY_4
 };
 

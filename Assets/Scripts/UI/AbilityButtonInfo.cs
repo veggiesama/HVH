@@ -14,14 +14,16 @@ public class AbilityButtonInfo : MonoBehaviour {
 
 	private void Start()
 	{
+		GameController gc = GameObject.Find("GameController").GetComponent<GameController>();
+
 		button = this.gameObject.GetComponent<Button>();
 		button.onClick.AddListener( delegate {
-			GameController.GetLocalOwner().UI_ClickedAbilityButton(abilitySlot);
+			gc.localPlayer.UI_ClickedAbilityButton(abilitySlot);
 		});
 
 		textComponent = GetComponentInChildren<Text>();
 		originalText = textComponent.text;
-		unit = GameController.GetLocalOwner().unit;
+		unit = gc.localPlayer.unit;
 
 		if (unit.HasAbilityInSlot(abilitySlot)) {
 			ability = unit.GetAbilityInSlot(abilitySlot);

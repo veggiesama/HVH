@@ -14,7 +14,9 @@ public class UnitInfo : MonoBehaviour {
 	public float turnRate = 0.7f;
 	public int size = 1; // TODO: enum
 
+	[Header("Status effects")]
 	public Dead onDeathStatusEffect;
+	public Airborn onAirbornStatusEffect;
 
 	// Use this for initialization
 	void Start () {
