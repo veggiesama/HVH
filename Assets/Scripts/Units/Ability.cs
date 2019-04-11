@@ -174,5 +174,6 @@ public abstract class Ability : ScriptableObject {
 	public bool IsEmptyAbility() {
 		return isEmptyAbility;
 	}
+
 }
  

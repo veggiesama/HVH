@@ -10,7 +10,7 @@ public class AbilityManager : MonoBehaviour {
 	private float debugTimer = 0f;
 
 	[Header("READ-ONLY")]
-	[SerializeField] private List<String> debugList = new List<string>();
+	[SerializeField] private List<string> debugList = new List<string>();
 
     void Awake() {
 
@@ -88,5 +88,16 @@ public class AbilityManager : MonoBehaviour {
 
 	public Ability GetAbilityInSlot(AbilitySlots slot) {
 		return abilityDict[slot];
+	}
+
+	public AbilitySlots GetAbilitySlot(Ability ability) {
+		foreach (KeyValuePair<AbilitySlots, Ability> kv in abilityDict) {
+			AbilitySlots slot = kv.Key;
+			Ability a = kv.Value;
+			if (a.Equals(ability))
+				return slot;
+		}
+
+		return AbilitySlots.NONE;
 	}
 }

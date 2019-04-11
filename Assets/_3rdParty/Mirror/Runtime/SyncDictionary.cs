@@ -9,7 +9,7 @@ namespace Mirror
     {
         public delegate void SyncDictionaryChanged(Operation op, K key, V item);
 
-        readonly Dictionary<K, V> objects;
+        readonly IDictionary<K, V> objects;
 
         public int Count => objects.Count;
         public bool IsReadOnly { get; private set; }
@@ -61,6 +61,11 @@ namespace Mirror
         protected SyncDictionary(IEqualityComparer<K> eq)
         {
             objects = new Dictionary<K, V>(eq);
+        }
+
+        protected SyncDictionary(IDictionary<K,V> objects)
+        {
+            this.objects = objects;
         }
 
         void AddOperation(Operation op, K key, V item)
@@ -236,7 +241,7 @@ namespace Mirror
             get => objects[i];
             set
             {
-                if (TryGetValue(i, out V val))
+                if (ContainsKey(i))
                 {
                     AddOperation(Operation.OP_SET, i, value);
                 }

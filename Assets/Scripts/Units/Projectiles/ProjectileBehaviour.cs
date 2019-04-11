@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public abstract class ProjectileBehaviour : MonoBehaviour {
+public abstract class ProjectileBehaviour : NetworkBehaviour {
+	protected bool initialized = false;
 	protected Ability ability;
 	protected UnitController target, attacker;
 	protected GameObject targetObject;
@@ -18,20 +20,32 @@ public abstract class ProjectileBehaviour : MonoBehaviour {
 	protected float currentTimer = 0;
 	protected Vector3 originalScale;
 
+	//private Player player;
+	//public GameObject serverProjectilePrefab;
+	//protected ServerProjectile serverProj;
+
 	// Use this for initialization
 	protected virtual void Start () {
-		rb = GetComponent<Rigidbody>();
+		//rb = GetComponent<Rigidbody>();
+		//player = attacker.GetPlayer();
+
+		//int index = NetworkManagerHVH.singleton.spawnPrefabs.IndexOf(serverProjectilePrefab);
+		//int index = FindObjectOfType<NetworkManagerHVH>().GetSpawnPrefabList().IndexOf(serverProjectilePrefab);
+		//player.CreateGhostProjectile(this.gameObject);
 	}
 
 	// target none
 	public virtual void Initialize(Ability ability) {
+		this.rb = GetComponent<Rigidbody>();
 		this.ability = ability;
 		this.attacker = ability.caster;
 		this.originalScale = transform.localScale;
 
+
 		float timeAlive = ability.projectileTimeAlive;
 		if (timeAlive <= 0) timeAlive = Constants.ProjectileSelfDestructTime; // fallback
 		Invoke( "DestroySelf", timeAlive);
+		this.initialized = true;
 	}
 
 	// target unit
@@ -57,7 +71,8 @@ public abstract class ProjectileBehaviour : MonoBehaviour {
 
 	public void DestroySelf() {
 		//Debug.Log("Projectile self-destructed due to time-out.");
-		Destroy(this.gameObject);
+		attacker.GetPlayer().DestroyProjectile(this.gameObject);
+		//Destroy(this.gameObject);
 	}
 
 	private IProjectileAbility GetIProjectileAbility() {
@@ -76,6 +91,10 @@ public abstract class ProjectileBehaviour : MonoBehaviour {
 				Mathf.Lerp(originalScale.z, growthFactor.z, t)
 			);
 		}
+
+		//serverProj.transform.position = this.transform.position;
+		//serverProj.transform.rotation = this.transform.rotation;
+		//serverProj.transform.localScale = this.transform.localScale;
 	}
 
 	protected virtual void OnTriggerEnter(Collider other) {

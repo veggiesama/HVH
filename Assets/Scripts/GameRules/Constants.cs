@@ -6,7 +6,6 @@ public static class Constants {
 	public static float TreeRespawnTime = 6.0f;
 	public static float ProjectileSelfDestructTime = 6.0f;
 	public static float FrontAngle = 15.0f; //30.0f;
-	public static bool SpawnNPCs = false;
 	public static int RaycastLength = 100;
 
 	public static int DwarvesTotal = 4;
@@ -50,7 +49,6 @@ public enum DwarfTeamSlots {
 public enum MonsterTeamSlots {
 	ENEMY_1, ENEMY_2, ENEMY_3, ENEMY_4
 };
-
 
 // abilities
 public enum AbilityTargetTypes {

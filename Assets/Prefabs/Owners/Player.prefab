@@ -204,6 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd697404dfc112446a95d5512bb2c8ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncInterval: 0.1
   maxHealth: 100
   currentHealth: 0
   healthRegen: 1
@@ -248,6 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07c48f881f4e97944ad92550a3344665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncInterval: 0.1
   body: {fileID: 0}
   agent: {fileID: 0}
   unitInfo: {fileID: 0}
@@ -333,10 +335,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncInterval: 0.1
   unit: {fileID: 114439122746566608}
+  team: 0
   uiController: {fileID: 3320323539532053525}
   camObject: {fileID: 1860743903889731771}
   isDisconnected: 0
   isUnassigned: 0
+  playerID: 0
+  projectilePrefab: {fileID: 1392497764110654, guid: c9e55555ef616bf46b4830720868c7b6,
+    type: 3}
 --- !u!114 &885585859267659497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -919,7 +925,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4772089510465928
 Transform:
   m_ObjectHideFlags: 0
@@ -943,7 +949,7 @@ Camera:
   m_GameObject: {fileID: 1574802763122534}
   m_Enabled: 0
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 3
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
@@ -964,7 +970,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1073741823
+    m_Bits: 1
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 70399186818398008}
   - component: {fileID: 7835063525637506412}
   - component: {fileID: 1885837541142149891}
+  - component: {fileID: 530168210896604239}
   m_Layer: 0
   m_Name: Cone
   m_TagString: Untagged
@@ -122,3 +123,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54291bb067eb91a4480a39788b79eb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncInterval: 0.1
+--- !u!114 &530168210896604239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8222844098290283177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
+  m_AssetId: 0e0a29864c746e049aa8edc3816b9f91
+  m_SceneId: 0

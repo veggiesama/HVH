@@ -12,6 +12,7 @@ public class UIController : MonoBehaviour
     void Start()
     {
 		uiCanvas = GameObject.Find("UI Canvas");
+		uiCanvas.GetComponent<UICanvas>().SetLocalPlayer( GetComponentInParent<Player>() );
 		castbar = uiCanvas.GetComponent<UICanvas>().castbar;
 
 		// show each hud container

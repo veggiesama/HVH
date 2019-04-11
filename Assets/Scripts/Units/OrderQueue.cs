@@ -91,4 +91,11 @@ public class OrderQueue : MonoBehaviour {
 		queue.Clear();
 		doingOrder = false;
 	}
+
+	public Order GetCurrentOrder() {
+		if (queue.Count > 0)
+			return queue[0];
+		else
+			return null;
+	}
 }

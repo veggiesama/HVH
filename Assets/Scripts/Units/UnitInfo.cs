@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class UnitInfo : MonoBehaviour {
+public class UnitInfo : NetworkBehaviour {
 	public float maxHealth = 100.0f;
-	[HideInInspector] public float currentHealth;
+	//[HideInInspector]
+	[SyncVar] public float currentHealth;
 
 	public float healthRegen = 1.0f;
 	public int armor = 0;

@@ -44,6 +44,9 @@ public class FirePoint : Ability, IProjectileAbility {
 		CastResults baseCastResults = base.Cast(castOrder);
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
+		caster.GetPlayer().CreateProjectile(projectilePrefab, this, castOrder.targetLocation, treeMissChance);
+		
+		/*
 		GameObject projectileObject = Instantiate(projectilePrefab,
 			caster.attackInfo.spawnerObject.transform.position,
 			caster.attackInfo.spawnerObject.transform.rotation,
@@ -51,12 +54,13 @@ public class FirePoint : Ability, IProjectileAbility {
 
 		BulletBehaviour bullet = projectileObject.GetComponent<BulletBehaviour>();
 		bullet.Initialize(this, castOrder.targetLocation, treeMissChance); // trees can cause the bullet to miss
+		*/
 
 		return CastResults.SUCCESS;
 	}
 
 	public bool OnHitEnemy(UnitController unit)
-	{ 
+	{
 		unit.ReceivesDamage(damage, caster);
 		return true;
 	}
@@ -71,4 +75,5 @@ public class FirePoint : Ability, IProjectileAbility {
 	{
 		return false;
 	}
+
 }

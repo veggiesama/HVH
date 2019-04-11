@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 namespace Mirror
@@ -15,10 +16,10 @@ namespace Mirror
     // TODO make fully static after removing obsoleted singleton!
     public class NetworkClient
     {
-        [Obsolete("Use NetworkClient directly. Singleton isn't needed anymore, all functions are static now. For example: NetworkClient.Send(message) instead of NetworkClient.singleton.Send(message).")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use NetworkClient directly. Singleton isn't needed anymore, all functions are static now. For example: NetworkClient.Send(message) instead of NetworkClient.singleton.Send(message).")]
         public static NetworkClient singleton = new NetworkClient();
 
-        [Obsolete("Use NetworkClient directly instead. There is always exactly one client.")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use NetworkClient directly instead. There is always exactly one client.")]
         public static List<NetworkClient> allClients => new List<NetworkClient>{singleton};
 
         public static readonly Dictionary<int, NetworkMessageDelegate> handlers = new Dictionary<int, NetworkMessageDelegate>();
@@ -31,7 +32,7 @@ namespace Mirror
 
         // active is true while a client is connecting/connected
         // (= while the network is active)
-        public static bool active { get; internal set; }
+        public static bool active => connectState == ConnectState.Connecting || connectState == ConnectState.Connected;
 
         public static bool isConnected => connectState == ConnectState.Connected;
 
@@ -43,17 +44,11 @@ namespace Mirror
         // to avoid race conditions. keep packets in Queue until LateUpdate.
         internal static Queue<byte[]> localClientPacketQueue = new Queue<byte[]>();
 
-        internal static void SetHandlers(NetworkConnection conn)
-        {
-            conn.SetHandlers(handlers);
-        }
-
         // connect remote
         public static void Connect(string address)
         {
             if (LogFilter.Debug) Debug.Log("Client Connect: " + address);
 
-            active = true;
             RegisterSystemHandlers(false);
             Transport.activeTransport.enabled = true;
             InitializeTransportHandlers();
@@ -70,14 +65,14 @@ namespace Mirror
         internal static void ConnectLocalServer()
         {
             if (LogFilter.Debug) Debug.Log("Client Connect Local Server");
-            active = true;
+
             RegisterSystemHandlers(true);
 
             connectState = ConnectState.Connected;
 
             // create local connection to server
             connection = new ULocalConnectionToServer();
-            SetHandlers(connection);
+            connection.SetHandlers(handlers);
 
             // create server connection to local client
             ULocalConnectionToClient connectionToClient = new ULocalConnectionToClient();
@@ -172,9 +167,6 @@ namespace Mirror
                     connection = null;
                     RemoveTransportHandlers();
                 }
-
-                // the client's network is not active anymore.
-                active = false;
             }
         }
 
@@ -187,7 +179,7 @@ namespace Mirror
             Transport.activeTransport.OnClientError.RemoveListener(OnError);
         }
 
-        [Obsolete("Use SendMessage<T> instead with no message id instead")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use SendMessage<T> instead with no message id instead")]
         public static bool Send(short msgType, MessageBase msg)
         {
             if (connection != null)
@@ -286,7 +278,7 @@ namespace Mirror
         }
         */
 
-        [Obsolete("Use NetworkTime.rtt instead")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use NetworkTime.rtt instead")]
         public static float GetRTT()
         {
             return (float)NetworkTime.rtt;
@@ -305,8 +297,8 @@ namespace Mirror
                 RegisterHandler<NetworkPongMessage>((conn, msg) => {});
                 RegisterHandler<SpawnPrefabMessage>(ClientScene.OnLocalClientSpawnPrefab);
                 RegisterHandler<SpawnSceneObjectMessage>(ClientScene.OnLocalClientSpawnSceneObject);
-                RegisterHandler<ObjectSpawnStartedMessage>((conn, msg) => {});
-                RegisterHandler<ObjectSpawnFinishedMessage>((conn, msg) => {});
+                RegisterHandler<ObjectSpawnStartedMessage>((conn, msg) => {}); // host mode doesn't need spawning
+                RegisterHandler<ObjectSpawnFinishedMessage>((conn, msg) => {}); // host mode doesn't need spawning
                 RegisterHandler<UpdateVarsMessage>((conn, msg) => {});
             }
             else
@@ -326,17 +318,17 @@ namespace Mirror
             RegisterHandler<SyncEventMessage>(ClientScene.OnSyncEventMessage);
         }
 
-        [Obsolete("Use RegisterHandler<T> instead")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use RegisterHandler<T> instead")]
         public static void RegisterHandler(int msgType, NetworkMessageDelegate handler)
         {
             if (handlers.ContainsKey(msgType))
             {
-                if (LogFilter.Debug) Debug.Log("NetworkClient.RegisterHandler replacing " + handler.ToString() + " - " + msgType);
+                if (LogFilter.Debug) Debug.Log("NetworkClient.RegisterHandler replacing " + handler + " - " + msgType);
             }
             handlers[msgType] = handler;
         }
 
-        [Obsolete("Use RegisterHandler<T> instead")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use RegisterHandler<T> instead")]
         public static void RegisterHandler(MsgType msgType, NetworkMessageDelegate handler)
         {
             RegisterHandler((int)msgType, handler);
@@ -347,7 +339,7 @@ namespace Mirror
             int msgType = MessagePacker.GetId<T>();
             if (handlers.ContainsKey(msgType))
             {
-                if (LogFilter.Debug) Debug.Log("NetworkClient.RegisterHandler replacing " + handler.ToString() + " - " + msgType);
+                if (LogFilter.Debug) Debug.Log("NetworkClient.RegisterHandler replacing " + handler + " - " + msgType);
             }
             handlers[msgType] = (networkMessage) =>
             {
@@ -355,13 +347,13 @@ namespace Mirror
             };
         }
 
-        [Obsolete("Use UnregisterHandler<T> instead")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use UnregisterHandler<T> instead")]
         public static void UnregisterHandler(int msgType)
         {
             handlers.Remove(msgType);
         }
 
-        [Obsolete("Use UnregisterHandler<T> instead")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use UnregisterHandler<T> instead")]
         public static void UnregisterHandler(MsgType msgType)
         {
             UnregisterHandler((int)msgType);
@@ -377,10 +369,11 @@ namespace Mirror
         public static void Shutdown()
         {
             if (LogFilter.Debug) Debug.Log("Shutting down client.");
-            active = false;
+            ClientScene.Shutdown();
+            connectState = ConnectState.None;
         }
 
-        [Obsolete("Call NetworkClient.Shutdown() instead. There is only one client.")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Call NetworkClient.Shutdown() instead. There is only one client.")]
         public static void ShutdownAll()
         {
             Shutdown();

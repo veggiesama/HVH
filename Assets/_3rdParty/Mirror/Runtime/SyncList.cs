@@ -43,7 +43,7 @@ namespace Mirror
     // in Unity 2019.1.
     //
     // TODO rename back to SyncListStruct after 2019.1!
-    [Obsolete("Use SyncList<MyStruct> instead")]
+    [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use SyncList<MyStruct> instead")]
     public class SyncListSTRUCT<T> : SyncList<T> where T : struct
     {
         public T GetItem(int i) => base[i];
@@ -54,7 +54,7 @@ namespace Mirror
     {
         public delegate void SyncListChanged(Operation op, int itemIndex, T item);
 
-        readonly List<T> objects = new List<T>();
+        readonly IList<T> objects;
 
         public int Count => objects.Count;
         public bool IsReadOnly { get; private set; }
@@ -87,6 +87,17 @@ namespace Mirror
 
         protected virtual void SerializeItem(NetworkWriter writer, T item) {}
         protected virtual T DeserializeItem(NetworkReader reader) => default;
+
+
+        protected SyncList()
+        {
+            objects = new List<T>();
+        }
+
+        protected SyncList(IList<T> objects)
+        {
+            this.objects = objects;
+        }
 
         public bool IsDirty => changes.Count > 0;
 
@@ -146,25 +157,18 @@ namespace Mirror
                 switch (change.operation)
                 {
                     case Operation.OP_ADD:
+                    case Operation.OP_REMOVE:
                         SerializeItem(writer, change.item);
                         break;
 
                     case Operation.OP_CLEAR:
                         break;
 
-                    case Operation.OP_INSERT:
-                        writer.WritePackedUInt32((uint)change.index);
-                        SerializeItem(writer, change.item);
-                        break;
-
-                    case Operation.OP_REMOVE:
-                        SerializeItem(writer, change.item);
-                        break;
-
                     case Operation.OP_REMOVEAT:
                         writer.WritePackedUInt32((uint)change.index);
                         break;
 
+                    case Operation.OP_INSERT:
                     case Operation.OP_SET:
                     case Operation.OP_DIRTY:
                         writer.WritePackedUInt32((uint)change.index);

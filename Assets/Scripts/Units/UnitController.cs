@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
+using Mirror;
 
-public class UnitController : MonoBehaviour {
+public class UnitController : NetworkBehaviour {
 	[HideInInspector] public BodyController body;
 	[HideInInspector] public NavMeshAgent agent;
 	[HideInInspector] public UnitInfo unitInfo;
@@ -34,7 +35,7 @@ public class UnitController : MonoBehaviour {
 	private float knockbackSafetyTimer = 0f;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		body = GetComponentInChildren<BodyController>();
 		agent = body.GetComponent<NavMeshAgent>();
 		unitInfo = GetComponent<UnitInfo>();
@@ -58,7 +59,7 @@ public class UnitController : MonoBehaviour {
 	
 	// UPDATE
 	//private void Update () {}
-	private void FixedUpdate() {}
+	//private void FixedUpdate() {}
 
 	// ORDERS
 
@@ -139,18 +140,16 @@ public class UnitController : MonoBehaviour {
 		}
 		 
 		orderQueue.Add(castOrder, ability.doNotCancelOrderQueue);
-
 	}
 
 	// targeting
-	public void SetCurrentTarget(UnitController target, AbilityTargetTeams targetTeam) {
-		if (targetTeam == AbilityTargetTeams.ALLY) {
+	public void SetCurrentTarget(UnitController target) {
+		if (target != null && SharesTeamWith(target)) {
 			if (currentFriendlyTarget != null)
 				currentFriendlyTarget.ShowTargetStand(false, AbilityTargetTeams.ALLY);
 
 			currentFriendlyTarget = target;
 			target.ShowTargetStand(true, AbilityTargetTeams.ALLY);
-
 		}
 
 		else {
@@ -177,7 +176,8 @@ public class UnitController : MonoBehaviour {
 	}
 	
 	private void SetTargetCamera(bool enable, AbilityTargetTeams targetTeam) {
-		faceCam.gameObject.SetActive(enable);
+		//faceCam.gameObject.SetActive(enable);
+		faceCam.enabled = enable;
 
 		if (enable) {
 			if (targetTeam == AbilityTargetTeams.ALLY)
@@ -188,8 +188,7 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public UnitController GetTarget(AbilityTargetTeams targetTeam) {
-		switch (targetTeam)
-		{
+		switch (targetTeam)	{
 			case AbilityTargetTeams.ALLY:
 				return currentFriendlyTarget;
 			case AbilityTargetTeams.ENEMY:
@@ -323,6 +322,10 @@ public class UnitController : MonoBehaviour {
 		orderQueue.CancelAllOrders();
 	}
 
+	public Order GetCurrentOrder() {
+		return orderQueue.GetCurrentOrder();
+	}
+	
 	public bool HasAbilityInSlot(AbilitySlots slot) {
 		if (abilityManager.HasAbilityInSlot(slot) && !abilityManager.GetAbilityInSlot(slot).IsEmptyAbility())
 			return true;
@@ -334,7 +337,11 @@ public class UnitController : MonoBehaviour {
 		return abilityManager.GetAbilityInSlot(slot);
 	}
 
-	private bool lockFacingToMouse = false;
+	public AbilitySlots GetAbilitySlot(Ability ability) {
+		return abilityManager.GetAbilitySlot(ability);
+	}
+
+	private bool lockFacingToMouse = false; // TODO: cleanup and separate helper functions
 
 	public void SetMouseLook(bool enable) {
 		lockFacingToMouse = enable;

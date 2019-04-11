@@ -10,24 +10,29 @@ public class BulletBehaviour : ProjectileBehaviour {
 
 	private float adjustTargetHeightBy = 1.0f;
 
-	protected override void Start() {
+	protected override void Start() { // remove overrides, put them in initialize
 		base.Start();
+	}
+
+	public virtual void Initialize(Ability ability, Vector3 targetLocation, float treeMissChance) {
 		targetLocation = targetLocation + (Vector3.up * adjustTargetHeightBy);
+		base.Initialize(ability, targetLocation);
+		this.treeMissChance = treeMissChance;
 		rb.transform.LookAt(targetLocation);
 	}
 
 	protected override void FixedUpdate () {
+		if (!hasAuthority) return;
+		if (!initialized) return;
+
 		base.FixedUpdate();
 		rb.velocity = transform.forward * projectileSpeed;
 	}
 
-	public virtual void Initialize(Ability ability, Vector3 targetLocation, float treeMissChance) {
-		base.Initialize(ability, targetLocation);
-		this.treeMissChance = treeMissChance;
-	}
-
 	// if the calling ability has a tree miss chance, apply it here
 	protected override void OnTriggerEnter(Collider other) {
+		if (!hasAuthority) return;
+
 		// collided with tree
 		if (other.gameObject.CompareTag("Tree")) {
 			if (treeMissChance > 0.0f && !hasRolledToMiss) {

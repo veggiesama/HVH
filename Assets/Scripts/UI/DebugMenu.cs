@@ -11,8 +11,7 @@ public class DebugMenu : MonoBehaviour {
 
 	private void Start()
 	{
-		GameController gc = GameObject.Find("GameController").GetComponent<GameController>();
-		unit = gc.localPlayer.unit;
+		unit = GameObject.Find("UI Canvas").GetComponent<UICanvas>().GetLocalPlayer().unit;
 
 		statusButton.onClick.AddListener( delegate {
 			ApplyStatus();

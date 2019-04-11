@@ -62,14 +62,14 @@ public class Swipe : Ability, IProjectileAbility {
 
 	public bool OnHitEnemy(UnitController unit)
 	{ 
-		Debug.Log("Cone hit enemy");
+		//Debug.Log("Cone hit enemy");
 		unit.ReceivesDamage(damage, caster);
 		return false;
 	}
 
 	public bool OnHitAlly(UnitController unit)
 	{
-		Debug.Log("Cone hit ally");
+		//Debug.Log("Cone hit ally");
 		unit.ReceivesDamage(damage / 2, caster);
 		return false;
 	}
