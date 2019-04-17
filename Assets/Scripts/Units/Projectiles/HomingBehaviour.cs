@@ -5,6 +5,7 @@ using UnityEngine;
 public class HomingBehaviour : ProjectileBehaviour {
 
 	protected override void FixedUpdate () {
+		if (!CanUpdate()) return;
 		base.FixedUpdate();
 		rb.transform.LookAt(target.body.transform);
 		rb.velocity = transform.forward * projectileSpeed;
@@ -20,7 +21,7 @@ public class HomingBehaviour : ProjectileBehaviour {
 		}
 
 		hasCollided = true;
-		target.ReceivesDamage(attacker.attackInfo.damage, attacker);
+		networkHelper.DealDamageTo(target, attacker.attackInfo.damage);
 		Destroy(this.gameObject);
 	}
 }

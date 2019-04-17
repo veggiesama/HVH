@@ -11,9 +11,9 @@ public class ControlScheme : MonoBehaviour {
     {
         
     }
-
+	/*
     public void UpdateInputs() {
 		if (player.isUnassigned) return;
 		if (!player.isLocalPlayer) return;
-	}
+	}*/
 }

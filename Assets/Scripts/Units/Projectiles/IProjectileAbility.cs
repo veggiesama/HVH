@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface IProjectileAbility {
-	bool OnHitEnemy(UnitController unit);
-	bool OnHitAlly(UnitController unit);
+	bool OnHitEnemy(UnitController enemy);
+	bool OnHitAlly(UnitController ally);
 	bool OnHitTree(Tree tree);
 }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class DebugMenu : MonoBehaviour {
 
@@ -9,9 +10,11 @@ public class DebugMenu : MonoBehaviour {
 	public Button statusButton;
 	private UnitController unit; 
 
-	private void Start()
-	{
-		unit = GameObject.Find("UI Canvas").GetComponent<UICanvas>().GetLocalPlayer().unit;
+	private void Start() {
+		var dict = ResourceLibrary.Instance.statusEffectDictionary;
+		statusDropdown.AddOptions(dict.Keys.ToList());
+
+		unit = FindObjectOfType<UICanvas>().GetLocalPlayer().unit;
 
 		statusButton.onClick.AddListener( delegate {
 			ApplyStatus();
@@ -19,57 +22,12 @@ public class DebugMenu : MonoBehaviour {
 	}
 
 	private void ApplyStatus() {
+		var dict = ResourceLibrary.Instance.statusEffectDictionary;
+		string selectedOption = statusDropdown.captionText.text;
+		if (dict.TryGetValue(selectedOption, out StatusEffect status)) {
+			StatusEffect s = Instantiate(status);
+			unit.networkHelper.ApplyStatusEffectTo(s);
+		} 
 
-		StatusEffect status;
-		switch (statusDropdown.captionText.text)
-		{
-			case "Airborn":
-				status = ScriptableObject.CreateInstance<Airborn>();
-				status.Reset();
-				unit.ApplyStatusEffect(status, null, unit);
-				break;
-			case "Dead":
-				status = ScriptableObject.CreateInstance<Dead>();
-				status.Reset();
-				unit.ApplyStatusEffect(status, null, null);
-				break;
-			case "Immobilized":
-				status = ScriptableObject.CreateInstance<Immobilized>();
-				status.Reset();
-				unit.ApplyStatusEffect(status, null, unit);
-				break;
-			case "Invisible":
-				status = ScriptableObject.CreateInstance<Invisible>();
-				status.Reset();
-				unit.ApplyStatusEffect(status, null, unit);
-				break;
-			case "Invulnerable":
-				status = ScriptableObject.CreateInstance<Invulnerable>();
-				status.Reset();
-				unit.ApplyStatusEffect(status, null, unit);
-				break;
-			case "Revealed":
-				status = ScriptableObject.CreateInstance<Revealed>();
-				status.Reset();
-				unit.ApplyStatusEffect(status, null, unit);
-				break;
-			case "Silenced":
-				status = ScriptableObject.CreateInstance<Silenced>();
-				status.Reset();
-				unit.ApplyStatusEffect(status, null, unit);
-				break;
-			case "Slowed":
-				status = ScriptableObject.CreateInstance<Slowed>();
-				status.Reset();
-				unit.ApplyStatusEffect(status, null, unit);
-				break;
-			case "Stunned":
-				status = ScriptableObject.CreateInstance<Stunned>();
-				status.Reset();
-				unit.ApplyStatusEffect(status, null, unit);
-				break;
-			default:
-				break;
-		}
 	}
 }

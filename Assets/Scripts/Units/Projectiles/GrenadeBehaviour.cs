@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 public class GrenadeBehaviour : ProjectileBehaviour {
 	public float rotationalSpeed;
-	private Transform childTransform;
 
-	protected override void Start() {
-		base.Start();
+	// should projectiles even have NetworkTransform?
+	// are they deterministic? are they always?
+	// should the AddForce be client-side and not localplayer-only? Move it to Start?
 
-		childTransform = transform.GetChild(0);
+	public override void Initialize(Ability ability, Vector3 targetLocation) {
+		base.Initialize(ability, targetLocation);
 
 		Vector3 throwVector = Util.CalculateBestLaunchSpeed(
 			attacker.GetBodyPosition(),
@@ -19,8 +21,10 @@ public class GrenadeBehaviour : ProjectileBehaviour {
 		rb.AddForce(throwVector, ForceMode.VelocityChange);
 
 		// prevent early triggering
-		GetComponent<BoxCollider>().enabled = false;
-		Invoke("EnableCollider", grenadeTimeToHitTarget * 0.75f);
+		if (CanUpdate()) {
+			GetComponent<BoxCollider>().enabled = false;
+			Invoke("EnableCollider", grenadeTimeToHitTarget * 0.75f);
+		}
 	}
 
 	private void EnableCollider() {
@@ -28,8 +32,11 @@ public class GrenadeBehaviour : ProjectileBehaviour {
 	}
 
 	protected override void FixedUpdate () {
-		base.FixedUpdate();
-		childTransform.Rotate(Vector3.up, rotationalSpeed * Time.fixedDeltaTime); // TODO: switch to Time.fixedDeltaTime?
+		if (!CanUpdate()) return;
+		//if (!initialized) return;
+
+ 		base.FixedUpdate();
+		transform.Rotate(Vector3.up, rotationalSpeed * Time.fixedDeltaTime); // TODO: switch to Time.fixedDeltaTime?
 	}
 
 }

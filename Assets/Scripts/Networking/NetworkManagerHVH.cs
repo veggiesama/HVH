@@ -34,7 +34,7 @@ public class NetworkManagerHVH : NetworkManager {
 
 		Player player;
 		player = gameController.GetNextUnassignedPlayer();
-		player.isUnassigned = false;
+		player.GetComponent<NetworkHelper>().isUnassigned = false;
 
 		GameObject playerGO = player.gameObject;
 		NetworkServer.AddPlayerForConnection(conn, playerGO);

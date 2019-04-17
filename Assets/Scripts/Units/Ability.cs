@@ -8,6 +8,8 @@ public abstract class Ability : ScriptableObject {
 	[HideInInspector] public UnitController caster, allyTarget, enemyTarget;
 	[HideInInspector] public UnitInfo unitInfo;
 	[HideInInspector] public AbilityManager abilityManager;
+	[HideInInspector] public NetworkHelper networkHelper;
+	[HideInInspector] public Player player;
 	//[HideInInspector] public Vector3 targetLocation;
 	protected bool isEmptyAbility = false;
 	protected Order castOrder;
@@ -25,14 +27,15 @@ public abstract class Ability : ScriptableObject {
 	public bool doNotCancelOrderQueue = false;
 
 	private float cooldownTimeRemaining = 0.0f;
-	protected float durationRemaining = 0;
+	public float durationRemaining = 0;
 
 	[Header("Projectile")]
 	public GameObject projectilePrefab = null;
+	public ProjectileBehaviourTypes projectileBehaviour = ProjectileBehaviourTypes.NONE;
 	public float projectileSpeed = 0;
 	public float projectileTimeAlive = 0;
 	public float projectileTimeUntilFullGrowth = 0;
-	public Vector3 projectileGrowthFactor = new Vector3(1, 1, 1);
+	public Vector3 projectileGrowthFactor = Vector3.one;
 	public float grenadeTimeToHitTarget = 0;
 
 	public abstract void Reset();
@@ -42,7 +45,9 @@ public abstract class Ability : ScriptableObject {
 		//this.Ability = obj.GetComponentInChildren<Ability>();
 		this.abilityManager = obj.GetComponent<AbilityManager>();
 		this.caster = obj.GetComponentInParent<UnitController>();
-		this.unitInfo = obj.GetComponentInParent<UnitInfo>();
+		this.unitInfo = caster.GetComponent<UnitInfo>();
+		this.player = obj.GetComponentInParent<Player>();
+		this.networkHelper = player.GetComponent<NetworkHelper>();
 	}
 
 	public virtual void Learn() {}
@@ -52,6 +57,7 @@ public abstract class Ability : ScriptableObject {
 		if (cooldownTimeRemaining > 0) 
 			cooldownTimeRemaining -= Time.deltaTime;
 		if (durationRemaining > 0) {
+			//Debug.Log(durationRemaining + "/" + duration);
 			durationRemaining -= Time.deltaTime;
 			if (durationRemaining <= 0)
 				OnDurationEnd();
@@ -60,7 +66,8 @@ public abstract class Ability : ScriptableObject {
 
 	public virtual void FixedUpdate() {}
 
-	public virtual CastResults Cast(Order castOrder) { 
+	public virtual CastResults Cast(Order castOrder) {
+		durationRemaining = duration;
 		this.castOrder = castOrder;
 		return CastResults.SUCCESS;
 	}
@@ -156,11 +163,6 @@ public abstract class Ability : ScriptableObject {
 		return true;
 	}
 
-	// enables OnDurationEnd()
-	protected void TrackDuration() {
-		durationRemaining = duration;
-	}
-
 	protected virtual void OnDurationEnd() {}
 
 	public float GetCooldown() {
@@ -175,5 +177,8 @@ public abstract class Ability : ScriptableObject {
 		return isEmptyAbility;
 	}
 
+	public virtual void CreateProjectile(Ability ability, Order castOrder) {
+		networkHelper.CreateProjectile(ability, castOrder);
+	}
 }
  

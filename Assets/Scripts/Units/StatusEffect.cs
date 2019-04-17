@@ -18,15 +18,15 @@ public abstract class StatusEffect : ScriptableObject {
 
 	protected StatusEffectManager statusEffectManager;
 	protected UnitController unit;
-	protected UnitController inflictor;
 	protected Ability ability;
+	protected NetworkHelper networkHelper;
 
-	public abstract void Reset();
+	public virtual void Reset() {}
 
-	public virtual void Initialize(GameObject obj, Ability ability, UnitController inflictor) {
+	public virtual void Initialize(GameObject obj, Ability ability) {
 		this.statusEffectManager = obj.GetComponentInChildren<StatusEffectManager>();
+		this.networkHelper = obj.GetComponentInParent<NetworkHelper>();
 		this.unit = obj.GetComponentInParent<UnitController>();
-		this.inflictor = inflictor;
 		this.ability = ability;
 	}
 	

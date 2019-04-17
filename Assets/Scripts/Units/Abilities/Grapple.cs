@@ -80,7 +80,7 @@ public class Grapple : Ability {
 	}
 
 	private void BeginLaunch(Vector3 anchor) {
-		caster.ApplyStatusEffect(airbornStatusEffect, this, caster);
+		caster.ApplyStatusEffect(airbornStatusEffect, this);
 		Vector3 velocityVector = (anchor - caster.GetBodyPosition()).normalized * launchForce;
 		//caster.EnableNav(false);
 		caster.body.PerformAirborn(velocityVector);
@@ -138,7 +138,7 @@ public class Grapple : Ability {
 		if (ropeLengthLast == 0 || ropeLength <= ropeLengthLast) // rope is shrinking
 			ropeLengthLast = ropeLength;
 		else { // rope snaps
-			caster.GetPlayer().DestroyTree(castOrder.tree, caster.GetBodyPosition(), 0);
+			networkHelper.DestroyTree(castOrder.tree, caster.GetBodyPosition(), 0);
 			DestroyRope();
 		}
 	}

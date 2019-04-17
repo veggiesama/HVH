@@ -11,6 +11,8 @@ public class UnitController : NetworkBehaviour {
 	[HideInInspector] public NavMeshAgent agent;
 	[HideInInspector] public UnitInfo unitInfo;
 	[HideInInspector] public AttackInfo attackInfo;
+	[HideInInspector] public NetworkHelper networkHelper;
+	[HideInInspector] public Player player;
 
 	private Camera faceCam; 
 	private UnitController currentFriendlyTarget, currentEnemyTarget;
@@ -32,7 +34,6 @@ public class UnitController : NetworkBehaviour {
 
 	private Quaternion wantedRotation;
 	private bool orderRestricted = false;
-	private float knockbackSafetyTimer = 0f;
 
 	// Use this for initialization
 	void Awake () {
@@ -41,6 +42,8 @@ public class UnitController : NetworkBehaviour {
 		unitInfo = GetComponent<UnitInfo>();
 		attackInfo = GetComponent<AttackInfo>();
 		faceCam = GetComponentInChildren<Camera>(true);
+		player = GetComponentInParent<Player>();
+		networkHelper = player.GetComponent<NetworkHelper>();
 
 		abilityManager = GetComponentInChildren<AbilityManager>();
 		orderQueue = GetComponentInChildren<OrderQueue>();
@@ -56,7 +59,7 @@ public class UnitController : NetworkBehaviour {
 		agent.angularSpeed = unitInfo.turnRate;
 		SetTargetCamera(false, AbilityTargetTeams.ENEMY);
 	}
-	
+
 	// UPDATE
 	//private void Update () {}
 	//private void FixedUpdate() {}
@@ -199,16 +202,17 @@ public class UnitController : NetworkBehaviour {
 		}
 	}
 
+	/*
 	// damage
 	public void ReceivesDamage(float damage, UnitController attacker) {
-		
+
 		if (!HasStatusEffect(StatusEffectTypes.INVULNERABLE))
-			unitInfo.currentHealth -= damage;
+			networkHelper.currentHealth -= damage;
 		
-		if (unitInfo.currentHealth < 0) {
+		if (networkHelper.currentHealth < 0) {
 			ApplyStatusEffect(unitInfo.onDeathStatusEffect, null, null);
 		}
-	}
+	}*/
 
 	// Misc.
 
@@ -217,7 +221,8 @@ public class UnitController : NetworkBehaviour {
 	}
 
 	public Player GetPlayer() {
-		return transform.parent.GetComponent<Player>();
+		return player;
+		//return transform.parent.GetComponent<Player>();
 	}
 
 	public Vector3 GetBodyPosition() {
@@ -274,7 +279,7 @@ public class UnitController : NetworkBehaviour {
 		//	agent.FindClosestEdge(out NavMeshHit hit);
 		//	Debug.DrawLine(hit.position, Vector3.up, Color.cyan, 3.0f, false);
 
-			ApplyStatusEffect(unitInfo.onDeathStatusEffect, null, null);
+			ApplyStatusEffect(unitInfo.onDeathStatusEffect);
 		}
 	}
 
@@ -301,12 +306,15 @@ public class UnitController : NetworkBehaviour {
 		return statusEffectManager.HasStatusEffect(name);
 	}
 
+	public void ApplyStatusEffect(StatusEffect status) {
+		ApplyStatusEffect(status, null);
+	}
 
-	//public void ApplyStatusEffect(StatusEffect status, Ability ability, UnitController inflictor) {
-	public void ApplyStatusEffect(StatusEffect status, Ability ability, UnitController inflictor) {
-		StatusEffect cloneStatus = Instantiate(status); //, statusEffectManager.transform);
-		cloneStatus.Initialize(this.gameObject, ability, inflictor);
+	public void ApplyStatusEffect(StatusEffect status, Ability ability) {
+		StatusEffect cloneStatus = Instantiate(status);
+		cloneStatus.Initialize(this.gameObject, ability);
 		statusEffectManager.Add(cloneStatus);
+		Debug.Log("Adding " + status.statusName + " to unit for " + status.duration + " seconds.");
 	}
 
 	public void RemoveStatusEffect(StatusEffectTypes statusType) {
@@ -315,7 +323,10 @@ public class UnitController : NetworkBehaviour {
 
 	public void RemoveStatusEffect(string statusName) {
 		statusEffectManager.Remove(statusName);
+	}
 
+	public float GetStatusEffectDuration(StatusEffectTypes statusType) {
+		return statusEffectManager.GetStatusEffect(statusType).duration;
 	}
 	
 	public void CancelAllOrders() {
@@ -355,22 +366,40 @@ public class UnitController : NetworkBehaviour {
 		return (this.GetTeam() == unit.GetTeam());
 	}
 
-	public void Knockback(Vector3 velocityVector, Ability ability, UnitController inflictor) {
-		ApplyStatusEffect(unitInfo.onAirbornStatusEffect, ability, inflictor);
+	public void Knockback(Vector3 velocityVector, Ability ability) {
+		ApplyStatusEffect(unitInfo.onAirbornStatusEffect, ability);
 		body.PerformAirborn(velocityVector);
-		body.OnCollisionEventHandler += OnKnockbackCollision; // event sub
-
+		Invoke("EnableKnockbackCollider", 0.25f); // prevent early triggering
 		//EnableNav(false);
+	}
+
+	public void EnableKnockbackCollider() {
+		body.OnCollisionEventHandler += OnKnockbackCollision; // event sub
 	}
 	
 	public void OnKnockbackCollision(Collision col) {
-		EndKnockback();
+		Debug.Log("Knockbacked unit collided with: " + col.collider.gameObject.name);
+
+		GameObject o = col.collider.gameObject;
+
+		if (o.layer == (int) LayerBits.TREE) {
+			Tree tree = o.GetComponent<Tree>();	
+			networkHelper.DestroyTree(tree);
+		}
+
+
+		else if (o.layer == (int) LayerBits.TERRAIN)
+			EndKnockback();
 	}
 
 	public void EndKnockback() {
 		RemoveStatusEffect(unitInfo.onAirbornStatusEffect.statusName);
 		body.OnCollisionEventHandler -= OnKnockbackCollision; // event unsub
 		//EnableNav(true);
+	}
+
+	public List<StatusEffect> GetStatusEffectList() {
+		return statusEffectManager.GetStatusEffectList();
 	}
 
 }

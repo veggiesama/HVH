@@ -18,8 +18,8 @@ public class Slowed : StatusEffect {
 	}
 	
 	// initializer
-	public override void Initialize(GameObject obj, Ability ability, UnitController inflictor) {
-		base.Initialize(obj, ability, inflictor);
+	public override void Initialize(GameObject obj, Ability ability) {
+		base.Initialize(obj, ability);
 	}
 
 	// 

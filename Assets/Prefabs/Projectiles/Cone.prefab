@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7835063525637506412}
   - component: {fileID: 1885837541142149891}
   - component: {fileID: 530168210896604239}
+  - component: {fileID: 5320963676015140773}
   m_Layer: 0
   m_Name: Cone
   m_TagString: Untagged
@@ -140,3 +141,17 @@ MonoBehaviour:
   m_LocalPlayerAuthority: 1
   m_AssetId: 0e0a29864c746e049aa8edc3816b9f91
   m_SceneId: 0
+--- !u!114 &5320963676015140773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8222844098290283177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncInterval: 0.1
+  compressRotation: 1

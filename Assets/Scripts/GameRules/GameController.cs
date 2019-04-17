@@ -36,9 +36,6 @@ public class GameController : NetworkBehaviour {
 		if (isServer) return;
 		dwarfDictionary.Callback += OnDwarfTeamChange;
 		monsterDictionary.Callback += OnMonsterTeamChange;
-
-		Debug.Log(dwarfDictionary.DebugToString());
-		Debug.Log(monsterDictionary.DebugToString());
 	}
 
 	private void OnDwarfTeamChange(DwarfSlotsToPlayerID_SyncDictionary.Operation op, int slot, int playerID) {
@@ -85,7 +82,7 @@ public class GameController : NetworkBehaviour {
 			DwarfTeamSlots slot = (DwarfTeamSlots)kv.Key;
 			Player player = GetPlayer(kv.Value);
 
-			if (player.isUnassigned)
+			if (player.GetComponent<NetworkHelper>().isUnassigned)
 				return player;
 		}
 
@@ -93,7 +90,7 @@ public class GameController : NetworkBehaviour {
 			MonsterTeamSlots slot = (MonsterTeamSlots)kv.Key;
 			Player player = GetPlayer(kv.Value);
 
-			if (player.isUnassigned)
+			if (player.GetComponent<NetworkHelper>().isUnassigned)
 				return player;
 		}
 
@@ -119,82 +116,6 @@ public class GameController : NetworkBehaviour {
 
 		return null;
 	}
-
-		/*
-
-	public override void OnStartClient()
-	{
-		//playerList.Callback += OnPlayerListChanged;
-	}
-
-	void OnPlayerListChanged(SyncListPlayers.Operation op, int index, GameObject p)
-    {
-        Debug.Log("player list changed:  " + op);
-    }
-
-	public void SpawnUnassignedPlayers() {
-		for (int i = 0; i < 8; i++) {
-			Transform spawnLoc = networkManager.GetStartPosition();
-			Player unassignedPlayer = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<Player>();
-			playerList.Add(unassignedPlayer.gameObject);
-			unassignedPlayer.MakeNPC();
-
-			dikkkList.Add(Random.Range(1,100), "Absolute" + Random.Range(1,100));
-
-			if (i < 4)
-				unassignedPlayer.SetTeam(Teams.DWARVES);
-			else
-				unassignedPlayer.SetTeam(Teams.MONSTERS);
-			
-			NetworkServer.Spawn(unassignedPlayer.gameObject);
-		}
-	}
-
-	public Player GetNextUnassignedPlayer() {
-
-		for (int i = 0; i < playerList.Count; i++) {
-			Player player = playerList[i].GetComponent<Player>();
-
-			if (player.isUnassigned)
-				return player;
-		}
-
-		return null;
-	}
-	*/
-	////////////////////////////////////////////////////////////////////////
-	/*
-	public void SpawnUnassignedPlayers() {
-		for (int i = 0; i < playerArray.Length; i++) {
-			Transform spawnLoc = networkManager.GetStartPosition();
-			Player unassignedPlayer = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<Player>();
-			playerArray[i] = unassignedPlayer.gameObject;
-			unassignedPlayer.MakeNPC();
-
-			if (i < 4)
-				unassignedPlayer.SetTeam(Teams.DWARVES);
-			else
-				unassignedPlayer.SetTeam(Teams.MONSTERS);
-			
-			NetworkServer.Spawn(unassignedPlayer.gameObject);
-		}
-	}
-
-	public Player GetNextUnassignedPlayer() {
-
-		for (int i = 0; i < playerArray.Length; i++) {
-			Player player = playerArray[i].GetComponent<Player>();
-
-			if (player.isUnassigned)
-				return player;
-		}
-
-		return null;
-	}
-	*/
-	////////////////////////////////////////////////////////////////////////
-
-
 
 	public static GameObject GetSceneMask() {
 		return GameObject.Find("SceneViewMask");

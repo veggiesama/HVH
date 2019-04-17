@@ -14,24 +14,22 @@ public class Dead : StatusEffect {
 	}
 	
 	// initializer
-	public override void Initialize(GameObject obj, Ability ability, UnitController inflictor) {
-		base.Initialize(obj, ability, inflictor);
+	public override void Initialize(GameObject obj, Ability ability) {
+		base.Initialize(obj, ability);
 	}
 
-	public override void Apply()
-	{
+	public override void Apply() {
 		base.Apply();
 		unit.CancelAllOrders();
 		unit.SetOrderRestricted(true);
-		unit.DetachFromNav();
-		unit.EnableNav(false);
-		Vector3 killFromDirection;// = Util.GetNullVector();
-		if (inflictor)
-			killFromDirection = inflictor.GetBodyPosition();
+
+		Vector3 killFromDirection;
+		if (ability != null)
+			killFromDirection = ability.caster.GetBodyPosition();
 		else
 			killFromDirection = unit.GetBodyPosition() + Random.insideUnitSphere * 1.5f;
 		
-		unit.body.PerformDeath(killFromDirection);
+		networkHelper.Die(killFromDirection);
 	}
 
 	public override void Update() {
@@ -45,16 +43,8 @@ public class Dead : StatusEffect {
 	}
 
 	public override void End() {
-		Transform spawnLoc = GameController.GetRandomSpawnPoint();
-		unit.body.transform.SetPositionAndRotation(spawnLoc.position, spawnLoc.rotation);
-		unit.unitInfo.currentHealth = unit.unitInfo.maxHealth;
-
-		unit.EnableNav(true);
-		unit.body.ResetBody();
-		unit.AttachToNav();
+		networkHelper.Respawn();
 		unit.SetOrderRestricted(false);
-		//agent.enabled = true;
-
 		base.End();
 	}
 }

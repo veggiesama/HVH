@@ -45,7 +45,7 @@ public class HealthController : MonoBehaviour {
 
 		if (allyTarget != null) {
 			allyTargetHealthbarSlider.gameObject.SetActive(true);
-			allyTargetHealthbarSlider.value = allyTarget.unitInfo.currentHealth / allyTarget.unitInfo.maxHealth;
+			allyTargetHealthbarSlider.value = allyTarget.networkHelper.currentHealth / allyTarget.unitInfo.maxHealth;
 		}
 		else {
 			allyTargetHealthbarSlider.gameObject.SetActive(false);
@@ -53,7 +53,7 @@ public class HealthController : MonoBehaviour {
 
 		if (enemyTarget != null) {
 			enemyTargetHealthbarSlider.gameObject.SetActive(true);
-			enemyTargetHealthbarSlider.value = enemyTarget.unitInfo.currentHealth / enemyTarget.unitInfo.maxHealth;
+			enemyTargetHealthbarSlider.value = enemyTarget.networkHelper.currentHealth / enemyTarget.unitInfo.maxHealth;
 		}
 		else {
 			enemyTargetHealthbarSlider.gameObject.SetActive(false);
@@ -67,7 +67,7 @@ public class HealthController : MonoBehaviour {
 		
 			Slider slider = allies[slot];
 			slider.gameObject.SetActive(true);
-			slider.value = p.unit.unitInfo.currentHealth / p.unit.unitInfo.maxHealth;
+			slider.value = p.unit.networkHelper.currentHealth / p.unit.unitInfo.maxHealth;
 		}
 
 		foreach (KeyValuePair<int,int> kv in gc.monsterDictionary) {
@@ -76,7 +76,7 @@ public class HealthController : MonoBehaviour {
 	
 			Slider slider = enemies[slot];
 			slider.gameObject.SetActive(true);
-			slider.value = p.unit.unitInfo.currentHealth / p.unit.unitInfo.maxHealth;
+			slider.value = p.unit.networkHelper.currentHealth / p.unit.unitInfo.maxHealth;
 		}
 		
 	}

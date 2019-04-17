@@ -11,9 +11,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Abilities/FirePoint")]
 public class FirePoint : Ability, IProjectileAbility {
 
-	[Header("Projectile (Bullet)")]
-	public float treeMissChance = 0.5f; 
-
 	public override void Reset()
 	{
 		abilityName = "FirePoint";
@@ -30,6 +27,7 @@ public class FirePoint : Ability, IProjectileAbility {
 		doNotCancelOrderQueue = true;
 
 		projectilePrefab = null;
+		projectileBehaviour = ProjectileBehaviourTypes.BULLET;
 		projectileSpeed = 5f;
 		projectileTimeAlive = 10f;
 		grenadeTimeToHitTarget = 0;
@@ -44,7 +42,8 @@ public class FirePoint : Ability, IProjectileAbility {
 		CastResults baseCastResults = base.Cast(castOrder);
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
-		caster.GetPlayer().CreateProjectile(projectilePrefab, this, castOrder.targetLocation, treeMissChance);
+		networkHelper.CreateProjectile(this, castOrder);
+		//networkHelper.CreateProjectile(ProjectileBehaviours.BULLET, projectilePrefab, this, castOrder.targetLocation, treeMissChance);
 		
 		/*
 		GameObject projectileObject = Instantiate(projectilePrefab,
@@ -61,13 +60,13 @@ public class FirePoint : Ability, IProjectileAbility {
 
 	public bool OnHitEnemy(UnitController unit)
 	{
-		unit.ReceivesDamage(damage, caster);
+		networkHelper.DealDamageTo(unit, damage);
 		return true;
 	}
 
 	public bool OnHitAlly(UnitController unit)
 	{
-		unit.ReceivesDamage(damage / 2, caster);
+		networkHelper.DealDamageTo(unit, damage / 2);
 		return true;
 	}
 

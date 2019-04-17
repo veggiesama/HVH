@@ -5,11 +5,19 @@ using UnityEngine;
 public class StatusEffectManager : MonoBehaviour {
 	[SerializeField] private List<StatusEffect> statusEffectList = new List<StatusEffect>();
 	private List<StatusEffect> removalList = new List<StatusEffect>();
+	private NetworkHelper networkHelper;
+	public float networkRefreshEvery = 0.1f;
+	private float currentTimer;
 
-    void Start() {}
+	private void Start() {
+		networkHelper = GetComponentInParent<NetworkHelper>();
+		currentTimer = networkRefreshEvery;
+	}
 
-    void Update()
-    {
+	void Update() {
+		// never update non-local players
+		if (!networkHelper.HasControllableAuthority()) return;
+
 		foreach (StatusEffect status in statusEffectList) {
 			if (!status.applied)
 				status.Apply();
@@ -17,11 +25,14 @@ public class StatusEffectManager : MonoBehaviour {
 			status.Update();
 		}
 
+		UpdateNetworkDurations();
 		EmptyRemovalList();
     }
 
-	void FixedUpdate()
-	{
+	void FixedUpdate() {
+		// never update non-local players
+		if (!networkHelper.HasControllableAuthority()) return;
+
 		foreach (StatusEffect status in statusEffectList) {
 			status.FixedUpdate();
 		}
@@ -29,11 +40,16 @@ public class StatusEffectManager : MonoBehaviour {
 
 	// add
 	public void Add(StatusEffect status) {
+		// never add status effects to non-local players
+		if (!networkHelper.HasControllableAuthority()) return;
+
  		var existingStatus = GetStatusEffect(status.type);
 		if(existingStatus)
 			existingStatus.Stack(status);
-		else
-			statusEffectList.Add(status);	
+		else {
+			statusEffectList.Add(status);
+			networkHelper.TrackStatus(status);
+		}
 	}
 
 	// remove (actually moves to removal list)
@@ -61,8 +77,10 @@ public class StatusEffectManager : MonoBehaviour {
 	}
 
 	private void EmptyRemovalList() {
-		foreach (StatusEffect status in removalList)
+		foreach (StatusEffect status in removalList) {
+			networkHelper.StopTrackingStatus(status.statusName);
 			statusEffectList.Remove(status);
+		}
 		removalList.Clear();
 	}
 
@@ -86,6 +104,9 @@ public class StatusEffectManager : MonoBehaviour {
 
 	// has
 	public bool HasStatusEffect(string name) {
+		if (!networkHelper.HasControllableAuthority())
+			return networkHelper.HasStatusEffect(name);
+
 		foreach (StatusEffect status in statusEffectList) {
 			if (status.statusName == name)
 				return true;
@@ -94,10 +115,28 @@ public class StatusEffectManager : MonoBehaviour {
 	}
 
 	public bool HasStatusEffect(StatusEffectTypes type) {
+		if (!networkHelper.HasControllableAuthority())
+			return networkHelper.HasStatusEffect(type);
+
 		foreach (StatusEffect status in statusEffectList) {
 			if (status.type == type)
 				return true;
 		}
 		return false;
 	}
+
+	public List<StatusEffect> GetStatusEffectList() {
+		return statusEffectList;
+	}
+
+	public void UpdateNetworkDurations() {
+		//Debug.Log("UpdateNetworkDurations");
+
+		currentTimer -= Time.deltaTime;
+		if (currentTimer < 0) {
+			networkHelper.UpdateNetworkStatusSyncListDurations();
+			currentTimer = networkRefreshEvery;
+		}
+	}
+
 }

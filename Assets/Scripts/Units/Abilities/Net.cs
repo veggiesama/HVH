@@ -24,6 +24,7 @@ public class Net : Ability, IProjectileAbility {
 		doNotCancelOrderQueue = false;
 
 		projectilePrefab = null; // set on scriptableObject
+		projectileBehaviour = ProjectileBehaviourTypes.GRENADE;
 		grenadeTimeToHitTarget = 2f;
 	}
 
@@ -31,26 +32,19 @@ public class Net : Ability, IProjectileAbility {
 		CastResults baseCastResults = base.Cast(castOrder);
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
-		GameObject projectileObject = Instantiate(projectilePrefab,
-			caster.attackInfo.spawnerObject.transform.position,
-			caster.attackInfo.spawnerObject.transform.rotation,
-			caster.transform);
-
-		GrenadeBehaviour projectile = projectileObject.GetComponent<GrenadeBehaviour>();
-		projectile.Initialize(this, castOrder.targetLocation);
-
+		CreateProjectile(this, castOrder);
 		return CastResults.SUCCESS;
 	}
 
-	public bool OnHitEnemy(UnitController unit) {
-		Debug.Log("Hit enemy.");
-		unit.ApplyStatusEffect(netImmobilizedStatus, this, unit);
+	public bool OnHitEnemy(UnitController enemy) {
+		//Debug.Log("Hit enemy.");
+		networkHelper.ApplyStatusEffectTo(enemy, netImmobilizedStatus, this);
 		return true;
 	}
 
-	public bool OnHitAlly(UnitController unit) {
-		Debug.Log("Hit ally.");
-		unit.ApplyStatusEffect(netImmobilizedStatus, this, unit);
+	public bool OnHitAlly(UnitController ally) {
+		//Debug.Log("Hit ally.");
+		networkHelper.ApplyStatusEffectTo(ally, netImmobilizedStatus, this);
 		return true;
 	}
 

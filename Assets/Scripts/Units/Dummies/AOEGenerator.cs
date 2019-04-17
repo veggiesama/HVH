@@ -10,6 +10,7 @@ public class AOEGenerator : MonoBehaviour {
 	private float currentTimer = 0f;
 	private float remainingDuration;
 	private bool destroysTrees;
+	private NetworkHelper networkHelper;
 
 	//public ParticleSystem particleSystem;
 
@@ -21,6 +22,7 @@ public class AOEGenerator : MonoBehaviour {
 
 	public void Initialize(UnitController sourceUnit, Ability sourceAbility, StatusEffect[] statusEffects, float reappliesEvery, bool destroysTrees) {
 		this.sourceUnit = sourceUnit;
+		this.networkHelper = sourceUnit.networkHelper;
 		this.sourceAbility = sourceAbility;
 		this.statusEffects = statusEffects;
 		this.reappliesEvery = reappliesEvery;
@@ -55,14 +57,14 @@ public class AOEGenerator : MonoBehaviour {
 			else if (destroysTrees && Util.IsTree(col.gameObject)) {
 				float rng = Random.Range(0, reappliesEvery * 0.2f); // destroy each tree at a random time before next Pulse()
 				Tree tree = col.gameObject.GetComponent<Tree>();
-				sourceUnit.GetPlayer().DestroyTree(tree, transform.position, rng);
+				networkHelper.DestroyTree(tree, transform.position, rng);
 			}
 		}
 	}
 
 	private void ReapplyStatusEffects(UnitController unit) {
 		foreach (StatusEffect effect in statusEffects) {
-			unit.ApplyStatusEffect(effect, sourceAbility, sourceUnit);
+			unit.ApplyStatusEffect(effect, sourceAbility);
 		}
 	}
 

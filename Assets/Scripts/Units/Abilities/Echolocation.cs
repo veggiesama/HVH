@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Abilities/Echolocation")]
 public class Echolocation : Ability, IProjectileAbility {
 
+	[Header("Echolocation")]
 	public float knockbackForce;
 
 	public override void Reset()
@@ -23,6 +24,7 @@ public class Echolocation : Ability, IProjectileAbility {
 		doNotCancelOrderQueue = true;
 
 		projectilePrefab = null;
+		projectileBehaviour = ProjectileBehaviourTypes.CONE;
 		projectileSpeed = 0f;
 		projectileTimeAlive = 0.5f;
 		projectileGrowthFactor = new Vector3(1,1,1);
@@ -40,36 +42,36 @@ public class Echolocation : Ability, IProjectileAbility {
 		CastResults baseCastResults = base.Cast(castOrder);
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
-		GameObject projectileObject = Instantiate(projectilePrefab,
-			caster.attackInfo.spawnerObject.transform.position,
-			caster.attackInfo.spawnerObject.transform.rotation,
-			caster.transform);
+		CreateProjectile(this, castOrder);
 
-		ConeBehaviour echolocation = projectileObject.GetComponent<ConeBehaviour>();
-		echolocation.Initialize(this, castOrder.targetLocation);
-		echolocation.SetGrowthFactor(projectileGrowthFactor);
-
-		TrackDuration();
 		return CastResults.SUCCESS;
 	}
 
-	public bool OnHitEnemy(UnitController unit)
+	public bool OnHitEnemy(UnitController enemy)
 	{ 
-		Debug.Log("Cone hit enemy");
-		Vector3 velocityVector = (unit.GetBodyPosition() - caster.GetBodyPosition()).normalized * knockbackForce;
-		unit.Knockback(caster.GetBodyPosition(), this, caster);
-		unit.ReceivesDamage(damage, caster);
+		Debug.Log("Echolocating enemy");
+
+		float offset_y = enemy.body.GetComponent<Collider>().bounds.extents.y;
+		Vector3 enemyPosition = enemy.body.transform.position;
+		Vector3 casterForward = caster.body.transform.forward;
+		Vector3 finalPosition = enemyPosition + (casterForward * knockbackForce);
+		finalPosition.y = Terrain.activeTerrain.SampleHeight(finalPosition) + Terrain.activeTerrain.GetPosition().y + offset_y;
+		Vector3 velocityVector = Util.CalculateBestLaunchSpeed(enemyPosition, finalPosition, duration);
+
+		//Vector3 velocityVector = (enemy.GetBodyPosition() - caster.GetBodyPosition()).normalized * knockbackForce;
+		networkHelper.ApplyKnockbackTo(enemy, velocityVector, this);
+		networkHelper.DealDamageTo(enemy, damage);
 		return false;
 	}
 
-	public bool OnHitAlly(UnitController unit)
+	public bool OnHitAlly(UnitController ally)
 	{
 		return false;
 	}
 
 	public bool OnHitTree(Tree tree)
 	{
-		caster.GetPlayer().DestroyTree(tree, caster.GetBodyPosition(), 0);
+		networkHelper.DestroyTree(tree, caster.GetBodyPosition(), 0);
 		return false;
 	}
 }

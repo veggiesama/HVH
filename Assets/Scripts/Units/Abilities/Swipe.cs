@@ -19,6 +19,7 @@ public class Swipe : Ability, IProjectileAbility {
 		doNotCancelOrderQueue = true;
 
 		projectilePrefab = null; // set on scriptableobject
+		projectileBehaviour = ProjectileBehaviourTypes.CONE;
 		projectileSpeed = 0f;
 		projectileTimeAlive = 0.5f;
 	}
@@ -32,6 +33,9 @@ public class Swipe : Ability, IProjectileAbility {
 		CastResults baseCastResults = base.Cast(castOrder);
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
+		CreateProjectile(this, castOrder);
+
+		/*
 		GameObject projectileObject = Instantiate(projectilePrefab,
 			caster.attackInfo.spawnerObject.transform.position,
 			caster.attackInfo.spawnerObject.transform.rotation,
@@ -39,8 +43,9 @@ public class Swipe : Ability, IProjectileAbility {
 
 		ConeBehaviour swipe = projectileObject.GetComponent<ConeBehaviour>();
 		swipe.Initialize(this, castOrder.targetLocation);
-		
-		TrackDuration();
+		*/
+
+		//TrackDuration();
 		return CastResults.SUCCESS;
 	}
 
@@ -62,21 +67,19 @@ public class Swipe : Ability, IProjectileAbility {
 
 	public bool OnHitEnemy(UnitController unit)
 	{ 
-		//Debug.Log("Cone hit enemy");
-		unit.ReceivesDamage(damage, caster);
+		networkHelper.DealDamageTo(unit, damage);
 		return false;
 	}
 
 	public bool OnHitAlly(UnitController unit)
 	{
-		//Debug.Log("Cone hit ally");
-		unit.ReceivesDamage(damage / 2, caster);
+		networkHelper.DealDamageTo(unit, damage / 2);
 		return false;
 	}
 
 	public bool OnHitTree(Tree tree)
 	{
-		caster.GetPlayer().DestroyTree(tree, caster.GetBodyPosition(), 0);
+		networkHelper.DestroyTree(tree, caster.GetBodyPosition(), 0);
 		return false;
 	}
 }

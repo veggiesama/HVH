@@ -7,16 +7,15 @@ using Mirror;
 
 public class Owner : NetworkBehaviour {
 	public UnitController unit;
-	[SerializeField] protected Teams team;
-
+	[SyncVar, SerializeField] protected int team;
 	[SyncVar] protected Color bodyColor;
 
 	public Teams GetTeam() {
-		return team;
+		return (Teams) team;
 	} 
 
 	public void SetTeam(Teams team) {
-		this.team = team;
+		this.team = (int) team;
 
 		if (team == Teams.DWARVES) {
 			bodyColor = Color.Lerp(Color.blue, Color.cyan, Random.Range(0.2f, 1.0f));

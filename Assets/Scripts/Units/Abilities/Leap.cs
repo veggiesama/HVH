@@ -11,7 +11,6 @@ public class Leap : Ability {
 	[Header("Leap")]
 	public float leapDistance;
 	public StatusEffect airbornStatusEffect;
-	private float jumpingTimer = 0f;
 
 	public override void Reset()
 	{
@@ -48,11 +47,11 @@ public class Leap : Ability {
 		Debug.DrawLine(casterPosition, finalPosition, Color.yellow, 10.0f);
 		Debug.DrawRay(finalPosition, Vector3.up, Color.green, 10.0f);
 
-		caster.ApplyStatusEffect(airbornStatusEffect, this, caster);
+		caster.ApplyStatusEffect(airbornStatusEffect, this);
 		caster.body.PerformAirborn(velocityVector);
 		caster.body.SetNoclip();
 
-		TrackDuration();
+		//TrackDuration();
 
 		return CastResults.SUCCESS;
 	}

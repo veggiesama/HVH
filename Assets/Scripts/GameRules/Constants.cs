@@ -12,6 +12,11 @@ public static class Constants {
 	public static int MonstersTotal = 1;
 }
 
+// Projectile types
+public enum ProjectileBehaviourTypes {
+	NONE, BULLET, CONE, GRENADE, HOMING
+}
+
 // Casting abilities
 public enum CastResults {
 	SUCCESS, FAILURE_COOLDOWN_NOT_READY, FAILURE_TARGET_OUT_OF_RANGE, FAILURE_NOT_FACING_TARGET, FAILURE_NAVIGATION_NOT_READY,

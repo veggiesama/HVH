@@ -5,9 +5,6 @@ using Mirror;
 
 public class UnitInfo : NetworkBehaviour {
 	public float maxHealth = 100.0f;
-	//[HideInInspector]
-	[SyncVar] public float currentHealth;
-
 	public float healthRegen = 1.0f;
 	public int armor = 0;
 	public int resist = 0;
@@ -22,7 +19,6 @@ public class UnitInfo : NetworkBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		currentHealth = maxHealth;
 		movementSpeedOriginal = movementSpeed;
 	}
 

@@ -12,12 +12,15 @@ public class Player : Owner {
 	//public ControlScheme controlScheme;
 	public UIController uiController;
 	public GameObject camObject;
+	public NetworkHelper networkHelper;
 	private MouseTargeter mouseTargeter;
 
 	//public bool isNPC = false; // inspector
-	public bool isDisconnected = false;
-	public bool isUnassigned = true;
 	[SyncVar] public int playerID;
+
+	public void Awake() {
+		networkHelper = GetComponent<NetworkHelper>();
+	}
 
 	public void Start() {
 		unit.body.GetComponent<Renderer>().material.color = bodyColor;
@@ -29,7 +32,6 @@ public class Player : Owner {
 		if (isLocalPlayer) {
 			camObject.SetActive(true);
 			uiController.gameObject.SetActive(true);
-
 			//Debug.Log("FOUND DWARF: " + FindObjectOfType<GameController>().Cmd_GetDwarf(DwarfTeamSlots.ALLY_1).name);
 		}
 	}
@@ -38,7 +40,7 @@ public class Player : Owner {
 	void Update () {
 		//controlScheme.UpdateInputs();
 
-		if (isUnassigned) return;
+		if (networkHelper.isUnassigned) return;
 		if (!isLocalPlayer) return;
 
 		// always register selections, even while disabled
@@ -166,12 +168,12 @@ public class Player : Owner {
 	}
 
 	public Vector3 GetMouseLocationToGround() {
-		if (isUnassigned) return mouseTargeter.GetNPCLocationToGround();
+		if (networkHelper.isUnassigned) return mouseTargeter.GetNPCLocationToGround();
 		return mouseTargeter.GetMouseLocationToGround();
 	}
 
 	public bool IsMouseTargeting() {
-		if (isUnassigned) return false;
+		if (networkHelper.isUnassigned) return false;
 		return mouseTargeter.IsTargetingEnabled();
 	}
 
@@ -180,7 +182,7 @@ public class Player : Owner {
 	}
 
 	public void MakeNPC() {
-		isUnassigned = true;
+		networkHelper.isUnassigned = true;
 		Transform[] children = GetComponentsInChildren<Transform>();
 		foreach (Transform child in children) {
 			if (child.CompareTag("PlayerOnly"))
@@ -194,104 +196,4 @@ public class Player : Owner {
 		unit.DoAbility(AbilitySlots.ATTACK);
 	}
 
-	public void DestroyTree(Tree tree, Vector3 destroyedFromDirection = default, float delay = 0f) {
-		int treeSiblingIndex = tree.GetSiblingIndex();
-		GameObject treeHandlerGO = tree.GetTreeHandlerGO();
-		Cmd_DestroyTree(treeHandlerGO, treeSiblingIndex, destroyedFromDirection, delay);
-	}
-
-	[Command]
-	public void Cmd_DestroyTree(GameObject treeHandlerGO, int treeSiblingIndex, Vector3 destroyedFromDirection, float delay) {
-		treeHandlerGO.GetComponent<TreeHandler>().Rpc_DestroyTree(treeSiblingIndex, destroyedFromDirection, delay);	
-	}
-
-	/*
-	public void CreateGhostProjectile(GameObject objectToClone) {
-		uint netID = objectToClone.GetComponent<NetworkIdentity>().netId;
-		Cmd_CreateGhostProjectile(netID);
-	}
-
-	[Command]
-	public void Cmd_CreateGhostProjectile(uint netID) {
-		GameObject objectToClone = NetworkIdentity.spawned[netID].gameObject;
-
-		GameObject clone = Instantiate(objectToClone);
-		clone.name = clone.name + " (Ghost)";
-
-		clone.AddComponent<NetworkGhost>();
-		clone.GetComponent<NetworkGhost>().Initialize(objectToClone);
-		//clone.AddComponent<NetworkTransform>();
-
-		NetworkServer.Spawn(clone);
-	}*/
-
-	/*
-	public void CreateServerProjectile(int prefabIndex, Transform t) {
-		Cmd_CreateServerProjectile(prefabIndex, t.position, t.rotation);
-	}
-
-	[SyncVar] public int lastProjectileNetID;
-
-	[Command]
-	public void Cmd_CreateServerProjectile(int prefabIndex, Vector3 position, Quaternion rotation) {
-		GameObject prefab = FindObjectOfType<NetworkManagerHVH>().spawnPrefabs[prefabIndex];
-		GameObject projectileObject = Instantiate(prefab, position, rotation, unit.transform);
-		NetworkServer.SpawnWithClientAuthority(projectileObject, this.gameObject);
-		Rpc_SetLastProjectileNetID( (int) projectileObject.GetComponent<NetworkIdentity>().netId );
-	}
-
-	[Command]
-	public void Cmd_DestroyServerProjectile(GameObject serverProjectile) {
-		//NetworkServer.UnSpawn(serverProjectile);
-		NetworkServer.Destroy(serverProjectile);
-	}
-
-	[ClientRpc]
-	public void Rpc_SetLastProjectileNetID(int netID) {
-		Debug.Log("Rpc_SetLastProjectileNetID");
-		lastProjectileNetID = netID;
-	}*/
-
-	public void CreateProjectile(GameObject projectilePrefab, Ability ability, Vector3 targetLocation, float missChance) {
-		int prefabIndex = NetworkManager.singleton.spawnPrefabs.IndexOf(projectilePrefab); // FindObjectOfType<NetworkManagerHVH>().GetSpawnPrefabList().IndexOf(serverProjectilePrefab);
-		int abilitySlotIndex = (int) unit.GetAbilitySlot(ability);
-	   	Cmd_CreateProjectile(prefabIndex, abilitySlotIndex, targetLocation, missChance);
-	}
-
-	[Command]
-	public void Cmd_CreateProjectile(int prefabIndex, int abilitySlotIndex, Vector3 targetLocation, float missChance) {
-		GameObject prefab = NetworkManager.singleton.spawnPrefabs[prefabIndex];
-
-		GameObject projectileObject = Instantiate(prefab,
-			unit.attackInfo.spawnerObject.transform.position,
-			unit.attackInfo.spawnerObject.transform.rotation);
-			//unit.transform); // bad for NetworkIdentity to be spawned as child?
-		NetworkServer.SpawnWithClientAuthority(projectileObject, this.gameObject); // connectionToClient);
-
-		uint projectileNetID = projectileObject.GetComponent<NetworkIdentity>().netId;
-		TargetRpc_InitializeProjectile(connectionToClient, projectileNetID, abilitySlotIndex, targetLocation, missChance);
-	}
-
-	[TargetRpc]
-	public void TargetRpc_InitializeProjectile(NetworkConnection conn, uint projectileNetID, int abilitySlotIndex, Vector3 targetLocation, float missChance) {
-		GameObject projectileObject = NetworkIdentity.spawned[projectileNetID].gameObject;
-		Ability ability = unit.GetAbilityInSlot((AbilitySlots)abilitySlotIndex);
-		BulletBehaviour bullet = projectileObject.GetComponent<BulletBehaviour>();
-
-		bullet.Initialize(ability, targetLocation, missChance);
-	}
-
-	public void DestroyProjectile(GameObject projectileObject) {
-		uint projectileNetID = projectileObject.GetComponent<NetworkIdentity>().netId;
-		Cmd_DestroyProjectile(projectileNetID);
-	}
-
-
-	//TODO: Add some safety. Change from netID to NetworkIdentity or GameObject probably.
-	[Command]
-	public void Cmd_DestroyProjectile(uint projectileNetID) {
-		GameObject projectileObject = NetworkIdentity.spawned[projectileNetID].gameObject;
-		NetworkServer.Destroy(projectileObject);
-		// Destroy?
-	}
 }
