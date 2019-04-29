@@ -6,8 +6,6 @@ using UnityEngine.Assertions;
 
 
 public class HealthController : MonoBehaviour {
-
-	[SerializeField] private GameController gc;
 	private Player player;
 	public Slider allyTargetHealthbarSlider, enemyTargetHealthbarSlider;
 	
@@ -59,24 +57,28 @@ public class HealthController : MonoBehaviour {
 			enemyTargetHealthbarSlider.gameObject.SetActive(false);
 		}
 		
-		Player[] playerArray = FindObjectsOfType<Player>();
+		Player[] playerArray = GameRules.Instance.GetAllPlayers();
 
-		foreach (KeyValuePair<int,int> kv in gc.dwarfDictionary) {
+		foreach (KeyValuePair<int,int> kv in GameRules.Instance.GetDwarfTeamDictionary()) {
 			DwarfTeamSlots slot = (DwarfTeamSlots)kv.Key;
-			Player p = gc.GetPlayer(kv.Value);
+			Player p = GameRules.Instance.GetPlayer(kv.Value);
 		
 			Slider slider = allies[slot];
 			slider.gameObject.SetActive(true);
-			slider.value = p.unit.networkHelper.currentHealth / p.unit.unitInfo.maxHealth;
+
+			if (p.unit.unitInfo != null)
+				slider.value = p.unit.networkHelper.currentHealth / p.unit.unitInfo.maxHealth;
 		}
 
-		foreach (KeyValuePair<int,int> kv in gc.monsterDictionary) {
+		foreach (KeyValuePair<int,int> kv in GameRules.Instance.GetMonsterTeamDictionary()) {
 			MonsterTeamSlots slot = (MonsterTeamSlots)kv.Key;
-			Player p = gc.GetPlayer(kv.Value);
+			Player p = GameRules.Instance.GetPlayer(kv.Value);
 	
 			Slider slider = enemies[slot];
 			slider.gameObject.SetActive(true);
-			slider.value = p.unit.networkHelper.currentHealth / p.unit.unitInfo.maxHealth;
+
+			if (p.unit.unitInfo != null)
+				slider.value = p.unit.networkHelper.currentHealth / p.unit.unitInfo.maxHealth;
 		}
 		
 	}

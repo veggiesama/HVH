@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Abilities/Net")]
+[CreateAssetMenu(menuName = "Abilities/Dwarf/Net")]
 public class Net : Ability, IProjectileAbility {
 
 	[Header("Net")]
@@ -24,6 +24,7 @@ public class Net : Ability, IProjectileAbility {
 		doNotCancelOrderQueue = false;
 
 		projectilePrefab = null; // set on scriptableObject
+		projectileSpawner = BodyLocations.WEAPON;
 		projectileBehaviour = ProjectileBehaviourTypes.GRENADE;
 		grenadeTimeToHitTarget = 2f;
 	}

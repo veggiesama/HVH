@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f2fe4ba9e82f747b6552e1df5be92a, type: 3}
+  m_Name: Shriek silence
+  m_EditorClassIdentifier: 
+  statusName: Shriek silence
+  type: 6
+  duration: 3
+  hideIcon: 0
+  dispellable: 0
+  applied: 0
+  remainingTime: 0

@@ -23,19 +23,24 @@ MonoBehaviour:
   targetType: 2
   targetTeam: 0
   damageType: 1
-  damage: 60
-  cooldown: 0.1
+  damage: 20
+  cooldown: 1
   castRange: 100
   castTime: 0
   duration: 0
   aoeRadius: 0
   quickCast: 1
   doNotCancelOrderQueue: 1
+  durationRemaining: 0
   projectilePrefab: {fileID: 1392497764110654, guid: c9e55555ef616bf46b4830720868c7b6,
     type: 3}
+  projectileSpawner: 3
   projectileBehaviour: 1
-  projectileSpeed: 5
+  projectileSpeed: 50
   projectileTimeAlive: 10
   projectileTimeUntilFullGrowth: 0
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
+  gunsmokePrefab: {fileID: 100000, guid: 16b6b10ec23de0b42b7cc45eb5b0f45f, type: 3}
+  muzzleFlashPrefab: {fileID: 100006, guid: 96e032e9fdd0a2c41b3d66f4e0a0f7b1, type: 3}
+  impactHitPrefab: {fileID: 100000, guid: 7d286b7ce5270fb4ea3e24a644c0932c, type: 3}

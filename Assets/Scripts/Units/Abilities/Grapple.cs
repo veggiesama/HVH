@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Abilities/Grapple")]
+[CreateAssetMenu(menuName = "Abilities/Dwarf/Grapple")]
 public class Grapple : Ability {
 
 	[Header("Grapple")]
@@ -91,7 +91,7 @@ public class Grapple : Ability {
 		casterStartingPosition = caster.GetBodyPosition();
 
 		rope = Instantiate(ropePrefab);
-		rope.SetPosition(0, caster.attackInfo.spawnerObject.transform.position);
+		rope.SetPosition(0, caster.body.projectileSpawner.transform.position);
 		rope.SetPosition(1, anchor);
 	}
 
@@ -132,7 +132,7 @@ public class Grapple : Ability {
 	}
 
 	private void UpdateRope() {
-		rope.SetPosition(0, caster.attackInfo.spawnerObject.transform.position);
+		rope.SetPosition(0, caster.body.projectileSpawner.transform.position);
 		ropeLength = Util.GetDistanceIn2D(rope.GetPosition(0), rope.GetPosition(1));
 
 		if (ropeLengthLast == 0 || ropeLength <= ropeLengthLast) // rope is shrinking

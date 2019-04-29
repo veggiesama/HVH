@@ -9,8 +9,6 @@ using Mirror;
 public class UnitController : NetworkBehaviour {
 	[HideInInspector] public BodyController body;
 	[HideInInspector] public NavMeshAgent agent;
-	[HideInInspector] public UnitInfo unitInfo;
-	[HideInInspector] public AttackInfo attackInfo;
 	[HideInInspector] public NetworkHelper networkHelper;
 	[HideInInspector] public Player player;
 
@@ -21,16 +19,13 @@ public class UnitController : NetworkBehaviour {
 	private AbilityManager abilityManager;
 	private MeshRenderer targetFriendlyStand, targetEnemyStand;
 
-	[Header("Abilities")]
-	public Ability startingAttackAbility;
-	public List<Ability> startingAbilitiesList;
-	public List<Ability> startingItemsList;
+	public UnitInfo unitInfo;
 
-
+	/*
 	public static explicit operator UnitController(GameObject v)
 	{
 		throw new NotImplementedException();
-	}
+	}*/
 
 	private Quaternion wantedRotation;
 	private bool orderRestricted = false;
@@ -39,8 +34,6 @@ public class UnitController : NetworkBehaviour {
 	void Awake () {
 		body = GetComponentInChildren<BodyController>();
 		agent = body.GetComponent<NavMeshAgent>();
-		unitInfo = GetComponent<UnitInfo>();
-		attackInfo = GetComponent<AttackInfo>();
 		faceCam = GetComponentInChildren<Camera>(true);
 		player = GetComponentInParent<Player>();
 		networkHelper = player.GetComponent<NetworkHelper>();
@@ -54,9 +47,6 @@ public class UnitController : NetworkBehaviour {
 
 		// sniper = 0.135s to turn 180 degrees, or 1350 degrees/sec
 		// NS = 0.188s to turn 180 degrees, or 960 degrees/sec
-
-		SetSpeed(unitInfo.movementSpeed);
-		agent.angularSpeed = unitInfo.turnRate;
 		SetTargetCamera(false, AbilityTargetTeams.ENEMY);
 	}
 
@@ -102,6 +92,12 @@ public class UnitController : NetworkBehaviour {
 
 		if (!ability.IsCooldownReady()) {
 			//Debug.Log("Cooldown not ready.");
+			return;
+		}
+
+		Order currentOrder = orderQueue.GetCurrentOrder();
+		if (currentOrder != null && ability == currentOrder.ability) {
+			Debug.Log("Don't interrupt cast when same ability is used again.");
 			return;
 		}
 
@@ -243,6 +239,15 @@ public class UnitController : NetworkBehaviour {
 		orderQueue.Add(turnOrder, true);
 	}
 
+	public void SetSize(int newSize) { // may change to enum
+		unitInfo.size = newSize;
+	}
+
+	public void SetTurnRate(float newTurnRate) {
+		unitInfo.turnRate = newTurnRate;
+		agent.angularSpeed = newTurnRate;		
+	}
+
 	public void SetSpeed(float newSpeed) {
 		unitInfo.movementSpeed = newSpeed;
 		agent.speed = newSpeed;
@@ -251,6 +256,15 @@ public class UnitController : NetworkBehaviour {
 	public void ResetSpeed() {
 		unitInfo.movementSpeed = unitInfo.movementSpeedOriginal;
 		agent.speed = unitInfo.movementSpeedOriginal;
+	}
+
+	public void ResetTurnRate() {
+		unitInfo.turnRate = unitInfo.turnRateOriginal;
+		agent.speed = unitInfo.turnRateOriginal;
+	}
+
+	public void ResetSize() {
+		unitInfo.size = unitInfo.sizeOriginal;
 	}
 
 	public void SetOrderRestricted(bool cmd) {
@@ -402,4 +416,28 @@ public class UnitController : NetworkBehaviour {
 		return statusEffectManager.GetStatusEffectList();
 	}
 
+	public void ReloadAbilities() {
+		abilityManager.LoadAbilities();
+	}
+
+	public void SetHealth(float newHealthValue) {
+		networkHelper.currentHealth = newHealthValue;
+	}
+
+	// TODO: not going to work over the network
+	public void SetUnitInfo(string unitInfoName) {
+		if (ResourceLibrary.Instance.unitInfoDictionary.TryGetValue(unitInfoName, out UnitInfo scriptableObject)) {
+			unitInfo = Instantiate(scriptableObject);
+			unitInfo.Initialize();
+
+			SetHealth(unitInfo.maxHealth);
+			SetSpeed(unitInfo.movementSpeed);
+			SetTurnRate(unitInfo.turnRate);
+			abilityManager.Initialize();
+			body.ResetAnimator();
+		}
+
+		else
+			Debug.Log("Invalid UnitInfo: " + unitInfoName);
+	}
 }

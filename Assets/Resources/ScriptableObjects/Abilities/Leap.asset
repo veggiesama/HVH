@@ -18,6 +18,8 @@ MonoBehaviour:
   enemyTarget: {fileID: 0}
   unitInfo: {fileID: 0}
   abilityManager: {fileID: 0}
+  networkHelper: {fileID: 0}
+  player: {fileID: 0}
   targetType: 0
   targetTeam: 0
   damageType: 0
@@ -26,12 +28,19 @@ MonoBehaviour:
   castRange: 0
   castTime: 0
   duration: 1.1
+  aoeRadius: 0
   quickCast: 1
   doNotCancelOrderQueue: 1
+  durationRemaining: 0
   projectilePrefab: {fileID: 0}
+  projectileSpawner: 0
+  projectileBehaviour: 0
   projectileSpeed: 0
   projectileTimeAlive: 0
+  projectileTimeUntilFullGrowth: 0
+  projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
   leapDistance: 20
   airbornStatusEffect: {fileID: 11400000, guid: b8224b1b8b500ed44aaa39fe0119df7a,
     type: 2}
+  particlePrefab: {fileID: 100000, guid: 8d561369f183c0c4cb7befe0dbca5aee, type: 3}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Abilities/Swipe")]
+[CreateAssetMenu(menuName = "Abilities/Monster/Swipe")]
 public class Swipe : Ability, IProjectileAbility {
 
 	public override void Reset()
@@ -19,6 +19,7 @@ public class Swipe : Ability, IProjectileAbility {
 		doNotCancelOrderQueue = true;
 
 		projectilePrefab = null; // set on scriptableobject
+		projectileSpawner = BodyLocations.MOUTH;
 		projectileBehaviour = ProjectileBehaviourTypes.CONE;
 		projectileSpeed = 0f;
 		projectileTimeAlive = 0.5f;

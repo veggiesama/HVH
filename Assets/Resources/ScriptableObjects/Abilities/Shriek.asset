@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ee9a0fdf0f722749b020646410a169c, type: 3}
+  m_Name: Shriek
+  m_EditorClassIdentifier: 
+  abilityName: Shriek
+  caster: {fileID: 0}
+  allyTarget: {fileID: 0}
+  enemyTarget: {fileID: 0}
+  unitInfo: {fileID: 0}
+  abilityManager: {fileID: 0}
+  networkHelper: {fileID: 0}
+  player: {fileID: 0}
+  targetType: 1
+  targetTeam: 2
+  damageType: 1
+  damage: 60
+  cooldown: 0.5
+  castRange: 20
+  castTime: 0
+  duration: 3
+  aoeRadius: 0
+  quickCast: 1
+  doNotCancelOrderQueue: 0
+  durationRemaining: 0
+  projectilePrefab: {fileID: 0}
+  projectileSpawner: 0
+  projectileBehaviour: 0
+  projectileSpeed: 0
+  projectileTimeAlive: 0
+  projectileTimeUntilFullGrowth: 0
+  projectileGrowthFactor: {x: 1, y: 1, z: 1}
+  grenadeTimeToHitTarget: 0
+  silenceStatusEffect: {fileID: 11400000, guid: 526333d47d326cb4eb78b8242457c986,
+    type: 2}
+  particlePrefab: {fileID: 100000, guid: 0dbee9b57de93724fb245a57552371f0, type: 3}

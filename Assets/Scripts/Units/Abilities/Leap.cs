@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Abilities/Leap")]
+[CreateAssetMenu(menuName = "Abilities/Monster/Leap")]
 public class Leap : Ability {
 
 	//public float forceUpwards;
@@ -11,6 +11,7 @@ public class Leap : Ability {
 	[Header("Leap")]
 	public float leapDistance;
 	public StatusEffect airbornStatusEffect;
+	public GameObject particlePrefab;
 
 	public override void Reset()
 	{
@@ -51,6 +52,7 @@ public class Leap : Ability {
 		caster.body.PerformAirborn(velocityVector);
 		caster.body.SetNoclip();
 
+		networkHelper.InstantiateParticle(particlePrefab, caster, BodyLocations.NONE, duration);
 		//TrackDuration();
 
 		return CastResults.SUCCESS;

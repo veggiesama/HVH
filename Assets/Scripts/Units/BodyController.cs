@@ -6,17 +6,39 @@ using Mirror;
 public class BodyController : MonoBehaviour {
 
 	private Rigidbody rb;
-	private UnitController unit;
+	[HideInInspector] public UnitController unit;
+	[HideInInspector] public Animator anim;
 
+	[HideInInspector] public GameObject projectileSpawner;
+	[HideInInspector] public GameObject head;
+	[HideInInspector] public GameObject mouth;
+	[HideInInspector] public GameObject feet;
+	[HideInInspector] public SkinnedMeshRenderer bodyMesh;
+
+	private Vector3 lastPosition = Vector3.zero;
+	private float updateAnimationSpeedFloatEvery = 0.1f;
+	
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		unit = GetComponentInParent<UnitController>();
 		rb = GetComponent<Rigidbody>();
+
+		InvokeRepeating("UpdateAnimationSpeedFloat", 0f, updateAnimationSpeedFloatEvery);
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	public void ResetAnimator() {
+		if (anim != null)
+			Destroy(anim.gameObject);
+				
+		GameObject animGO = Instantiate(unit.unitInfo.animationPrefab, this.transform);
+		anim = animGO.GetComponent<Animator>();
 		
+		BodyLocationFinder finder = anim.GetComponent<BodyLocationFinder>();
+		projectileSpawner = finder.projectileSpawner;
+		head = finder.head;
+		mouth = finder.mouth;
+		feet = finder.feet;
+		bodyMesh = finder.bodyMesh;
 	}
 
 	private void FixedUpdate() {
@@ -26,14 +48,18 @@ public class BodyController : MonoBehaviour {
 		}
 	}
 
-	public UnitController GetUnitController() {
-		return transform.parent.GetComponent<UnitController>();
+	private void UpdateAnimationSpeedFloat() {
+		if (anim == null) return;
+
+		float speed = ((transform.position - lastPosition).magnitude) / Time.deltaTime;
+		lastPosition = transform.position;
+		anim.SetFloat("speed", speed);
 	}
 
 	// performances
 	public void PerformDeath(Vector3 killedFromDirection) {
 		rb.isKinematic = false;
-		rb.constraints = RigidbodyConstraints.None;
+		rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
 		float upwardMagnitude = Random.Range(50f, 150f);
 		float impactMagnitude = 400f;
@@ -41,6 +67,7 @@ public class BodyController : MonoBehaviour {
 		rb.AddForce(Vector3.up * upwardMagnitude);
 		if (!Util.IsNullVector(killedFromDirection))
 			rb.AddForce((transform.position - killedFromDirection).normalized * impactMagnitude);
+		anim.SetBool("isDead", true);
 	}
 
 	public void PerformLaunch(Vector3 velocityVector) {
@@ -59,6 +86,7 @@ public class BodyController : MonoBehaviour {
 			RigidbodyConstraints.FreezeRotationZ;
 		rb.isKinematic = true;
 		SetDefaultClip();
+		anim.SetBool("isDead", false);
 	}
 
 	public void SetDefaultClip() {

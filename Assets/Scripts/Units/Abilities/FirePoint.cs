@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Attack logic:
-// 1. fire instantly at point target
-// 2. check for trees in raytrace. if trees, apply 50% miss chance and alter point target
-// 3. if projectile intersects foe, deal 100% dmg. if friendly, 50%. 
-// 4. slow character during reload
-
-[CreateAssetMenu(menuName = "Abilities/FirePoint")]
+[CreateAssetMenu(menuName = "Abilities/Dwarf/FirePoint")]
 public class FirePoint : Ability, IProjectileAbility {
+
+	[Header("FirePoint")]
+	public GameObject gunsmokePrefab;
+	public GameObject muzzleFlashPrefab;
+	public GameObject impactHitPrefab;
 
 	public override void Reset()
 	{
@@ -27,6 +26,7 @@ public class FirePoint : Ability, IProjectileAbility {
 		doNotCancelOrderQueue = true;
 
 		projectilePrefab = null;
+		projectileSpawner = BodyLocations.WEAPON;
 		projectileBehaviour = ProjectileBehaviourTypes.BULLET;
 		projectileSpeed = 5f;
 		projectileTimeAlive = 10f;
@@ -43,17 +43,8 @@ public class FirePoint : Ability, IProjectileAbility {
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
 		networkHelper.CreateProjectile(this, castOrder);
-		//networkHelper.CreateProjectile(ProjectileBehaviours.BULLET, projectilePrefab, this, castOrder.targetLocation, treeMissChance);
-		
-		/*
-		GameObject projectileObject = Instantiate(projectilePrefab,
-			caster.attackInfo.spawnerObject.transform.position,
-			caster.attackInfo.spawnerObject.transform.rotation,
-			caster.transform);
-
-		BulletBehaviour bullet = projectileObject.GetComponent<BulletBehaviour>();
-		bullet.Initialize(this, castOrder.targetLocation, treeMissChance); // trees can cause the bullet to miss
-		*/
+		networkHelper.InstantiateParticle(gunsmokePrefab, caster, BodyLocations.WEAPON);
+		networkHelper.InstantiateParticle(muzzleFlashPrefab, caster, BodyLocations.WEAPON);
 
 		return CastResults.SUCCESS;
 	}
@@ -61,12 +52,14 @@ public class FirePoint : Ability, IProjectileAbility {
 	public bool OnHitEnemy(UnitController unit)
 	{
 		networkHelper.DealDamageTo(unit, damage);
+		networkHelper.InstantiateParticle(impactHitPrefab, unit, BodyLocations.HEAD);
 		return true;
 	}
 
 	public bool OnHitAlly(UnitController unit)
 	{
 		networkHelper.DealDamageTo(unit, damage / 2);
+		networkHelper.InstantiateParticle(impactHitPrefab, unit, BodyLocations.HEAD);
 		return true;
 	}
 

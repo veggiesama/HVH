@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Abilities/EmptyAbility")]
+[CreateAssetMenu(menuName = "Abilities/_EmptyAbility")]
 public class EmptyAbility : Ability {
 
 	public override void Reset() {

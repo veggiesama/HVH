@@ -7,7 +7,7 @@ public class NetworkHelper : NetworkBehaviour {
 
 	Player player;
 	UnitController unit;
-	[SyncVar] public float currentHealth;
+	[SyncVar] public float currentHealth = 1;
 	public bool isDisconnected = false;
 	public bool isUnassigned = true;
 	
@@ -31,7 +31,7 @@ public class NetworkHelper : NetworkBehaviour {
 	public void Start() {
 		player = GetComponent<Player>();
 		unit = player.unit;
-		currentHealth = unit.unitInfo.maxHealth;
+		//currentHealth = unit.unitInfo.maxHealth;
 	}
 
 
@@ -74,16 +74,16 @@ public class NetworkHelper : NetworkBehaviour {
 
 		int prefabIndex = NetworkManager.singleton.spawnPrefabs.IndexOf(projectilePrefab);
 		int abilitySlotIndex = PackAbility(ability); // (int) unit.GetAbilitySlot(ability);
-	   	Cmd_CreateProjectile(prefabIndex, abilitySlotIndex, targetLocation);
+		int bodyLocation = (int)ability.projectileSpawner;
+	   	Cmd_CreateProjectile(prefabIndex, bodyLocation, abilitySlotIndex, targetLocation);
 	}
 
 	[Command]
-	private void Cmd_CreateProjectile(int prefabIndex, int abilitySlotIndex, Vector3 targetLocation) {
+	private void Cmd_CreateProjectile(int prefabIndex, int bodyLocation, int abilitySlotIndex, Vector3 targetLocation) {
 		GameObject prefab = NetworkManager.singleton.spawnPrefabs[prefabIndex];
+		Transform trans = GetBodyLocationTransform((BodyLocations)bodyLocation, unit);
 
-		GameObject projectileObject = Instantiate(prefab,
-			unit.attackInfo.spawnerObject.transform.position,
-			unit.attackInfo.spawnerObject.transform.rotation);
+		GameObject projectileObject = Instantiate(prefab, trans.position, trans.rotation);
 			//unit.transform); // bad for NetworkIdentity to be spawned as child?
 		NetworkServer.SpawnWithClientAuthority(projectileObject, this.gameObject); // connectionToClient);
 		TargetRpc_InitializeProjectile(connectionToClient, projectileObject, abilitySlotIndex, targetLocation);
@@ -283,7 +283,7 @@ public class NetworkHelper : NetworkBehaviour {
 
 	[Command]
 	private void Cmd_Respawn() {
-		Transform spawnLoc = GameController.GetRandomSpawnPoint();
+		Transform spawnLoc = GameRules.GetRandomSpawnPoint();
 		currentHealth = unit.unitInfo.maxHealth;
 		Rpc_Respawn(spawnLoc.position, spawnLoc.rotation);
 	}
@@ -326,6 +326,38 @@ public class NetworkHelper : NetworkBehaviour {
 		unit.Knockback(velocityVector, ability);
 	}
 
+	// PARTICLES
+	public void InstantiateParticle(GameObject prefab, UnitController unit, BodyLocations loc, float duration = 0f) {
+		if (!ResourceLibrary.Instance.particlePrefabDictionary.ContainsKey(prefab.name)) {
+			Debug.Log(prefab.name + " not found in particle prefab dictionary.");
+			return;
+		}
+		Cmd_InstantiateParticleOnClients(prefab.name, unit.player.gameObject, (int)loc, duration);
+	}
+
+	[Command]
+	private void Cmd_InstantiateParticleOnClients(string particlePrefabName, GameObject playerGO, int bodyLocation, float duration) {
+		Rpc_InstantiateParticle(particlePrefabName, playerGO, bodyLocation, duration);
+	}
+
+	[ClientRpc]
+	private void Rpc_InstantiateParticle(string particlePrefabName, GameObject playerGO, int bodyLocation, float duration) {
+		GameObject prefab = ResourceLibrary.Instance.particlePrefabDictionary[particlePrefabName];
+		Player p = playerGO.GetComponent<Player>();
+		Transform trans = GetBodyLocationTransform((BodyLocations)bodyLocation, p.unit);
+		GameObject particleSystemGO = Instantiate(prefab, trans);
+
+		if (duration != 0f) {
+			ParticleSystem[] psArray = particleSystemGO.GetComponentsInChildren<ParticleSystem>();
+			foreach (ParticleSystem ps in psArray) {
+				ps.Stop();
+				var main = ps.main;
+				main.duration = duration;
+				ps.Play();
+			}
+		}
+	}
+
 	/*
 	private void UpdateNetworkStatusSyncList() {
 		currentTimer -= Time.deltaTime;
@@ -360,6 +392,28 @@ public class NetworkHelper : NetworkBehaviour {
 		if (caster != null)
 			return caster.GetAbilityInSlot((AbilitySlots)abilitySlotIndex);
 		return null;
+	}
+
+	private Transform GetBodyLocationTransform(BodyLocations bodyLoc, UnitController u) {
+		Transform trans;
+		switch (bodyLoc) {
+			case BodyLocations.HEAD:
+				trans = u.body.head.transform;
+				break;
+			case BodyLocations.MOUTH:
+				trans = u.body.mouth.transform;
+				break;
+			case BodyLocations.WEAPON:
+				trans = u.body.projectileSpawner.transform;
+				break;
+			case BodyLocations.FEET:
+				trans = u.body.feet.transform;
+				break;
+			default: // case BodyLocations.NONE:
+				trans = u.body.transform;
+				break;
+		}
+		return trans;
 	}
 
 }

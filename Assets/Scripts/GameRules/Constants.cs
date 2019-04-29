@@ -78,6 +78,12 @@ public enum StatusEffectTypes {
 	SHARE_VISION, ORDER_RESTRICTED
 }
 
+// hit locations
+public enum BodyLocations {
+	NONE, HEAD, MOUTH, WEAPON, FEET
+}
+
+
 // returns the screen position for ally and enemy viewports
 public static class CameraViewports {
 

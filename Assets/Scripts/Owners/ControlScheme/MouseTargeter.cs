@@ -105,7 +105,7 @@ public class MouseTargeter : MonoBehaviour {
 		if (Physics.Raycast(ray, out RaycastHit hit, Constants.RaycastLength, layerMask)) {
 			GameObject targetObject = hit.transform.gameObject;
 			if (targetObject.tag == "Body") {
-				UnitController targetUnit = targetObject.GetComponent<BodyController>().GetUnitController();
+				UnitController targetUnit = targetObject.GetComponent<BodyController>().unit;
 				return targetUnit;
 			}
 		}

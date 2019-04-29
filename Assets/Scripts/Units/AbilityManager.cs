@@ -8,37 +8,43 @@ public class AbilityManager : MonoBehaviour {
 	private UnitController unit;
 	private float debugRefreshEvery = 1f;
 	private float debugTimer = 0f;
+	private bool initialized = false;
 
 	[Header("READ-ONLY")]
 	[SerializeField] private List<string> debugList = new List<string>();
 
     void Awake() {
-
 		unit = GetComponentInParent<UnitController>();
+		//LoadAbilities();
+	}
 
-		//foreach (AbilitySlots slot in Enum.GetValues(typeof(AbilitySlots))) {
-		//	abilityDict.Add(slot, null);
-		//}
+	public void Initialize() {
+		LoadAbilities();
+		initialized = true;
+	}
+
+	public void LoadAbilities() {
+		abilityDict.Clear();
 
 		int n = 0;
 		foreach (AbilitySlots slot in Enum.GetValues(typeof(AbilitySlots))) {
 			string slotName = slot.ToString();
 
 			if(slotName.Contains("ATTACK")) {
-				Ability a = Instantiate(unit.startingAttackAbility);
+				Ability a = Instantiate(unit.unitInfo.startingAttackAbility);
 				a.Initialize(unit.gameObject);
 				abilityDict[slot] = a;
 			}
 
 			else if(slotName.Contains("ABILITY")) {
-				Ability a = Instantiate(unit.startingAbilitiesList[n]);
+				Ability a = Instantiate(unit.unitInfo.startingAbilitiesList[n]);
 				a.Initialize(unit.gameObject);
 				abilityDict[slot] = a;
 				n++;
 			}
 
 			else if(slotName.Contains("ITEM")) {
-				Ability a = Instantiate(unit.startingItemsList[n-6]);
+				Ability a = Instantiate(unit.unitInfo.startingItemsList[n-6]);
 				a.Initialize(unit.gameObject);
 				abilityDict[slot] = a;
 				n++;
@@ -48,6 +54,7 @@ public class AbilityManager : MonoBehaviour {
 
 	private void Update()
 	{
+		if (!initialized) return;
 		BuildDebugList();
 
 		foreach (KeyValuePair<AbilitySlots, Ability> kv in abilityDict) {
@@ -60,6 +67,8 @@ public class AbilityManager : MonoBehaviour {
 
 	private void FixedUpdate()
 	{
+		if (!initialized) return;
+
 		foreach (KeyValuePair<AbilitySlots, Ability> kv in abilityDict) {
 			AbilitySlots slot = kv.Key;
 			Ability ability = kv.Value;
@@ -83,7 +92,8 @@ public class AbilityManager : MonoBehaviour {
 	}
 
 	public bool HasAbilityInSlot(AbilitySlots slot) {
-		return abilityDict[slot] != null;
+		return abilityDict.TryGetValue(slot, out Ability value);
+		//return abilityDict[slot] != null;
 	}
 
 	public Ability GetAbilityInSlot(AbilitySlots slot) {

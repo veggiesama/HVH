@@ -31,8 +31,10 @@ MonoBehaviour:
   aoeRadius: 0
   quickCast: 1
   doNotCancelOrderQueue: 1
+  durationRemaining: 0
   projectilePrefab: {fileID: 8222844098290283177, guid: 0e0a29864c746e049aa8edc3816b9f91,
     type: 3}
+  projectileSpawner: 2
   projectileBehaviour: 2
   projectileSpeed: 0
   projectileTimeAlive: 0.5

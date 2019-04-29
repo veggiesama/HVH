@@ -12,7 +12,7 @@ public class ConeBehaviour : ProjectileBehaviour {
 	protected override void FixedUpdate () {
 		if (!CanUpdate()) return;
 		base.FixedUpdate();
-		rb.position = attacker.attackInfo.spawnerObject.transform.position;
-		rb.rotation = attacker.attackInfo.spawnerObject.transform.rotation;
+		rb.position = attacker.body.mouth.transform.position;
+		rb.rotation = attacker.body.mouth.transform.rotation;
 	}
 }

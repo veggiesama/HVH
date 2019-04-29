@@ -12,19 +12,21 @@ public class Owner : NetworkBehaviour {
 
 	public Teams GetTeam() {
 		return (Teams) team;
-	} 
+	}
 
 	public void SetTeam(Teams team) {
 		this.team = (int) team;
 
 		if (team == Teams.DWARVES) {
-			bodyColor = Color.Lerp(Color.blue, Color.cyan, Random.Range(0.2f, 1.0f));
+			bodyColor = Color.Lerp(Color.white, Color.cyan, Random.Range(0.2f, 0.6f));
+			unit.SetUnitInfo("Dwarf");
 		}
 		else if (team == Teams.MONSTERS) {
-			bodyColor = Color.Lerp(Color.red, Color.magenta, Random.Range(0.2f, 1.0f));
+			bodyColor = Color.Lerp(Color.white, Color.red, Random.Range(0.2f, 0.6f));
+			unit.SetUnitInfo("Monster");
 		}
 
-		unit.body.GetComponent<Renderer>().material.color = bodyColor;
+		unit.body.bodyMesh.material.color = bodyColor;
 	}
 
 }

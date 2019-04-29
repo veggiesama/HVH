@@ -21,7 +21,7 @@ public class HomingBehaviour : ProjectileBehaviour {
 		}
 
 		hasCollided = true;
-		networkHelper.DealDamageTo(target, attacker.attackInfo.damage);
+		networkHelper.DealDamageTo(target, ability.damage);
 		Destroy(this.gameObject);
 	}
 }

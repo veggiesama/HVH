@@ -8,13 +8,13 @@ public class CastTree : Cast {
 		this.orderType = OrderTypes.CAST_TREE;
 	}
 
-	public override void Execute()
-	{
-		if (tree != null)
-			base.Execute();
-		else {
-			Debug.Log("Tree no longer exists.");
-			End();
+	public override void Execute() {
+		if (tree == null) {
+			failCast = true;
+			Debug.Log("Cast failure: Tree no longer exists.");
+			return;
 		}
+
+		base.Execute();
 	}
 }

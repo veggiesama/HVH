@@ -6,8 +6,6 @@ using System.Collections.Generic;
 
 public class NetworkManagerHVH : NetworkManager {
 
-	public GameController gameController;
-
     public override void OnStartHost()
     {
         Debug.Log("Host has started");
@@ -33,7 +31,7 @@ public class NetworkManagerHVH : NetworkManager {
 		Debug.Log("Client is set to the ready state (ready to receive state updates): " + conn);
 
 		Player player;
-		player = gameController.GetNextUnassignedPlayer();
+		player = GameRules.Instance.GetNextUnassignedPlayer();
 		player.GetComponent<NetworkHelper>().isUnassigned = false;
 
 		GameObject playerGO = player.gameObject;
@@ -119,4 +117,5 @@ public class NetworkManagerHVH : NetworkManager {
 	public List<GameObject> GetSpawnPrefabList() {
 		return base.spawnPrefabs;
 	}
+
 }

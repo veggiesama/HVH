@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Abilities/Flare")]
+[CreateAssetMenu(menuName = "Abilities/Dwarf/Flare")]
 public class Flare : Ability {
 
 	[Header("Flare")]

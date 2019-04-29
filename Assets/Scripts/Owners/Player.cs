@@ -32,7 +32,6 @@ public class Player : Owner {
 		if (isLocalPlayer) {
 			camObject.SetActive(true);
 			uiController.gameObject.SetActive(true);
-			//Debug.Log("FOUND DWARF: " + FindObjectOfType<GameController>().Cmd_GetDwarf(DwarfTeamSlots.ALLY_1).name);
 		}
 	}
 

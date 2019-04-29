@@ -11,7 +11,7 @@ public abstract class Order : ScriptableObject {
 	protected UnitController allyTarget;
 	protected UnitController enemyTarget;
 	public Vector3 targetLocation;
-	protected Ability ability;
+	public Ability ability;
 	public Tree tree;
 
 	public virtual void Initialize(GameObject obj, Ability ability = null, Vector3 targetLocation = default,

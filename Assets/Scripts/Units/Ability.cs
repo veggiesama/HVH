@@ -31,6 +31,7 @@ public abstract class Ability : ScriptableObject {
 
 	[Header("Projectile")]
 	public GameObject projectilePrefab = null;
+	public BodyLocations projectileSpawner = BodyLocations.NONE;
 	public ProjectileBehaviourTypes projectileBehaviour = ProjectileBehaviourTypes.NONE;
 	public float projectileSpeed = 0;
 	public float projectileTimeAlive = 0;
@@ -45,7 +46,6 @@ public abstract class Ability : ScriptableObject {
 		//this.Ability = obj.GetComponentInChildren<Ability>();
 		this.abilityManager = obj.GetComponent<AbilityManager>();
 		this.caster = obj.GetComponentInParent<UnitController>();
-		this.unitInfo = caster.GetComponent<UnitInfo>();
 		this.player = obj.GetComponentInParent<Player>();
 		this.networkHelper = player.GetComponent<NetworkHelper>();
 	}
@@ -90,74 +90,6 @@ public abstract class Ability : ScriptableObject {
 		else if (Util.GetDistanceIn2D(caster.GetBodyPosition(), targetLocation) > castRange) {
 			//print("Target location out of cast range.");
 			return false;
-		}
-
-		return true;
-	}
-
-	public bool IsTargetInRange() {
-		if (castRange == 0) return true;
-
-		switch (targetType) {
-			case AbilityTargetTypes.NONE:
-				break;
-			case AbilityTargetTypes.UNIT:
-				switch (targetTeam)
-				{
-					case AbilityTargetTeams.ALLY:
-						if (!allyTarget) {
-							Debug.Log("No ally selected.");
-							return false;
-						}
-						else if (Util.GetDistanceIn2D(caster.GetBodyPosition(), allyTarget.GetBodyPosition()) < castRange) {
-							Debug.Log("Target ally out of cast range.");
-							return false;
-						}
-						break;
-
-					case AbilityTargetTeams.ENEMY:
-						if (!enemyTarget) {
-							Debug.Log("No enemy selected.");
-							return false;
-						}
-						else if (Util.GetDistanceIn2D(caster.GetBodyPosition(), enemyTarget.GetBodyPosition()) > castRange) {
-							Debug.Log("Target enemy out of cast range.");
-							return false;
-						}
-						break;
-					
-					case AbilityTargetTeams.BOTH:
-						if (!allyTarget && !enemyTarget) {
-							Debug.Log("Neither ally nor enemy selected.");
-							return false;
-						}
-						// nothing checks for range yet
-						break;
-	
-					default:
-						break;
-				}
-				break;
-			/*
-			case AbilityTargetTypes.POINT:
-				if (Util.IsNullVector(targetLocation)) {
-					print("Invalid target location");
-					return false;
-				}
-				else if (Util.GetDistanceIn2D(caster.GetBodyPosition(), targetLocation) > castRange) {
-					print("Target location out of cast range.");
-					return false;
-				}
-				break;
-			case AbilityTargetTypes.PASSIVE:
-				break;
-			case AbilityTargetTypes.CHANNELLED:
-				break;
-			case AbilityTargetTypes.SHAPE:
-				break;*/
-			default:
-				Debug.Log("Unexpected AbilityTargetType value.");
-				return false;
 		}
 
 		return true;

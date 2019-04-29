@@ -26,7 +26,7 @@ public class FieldOfView : MonoBehaviour {
 	Mesh viewMesh;
 
 	void Start() {
-		sceneViewMask = GameController.GetSceneMask();
+		sceneViewMask = GameRules.GetSceneMask();
 		if (sceneViewMask != null)
 			sceneViewMask.SetActive(false);
 

@@ -34,6 +34,7 @@ MonoBehaviour:
   durationRemaining: 0
   projectilePrefab: {fileID: 1614867261836170, guid: fcb164ba73590584a93f4ba723df8fa0,
     type: 3}
+  projectileSpawner: 3
   projectileBehaviour: 3
   projectileSpeed: 0
   projectileTimeAlive: 3

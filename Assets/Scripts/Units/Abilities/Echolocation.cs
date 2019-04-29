@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Abilities/Echolocation")]
+[CreateAssetMenu(menuName = "Abilities/Monster/Echolocation")]
 public class Echolocation : Ability, IProjectileAbility {
 
 	[Header("Echolocation")]
@@ -24,6 +24,7 @@ public class Echolocation : Ability, IProjectileAbility {
 		doNotCancelOrderQueue = true;
 
 		projectilePrefab = null;
+		projectileSpawner = BodyLocations.MOUTH;
 		projectileBehaviour = ProjectileBehaviourTypes.CONE;
 		projectileSpeed = 0f;
 		projectileTimeAlive = 0.5f;
