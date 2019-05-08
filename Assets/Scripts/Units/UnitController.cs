@@ -3,10 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Random = UnityEngine.Random;
-using Mirror;
 
-public class UnitController : NetworkBehaviour {
+public class UnitController : MonoBehaviour {
 	[HideInInspector] public BodyController body;
 	[HideInInspector] public NavMeshAgent agent;
 	[HideInInspector] public NetworkHelper networkHelper;
@@ -424,8 +422,8 @@ public class UnitController : NetworkBehaviour {
 		networkHelper.currentHealth = newHealthValue;
 	}
 
-	// TODO: not going to work over the network
 	public void SetUnitInfo(string unitInfoName) {
+		Debug.Log("Local SetUnitInfo");
 		if (ResourceLibrary.Instance.unitInfoDictionary.TryGetValue(unitInfoName, out UnitInfo scriptableObject)) {
 			unitInfo = Instantiate(scriptableObject);
 			unitInfo.Initialize();
@@ -435,6 +433,7 @@ public class UnitController : NetworkBehaviour {
 			SetTurnRate(unitInfo.turnRate);
 			abilityManager.Initialize();
 			body.ResetAnimator();
+			body.bodyMesh.material.color = unitInfo.bodyColor;
 		}
 
 		else

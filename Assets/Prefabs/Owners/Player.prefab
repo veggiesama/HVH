@@ -125,7 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07c48f881f4e97944ad92550a3344665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncInterval: 0.1
   body: {fileID: 0}
   agent: {fileID: 0}
   networkHelper: {fileID: 0}
@@ -157,7 +156,6 @@ GameObject:
   - component: {fileID: 885585859267659497}
   - component: {fileID: 8234122456298103451}
   - component: {fileID: 8879444565007247646}
-  - component: {fileID: 8180814785948654849}
   - component: {fileID: 4399033961528583737}
   m_Layer: 0
   m_Name: Player
@@ -198,9 +196,9 @@ MonoBehaviour:
   syncInterval: 0.1
   unit: {fileID: 114439122746566608}
   team: 0
+  networkHelper: {fileID: 0}
   uiController: {fileID: 3320323539532053525}
   camObject: {fileID: 1860743903889731771}
-  networkHelper: {fileID: 0}
   playerID: 0
 --- !u!114 &885585859267659497
 MonoBehaviour:
@@ -234,6 +232,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncInterval: 0.1
   currentHealth: 0
+  unitInfo: 
   isDisconnected: 0
   isUnassigned: 1
 --- !u!114 &8879444565007247646
@@ -252,20 +251,6 @@ MonoBehaviour:
   m_LocalPlayerAuthority: 1
   m_AssetId: 1b64ea0b5354f754f9eea2c6ccbad286
   m_SceneId: 0
---- !u!114 &8180814785948654849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1149659272418656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncInterval: 0.1
-  compressRotation: 1
 --- !u!114 &4399033961528583737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncInterval: 0.1
-  compressRotation: 1
+  compressRotation: 0
   target: {fileID: 4539851055164326}
 --- !u!1 &1174688678427292
 GameObject:
@@ -709,6 +694,7 @@ MonoBehaviour:
   projectileSpawner: {fileID: 0}
   head: {fileID: 0}
   mouth: {fileID: 0}
+  feet: {fileID: 0}
   bodyMesh: {fileID: 0}
 --- !u!1 &1556071493720860
 GameObject:

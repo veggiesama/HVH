@@ -8,6 +8,7 @@ public class NetworkHelper : NetworkBehaviour {
 	Player player;
 	UnitController unit;
 	[SyncVar] public float currentHealth = 1;
+	[SyncVar] public string unitInfo;
 	public bool isDisconnected = false;
 	public bool isUnassigned = true;
 	
@@ -358,25 +359,19 @@ public class NetworkHelper : NetworkBehaviour {
 		}
 	}
 
-	/*
-	private void UpdateNetworkStatusSyncList() {
-		currentTimer -= Time.deltaTime;
-		if (currentTimer < 0) {
-			networkStatusEffects.Clear();
+	// UNIT INFO
+	public void SetUnitInfo(string unitInfoName) {
+		Debug.Log("SetUnitInfo");
+		unitInfo = unitInfoName;
+		Rpc_SetUnitInfo(unitInfoName);
+	}
 
-			List<StatusEffect> list = unit.GetStatusEffectList();
-			foreach (StatusEffect s in list) {
-				networkStatusEffects.Add( new NetworkStatusEffect(
-				  s.statusName,
-				  (int)s.type,
-				  s.duration,
-				  s.remainingTime
-				));
-			}
-			
-			currentTimer = refreshEvery;
-		}
-	}*/
+	[ClientRpc]
+	private void Rpc_SetUnitInfo(string unitInfoName) {
+		Debug.Log("RPC_SetUnitInfo");
+		unit.SetUnitInfo(unitInfoName);
+	}
+
 
 	// HELPER FUNCTIONS
 

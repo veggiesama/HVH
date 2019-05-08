@@ -14,6 +14,9 @@ public class UnitInfo : ScriptableObject {
 	[HideInInspector] public float movementSpeedOriginal;
 	[HideInInspector] public float turnRateOriginal;
 	[HideInInspector] public int sizeOriginal;
+	[SerializeField] private Color bodyColorA;
+	[SerializeField] private Color bodyColorB;
+	[HideInInspector] public Color bodyColor;
 
 	[Header("Status effects")]
 	public Dead onDeathStatusEffect;
@@ -32,6 +35,7 @@ public class UnitInfo : ScriptableObject {
 		movementSpeedOriginal = movementSpeed;
 		turnRateOriginal = turnRate;
 		sizeOriginal = size;
+		bodyColor = Color.Lerp(bodyColorA, bodyColorB, Random.Range(0f, 1f));
 	}
 
 }

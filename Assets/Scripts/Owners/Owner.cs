@@ -9,6 +9,11 @@ public class Owner : NetworkBehaviour {
 	public UnitController unit;
 	[SyncVar, SerializeField] protected int team;
 	[SyncVar] protected Color bodyColor;
+	public NetworkHelper networkHelper;
+
+	public void Awake() {
+		networkHelper = GetComponent<NetworkHelper>();
+	}
 
 	public Teams GetTeam() {
 		return (Teams) team;
@@ -18,15 +23,12 @@ public class Owner : NetworkBehaviour {
 		this.team = (int) team;
 
 		if (team == Teams.DWARVES) {
-			bodyColor = Color.Lerp(Color.white, Color.cyan, Random.Range(0.2f, 0.6f));
-			unit.SetUnitInfo("Dwarf");
+			networkHelper.SetUnitInfo("Dwarf");
 		}
 		else if (team == Teams.MONSTERS) {
-			bodyColor = Color.Lerp(Color.white, Color.red, Random.Range(0.2f, 0.6f));
-			unit.SetUnitInfo("Monster");
+			networkHelper.SetUnitInfo("Monster");
 		}
 
-		unit.body.bodyMesh.material.color = bodyColor;
 	}
 
 }

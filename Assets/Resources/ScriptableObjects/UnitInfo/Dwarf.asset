@@ -17,11 +17,14 @@ MonoBehaviour:
   armor: 0
   resist: 0
   movementSpeed: 7
-  turnRate: 1333
+  turnRate: 1350
   size: 1
   movementSpeedOriginal: 0
   turnRateOriginal: 0
   sizeOriginal: 0
+  bodyColorA: {r: 0.495283, g: 1, b: 1, a: 1}
+  bodyColorB: {r: 0.3160377, g: 1, b: 0.39036372, a: 0}
+  bodyColor: {r: 0, g: 0, b: 0, a: 0}
   onDeathStatusEffect: {fileID: 11400000, guid: a2c024c32d1d9ad48b525321e3c76286,
     type: 2}
   onAirbornStatusEffect: {fileID: 11400000, guid: 602ec8d7899e5e644a690f77dc709914,
