@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncInterval: 0.1
-  compressRotation: 0
+  compressRotation: 2
   target: {fileID: 4539851055164326}
 --- !u!1 &1174688678427292
 GameObject:
