@@ -16,6 +16,11 @@ public class NetworkManagerHVH : NetworkManager {
 		Debug.Log("Server has started");
     }
 
+	public override void OnStartClient()
+	{
+		Debug.Log("Client has started");
+	}
+
 	public override void OnServerAddPlayer(NetworkConnection conn, AddPlayerMessage extraMessage) {
         Debug.Log("Client has requested to get his player added to the game");
 	}

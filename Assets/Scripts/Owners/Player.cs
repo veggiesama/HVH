@@ -18,23 +18,16 @@ public class Player : Owner {
 	[SyncVar] public int playerID;
 
 	public override void OnStartClient() {
-		base.OnStartClient();
-
 		if (!string.IsNullOrEmpty(networkHelper.unitInfo)) {
 			unit.SetUnitInfo(networkHelper.unitInfo);
 		}
-
-		Debug.Log("OnStartClient");
 	}
 
 	public void Start() {
 		unit.body.GetComponent<Renderer>().material.color = bodyColor;
-		Debug.Log("Start");
 	}
 
 	public override void OnStartLocalPlayer() {
-        base.OnStartLocalPlayer(); // does this do anything?
-		Debug.Log("OnStartLocalPlayer");
 		mouseTargeter = GetComponent<MouseTargeter>();
 		if (isLocalPlayer) {
 			camObject.SetActive(true);

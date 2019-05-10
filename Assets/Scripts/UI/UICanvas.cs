@@ -7,6 +7,10 @@ public class UICanvas : MonoBehaviour {
     public Slider castbar;
 	[SerializeField] private Player localPlayer;
 
+	void Awake() {
+		DontDestroyOnLoad(this.gameObject);
+	}
+
 	public void SetLocalPlayer(Player player) {
 		localPlayer = player;
 	}

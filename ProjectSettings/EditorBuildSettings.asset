@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Scenes/HVH.unity
+    path: Assets/Scenes/Initialization.unity
+    guid: aba981037ca328945bee4184739b5d5b
+  - enabled: 1
+    path: Assets/Scenes/HVH.unity
     guid: f6b142b2e456a1044b3bbc0cab665f55
   m_configObjects: {}

@@ -52,7 +52,7 @@ public class DayNightController : NetworkBehaviour {
 			isDay = lsky.IsDay;
 			//isNight = lsky.IsNight;
 
-			Debug.Log("Time: " + GetTimeOfDay() + ", Timer: " + currentTimer +  ", isDay: " + isDay);
+			//Debug.Log("Time: " + GetTimeOfDay() + ", Timer: " + currentTimer +  ", isDay: " + isDay);
 
 			if (isServer && currentTimer <= 0) {
 				if (isDay)
@@ -80,7 +80,7 @@ public class DayNightController : NetworkBehaviour {
 	}
 
 	IEnumerator TransitionToDay() {
-		Debug.Log("Transitioning to day!");
+		//Debug.Log("Transitioning to day!");
 		float originalTimeline = GetTimeOfDay();
 		for (float t = 0; t <= lengthOfTransition; t += transitionUpdateEvery) {
 			SetTimeOfDay( Mathf.SmoothStep(originalTimeline, dayBegins, t / lengthOfTransition) );
@@ -89,7 +89,7 @@ public class DayNightController : NetworkBehaviour {
 	}
 
 	IEnumerator TransitionToNight() {
-		Debug.Log("Transitioning to night!");
+		//Debug.Log("Transitioning to night!");
 		float originalTimeline = GetTimeOfDay();
 		for (float t = 0; t <= lengthOfTransition; t += transitionUpdateEvery) {
 			SetTimeOfDay( Mathf.SmoothStep(originalTimeline, nightBegins, t / lengthOfTransition) );

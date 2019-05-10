@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Extensions;
+using UnityEngine.SceneManagement;
 
 public class GameRules : Singleton<GameRules> {
 
@@ -16,6 +17,10 @@ public class GameRules : Singleton<GameRules> {
 		} set {
 			mInstance = value;
 		}
+	}
+
+	void Awake() {
+		DontDestroyOnLoad(this.gameObject);
 	}
 
 	// Use this for initialization

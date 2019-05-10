@@ -19,6 +19,8 @@ public class ResourceLibrary : Singleton<ResourceLibrary> {
 	}
 
     void Awake() {
+		DontDestroyOnLoad(this.gameObject);
+	
 	    UnitInfo[] unitArray = Resources.LoadAll<UnitInfo>("ScriptableObjects\\UnitInfo");
 		foreach (UnitInfo o in unitArray) {
 			unitInfoDictionary.Add(o.name, o);
