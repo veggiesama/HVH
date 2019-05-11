@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.2840553, g: 0.26312232, b: 0.23842761, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2230,6 +2230,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogMode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogStartDistance.evaluateTime
+      value: 0.19335204
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogEndDistance.evaluateTime
+      value: 0.19335204
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogStartDistance.inputValue
+      value: 49
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogEndDistance.inputValue
+      value: 724
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogDensity.inputValue
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7561,7 +7591,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22400762, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000015258789
+      value: 0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 22428984, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMin.y
