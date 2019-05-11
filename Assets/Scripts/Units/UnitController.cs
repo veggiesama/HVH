@@ -95,7 +95,7 @@ public class UnitController : MonoBehaviour {
 
 		Order currentOrder = orderQueue.GetCurrentOrder();
 		if (currentOrder != null && ability == currentOrder.ability) {
-			Debug.Log("Don't interrupt cast when same ability is used again.");
+			//Debug.Log("Don't interrupt cast when same ability is used again.");
 			return;
 		}
 
@@ -326,7 +326,7 @@ public class UnitController : MonoBehaviour {
 		StatusEffect cloneStatus = Instantiate(status);
 		cloneStatus.Initialize(this.gameObject, ability);
 		statusEffectManager.Add(cloneStatus);
-		Debug.Log("Adding " + status.statusName + " to unit for " + status.duration + " seconds.");
+		//Debug.Log("Adding " + status.statusName + " to unit for " + status.duration + " seconds.");
 	}
 
 	public void RemoveStatusEffect(StatusEffectTypes statusType) {

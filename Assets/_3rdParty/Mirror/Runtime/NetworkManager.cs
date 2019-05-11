@@ -87,9 +87,12 @@ namespace Mirror
         }
 
         // headless mode detection
+        public static bool isHeadless => SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null;
+
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("This is a static property now...use `isHeadless` instead of `IsHeadless()`.  This method will be removed by summer 2019.")]
         public static bool IsHeadless()
         {
-            return SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null;
+            return isHeadless;
         }
 
         void InitializeSingleton()
@@ -132,7 +135,7 @@ namespace Mirror
             // some transports might not be ready until Start.
             //
             // (tick rate is applied in StartServer!)
-            if (IsHeadless() && startOnHeadless)
+            if (isHeadless && startOnHeadless)
             {
                 StartServer();
             }
@@ -235,7 +238,7 @@ namespace Mirror
             // * if not in Editor (it doesn't work in the Editor)
             // * if not in Host mode
 #if !UNITY_EDITOR
-            if (!NetworkClient.active)
+            if (!NetworkClient.active && isHeadless)
             {
                 Application.targetFrameRate = serverTickRate;
                 Debug.Log("Server Tick Rate set to: " + Application.targetFrameRate + " Hz.");
@@ -397,6 +400,11 @@ namespace Mirror
 
         public virtual void ServerChangeScene(string newSceneName)
         {
+            ServerChangeScene(newSceneName, LoadSceneMode.Single, LocalPhysicsMode.None);
+        }
+
+        public virtual void ServerChangeScene(string newSceneName, LoadSceneMode sceneMode, LocalPhysicsMode physicsMode)
+        {
             if (string.IsNullOrEmpty(newSceneName))
             {
                 Debug.LogError("ServerChangeScene empty scene name");
@@ -407,9 +415,17 @@ namespace Mirror
             NetworkServer.SetAllClientsNotReady();
             networkSceneName = newSceneName;
 
-            loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName);
+            LoadSceneParameters loadSceneParameters = new LoadSceneParameters(sceneMode, physicsMode);
 
-            SceneMessage msg = new SceneMessage(networkSceneName);
+            loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName, loadSceneParameters);
+
+            SceneMessage msg = new SceneMessage()
+            {
+                sceneName = newSceneName,
+                sceneMode = loadSceneParameters.loadSceneMode,
+                physicsMode = loadSceneParameters.localPhysicsMode
+            };
+
             NetworkServer.SendToAll(msg);
 
             startPositionIndex = 0;
@@ -425,6 +441,11 @@ namespace Mirror
         }
 
         void ClientChangeScene(string newSceneName, bool forceReload)
+        {
+            ClientChangeScene(newSceneName, forceReload, LoadSceneMode.Single, LocalPhysicsMode.None);
+        }
+
+        internal void ClientChangeScene(string newSceneName, bool forceReload, LoadSceneMode sceneMode, LocalPhysicsMode physicsMode)
         {
             if (string.IsNullOrEmpty(newSceneName))
             {
@@ -452,8 +473,12 @@ namespace Mirror
             // Let client prepare for scene change
             OnClientChangeScene(newSceneName);
 
-            loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName);
-            networkSceneName = newSceneName;
+            loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName, new LoadSceneParameters()
+            {
+                loadSceneMode = sceneMode,
+                localPhysicsMode = physicsMode,
+            });
+            networkSceneName = newSceneName; //This should probably not change if additive is used          
         }
 
         void FinishLoadScene()
@@ -505,6 +530,12 @@ namespace Mirror
         {
             if (LogFilter.Debug) Debug.Log("RegisterStartPosition: (" + start.gameObject.name + ") " + start.position);
             startPositions.Add(start);
+
+            // reorder the list so that round-robin spawning uses the start positions
+            // in hierarchy order.  This assumes all objects with NetworkStartPosition
+            // component are siblings, either in the scene root or together as children
+            // under a single parent in the scene.
+            startPositions = startPositions.OrderBy(transform => transform.GetSiblingIndex()).ToList();
         }
 
         public static void UnRegisterStartPosition(Transform start)
@@ -539,7 +570,8 @@ namespace Mirror
 
             if (networkSceneName != "" && networkSceneName != offlineScene)
             {
-                conn.Send(new SceneMessage(networkSceneName));
+                SceneMessage msg = new SceneMessage() {sceneName = networkSceneName};
+                conn.Send(msg);
             }
 
             OnServerConnect(conn);
@@ -619,11 +651,9 @@ namespace Mirror
         {
             if (LogFilter.Debug) Debug.Log("NetworkManager.OnClientSceneInternal");
 
-            string newSceneName = msg.value;
-
             if (NetworkClient.isConnected && !NetworkServer.active)
             {
-                ClientChangeScene(newSceneName, true);
+                ClientChangeScene(msg.sceneName, true, msg.sceneMode, msg.physicsMode);
             }
         }
         #endregion
@@ -672,35 +702,30 @@ namespace Mirror
             Transform startPos = GetStartPosition();
             GameObject player = startPos != null
                 ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
-                : Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+                : Instantiate(playerPrefab);
 
             NetworkServer.AddPlayerForConnection(conn, player);
         }
 
-        public Transform GetStartPosition()
-        {
-            // first remove any dead transforms
-            startPositions.RemoveAll(t => t == null);
+		public Transform GetStartPosition()
+		{
+			// first remove any dead transforms
+			startPositions.RemoveAll(t => t == null);
 
-            if (playerSpawnMethod == PlayerSpawnMethod.Random && startPositions.Count > 0)
-            {
-                // try to spawn at a random start location
-                int index = UnityEngine.Random.Range(0, startPositions.Count);
-                return startPositions[index];
-            }
-            if (playerSpawnMethod == PlayerSpawnMethod.RoundRobin && startPositions.Count > 0)
-            {
-                if (startPositionIndex >= startPositions.Count)
-                {
-                    startPositionIndex = 0;
-                }
+			if (startPositions.Count == 0)
+				return null;
 
-                Transform startPos = startPositions[startPositionIndex];
-                startPositionIndex += 1;
-                return startPos;
-            }
-            return null;
-        }
+			if (playerSpawnMethod == PlayerSpawnMethod.Random)
+			{
+				return startPositions[UnityEngine.Random.Range(0, startPositions.Count)];
+			}
+			else
+			{
+				Transform startPosition = startPositions[startPositionIndex];
+				startPositionIndex = (startPositionIndex + 1) % startPositions.Count;
+				return startPosition;
+			}
+		}
 
         public virtual void OnServerRemovePlayer(NetworkConnection conn, NetworkIdentity player)
         {
@@ -747,14 +772,10 @@ namespace Mirror
             // always become ready.
             ClientScene.Ready(conn);
 
-            // vis2k: replaced all this weird code with something more simple
-            if (autoCreatePlayer)
+            if (autoCreatePlayer && ClientScene.localPlayer == null)
             {
                 // add player if existing one is null
-                if (ClientScene.localPlayer == null)
-                {
-                    ClientScene.AddPlayer();
-                }
+                ClientScene.AddPlayer();
             }
         }
         #endregion

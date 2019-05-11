@@ -55,6 +55,6 @@ public static class Util {
 	}
 
 	public static bool IsTree(GameObject gameObject) {
-		return gameObject.tag == "Tree";
+		return (gameObject.GetComponent<Tree>() != null);
 	}
 }

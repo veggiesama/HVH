@@ -2,11 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
 using System.Linq;
-using Mono.Cecil.Pdb;
-using Mono.Cecil.Mdb;
+using Mono.CecilX;
+using Mono.CecilX.Cil;
 
 namespace Mirror.Weaver
 {
@@ -23,9 +21,6 @@ namespace Mirror.Weaver
 
         // [SyncEvent] invoke functions that should be replaced. dict<originalEventName, replacement>
         public Dictionary<string, MethodDefinition> replaceEvents = new Dictionary<string, MethodDefinition>();
-
-        public Dictionary<string, MethodReference> readFuncs;
-        public Dictionary<string, MethodReference> writeFuncs;
 
         public List<MethodDefinition> generatedReadFunctions = new List<MethodDefinition>();
         public List<MethodDefinition> generatedWriteFunctions = new List<MethodDefinition>();
@@ -86,24 +81,15 @@ namespace Mirror.Weaver
         public static TypeReference CmdDelegateReference;
         public static MethodReference CmdDelegateConstructor;
 
-        public static MethodReference NetworkReaderReadInt32;
-
-        public static MethodReference NetworkWriterWriteInt32;
         public static MethodReference NetworkWriterWriteInt16;
 
         public static MethodReference NetworkServerGetActive;
         public static MethodReference NetworkServerGetLocalClientActive;
         public static MethodReference NetworkClientGetActive;
-        public static MethodReference UBehaviourIsServer;
+        public static MethodReference getBehaviourIsServer;
         public static MethodReference NetworkReaderReadPackedUInt32;
-        public static MethodReference NetworkReaderReadPackedInt32;
         public static MethodReference NetworkReaderReadPackedUInt64;
-        public static MethodReference NetworkReaderReadPackedInt64;
-        public static MethodReference NetworkReaderReadByte;
-        public static MethodReference NetworkWriterWritePackedUInt32;
-        public static MethodReference NetworkWriterWritePackedInt32;
         public static MethodReference NetworkWriterWritePackedUInt64;
-        public static MethodReference NetworkWriterWritePackedInt64;
 
         public static MethodReference NetworkReadUInt16;
         public static MethodReference NetworkWriteUInt16;
@@ -219,12 +205,6 @@ namespace Mirror.Weaver
             }
         }
 
-
-        static void ProcessPropertySites()
-        {
-            PropertySiteProcessor.ProcessSitesModule(CurrentAssembly.MainModule);
-        }
-
         static bool ProcessNetworkBehaviourType(TypeDefinition td)
         {
             if (!NetworkBehaviourProcessor.WasProcessed(td))
@@ -280,7 +260,12 @@ namespace Mirror.Weaver
         static TypeReference ImportCorLibType(string fullName)
         {
             TypeDefinition type = CorLibModule.GetType(fullName) ?? CorLibModule.ExportedTypes.First(t => t.FullName == fullName).Resolve();
-            return CurrentAssembly.MainModule.ImportReference(type);
+            if (type != null)
+            {
+                return CurrentAssembly.MainModule.ImportReference(type);
+            }
+            Error("Failed to import mscorlib type: " + fullName + " because Resolve failed. (Might happen when trying to Resolve in NetStandard dll, see also: https://github.com/vis2k/Mirror/issues/791)");
+            return null;
         }
 
         static void SetupTargetTypes()
@@ -322,21 +307,12 @@ namespace Mirror.Weaver
             NetworkServerGetLocalClientActive = Resolvers.ResolveMethod(NetworkServerType, CurrentAssembly, "get_localClientActive");
             NetworkClientGetActive = Resolvers.ResolveMethod(NetworkClientType, CurrentAssembly, "get_active");
 
-            NetworkReaderReadInt32 = Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadInt32");
-
-            NetworkWriterWriteInt32 = Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", int32Type);
             NetworkWriterWriteInt16 = Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", int16Type);
 
             NetworkReaderReadPackedUInt32 = Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadPackedUInt32");
-            NetworkReaderReadPackedInt32 = Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadPackedInt32");
             NetworkReaderReadPackedUInt64 = Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadPackedUInt64");
-            NetworkReaderReadPackedInt64 = Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadPackedInt64");
-            NetworkReaderReadByte = Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadByte");
 
-            NetworkWriterWritePackedUInt32 = Resolvers.ResolveMethod(NetworkWriterType, CurrentAssembly, "WritePackedUInt32");
-            NetworkWriterWritePackedInt32 = Resolvers.ResolveMethod(NetworkWriterType, CurrentAssembly, "WritePackedInt32");
             NetworkWriterWritePackedUInt64 = Resolvers.ResolveMethod(NetworkWriterType, CurrentAssembly, "WritePackedUInt64");
-            NetworkWriterWritePackedInt64 = Resolvers.ResolveMethod(NetworkWriterType, CurrentAssembly, "WritePackedInt64");
 
             NetworkReadUInt16 = Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadUInt16");
             NetworkWriteUInt16 = Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", uint16Type);
@@ -346,8 +322,8 @@ namespace Mirror.Weaver
             CurrentAssembly.MainModule.ImportReference(gameObjectType);
             CurrentAssembly.MainModule.ImportReference(transformType);
 
-            TypeReference netViewTmp = NetAssembly.MainModule.GetType("Mirror.NetworkIdentity");
-            NetworkIdentityType = CurrentAssembly.MainModule.ImportReference(netViewTmp);
+            TypeReference networkIdentityTmp = NetAssembly.MainModule.GetType("Mirror.NetworkIdentity");
+            NetworkIdentityType = CurrentAssembly.MainModule.ImportReference(networkIdentityTmp);
 
             NetworkBehaviourType = NetAssembly.MainModule.GetType("Mirror.NetworkBehaviour");
             NetworkBehaviourType2 = CurrentAssembly.MainModule.ImportReference(NetworkBehaviourType);
@@ -373,11 +349,11 @@ namespace Mirror.Weaver
             // get specialized GetComponent<NetworkIdentity>()
             getComponentReference = Resolvers.ResolveMethodGeneric(ComponentType, CurrentAssembly, "GetComponent", NetworkIdentityType);
 
-            getNetIdReference = Resolvers.ResolveMethod(netViewTmp, CurrentAssembly, "get_netId");
+            getNetIdReference = Resolvers.ResolveMethod(networkIdentityTmp, CurrentAssembly, "get_netId");
 
             gameObjectInequality = Resolvers.ResolveMethod(unityObjectType, CurrentAssembly, "op_Inequality");
 
-            UBehaviourIsServer  = Resolvers.ResolveMethod(NetworkBehaviourType, CurrentAssembly, "get_isServer");
+            getBehaviourIsServer = Resolvers.ResolveMethod(NetworkBehaviourType, CurrentAssembly, "get_isServer");
             setSyncVarReference = Resolvers.ResolveMethod(NetworkBehaviourType, CurrentAssembly, "SetSyncVar");
             setSyncVarHookGuard = Resolvers.ResolveMethod(NetworkBehaviourType, CurrentAssembly, "set_syncVarHookGuard");
             getSyncVarHookGuard = Resolvers.ResolveMethod(NetworkBehaviourType, CurrentAssembly, "get_syncVarHookGuard");
@@ -400,82 +376,6 @@ namespace Mirror.Weaver
 
             SyncObjectType = CurrentAssembly.MainModule.ImportReference(SyncObjectType);
             InitSyncObjectReference = Resolvers.ResolveMethod(NetworkBehaviourType, CurrentAssembly, "InitSyncObject");
-        }
-
-        static void SetupReadFunctions()
-        {
-            WeaveLists.readFuncs = new Dictionary<string, MethodReference>
-            {
-                { singleType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadSingle") },
-                { doubleType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadDouble") },
-                { boolType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadBoolean") },
-                { stringType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadString") },
-                { int64Type.FullName, NetworkReaderReadPackedInt64 },
-                { uint64Type.FullName, NetworkReaderReadPackedUInt64 },
-                { int32Type.FullName, NetworkReaderReadPackedInt32 },
-                { uint32Type.FullName, NetworkReaderReadPackedUInt32 },
-                { int16Type.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadInt16") },
-                { uint16Type.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadUInt16") },
-                { byteType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadByte") },
-                { sbyteType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadSByte") },
-                { charType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadChar") },
-                { decimalType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadDecimal") },
-                { vector2Type.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadVector2") },
-                { vector3Type.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadVector3") },
-                { vector4Type.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadVector4") },
-                { vector2IntType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadVector2Int") },
-                { vector3IntType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadVector3Int") },
-                { colorType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadColor") },
-                { color32Type.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadColor32") },
-                { quaternionType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadQuaternion") },
-                { rectType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadRect") },
-                { planeType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadPlane") },
-                { rayType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadRay") },
-                { matrixType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadMatrix4x4") },
-                { guidType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadGuid") },
-                { gameObjectType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadGameObject") },
-                { NetworkIdentityType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadNetworkIdentity") },
-                { transformType.FullName, Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadTransform") },
-                { "System.Byte[]", Resolvers.ResolveMethod(NetworkReaderType, CurrentAssembly, "ReadBytesAndSize") },
-            };
-        }
-
-        static void SetupWriteFunctions()
-        {
-            WeaveLists.writeFuncs = new Dictionary<string, MethodReference>
-            {
-                { singleType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", singleType) },
-                { doubleType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", doubleType) },
-                { boolType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", boolType) },
-                { stringType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", stringType) },
-                { int64Type.FullName, NetworkWriterWritePackedInt64 },
-                { uint64Type.FullName, NetworkWriterWritePackedUInt64 },
-                { int32Type.FullName, NetworkWriterWritePackedInt32 },
-                { uint32Type.FullName, NetworkWriterWritePackedUInt32 },
-                { int16Type.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", int16Type) },
-                { uint16Type.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", uint16Type) },
-                { byteType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", byteType) },
-                { sbyteType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", sbyteType) },
-                { charType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", charType) },
-                { decimalType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", decimalType) },
-                { vector2Type.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", vector2Type) },
-                { vector3Type.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", vector3Type) },
-                { vector4Type.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", vector4Type) },
-                { vector2IntType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", vector2IntType) },
-                { vector3IntType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", vector3IntType) },
-                { colorType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", colorType) },
-                { color32Type.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", color32Type) },
-                { quaternionType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", quaternionType) },
-                { rectType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", rectType) },
-                { planeType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", planeType) },
-                { rayType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", rayType) },
-                { matrixType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", matrixType) },
-                { guidType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", guidType) },
-                { gameObjectType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", gameObjectType) },
-                { NetworkIdentityType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", NetworkIdentityType) },
-                { transformType.FullName, Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "Write", transformType) },
-                { "System.Byte[]", Resolvers.ResolveMethodWithArg(NetworkWriterType, CurrentAssembly, "WriteBytesAndSize", "System.Byte[]") }
-            };
         }
 
         public static bool IsNetworkBehaviour(TypeDefinition td)
@@ -641,13 +541,24 @@ namespace Mirror.Weaver
 
         static bool Weave(string assName, IEnumerable<string> dependencies, IAssemblyResolver assemblyResolver, string unityEngineDLLPath, string mirrorNetDLLPath, string outputDir)
         {
-            ReaderParameters readParams = Helpers.ReaderParameters(assName, dependencies, assemblyResolver, unityEngineDLLPath, mirrorNetDLLPath);
-
-            using (CurrentAssembly = AssemblyDefinition.ReadAssembly(assName, readParams))
+            using (DefaultAssemblyResolver asmResolver = new DefaultAssemblyResolver())
+            using (CurrentAssembly = AssemblyDefinition.ReadAssembly(assName, new ReaderParameters { ReadWrite = true, ReadSymbols = true, AssemblyResolver = asmResolver }))
             {
+                asmResolver.AddSearchDirectory(Path.GetDirectoryName(assName));
+                asmResolver.AddSearchDirectory(Helpers.UnityEngineDLLDirectoryName());
+                asmResolver.AddSearchDirectory(Path.GetDirectoryName(unityEngineDLLPath));
+                asmResolver.AddSearchDirectory(Path.GetDirectoryName(mirrorNetDLLPath));
+                if (dependencies != null)
+                {
+                    foreach (string path in dependencies)
+                    {
+                        asmResolver.AddSearchDirectory(path);
+                    }
+                }
+
                 SetupTargetTypes();
-                SetupReadFunctions();
-                SetupWriteFunctions();
+                Readers.Init(CurrentAssembly);
+                Writers.Init(CurrentAssembly);
 
                 ModuleDefinition moduleDefinition = CurrentAssembly.MainModule;
                 Console.WriteLine("Script Module: {0}", moduleDefinition.Name);
@@ -677,8 +588,6 @@ namespace Mirror.Weaver
                             }
                             catch (Exception ex)
                             {
-                                if (CurrentAssembly.MainModule.SymbolReader != null)
-                                    CurrentAssembly.MainModule.SymbolReader.Dispose();
                                 Weaver.Error(ex.Message);
                                 throw ex;
                             }
@@ -686,8 +595,6 @@ namespace Mirror.Weaver
 
                         if (WeavingFailed)
                         {
-                            if (CurrentAssembly.MainModule.SymbolReader != null)
-                                CurrentAssembly.MainModule.SymbolReader.Dispose();
                             return false;
                         }
                     }
@@ -700,33 +607,31 @@ namespace Mirror.Weaver
                     // this must be done for ALL code, not just NetworkBehaviours
                     try
                     {
-                        ProcessPropertySites();
+                        PropertySiteProcessor.ProcessSitesModule(CurrentAssembly.MainModule);
                     }
                     catch (Exception e)
                     {
                         Log.Error("ProcessPropertySites exception: " + e);
-                        if (CurrentAssembly.MainModule.SymbolReader != null)
-                            CurrentAssembly.MainModule.SymbolReader.Dispose();
                         return false;
                     }
 
                     if (WeavingFailed)
                     {
                         //Log.Error("Failed phase II.");
-                        if (CurrentAssembly.MainModule.SymbolReader != null)
-                            CurrentAssembly.MainModule.SymbolReader.Dispose();
                         return false;
                     }
 
-                    string dest = Helpers.DestinationFileFor(outputDir, assName);
-                    //Console.WriteLine ("Output:" + dest);
-
-                    WriterParameters writeParams = Helpers.GetWriterParameters(readParams);
-                    CurrentAssembly.Write(dest, writeParams);
+                    // write to outputDir if specified, otherwise perform in-place write
+                    WriterParameters writeParams = new WriterParameters { WriteSymbols = true };
+                    if (outputDir != null)
+                    {
+                        CurrentAssembly.Write(Helpers.DestinationFileFor(outputDir, assName), writeParams);
+                    }
+                    else
+                    {
+                        CurrentAssembly.Write(writeParams);
+                    }
                 }
-
-                if (CurrentAssembly.MainModule.SymbolReader != null)
-                    CurrentAssembly.MainModule.SymbolReader.Dispose();
             }
 
             return true;
@@ -737,27 +642,27 @@ namespace Mirror.Weaver
             WeavingFailed = false;
             WeaveLists = new WeaverLists();
 
-            UnityAssembly = AssemblyDefinition.ReadAssembly(unityEngineDLLPath);
-            NetAssembly = AssemblyDefinition.ReadAssembly(mirrorNetDLLPath);
-
-            SetupUnityTypes();
-
-            try
+            using (UnityAssembly = AssemblyDefinition.ReadAssembly(unityEngineDLLPath))
+            using (NetAssembly = AssemblyDefinition.ReadAssembly(mirrorNetDLLPath))
             {
-                foreach (string ass in assemblies)
+                SetupUnityTypes();
+
+                try
                 {
-                    if (!Weave(ass, dependencies, assemblyResolver, unityEngineDLLPath, mirrorNetDLLPath, outputDir))
+                    foreach (string ass in assemblies)
                     {
-                        return false;
+                        if (!Weave(ass, dependencies, assemblyResolver, unityEngineDLLPath, mirrorNetDLLPath, outputDir))
+                        {
+                            return false;
+                        }
                     }
                 }
+                catch (Exception e)
+                {
+                    Log.Error("Exception :" + e);
+                    return false;
+                }
             }
-            catch (Exception e)
-            {
-                Log.Error("Exception :" + e);
-                return false;
-            }
-            CorLibModule = null;
             return true;
         }
     }

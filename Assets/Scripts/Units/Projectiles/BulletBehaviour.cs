@@ -27,7 +27,7 @@ public class BulletBehaviour : ProjectileBehaviour {
 		if (!hasAuthority) return;
 
 		// collided with tree
-		if (col.gameObject.CompareTag("Tree")) {
+		if (Util.IsTree(col.gameObject)) {
 			if (treeMissChance > 0.0f && !hasRolledToMiss) {
 				missed = RollMissChance();
 				hasRolledToMiss = true;	

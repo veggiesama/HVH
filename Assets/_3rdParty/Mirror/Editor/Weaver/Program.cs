@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Mono.Cecil;
+using Mono.CecilX;
 
 namespace Mirror.Weaver
 {
@@ -31,32 +31,33 @@ namespace Mirror.Weaver
             CheckAssemblies(assemblies);
             Log.WarningMethod = printWarning;
             Log.ErrorMethod = printError;
-            IAssemblyResolver assemblyResolver = new DefaultAssemblyResolver();
-            return Weaver.WeaveAssemblies(assemblies, extraAssemblyPaths, assemblyResolver, outputDirectory, unityEngine, netDLL);
+            return Weaver.WeaveAssemblies(assemblies, extraAssemblyPaths, null, outputDirectory, unityEngine, netDLL);
         }
 
-        private static void CheckDLLPath(string path)
+        static void CheckDLLPath(string path)
         {
             if (!File.Exists(path))
                 throw new Exception("dll could not be located at " + path + "!");
         }
 
-        private static void CheckAssemblies(IEnumerable<string> assemblyPaths)
+        static void CheckAssemblies(IEnumerable<string> assemblyPaths)
         {
             foreach (string assemblyPath in assemblyPaths)
                 CheckAssemblyPath(assemblyPath);
         }
 
-        private static void CheckAssemblyPath(string assemblyPath)
+        static void CheckAssemblyPath(string assemblyPath)
         {
             if (!File.Exists(assemblyPath))
                 throw new Exception("Assembly " + assemblyPath + " does not exist!");
         }
 
-        private static void CheckOutputDirectory(string outputDir)
+        static void CheckOutputDirectory(string outputDir)
         {
-            if (!Directory.Exists(outputDir))
+            if (outputDir != null && !Directory.Exists(outputDir))
+            {
                 Directory.CreateDirectory(outputDir);
+            }
         }
     }
 }

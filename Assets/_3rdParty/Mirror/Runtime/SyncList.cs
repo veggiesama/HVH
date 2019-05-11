@@ -38,11 +38,6 @@ namespace Mirror
     // Original UNET name is SyncListStruct and original Weaver weavers anything
     // that contains the name 'SyncListStruct', without considering the name-
     // space.
-    //
-    // In other words, we need another name until the original Weaver is removed
-    // in Unity 2019.1.
-    //
-    // TODO rename back to SyncListStruct after 2019.1!
     [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use SyncList<MyStruct> instead")]
     public class SyncListSTRUCT<T> : SyncList<T> where T : struct
     {
@@ -302,6 +297,14 @@ namespace Mirror
         public void CopyTo(T[] array, int index) => objects.CopyTo(array, index);
 
         public int IndexOf(T item) => objects.IndexOf(item);
+
+        public int FindIndex(Predicate<T> match)
+        {
+            for (int i = 0; i < objects.Count; ++i)
+                if (match(objects[i]))
+                    return i;
+            return -1;
+        }
 
         public void Insert(int index, T item)
         {

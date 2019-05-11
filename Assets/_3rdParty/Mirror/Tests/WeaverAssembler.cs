@@ -48,8 +48,7 @@ namespace Mirror.Tests
         {
             foreach (string asm in refAsms)
             {
-                string asmFullPath;
-                if (FindReferenceAssemblyPath(asm, out asmFullPath))
+                if (FindReferenceAssemblyPath(asm, out string asmFullPath))
                 {
                     ReferenceAssemblies.Add(asmFullPath);
                 }
@@ -141,7 +140,7 @@ namespace Mirror.Tests
             BuildAssembly(false);
         }
 
-        private static void BuildAssembly(bool wait)
+        static void BuildAssembly(bool wait)
         {
             AssemblyBuilder assemblyBuilder = new AssemblyBuilder(OutputDirectory + OutputFile, SourceFiles.ToArray());
             assemblyBuilder.additionalReferences = ReferenceAssemblies.ToArray();

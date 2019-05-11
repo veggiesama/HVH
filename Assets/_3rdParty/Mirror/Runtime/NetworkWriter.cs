@@ -74,23 +74,16 @@ namespace Mirror
         // (like an inventory with different items etc.)
         public void WriteBytesAndSize(byte[] buffer, int offset, int count)
         {
+            uint length = checked((uint)count);
             // null is supported because [SyncVar]s might be structs with null byte[] arrays
             // (writing a size=0 empty array is not the same, the server and client would be out of sync)
             // (using size=-1 for null would limit max size to 32kb instead of 64kb)
-            if (buffer == null)
+            writer.Write(buffer != null); // notNull?
+            if (buffer != null)
             {
-                writer.Write(false); // notNull?
-                return;
+                WritePackedUInt32(length);
+                writer.Write(buffer, offset, count);
             }
-            if (count < 0)
-            {
-                Debug.LogError("NetworkWriter WriteBytesAndSize: size " + count + " cannot be negative");
-                return;
-            }
-
-            writer.Write(true); // notNull?
-            WritePackedUInt32((uint)count);
-            writer.Write(buffer, offset, count);
         }
 
         // Weaver needs a write function with just one byte[] parameter
@@ -132,15 +125,15 @@ namespace Mirror
             }
             if (value <= 2287)
             {
-                Write((byte)((value - 240) / 256 + 241));
-                Write((byte)((value - 240) % 256));
+                Write((byte)(((value - 240) >> 8) + 241));
+                Write((byte)((value - 240) & 0xFF));
                 return;
             }
             if (value <= 67823)
             {
                 Write((byte)249);
-                Write((byte)((value - 2288) / 256));
-                Write((byte)((value - 2288) % 256));
+                Write((byte)((value - 2288) >> 8));
+                Write((byte)((value - 2288) & 0xFF));
                 return;
             }
             if (value <= 16777215)
@@ -282,8 +275,8 @@ namespace Mirror
 
         public void Write(Ray value)
         {
-            Write(value.direction);
             Write(value.origin);
+            Write(value.direction);
         }
 
         public void Write(Matrix4x4 value)

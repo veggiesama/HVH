@@ -43,8 +43,8 @@ public class NetworkGameRules : NetworkBehaviour {
 			dwarfDictionary.Add((int)slot, n);
 
 			unassignedPlayer.MakeNPC();
-			unassignedPlayer.SetTeam(Teams.DWARVES);
 			NetworkServer.Spawn(unassignedPlayer.gameObject);
+			unassignedPlayer.SetTeam(Teams.DWARVES);
 			n++;
 		}
 

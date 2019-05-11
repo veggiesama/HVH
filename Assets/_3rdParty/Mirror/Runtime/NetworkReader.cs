@@ -22,6 +22,11 @@ namespace Mirror
             reader = new BinaryReader(new MemoryStream(buffer, false), encoding);
         }
 
+        public NetworkReader(ArraySegment<byte> buffer)
+        {
+            reader = new BinaryReader(new MemoryStream(buffer.Array, buffer.Offset, buffer.Count, false), encoding);
+        }
+
         // 'int' is the best type for .Position. 'short' is too small if we send >32kb which would result in negative .Position
         // -> converting long to int is fine until 2GB of data (MAX_INT), so we don't have to worry about overflows here
         public int Position { get { return (int)reader.BaseStream.Position; }  set { reader.BaseStream.Position = value; } }
@@ -86,13 +91,13 @@ namespace Mirror
             byte a1 = ReadByte();
             if (a0 >= 241 && a0 <= 248)
             {
-                return 240 + 256 * (a0 - ((ulong)241)) + a1;
+                return 240 + ((a0 - (ulong)241) << 8) + a1;
             }
 
             byte a2 = ReadByte();
             if (a0 == 249)
             {
-                return 2288 + (((ulong)256) * a1) + a2;
+                return 2288 + ((ulong)a1 << 8) + a2;
             }
 
             byte a3 = ReadByte();

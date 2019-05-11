@@ -1,6 +1,6 @@
 using System;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
+using Mono.CecilX;
+using Mono.CecilX.Cil;
 
 namespace Mirror.Weaver
 {
@@ -216,7 +216,7 @@ namespace Mirror.Weaver
             return 1;
         }
 
-        private static int ProcessInstructionLoadAddress(MethodDefinition md, Instruction instr, FieldDefinition opField, int iCount)
+        static int ProcessInstructionLoadAddress(MethodDefinition md, Instruction instr, FieldDefinition opField, int iCount)
         {
             // dont replace property call sites in constructors
             if (md.Name == ".ctor")
@@ -277,7 +277,6 @@ namespace Mirror.Weaver
                         // find replaceEvent with matching name
                         // NOTE: original weaver compared .Name, not just the MethodDefinition,
                         //       that's why we use dict<string,method>.
-                        // TODO maybe replaceEvents[md] would work too?
                         if (Weaver.WeaveLists.replaceEvents.TryGetValue(opField.Name, out MethodDefinition replacement))
                         {
                             instr.Operand = replacement;
@@ -292,7 +291,6 @@ namespace Mirror.Weaver
                 // should it be replaced?
                 // NOTE: original weaver compared .FullName, not just the MethodDefinition,
                 //       that's why we use dict<string,method>.
-                // TODO maybe replaceMethods[md] would work too?
                 if (Weaver.WeaveLists.replaceMethods.TryGetValue(opMethodRef.FullName, out MethodDefinition replacement))
                 {
                     //DLog(td, "    replacing "  + md.Name + ":" + i);
