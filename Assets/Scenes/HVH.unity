@@ -92455,6 +92455,11 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4810933034587170793, guid: efda1fb7965dc094cb24ee831e419166,
+        type: 3}
+      propertyPath: materialsLibrary
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 431834570105469337, guid: efda1fb7965dc094cb24ee831e419166,
         type: 3}
       propertyPath: m_SceneId
@@ -92475,11 +92480,6 @@ PrefabInstance:
     - target: {fileID: 4044437847023058, guid: efda1fb7965dc094cb24ee831e419166, type: 3}
       propertyPath: m_LocalRotation.w
       value: -0.13052608
-      objectReference: {fileID: 0}
-    - target: {fileID: 4810933034587170793, guid: efda1fb7965dc094cb24ee831e419166,
-        type: 3}
-      propertyPath: materialsLibrary
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 431834570105469337, guid: efda1fb7965dc094cb24ee831e419166, type: 3}
