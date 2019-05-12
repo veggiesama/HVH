@@ -36,7 +36,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8ceb464a0b562a944acfc19a031158c9, type: 2}
   - {fileID: 11400000, guid: a30be00ac1b3bbd40a1e4c63b5a412ee, type: 2}
   - {fileID: 11400000, guid: bd2b85926ef9a814884418a361399750, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
+  - {fileID: 11400000, guid: 9b1704880fe3fa249872b713fc810c38, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   startingItemsList:
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}

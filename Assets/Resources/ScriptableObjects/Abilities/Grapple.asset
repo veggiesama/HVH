@@ -31,14 +31,16 @@ MonoBehaviour:
   aoeRadius: 0
   quickCast: 0
   doNotCancelOrderQueue: 0
+  durationRemaining: 0
   projectilePrefab: {fileID: 0}
+  projectileSpawner: 0
   projectileBehaviour: 0
   projectileSpeed: 0
   projectileTimeAlive: 0
   projectileTimeUntilFullGrowth: 0
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
-  airbornStatusEffect: {fileID: 11400000, guid: 602ec8d7899e5e644a690f77dc709914,
+  airbornStatusEffect: {fileID: 11400000, guid: d8b9217eed31c634198794441aa14878,
     type: 2}
   launchForce: 20
   collisionMagnitudeThreshold: 10

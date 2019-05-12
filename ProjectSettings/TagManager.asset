@@ -20,7 +20,7 @@ TagManager:
   - 
   - VisionBlockers
   - PhysicsNoclip
-  - PhysicsIgnoreTrees
+  - 
   - 
   - 
   - 
@@ -28,7 +28,7 @@ TagManager:
   - 
   - Terrain
   - Tree
-  - 
+  - DeadTree
   - 
   - 
   - 

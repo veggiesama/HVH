@@ -48,10 +48,7 @@ public class Echolocation : Ability, IProjectileAbility {
 		return CastResults.SUCCESS;
 	}
 
-	public bool OnHitEnemy(UnitController enemy)
-	{ 
-		Debug.Log("Echolocating enemy");
-
+	public bool OnHitEnemy(UnitController enemy) { 
 		float offset_y = enemy.body.GetComponent<Collider>().bounds.extents.y;
 		Vector3 enemyPosition = enemy.body.transform.position;
 		Vector3 casterForward = caster.body.transform.forward;
@@ -65,13 +62,11 @@ public class Echolocation : Ability, IProjectileAbility {
 		return false;
 	}
 
-	public bool OnHitAlly(UnitController ally)
-	{
+	public bool OnHitAlly(UnitController ally) {
 		return false;
 	}
 
-	public bool OnHitTree(Tree tree)
-	{
+	public bool OnHitTree(Tree tree) {
 		networkHelper.DestroyTree(tree, caster.GetBodyPosition(), 0);
 		return false;
 	}

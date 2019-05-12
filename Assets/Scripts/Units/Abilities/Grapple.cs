@@ -84,7 +84,7 @@ public class Grapple : Ability {
 		Vector3 velocityVector = (anchor - caster.GetBodyPosition()).normalized * launchForce;
 		//caster.EnableNav(false);
 		caster.body.PerformAirborn(velocityVector);
-		caster.body.SetTreeClipOnly();
+		//caster.body.SetTreeClipOnly();
 		caster.body.OnCollisionEventHandler += OnBodyCollision; // event sub
 		isLaunching = true;
 

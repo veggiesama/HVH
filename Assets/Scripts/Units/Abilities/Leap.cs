@@ -50,7 +50,6 @@ public class Leap : Ability {
 
 		caster.ApplyStatusEffect(airbornStatusEffect, this);
 		caster.body.PerformAirborn(velocityVector);
-		caster.body.SetNoclip();
 
 		networkHelper.InstantiateParticle(particlePrefab, caster, BodyLocations.NONE, duration);
 		//TrackDuration();

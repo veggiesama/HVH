@@ -19,8 +19,8 @@ public class StatusEffectManager : MonoBehaviour {
 		if (!networkHelper.HasControllableAuthority()) return;
 
 		foreach (StatusEffect status in statusEffectList) {
-			if (!status.applied)
-				status.Apply();
+		//	if (!status.applied)
+		//		status.Apply();
 
 			status.Update();
 		}
@@ -48,6 +48,7 @@ public class StatusEffectManager : MonoBehaviour {
 			existingStatus.Stack(status);
 		else {
 			statusEffectList.Add(status);
+			status.Apply(); // new
 			networkHelper.TrackStatus(status);
 		}
 	}

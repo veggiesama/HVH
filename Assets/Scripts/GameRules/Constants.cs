@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class Constants {
-	public static float TreeRespawnTime = 6.0f;
+	public static float TreeRespawnTime = 30.0f;
 	public static float ProjectileSelfDestructTime = 6.0f;
 	public static float FrontAngle = 15.0f; //30.0f;
 	public static int RaycastLength = 100;
@@ -76,6 +76,10 @@ public enum OrderTypes {
 public enum StatusEffectTypes {
 	BLINDED, DEAD, INVISIBLE, IMMOBILIZED, STUNNED, SLOWED, SILENCED, AIRBORN, REVEALED, WELL_FED, INVULNERABLE, RESISTANT,
 	SHARE_VISION, ORDER_RESTRICTED
+}
+
+public enum AirbornClippingTypes {
+	NO_CLIP, TREE_CLIP, TREE_DESTROY
 }
 
 // hit locations

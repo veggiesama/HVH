@@ -77,7 +77,22 @@ public class BodyController : MonoBehaviour {
 	public void PerformAirborn(Vector3 velocityVector) {
 		rb.isKinematic = false;
 		rb.AddForce(velocityVector, ForceMode.VelocityChange);
-		//SetNoclip(true);
+	}
+
+	//public void SetTreeClipOnly() {
+	//	gameObject.layer = LayerMask.NameToLayer("PhysicsIgnoreTrees"); 
+	//}
+
+	public void SetNoclip() {
+		gameObject.layer = LayerMask.NameToLayer("PhysicsNoclip"); 
+	}
+
+	public void SetDefaultClip() {
+		gameObject.layer = LayerMask.NameToLayer("Default");
+	}
+
+	public void SetTriggerable(bool enable) {
+		GetComponent<Collider>().isTrigger = enable;
 	}
 
 	public void ResetBody() {
@@ -86,19 +101,8 @@ public class BodyController : MonoBehaviour {
 			RigidbodyConstraints.FreezeRotationZ;
 		rb.isKinematic = true;
 		SetDefaultClip();
+		SetTriggerable(false);
 		anim.SetBool("isDead", false);
-	}
-
-	public void SetDefaultClip() {
-		gameObject.layer = LayerMask.NameToLayer("Default");
-	}
-
-	public void SetTreeClipOnly() {
-		gameObject.layer = LayerMask.NameToLayer("PhysicsIgnoreTrees"); 
-	}
-
-	public void SetNoclip() {
-		gameObject.layer = LayerMask.NameToLayer("PhysicsNoclip"); 
 	}
 
 	public void FixedUpdate_ForceTurn(Vector3 targetPosition) {
@@ -121,6 +125,14 @@ public class BodyController : MonoBehaviour {
 
 	// THIS IS ALL SHIT
 
+	public delegate void OnCollidedTreeDelegate(Tree tree);
+	public event OnCollidedTreeDelegate OnCollidedTreeEventHandler;
+
+	public void OnCollidedTree(Tree tree) {
+		if (OnCollidedTreeEventHandler != null) {
+			OnCollidedTreeEventHandler(tree);	
+		}
+	}
 
 	public delegate void OnCollisionDelegate(Collision col);
 	public event OnCollisionDelegate OnCollisionEventHandler;

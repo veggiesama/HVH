@@ -67,6 +67,15 @@ public class Tree : MonoBehaviour {
 		Destroy(deadTreeCopy, 5.0f);
 	}
 
+	public void OnTriggerEnter(Collider col) {
+		Debug.Log("Tree triggered by: " + col.gameObject.name);
+		GameObject go = col.gameObject;
+
+		if (Util.IsBody(go)) {
+			go.GetComponent<BodyController>().OnCollidedTree(this);
+		}	
+	}
+
 	public Vector3 GetAnchorPoint() {
 		return abilityAnchor.position;
 	}

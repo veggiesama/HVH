@@ -41,6 +41,6 @@ MonoBehaviour:
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
   leapDistance: 20
-  airbornStatusEffect: {fileID: 11400000, guid: b8224b1b8b500ed44aaa39fe0119df7a,
+  airbornStatusEffect: {fileID: 11400000, guid: fd29b73e4ae839d4f83f41c738544f63,
     type: 2}
   particlePrefab: {fileID: 100000, guid: 8d561369f183c0c4cb7befe0dbca5aee, type: 3}
