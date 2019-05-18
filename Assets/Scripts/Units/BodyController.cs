@@ -14,10 +14,11 @@ public class BodyController : MonoBehaviour {
 	[HideInInspector] public GameObject mouth;
 	[HideInInspector] public GameObject feet;
 	[HideInInspector] public SkinnedMeshRenderer bodyMesh;
+	[HideInInspector] public FieldOfView fov;
 
 	private Vector3 lastPosition = Vector3.zero;
 	private float updateAnimationSpeedFloatEvery = 0.1f;
-	
+
 	// Use this for initialization
 	void Awake () {
 		unit = GetComponentInParent<UnitController>();
@@ -88,7 +89,7 @@ public class BodyController : MonoBehaviour {
 	}
 
 	public void SetDefaultClip() {
-		gameObject.layer = LayerMask.NameToLayer("Default");
+		gameObject.layer = LayerMask.NameToLayer("Body");
 	}
 
 	public void SetTriggerable(bool enable) {
@@ -142,6 +143,14 @@ public class BodyController : MonoBehaviour {
 		if (OnCollisionEventHandler != null) {
 			OnCollisionEventHandler(collision);	
 		}
+	}
+	 
+	public void SetVisibility(bool enable) {
+		anim.gameObject.SetActive(enable);
+	}
+
+	public bool IsVisible() {
+		return anim.gameObject.activeInHierarchy;
 	}
 
 }

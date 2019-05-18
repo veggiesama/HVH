@@ -39,8 +39,7 @@ public class Invisible : StatusEffect {
 		}
 	}
 
-	public override void Apply()
-	{
+	public override void Apply() {
 		base.Apply();
 		StartFadeToHide();
 	}

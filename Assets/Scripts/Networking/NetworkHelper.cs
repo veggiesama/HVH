@@ -29,12 +29,11 @@ public class NetworkHelper : NetworkBehaviour {
 		}
 	}
 
-	public void Start() {
+	void Awake() {
 		player = GetComponent<Player>();
 		unit = player.unit;
 		//currentHealth = unit.unitInfo.maxHealth;
 	}
-
 
 	// TODO: add every network status effect from server (with current duration), remove status effects from server
 	public override void OnStartLocalPlayer() {
@@ -361,16 +360,15 @@ public class NetworkHelper : NetworkBehaviour {
 
 	// UNIT INFO
 	public void SetUnitInfo(string unitInfoName) {
-		Debug.Log("SetUnitInfo");
 		unitInfo = unitInfoName;
-		Rpc_SetUnitInfo(unitInfoName);
-	}
-
-	[ClientRpc]
-	private void Rpc_SetUnitInfo(string unitInfoName) {
-		Debug.Log("RPC_SetUnitInfo");
+		//Rpc_SetUnitInfo(unitInfoName);
 		unit.SetUnitInfo(unitInfoName);
 	}
+
+	/*[ClientRpc]
+	private void Rpc_SetUnitInfo(string unitInfoName) {
+		unit.SetUnitInfo(unitInfoName);
+	}*/
 
 
 	// HELPER FUNCTIONS

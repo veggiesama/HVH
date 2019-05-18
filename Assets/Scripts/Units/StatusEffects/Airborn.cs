@@ -45,8 +45,6 @@ public class Airborn : StatusEffect {
 
 	public void OnCollidedTree(Tree tree) {
 		if (alreadyTriggeredList.Contains(tree)) return;
-
-		Debug.Log("Collided with tree");
 		alreadyTriggeredList.Add(tree);
 		networkHelper.DestroyTree(tree, unit.GetBodyPosition(), 0f);
 	}

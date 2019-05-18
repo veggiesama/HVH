@@ -98,7 +98,7 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 		if (alreadyTriggeredList.Contains(target))
 			return; // Debug.Log("Already triggered against this target.");
 
-		if (target.GetTeam() == attacker.GetTeam())
+		if (target.SharesTeamWith(attacker))
 			destroyOnHit = proj.OnHitAlly(target); // collided with ally
 		else
 			destroyOnHit = proj.OnHitEnemy(target); // collided with enemy

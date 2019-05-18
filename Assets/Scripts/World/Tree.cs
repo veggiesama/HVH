@@ -13,7 +13,7 @@ public class Tree : MonoBehaviour {
 	private Material[] originalTreeMaterials;
 	private TreeHandler treeHandler;
 	private Renderer meshRenderer;
-
+	private FadeMaterial fadeScript;
 
 	private void Start() {
 		meshRenderer = meshGO.GetComponent<Renderer>();
@@ -30,7 +30,16 @@ public class Tree : MonoBehaviour {
 			if (highlightedTreeMaterials[n] == null) {
 				highlightedTreeMaterials[n] = originalTreeMaterials[n];
 			}
-		}
+		} 
+
+		// dead tree mesh referenced from regular tree mesh
+		Mesh sm = meshGO.GetComponent<MeshFilter>().sharedMesh;
+		var deadTreeMeshFilter = deadTreeGO.AddComponent<MeshFilter>();
+		var deadTreeRenderer = deadTreeGO.AddComponent<MeshRenderer>();
+		deadTreeMeshFilter.mesh = sm;
+		deadTreeRenderer.materials = originalTreeMaterials;
+		fadeScript = deadTreeGO.GetComponent<FadeMaterial>();
+		deadTreeGO.SetActive(false);
 	}
 
 	public void SetHighlighted(bool enable) {
@@ -48,6 +57,24 @@ public class Tree : MonoBehaviour {
 		meshRenderer.materials = currentMats;
 	}
 
+	// create a dead tree from the prefab that falls over and destroys itself
+	public void FallOver(Vector3 fromDirection, float force) {
+		GameObject deadTreeClone = Instantiate(deadTreeGO);
+		deadTreeClone.SetActive(true);
+		deadTreeClone.transform.position = meshGO.transform.position;
+		deadTreeClone.transform.rotation = meshGO.transform.rotation;
+		deadTreeClone.transform.localScale = meshGO.transform.localScale;
+
+		if (fromDirection != default) {
+			Rigidbody rb = deadTreeClone.GetComponent<Rigidbody>();
+			rb.AddForce((deadTreeClone.transform.position - fromDirection).normalized * force);
+		}
+
+		fadeScript.enabled = true;
+		Destroy(deadTreeClone, 5.0f);
+	}
+
+	/*
 	public void FallOver(Vector3 fromDirection, float force) {
 		GameObject deadTreeCopy = Instantiate(deadTreeGO);
 		deadTreeCopy.SetActive(true);		
@@ -56,7 +83,7 @@ public class Tree : MonoBehaviour {
 		deadTreeCopy.transform.localScale = meshGO.transform.localScale;
 		MeshFilter deadTreeCopyMesh = deadTreeCopy.AddComponent<MeshFilter>();
 		MeshRenderer deadTreeCopyRenderer = deadTreeCopy.AddComponent<MeshRenderer>();
-		deadTreeCopy.GetComponent<MeshFilter>().mesh = Instantiate( meshGO.GetComponent<MeshFilter>().sharedMesh );
+		deadTreeCopyMesh.mesh = Instantiate( meshGO.GetComponent<MeshFilter>().sharedMesh );
 		deadTreeCopyRenderer.materials = originalTreeMaterials;
 
 		if (fromDirection != default) {
@@ -65,10 +92,10 @@ public class Tree : MonoBehaviour {
 		}
 
 		Destroy(deadTreeCopy, 5.0f);
-	}
+	}*/
 
 	public void OnTriggerEnter(Collider col) {
-		Debug.Log("Tree triggered by: " + col.gameObject.name);
+		//Debug.Log("Tree triggered by: " + col.gameObject.name);
 		GameObject go = col.gameObject;
 
 		if (Util.IsBody(go)) {

@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Extensions;
 using UnityEngine.SceneManagement;
+using Mirror;
 
 public class GameRules : Singleton<GameRules> {
 
-	private NetworkGameRules networkGameRules;
+	public NetworkManagerHVH networkManager;
+	public NetworkGameRules networkGameRules;
+	public GameObject playerPrefab;
 	public GameObject sceneViewMask;
-	public float cycleLength = 6f;
+
+	private Player localPlayer;
 
 	// Singleton constructor
 	public static GameRules Instance {
@@ -25,8 +29,6 @@ public class GameRules : Singleton<GameRules> {
 
 	// Use this for initialization
 	void Start () {
-		networkGameRules = GetComponent<NetworkGameRules>();
-
 		GameObject[] editorOnlyObjects = GameObject.FindGameObjectsWithTag("EditorOnly");
 		foreach(GameObject obj in editorOnlyObjects) {
 			foreach (MeshRenderer mesh in obj.GetComponentsInChildren<MeshRenderer>()) {
@@ -35,12 +37,82 @@ public class GameRules : Singleton<GameRules> {
 		}
 	}
 
+	public void SpawnUnassignedPlayers() {
+		// NOTE: Enum count determines number of team slots
+		int n = 0;
+		foreach (DwarfTeamSlots slot in System.Enum.GetValues(typeof(DwarfTeamSlots)))  {
+			Transform spawnLoc = networkManager.GetStartPosition();
+			Player unassignedPlayer = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<Player>();
+			unassignedPlayer.playerID = n;
+			networkGameRules.dwarfDictionary.Add((int)slot, n);
+
+			unassignedPlayer.MakeNPC();
+			NetworkServer.Spawn(unassignedPlayer.gameObject);
+			unassignedPlayer.SetTeam(Teams.DWARVES);
+			n++;
+		}
+
+		foreach (MonsterTeamSlots slot in System.Enum.GetValues(typeof(MonsterTeamSlots)))  {
+			Transform spawnLoc = networkManager.GetStartPosition();
+			Player unassignedPlayer = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<Player>();
+			unassignedPlayer.playerID = n;
+			networkGameRules.monsterDictionary.Add((int)slot, n);
+
+			unassignedPlayer.MakeNPC();
+			NetworkServer.Spawn(unassignedPlayer.gameObject);
+			unassignedPlayer.SetTeam(Teams.MONSTERS);
+			n++;
+		}
+
+		//Debug.Log(dwarfDictionary.DebugToString());
+		//Debug.Log(monsterDictionary.DebugToString());
+	}
+
+	public Player GetNextUnassignedPlayer() {
+		foreach (KeyValuePair<int, int> kv in networkGameRules.monsterDictionary) {
+			MonsterTeamSlots slot = (MonsterTeamSlots)kv.Key;
+			Player player = GetPlayer(kv.Value);
+
+			if (player.GetComponent<NetworkHelper>().isUnassigned)
+				return player;
+		}
+
+		foreach (KeyValuePair<int, int> kv in networkGameRules.dwarfDictionary) {
+			DwarfTeamSlots slot = (DwarfTeamSlots)kv.Key;
+			Player player = GetPlayer(kv.Value);
+
+			if (player.GetComponent<NetworkHelper>().isUnassigned)
+				return player;
+		}
+
+		return null;
+	}
+
+	public Player GetPlayer(DwarfTeamSlots slot) {
+		int id = networkGameRules.dwarfDictionary[(int)slot];
+		return GetPlayer(id);
+	}
+
+	public Player GetPlayer(MonsterTeamSlots slot) {
+		int id = networkGameRules.monsterDictionary[(int)slot];
+		return GetPlayer(id);
+	}
+
+	public Player GetPlayer(int playerID) {
+		foreach (Player p in GetAllPlayers()) {
+			if (p.playerID == playerID)
+				return p;
+		}
+		return null;
+	}
+
+	public Player[] GetAllPlayers() {
+		return FindObjectsOfType<Player>();
+	}
+
 	public static GameObject GetSceneMask() {
 		return GameObject.Find("SceneViewMask");
 	}
-
-	//private List<GameObject> allies;
-	//private GameObject[] enemies;
 
 	public static Transform GetRandomSpawnPoint() {
 		GameObject[] allSpawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
@@ -49,28 +121,17 @@ public class GameRules : Singleton<GameRules> {
 		return allSpawnPoints[rng].transform;
 	}
 
-	public void SpawnUnassignedPlayers() {
-		networkGameRules.SpawnUnassignedPlayers();
+	public void SetLocalPlayer(Player player) {
+		foreach (Player p in GetAllPlayers()) {
+			p.gameObject.tag = "Untagged";
+		}
+
+		player.gameObject.tag = "LocalPlayer";
+		localPlayer = player;
 	}
 
-	public Player GetNextUnassignedPlayer() {
-		return networkGameRules.GetNextUnassignedPlayer();
-	}
-
-	public Player GetPlayer(DwarfTeamSlots slot) {
-		return networkGameRules.GetPlayer(slot);
-	}
-
-	public Player GetPlayer(MonsterTeamSlots slot) {
-		return networkGameRules.GetPlayer(slot);
-	}
-
-	public Player GetPlayer(int playerID) {
-		return networkGameRules.GetPlayer(playerID);
-	}
-
-	public Player[] GetAllPlayers() {
-		return networkGameRules.GetAllPlayers();
+	public Player GetLocalPlayer() {
+		return localPlayer;
 	}
 
 	public DwarfSlotsToPlayerID_SyncDictionary GetDwarfTeamDictionary() {

@@ -51,10 +51,19 @@ public static class Util {
 	}
 
 	public static bool IsBody(GameObject gameObject) {
-		return gameObject.tag == "Body";
+		return gameObject.layer == (int)LayerBits.BODY;
 	}
 
 	public static bool IsTree(GameObject gameObject) {
-		return (gameObject.GetComponent<Tree>() != null);
+		return gameObject.layer == (int)LayerBits.TREE;
+		//return (gameObject.GetComponent<Tree>() != null);
+	}
+
+	public static bool IsTerrain(GameObject gameObject) {
+		return gameObject.layer == (int)LayerBits.TERRAIN;
+	}
+
+	public static bool IsLocalPlayer(Player player) {
+		return (player.gameObject.CompareTag("LocalPlayer"));
 	}
 }

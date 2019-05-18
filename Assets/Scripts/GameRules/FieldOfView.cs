@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
 public class FieldOfView : MonoBehaviour {
 
 	private GameObject sceneViewMask;
@@ -26,6 +26,7 @@ public class FieldOfView : MonoBehaviour {
 	Mesh viewMesh;
 
 	void Start() {
+		Debug.Log("Started FieldOfView");
 		sceneViewMask = GameRules.GetSceneMask();
 		if (sceneViewMask != null)
 			sceneViewMask.SetActive(false);
@@ -71,7 +72,7 @@ public class FieldOfView : MonoBehaviour {
 		ViewCastInfo oldViewCast = new ViewCastInfo();
 		for (int i = 0; i <= stepCount; i++) {
 			float angle = transform.eulerAngles.y - viewAngle/2 + stepAngleSize * i;
-			//Debug.DrawLine(transform.position, transform.position + DirFromAngle(angle, true) * viewRadius, Color.red);
+			Debug.DrawLine(transform.position, transform.position + DirFromAngle(angle, true) * viewRadius, Color.red);
 			ViewCastInfo newViewCast = ViewCast(angle);
 
 			if (i > 0) {
@@ -122,7 +123,7 @@ public class FieldOfView : MonoBehaviour {
 			float angle = (minAngle + maxAngle) / 2;
 			ViewCastInfo newViewCast = ViewCast(angle);
 
-			//Debug.DrawLine(transform.position, transform.position + DirFromAngle(angle, true) * viewRadius, Color.yellow);
+			Debug.DrawLine(transform.position, transform.position + DirFromAngle(angle, true) * viewRadius, Color.yellow);
 			bool edgeDstThresholdExceeded = Mathf.Abs(minViewCast.dst - newViewCast.dst) > edgeDstThreshold;
 			if (newViewCast.hit == minViewCast.hit && !edgeDstThresholdExceeded) {
 				minAngle = angle;
@@ -180,3 +181,4 @@ public class FieldOfView : MonoBehaviour {
 		}
 	}
 }
+*/

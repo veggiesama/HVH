@@ -6,9 +6,9 @@ TagManager:
   tags:
   - Creature
   - Tree
-  - Body
   - SpawnPoint
-  - PlayerOnly
+  - LocalPlayerOnly
+  - LocalPlayer
   layers:
   - Default
   - TransparentFX
@@ -18,14 +18,14 @@ TagManager:
   - UI
   - 
   - 
-  - VisionBlockers
+  - Vision
   - PhysicsNoclip
   - 
   - 
   - 
   - 
   - 
-  - 
+  - VisionBlocker
   - Terrain
   - Tree
   - DeadTree
@@ -33,7 +33,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Body
   - 
   - 
   - 

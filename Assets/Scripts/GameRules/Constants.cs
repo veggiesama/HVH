@@ -25,12 +25,13 @@ public enum CastResults {
 
 // Layers
 public enum LayerBits {
-	TERRAIN = 16, TREE = 17
+	TERRAIN = 16, TREE = 17, BODY = 23
 }
 
 public enum LayerMasks {
 	TERRAIN = 1 << LayerBits.TERRAIN,
 	TREE = 1 << LayerBits.TREE,
+	BODY = 1 << LayerBits.BODY
 }
 
 // UI slots

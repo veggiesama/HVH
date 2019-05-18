@@ -8,7 +8,6 @@ using Mirror;
 public class Owner : NetworkBehaviour {
 	public UnitController unit;
 	[SyncVar, SerializeField] protected int team;
-	[SyncVar] protected Color bodyColor;
 	public NetworkHelper networkHelper;
 
 	public void Awake() {

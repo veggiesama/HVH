@@ -100,14 +100,13 @@ public class MouseTargeter : MonoBehaviour {
 	}
 
 	public UnitController GetUnitAtMouseLocation() {
-		int layerMask = ~((int)LayerMasks.TERRAIN | (int)LayerMasks.TREE); // cast at everything except terrain + tree
+		int layerMask = (int)LayerMasks.BODY; // ~((int)LayerMasks.TERRAIN | (int)LayerMasks.TREE); // cast at everything except terrain + tree
 		Ray ray = (Ray)cam.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out RaycastHit hit, Constants.RaycastLength, layerMask)) {
 			GameObject targetObject = hit.transform.gameObject;
-			if (targetObject.tag == "Body") {
-				UnitController targetUnit = targetObject.GetComponent<BodyController>().unit;
-				return targetUnit;
-			}
+			UnitController targetUnit = targetObject.GetComponent<BodyController>().unit;
+			if (!targetUnit.body.IsVisible()) return null;
+			return targetUnit;
 		}
 
 		return null;

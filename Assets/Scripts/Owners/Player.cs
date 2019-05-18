@@ -23,15 +23,12 @@ public class Player : Owner {
 		}
 	}
 
-	public void Start() {
-		unit.body.GetComponent<Renderer>().material.color = bodyColor;
-	}
-
 	public override void OnStartLocalPlayer() {
 		mouseTargeter = GetComponent<MouseTargeter>();
 		if (isLocalPlayer) {
-			camObject.SetActive(true);
-			uiController.gameObject.SetActive(true);
+			GameRules.Instance.SetLocalPlayer(this);
+			EnableLocalPlayerOnlyObjects(true);
+			UpdateTeamVision();
 		}
 	}
 
@@ -183,16 +180,30 @@ public class Player : Owner {
 	public void MakeNPC() {
 		networkHelper.isUnassigned = true;
 		Transform[] children = GetComponentsInChildren<Transform>();
-		foreach (Transform child in children) {
-			if (child.CompareTag("PlayerOnly"))
-				child.gameObject.SetActive(false);
-		}
+		EnableLocalPlayerOnlyObjects(false);
 
 		//InvokeRepeating("PewPewNPCs", Random.Range(0f,1.2f), 1.2f);
 	}
 
 	private void PewPewNPCs() {
 		unit.DoAbility(AbilitySlots.ATTACK);
+	}
+
+	public void EnableLocalPlayerOnlyObjects(bool enable) {
+		Transform[] children = GetComponentsInChildren<Transform>(true);
+		foreach (Transform child in children) {
+			if (child.CompareTag("LocalPlayerOnly"))
+				child.gameObject.SetActive(enable);
+		}
+	}
+
+	public void UpdateTeamVision() {
+		 foreach (UnitController u in FindObjectsOfType<UnitController>()) {
+			if (u.SharesTeamWith(this.unit))
+				u.EnableVision(true);
+			else
+				u.EnableVision(false);
+		}
 	}
 
 }

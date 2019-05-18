@@ -16,6 +16,7 @@ public class UnitController : MonoBehaviour {
 	private StatusEffectManager statusEffectManager;
 	private AbilityManager abilityManager;
 	private MeshRenderer targetFriendlyStand, targetEnemyStand;
+	private FieldOfView fov;
 
 	public UnitInfo unitInfo;
 
@@ -39,6 +40,8 @@ public class UnitController : MonoBehaviour {
 		abilityManager = GetComponentInChildren<AbilityManager>();
 		orderQueue = GetComponentInChildren<OrderQueue>();
 		statusEffectManager = GetComponentInChildren<StatusEffectManager>();
+		fov = GetComponentInChildren<FieldOfView>(true);
+		fov.OnTargetsVisibilityChange += OnTargetsVisibilityChange;
 
 		targetFriendlyStand = transform.Find("Body/FX/Target friendly stand").GetComponent<MeshRenderer>();
 		targetEnemyStand = transform.Find("Body/FX/Target enemy stand").GetComponent<MeshRenderer>();
@@ -139,41 +142,60 @@ public class UnitController : MonoBehaviour {
 		orderQueue.Add(castOrder, ability.doNotCancelOrderQueue);
 	}
 
+
 	// targeting
+
 	public void SetCurrentTarget(UnitController target) {
-		if (target != null && SharesTeamWith(target)) {
-			if (currentFriendlyTarget != null)
+		if (target == null) return;
+
+		if (SharesTeamWith(target)) {
+			if (currentFriendlyTarget != null) {
 				currentFriendlyTarget.ShowTargetStand(false, AbilityTargetTeams.ALLY);
+				currentFriendlyTarget.SetTargetCamera(false, AbilityTargetTeams.ALLY);
+			}
 
 			currentFriendlyTarget = target;
 			target.ShowTargetStand(true, AbilityTargetTeams.ALLY);
+			target.SetTargetCamera(true, AbilityTargetTeams.ALLY);
 		}
-
 		else {
-			if (currentEnemyTarget != null)
+			if (currentEnemyTarget != null) {
 				currentEnemyTarget.ShowTargetStand(false, AbilityTargetTeams.ENEMY);
+				currentEnemyTarget.SetTargetCamera(false, AbilityTargetTeams.ENEMY);
+			}
 
 			currentEnemyTarget = target;
+			target.ShowTargetStand(true, AbilityTargetTeams.ENEMY);
+			target.SetTargetCamera(true, AbilityTargetTeams.ENEMY);
+		}
+	}
 
-			if (target != null) {
-				target.ShowTargetStand(true, AbilityTargetTeams.ENEMY);
-			}
+	public void RemoveCurrentTarget(AbilityTargetTeams targetTeam) {
+		switch (targetTeam)	{
+			case AbilityTargetTeams.ALLY:
+				currentFriendlyTarget.ShowTargetStand(false, targetTeam);
+				currentFriendlyTarget.SetTargetCamera(false, targetTeam);
+				currentFriendlyTarget = null;
+				break;
+			case AbilityTargetTeams.ENEMY:
+				currentEnemyTarget.ShowTargetStand(false, targetTeam);
+				currentEnemyTarget.SetTargetCamera(false, targetTeam);
+				currentEnemyTarget = null;
+				break;
+			default:
+				Debug.Log("Get both targets not supported yet");
+				return;
 		}
 	}
 
 	private void ShowTargetStand(bool enable, AbilityTargetTeams targetTeam) {
-		if (targetTeam == AbilityTargetTeams.ALLY) {
+		if (targetTeam == AbilityTargetTeams.ALLY)
 			targetFriendlyStand.enabled = enable;
-			SetTargetCamera(enable, AbilityTargetTeams.ALLY);
-		}
-		else {
+		else
 			targetEnemyStand.enabled = enable;
-			SetTargetCamera(enable, AbilityTargetTeams.ENEMY);
-		}
 	}
 	
 	private void SetTargetCamera(bool enable, AbilityTargetTeams targetTeam) {
-		//faceCam.gameObject.SetActive(enable);
 		faceCam.enabled = enable;
 
 		if (enable) {
@@ -195,20 +217,6 @@ public class UnitController : MonoBehaviour {
 				return null;
 		}
 	}
-
-	/*
-	// damage
-	public void ReceivesDamage(float damage, UnitController attacker) {
-
-		if (!HasStatusEffect(StatusEffectTypes.INVULNERABLE))
-			networkHelper.currentHealth -= damage;
-		
-		if (networkHelper.currentHealth < 0) {
-			ApplyStatusEffect(unitInfo.onDeathStatusEffect, null, null);
-		}
-	}*/
-
-	// Misc.
 
 	public Teams GetTeam() {
 		return GetPlayer().GetTeam();
@@ -382,7 +390,6 @@ public class UnitController : MonoBehaviour {
 		ApplyStatusEffect(unitInfo.onAirbornStatusEffect, ability);
 		body.PerformAirborn(velocityVector);
 		Invoke("EnableKnockbackCollider", 0.25f); // prevent early triggering
-		//EnableNav(false);
 	}
 
 	public void EnableKnockbackCollider() {
@@ -390,17 +397,16 @@ public class UnitController : MonoBehaviour {
 	}
 	
 	public void OnKnockbackCollision(Collision col) {
-		Debug.Log("Knockbacked unit collided with: " + col.collider.gameObject.name);
-
+		//Debug.Log("Knockbacked unit collided with: " + col.collider.gameObject.name);
 		GameObject o = col.collider.gameObject;
 
-		if (o.layer == (int) LayerBits.TREE) {
+		if (Util.IsTree(o)) {
 			Tree tree = o.GetComponent<Tree>();	
 			networkHelper.DestroyTree(tree);
 		}
 
 
-		else if (o.layer == (int) LayerBits.TERRAIN)
+		else if (Util.IsTerrain(o))
 			EndKnockback();
 	}
 
@@ -423,7 +429,6 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public void SetUnitInfo(string unitInfoName) {
-		Debug.Log("Local SetUnitInfo");
 		if (ResourceLibrary.Instance.unitInfoDictionary.TryGetValue(unitInfoName, out UnitInfo scriptableObject)) {
 			unitInfo = Instantiate(scriptableObject);
 			unitInfo.Initialize();
@@ -439,4 +444,39 @@ public class UnitController : MonoBehaviour {
 		else
 			Debug.Log("Invalid UnitInfo: " + unitInfoName);
 	}
+
+	// VISIBILITY
+	// NOTE: No network code syncs vision. Purely based on shared transforms.
+	public void EnableVision(bool enable) {
+		fov.gameObject.SetActive(enable);
+		body.SetVisibility(enable);
+	}
+
+	public void OnTargetsVisibilityChange(List<Transform> currentVisibleTargets, List<Transform> previousVisibleTargets) {
+		if (!GameObject.Find("UI Canvas").GetComponent<UICanvas>().GetLocalPlayer().unit.SharesTeamWith(this)) return;
+
+		// make newly visible bodies visible
+		foreach (Transform t in currentVisibleTargets) {
+			if (!previousVisibleTargets.Contains(t)) {
+				BodyController b = t.gameObject.GetComponent<BodyController>();
+				if (b != null && !b.unit.SharesTeamWith(this)) {
+					b.SetVisibility(true);
+					// TODO: if previous enemy target was lost and no new target was selected, restore previous enemy target
+				}
+			}
+		}
+
+		// make newly hidden bodies invisible
+		foreach (Transform t in previousVisibleTargets) {
+			if (!currentVisibleTargets.Contains(t)) {
+				BodyController b = t.gameObject.GetComponent<BodyController>();
+				if (b != null && !b.unit.SharesTeamWith(this)) {
+					b.SetVisibility(false);
+					if (b.unit == currentEnemyTarget)
+						RemoveCurrentTarget(AbilityTargetTeams.ENEMY);
+				}
+			}
+		}
+	}
+
 }
