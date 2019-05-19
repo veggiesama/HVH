@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.AI;
 using UnityEngine;
 using Mirror;
 
@@ -117,7 +118,17 @@ public class MouseTargeter : MonoBehaviour {
 		Ray ray = (Ray)cam.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out RaycastHit hit, Constants.RaycastLength, layerMask)) {
 			return hit.point;
-		}
+		} 
+		/*else {
+			Plane navPlane = new Plane(Vector3.up, new Vector3(0, 20f, 0));
+			if (navPlane.Raycast(ray, out float enter)) {
+				Vector3 hitPoint = ray.GetPoint(enter);
+				Debug.DrawLine(hitPoint, (hitPoint + Vector3.up) * 2f, Color.green, 3.0f);
+			}
+
+			//NavMesh.SamplePosition(new Vector3(ray., 20f, z))
+		}*/
+
 
 		return Util.GetNullVector();
 	}

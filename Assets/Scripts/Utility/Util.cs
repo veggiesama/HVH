@@ -66,4 +66,8 @@ public static class Util {
 	public static bool IsLocalPlayer(Player player) {
 		return (player.gameObject.CompareTag("LocalPlayer"));
 	}
+
+	public static void DebugDrawVector(Vector3 position, Color color, float dur = 1f) {
+		Debug.DrawLine(position, position + (Vector3.up * 2f), color, dur);
+	}
 }

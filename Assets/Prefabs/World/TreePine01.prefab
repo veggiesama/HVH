@@ -341,7 +341,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1621580088033262453}
   - component: {fileID: 7652154032313852455}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: TreePine01_VisionBlocker
   m_TagString: Untagged
   m_Icon: {fileID: 0}

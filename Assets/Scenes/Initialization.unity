@@ -5006,7 +5006,7 @@ MonoBehaviour:
   dayBegins: 10
   nightBegins: 20
   lengthOfDay: 60
-  lengthOfNight: 60
+  lengthOfNight: 1
   lengthOfTransition: 2
   isDay: 1
   currentTimer: 0
