@@ -10,47 +10,65 @@ public class MoveToPosition : Order {
 		this.orderType = OrderTypes.MOVE_TO_POSITION;
 	}
 
-	public override void Execute()
-	{
+	public override void Execute() {
 		if (unit.HasStatusEffect(StatusEffectTypes.AIRBORN) || unit.HasStatusEffect(StatusEffectTypes.IMMOBILIZED)) {
 			unit.TurnToFace(targetLocation);
 			return;
 		}
 
 		if (unit.IsReadyForNav()) {
-			//Util.DebugDrawVector(targetLocation, Color.green, 1f);
-
-			//NavMeshPath path = new NavMeshPath();
-			//Vector3 newDest = targetLocation;
-			/*
-			unit.agent.CalculatePath(newDest, path);
-			if (path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid) {
-				float t = 1.0f; // add or subtract half of current value
-				for (int i = 0; i < 10; i++) {
-						t = t * 0.5f;
-						newDest = Vector3.Lerp(unit.GetBodyPosition(), newDest, t);
-						Util.DebugDrawVector(newDest, Color.yellow, 3f);
-					}
-				}
-			}
-
-			/*for (float t = 1.0f; t > 0; t -= 0.1f) {
-				unit.agent.CalculatePath(newDest, path);
-				if (path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid) {
-					newDest = Vector3.Lerp(unit.GetBodyPosition(), newDest, t);
-					Util.DebugDrawVector(newDest, Color.yellow, 3f);
-				}
-				else {
-					break;
-				}
-			}*/
 			
 
-			//unit.agent.SetPath(path);
-			unit.agent.SetDestination(targetLocation);
+			NavMeshPath path = CalculatePath(targetLocation);
+
+			if (path.status != NavMeshPathStatus.PathComplete) {
+				path = CalculateDirectNearestPath(targetLocation, 6);
+			}
+
+			if (path != null)
+				unit.agent.SetPath(path);
 
 			return;
 		}
+	}
+
+	// this speeds up the nav agent's decision time
+	private NavMeshPath CalculateDirectNearestPath(Vector3 destination, int tryHowManyTimes) {
+		Util.DebugDrawVector(destination, Color.red, 3f);
+
+		Vector3 newDestination = destination;
+		NavMeshPath path;
+		NavMeshPath lastValidPath = null;
+
+		float lerpT = 0.5f;
+		float lerpInc = lerpT;
+		for (int i = 0; i < tryHowManyTimes; i++) {
+			newDestination = Vector3.Lerp(unit.GetBodyPosition(), destination, lerpT);
+			string debug = "Before: " + newDestination.y;
+			newDestination = Util.SnapVectorToTerrain(newDestination);
+			debug += (", After: " + newDestination.y);
+			lerpInc = lerpInc * 0.5f;
+			path = CalculatePath(newDestination);
+
+			if (path.status != NavMeshPathStatus.PathComplete) {
+				lerpT -= lerpInc;
+				//Util.DebugDrawVector(newDestination, Color.yellow, 3f);
+			}
+			else {
+				lastValidPath = path;
+				lerpT += lerpInc;
+				//Util.DebugDrawVector(newDestination, Color.green, 3f);
+			}
+	
+		}
+
+		return lastValidPath;
+	}
+
+	private NavMeshPath CalculatePath(Vector3 destination) {
+		NavMeshPath path = new NavMeshPath();
+		unit.agent.CalculatePath(destination, path);
+		return path;
 	}
 
 	public override void Update()

@@ -8,7 +8,7 @@ public class NetworkManagerHVH : NetworkManager {
 
     public override void OnStartHost()
     {
-        Debug.Log("Host has started");
+		Debug.Log("Host has started");
     }
 
     public override void OnStartServer()

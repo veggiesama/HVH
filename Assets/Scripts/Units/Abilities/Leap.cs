@@ -41,12 +41,14 @@ public class Leap : Ability {
 		Vector3 casterPosition = caster.body.transform.position;
 		Vector3 casterForward = caster.body.transform.forward;
 		Vector3 finalPosition = casterPosition + (casterForward * leapDistance);
-		finalPosition.y = Terrain.activeTerrain.SampleHeight(finalPosition) + Terrain.activeTerrain.GetPosition().y + offset_y;
+		finalPosition = Util.SnapVectorToTerrain(finalPosition);
+		finalPosition.y += offset_y;
+		//finalPosition.y = Terrain.activeTerrain.SampleHeight(finalPosition) + Terrain.activeTerrain.GetPosition().y + offset_y;
 		Vector3 velocityVector = Util.CalculateBestLaunchSpeed(casterPosition, finalPosition, duration);
 
-		Debug.DrawRay(casterPosition, velocityVector, Color.blue, 10.0f);
-		Debug.DrawLine(casterPosition, finalPosition, Color.yellow, 10.0f);
-		Debug.DrawRay(finalPosition, Vector3.up, Color.green, 10.0f);
+		//Debug.DrawRay(casterPosition, velocityVector, Color.blue, 10.0f);
+		//Debug.DrawLine(casterPosition, finalPosition, Color.yellow, 10.0f);
+		//Debug.DrawRay(finalPosition, Vector3.up, Color.green, 10.0f);
 
 		caster.ApplyStatusEffect(airbornStatusEffect, this);
 		caster.body.PerformAirborn(velocityVector);

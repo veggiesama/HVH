@@ -13,6 +13,7 @@ public class NetworkGameRules : NetworkBehaviour {
 	public DwarfSlotsToPlayerID_SyncDictionary dwarfDictionary = new DwarfSlotsToPlayerID_SyncDictionary();
 	public MonsterSlotsToPlayerID_SyncDictionary monsterDictionary = new MonsterSlotsToPlayerID_SyncDictionary();
 	private DayNightController dayNightController;
+	public NetworkManager networkManager;
 
 	public void Awake() {
 		dayNightController = GetComponentInParent<DayNightController>();

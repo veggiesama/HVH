@@ -8,9 +8,7 @@ public class DebugAgent : MonoBehaviour
 	public NavMeshAgent agentToDebug;
 	public LineRenderer lineRenderer;
 
-	// Update is called once per frame
-	void Update()
-    {
+	void Update() {
         if (agentToDebug != null && agentToDebug.hasPath) {
 			lineRenderer.positionCount = agentToDebug.path.corners.Length;
 			lineRenderer.SetPositions(agentToDebug.path.corners);

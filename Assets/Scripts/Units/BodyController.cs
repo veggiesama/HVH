@@ -146,11 +146,15 @@ public class BodyController : MonoBehaviour {
 	}
 	 
 	public void SetVisibility(bool enable) {
-		anim.gameObject.SetActive(enable);
+		if (anim != null)
+			anim.gameObject.SetActive(enable);
 	}
 
 	public bool IsVisible() {
-		return anim.gameObject.activeInHierarchy;
+		if (anim != null) 
+			return anim.gameObject.activeInHierarchy;
+		else
+			return false;
 	}
 
 }

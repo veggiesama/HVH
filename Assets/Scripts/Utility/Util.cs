@@ -50,6 +50,20 @@ public static class Util {
 		return unit.GetBodyPosition() + new Vector3(rng.x, 0, rng.y) * distance;
 	}
 
+	public static Vector3 SnapVectorToTerrain(Vector3 loc) {
+		loc.y = loc.y + 20f;
+
+		Physics.Raycast(loc, Vector3.down, out RaycastHit downHit, 100f, (int)LayerMasks.TERRAIN);
+		Physics.Raycast(loc, Vector3.up, out RaycastHit upHit, 100f, (int)LayerMasks.TERRAIN);
+
+		if (downHit.collider != null)
+			return downHit.point;
+		else if (upHit.collider != null)
+			return upHit.point;
+		else
+			return loc;
+	}
+
 	public static bool IsBody(GameObject gameObject) {
 		return gameObject.layer == (int)LayerBits.BODY;
 	}

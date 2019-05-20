@@ -291,14 +291,16 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public void AttachToNav() {
+		NavMesh.SamplePosition(GetBodyPosition(), out NavMeshHit hit, 100f, -1);
+		body.transform.position = hit.position;
+		Debug.DrawLine(GetBodyPosition(), hit.position, Color.cyan, 3.0f);
+
 		agent.Warp(GetBodyPosition());
 		agent.updatePosition = true;
 		agent.updateRotation = true;
 
 		if (!agent.isOnNavMesh) {
-		//	agent.FindClosestEdge(out NavMeshHit hit);
-		//	Debug.DrawLine(hit.position, Vector3.up, Color.cyan, 3.0f, false);
-
+			Debug.Log("Unit fell off map.");
 			ApplyStatusEffect(unitInfo.onDeathStatusEffect);
 		}
 	}

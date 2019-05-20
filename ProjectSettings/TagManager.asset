@@ -9,6 +9,7 @@ TagManager:
   - SpawnPoint
   - LocalPlayerOnly
   - LocalPlayer
+  - PlayerOnly
   layers:
   - Default
   - TransparentFX

@@ -10,7 +10,6 @@ public class GameRules : Singleton<GameRules> {
 	public NetworkManagerHVH networkManager;
 	public NetworkGameRules networkGameRules;
 	public GameObject playerPrefab;
-	public GameObject sceneViewMask;
 
 	private Player localPlayer;
 
@@ -42,7 +41,8 @@ public class GameRules : Singleton<GameRules> {
 		int n = 0;
 		foreach (DwarfTeamSlots slot in System.Enum.GetValues(typeof(DwarfTeamSlots)))  {
 			Transform spawnLoc = networkManager.GetStartPosition();
-			Player unassignedPlayer = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<Player>();
+			GameObject unassignedPlayerGO = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation);
+			Player unassignedPlayer = unassignedPlayerGO.GetComponent<Player>(); 
 			unassignedPlayer.playerID = n;
 			networkGameRules.dwarfDictionary.Add((int)slot, n);
 
@@ -108,10 +108,6 @@ public class GameRules : Singleton<GameRules> {
 
 	public Player[] GetAllPlayers() {
 		return FindObjectsOfType<Player>();
-	}
-
-	public static GameObject GetSceneMask() {
-		return GameObject.Find("SceneViewMask");
 	}
 
 	public static Transform GetRandomSpawnPoint() {
