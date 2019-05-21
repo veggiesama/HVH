@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.SceneManagement;
 
 public class NetworkHelper : NetworkBehaviour {
 
@@ -409,4 +410,38 @@ public class NetworkHelper : NetworkBehaviour {
 		return trans;
 	}
 
+	// SCENE MANAGEMENT
+
+	//public enum LoadAction { Load, Unload }
+   // bool isBusyLoadingScene = false;     // isBusy protects us from being overwhelmed by server messages to load several subscenes at once.
+
+	/*
+    IEnumerator LoadUnloadScene(string sceneName, LoadAction loadAction)
+    {
+        while (isBusyLoadingScene) yield return null;
+
+        isBusyLoadingScene = true;
+
+        if (loadAction == LoadAction.Load)
+            yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        else
+        {
+            yield return SceneManager.UnloadSceneAsync(sceneName);
+            yield return Resources.UnloadUnusedAssets();
+        }
+
+        isBusyLoadingScene = false;
+        Debug.LogFormat("{0} {1} Done", sceneName, loadAction.ToString());
+
+        Cmd_SceneDone(sceneName, loadAction);
+    }
+
+    [Command]
+    public void Cmd_SceneDone(string sceneName, LoadAction loadAction)
+    {
+        // The point of this is to show the client telling server it has loaded the subscene
+        // so the server might take some further action, e.g. reposition the player.
+        Debug.LogFormat("{0} {1} done on client", sceneName, loadAction.ToString());
+    }
+	*/
 }

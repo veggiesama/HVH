@@ -7,10 +7,8 @@ using Mirror;
 
 public class GameRules : Singleton<GameRules> {
 
-	public NetworkManagerHVH networkManager;
 	public NetworkGameRules networkGameRules;
-	public GameObject playerPrefab;
-
+	private GameObject playerPrefab;
 	private Player localPlayer;
 
 	// Singleton constructor
@@ -24,6 +22,7 @@ public class GameRules : Singleton<GameRules> {
 
 	void Awake() {
 		DontDestroyOnLoad(this.gameObject);
+		playerPrefab = NetworkManager.singleton.playerPrefab;
 	}
 
 	// Use this for initialization
@@ -37,10 +36,11 @@ public class GameRules : Singleton<GameRules> {
 	}
 
 	public void SpawnUnassignedPlayers() {
+
 		// NOTE: Enum count determines number of team slots
 		int n = 0;
 		foreach (DwarfTeamSlots slot in System.Enum.GetValues(typeof(DwarfTeamSlots)))  {
-			Transform spawnLoc = networkManager.GetStartPosition();
+			Transform spawnLoc = NetworkManager.singleton.GetStartPosition();
 			GameObject unassignedPlayerGO = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation);
 			Player unassignedPlayer = unassignedPlayerGO.GetComponent<Player>(); 
 			unassignedPlayer.playerID = n;
@@ -53,7 +53,7 @@ public class GameRules : Singleton<GameRules> {
 		}
 
 		foreach (MonsterTeamSlots slot in System.Enum.GetValues(typeof(MonsterTeamSlots)))  {
-			Transform spawnLoc = networkManager.GetStartPosition();
+			Transform spawnLoc = NetworkManager.singleton.GetStartPosition();
 			Player unassignedPlayer = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<Player>();
 			unassignedPlayer.playerID = n;
 			networkGameRules.monsterDictionary.Add((int)slot, n);

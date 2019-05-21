@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
+#pragma warning disable 0649
+
 // Manager class for the debug popup
 namespace IngameDebugConsole
 {

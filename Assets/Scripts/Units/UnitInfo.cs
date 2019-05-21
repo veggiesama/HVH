@@ -14,9 +14,9 @@ public class UnitInfo : ScriptableObject {
 	[HideInInspector] public float movementSpeedOriginal;
 	[HideInInspector] public float turnRateOriginal;
 	[HideInInspector] public int sizeOriginal;
-	[SerializeField] private Color bodyColorA;
-	[SerializeField] private Color bodyColorB;
-	[HideInInspector] public Color bodyColor;
+	[SerializeField] private Color bodyColorA = new Color();
+	[SerializeField] private Color bodyColorB = new Color();
+	[HideInInspector] public Color bodyColor = new Color();
 
 	[Header("Status effects")]
 	public Dead onDeathStatusEffect;

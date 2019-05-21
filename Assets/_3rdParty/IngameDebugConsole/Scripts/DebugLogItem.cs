@@ -6,6 +6,8 @@ using UnityEditor;
 using System.Text.RegularExpressions;
 #endif
 
+#pragma warning disable 0649
+
 // A UI element to show information about a debug entry
 namespace IngameDebugConsole
 {

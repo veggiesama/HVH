@@ -23,13 +23,24 @@ public class DayNightController : MonoBehaviour {
 	[Header("Readonly")]
 	[SerializeField] private bool isDay = true;
 	[SerializeField] private float currentTimer;
+	private bool gameplayStarted = false;
 
     public void Start() {
+		NetworkSceneManager.Instance.OnGameplayScenesInitializedEventHandler += OnGameplayScenesInitialized;
+		currentTimer = lengthOfDay;
 		StartCoroutine( SlowUpdate() ); // is Server check?
 	}
 
+	private void OnGameplayScenesInitialized() {
+		gameplayStarted = true;
+	}	
+
     // Update is called once per frame
     IEnumerator SlowUpdate() {
+		while (!gameplayStarted) {
+			yield return new WaitForSeconds(updateEvery);
+		}
+
 		while (true) {
 			currentTimer -= updateEvery;
 			isDay = lsky.IsDay;

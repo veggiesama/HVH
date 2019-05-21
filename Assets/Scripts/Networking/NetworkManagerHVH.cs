@@ -6,118 +6,182 @@ using System.Collections.Generic;
 
 public class NetworkManagerHVH : NetworkManager {
 
-    public override void OnStartHost()
-    {
-		Debug.Log("Host has started");
-    }
+	private bool allScenesLoaded = false;
+	private bool isHost = false;
+	private bool isServer = false;
+	//private bool isClient = false;
 
-    public override void OnStartServer()
-    {
-		Debug.Log("Server has started");
-    }
-
-	public override void OnStartClient()
-	{
-		Debug.Log("Client has started");
+	public override void Awake() {
+		base.Awake();
+		NetworkSceneManager.Instance.OnGameplayScenesInitializedEventHandler += OnGameplayScenesInitialized;
 	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// HOST CALLBACKS
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// When the host is started:
+	// Start()
+
+	public override void OnStartHost() {
+		base.OnStartHost();
+		Debug.Log("Host has started");
+		isHost = true;
+    }
+	
+	// OnStartServer()
+	// OnServerConnect
+	// OnStartClient
+	// OnClientConnect
+	// OnServerSceneChanged
+	// OnServerReady
+	// OnServerAddPlayer
+	// OnClientChangeScene
+	// OnClientSceneChanged
+	
+	// When a client connects:
+	// OnServerConnect
+	// OnServerReady
+	// OnServerAddPlayer
+
+	// OnServerDisconnect
+
+	public override void OnStopHost() {
+        Debug.Log("Host has stopped");
+    }
+
+	// OnStopServer
+	// OnStopClient
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// SERVER CALLBACKS
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// Start()
+
+    public override void OnStartServer() {
+		Debug.Log("Server has started");
+		NetworkSceneManager.Instance.InitializeGameplayScenes();
+		isServer = true;
+    }
+
+	public override void OnServerSceneChanged(string sceneName) {
+		base.OnServerSceneChanged(sceneName);
+	}
+
+	public override void OnServerConnect(NetworkConnection conn) {
+		Debug.Log("A client connected to the server: " + conn);
+    }
+
+    public override void OnServerReady(NetworkConnection conn) {
+		base.OnServerReady(conn);
+		//NetworkServer.SetClientReady(conn);
+		StartCoroutine( WaitServerReady(conn) );
+    }
 
 	public override void OnServerAddPlayer(NetworkConnection conn, AddPlayerMessage extraMessage) {
         Debug.Log("Client has requested to get his player added to the game");
 	}
 
-    public override void OnServerConnect(NetworkConnection conn)
-    {
-        Debug.Log("A client connected to the server: " + conn);
-    }
-
-    public override void OnServerReady(NetworkConnection conn)
-    {
-		NetworkServer.SetClientReady(conn);
-		Debug.Log("Client is set to the ready state (ready to receive state updates): " + conn);
-
-		Player player;
-		player = GameRules.Instance.GetNextUnassignedPlayer();
-		player.GetComponent<NetworkHelper>().isUnassigned = false;
-
-		GameObject playerGO = player.gameObject;
-		NetworkServer.AddPlayerForConnection(conn, playerGO);
-    }
-
-	public override void OnServerRemovePlayer(NetworkConnection conn, NetworkIdentity player)
-	{
-        //if (player.gameObject != null)
-        //    NetworkServer.Destroy(player.gameObject);
-	}
-
-    public override void OnServerError(NetworkConnection conn, int errorCode)
-    {
-        Debug.Log("Server network error occurred: ???"); //+ (NetworkError)errorCode);
-    }
-
-    public override void OnServerDisconnect(NetworkConnection conn)
-    {
-        //NetworkServer.DestroyPlayersForConnection(conn);
-
-        //if (conn.lastError != NetworkError.Ok)
-        //{
-        //    if (LogFilter.logError)
-        //        Debug.LogError("ServerDisconnected due to error: " + conn.lastError);
-        //}
-
+    public override void OnServerDisconnect(NetworkConnection conn) {
         Debug.Log("A client disconnected from the server: " + conn);
     }
 
-    public override void OnStopServer()
-    {
+    public override void OnStopServer() {
         Debug.Log("Server has stopped");
+		NetworkSceneManager.Instance.UnloadSubScenes();
     }
 
-    public override void OnStopHost()
-    {
-        Debug.Log("Host has stopped");
+	public override void OnServerRemovePlayer(NetworkConnection conn, NetworkIdentity player) {
+	}
+
+    public override void OnServerError(NetworkConnection conn, int errorCode) {
+        Debug.Log("Server network error occurred: ???"); //+ (NetworkError)errorCode);
     }
 
-    // Client callbacks
-    public override void OnClientConnect(NetworkConnection conn)
-    {
-        base.OnClientConnect(conn);
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// CLIENT CALLBACKS
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        Debug.Log("Connected successfully to server, now to set up other stuff for the client...");
+	// Start()
+
+	public override void OnStartClient() {
+		Debug.Log("Client has started");
+		//isClient = true;
+	}
+
+    public override void OnClientConnect(NetworkConnection conn) {
+		if (!isHost) {
+			NetworkSceneManager.Instance.InitializeGameplayScenes();
+		}
+
+		StartCoroutine( WaitClientConnect(conn) );
+        //base.OnClientConnect(conn);
     }
 
-    public override void OnClientDisconnect(NetworkConnection conn)
-    {
-        StopClient();
+	public override void OnClientChangeScene(string newSceneName) {
+		base.OnClientChangeScene(newSceneName);
+	}
 
-        //if (conn.lastError != NetworkError.Ok)
-        //{
-        //    if (LogFilter.logError)
-        //        Debug.LogError("ClientDisconnected due to error: " + conn.lastError);
-        //}
-
-        Debug.Log("Client disconnected from server: " + conn);
-    }
-	
-    public override void OnClientError(NetworkConnection conn, int errorCode)
-    {
-        Debug.Log("Client network error occurred: ???"); //+ (NetworkError)errorCode);
-    }
-
-    public override void OnClientNotReady(NetworkConnection conn)
-    {
-        Debug.Log("Server has set client to be not-ready (stop getting state updates)");
+    public override void OnClientSceneChanged(NetworkConnection conn) {
+        base.OnClientSceneChanged(conn);
+        Debug.Log("Server triggered scene change and we've done the same, do any extra work here for the client...");
     }
 
     public override void OnStopClient() {
         Debug.Log("Client has stopped");
+		NetworkSceneManager.Instance.UnloadSubScenes();
     }
 
-    public override void OnClientSceneChanged(NetworkConnection conn)
-    {
-        base.OnClientSceneChanged(conn);
-
-        Debug.Log("Server triggered scene change and we've done the same, do any extra work here for the client...");
+	public override void OnClientDisconnect(NetworkConnection conn) {
+		base.OnClientDisconnect(conn);
+        Debug.Log("Client disconnected from server: " + conn);
     }
+	
+    public override void OnClientError(NetworkConnection conn, int errorCode) {
+        Debug.Log("Client network error occurred: ???"); //+ (NetworkError)errorCode);
+    }
+
+    public override void OnClientNotReady(NetworkConnection conn) {
+        Debug.Log("Server has set client to be not-ready (stop getting state updates)");
+    }
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// OTHER
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public void OnGameplayScenesInitialized() {
+
+		if (isServer) {
+			Debug.Log("Trying to spawn players.");
+			GameRules.Instance.SpawnUnassignedPlayers();
+		}
+
+		allScenesLoaded = true;
+	}
+
+	IEnumerator WaitServerReady(NetworkConnection conn) {
+		while (!allScenesLoaded) {
+			yield return null;
+		}
+
+		Debug.Log("Assigning client to next available player slot.");
+		
+		Player player = GameRules.Instance.GetNextUnassignedPlayer();
+		player.GetComponent<NetworkHelper>().isUnassigned = false;
+
+		GameObject playerGO = player.gameObject;
+		NetworkServer.AddPlayerForConnection(conn, playerGO);
+	}
+
+	IEnumerator WaitClientConnect(NetworkConnection conn) {
+		while (!allScenesLoaded) {
+			yield return null;
+		}
+
+		ClientScene.Ready(conn);
+		Debug.Log("Connected successfully to server, now to set up other stuff for the client...");
+	}
 
 	public List<GameObject> GetSpawnPrefabList() {
 		return base.spawnPrefabs;

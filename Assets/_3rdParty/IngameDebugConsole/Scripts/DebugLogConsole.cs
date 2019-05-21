@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 using System;
 
+
+#pragma warning disable 0618
+#pragma warning disable 0649
+
 // Manages the console commands, parses console input and handles execution of commands
 // Supported method parameter types: int, float, bool, string, Vector2, Vector3, Vector4
 

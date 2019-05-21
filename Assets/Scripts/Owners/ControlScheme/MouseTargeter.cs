@@ -16,7 +16,9 @@ public class MouseTargeter : MonoBehaviour {
 	[HideInInspector] public Ability storedAbility;
 	private bool targetingEnabled = false;
 	private Tree lastTree;
-	private UnitController lastUnit;
+
+	#pragma warning disable 0649
+	private UnitController lastUnit; 
 
 	// Start is called before the first frame update
     void Start()
