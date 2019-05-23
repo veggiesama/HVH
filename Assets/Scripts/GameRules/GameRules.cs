@@ -7,7 +7,11 @@ using Mirror;
 
 public class GameRules : Singleton<GameRules> {
 
+	[HideInInspector]
 	public NetworkGameRules networkGameRules;
+	[HideInInspector]
+	public TeamFieldOfView teamFov;
+
 	private GameObject playerPrefab;
 	private Player localPlayer;
 
@@ -21,8 +25,10 @@ public class GameRules : Singleton<GameRules> {
 	}
 
 	void Awake() {
-		DontDestroyOnLoad(this.gameObject);
+		//DontDestroyOnLoad(this.gameObject);
 		playerPrefab = NetworkManager.singleton.playerPrefab;
+		networkGameRules = GetComponent<NetworkGameRules>();
+		teamFov = GetComponentInChildren<TeamFieldOfView>();
 	}
 
 	// Use this for initialization

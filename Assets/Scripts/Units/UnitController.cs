@@ -11,7 +11,7 @@ public class UnitController : MonoBehaviour {
 	[HideInInspector] public Player player;
 
 	private Camera faceCam; 
-	private UnitController currentFriendlyTarget, currentEnemyTarget;
+	private UnitController currentFriendlyTarget, currentEnemyTarget, forgottenEnemyTarget;
 	private OrderQueue orderQueue;
 	private StatusEffectManager statusEffectManager;
 	private AbilityManager abilityManager;
@@ -41,7 +41,7 @@ public class UnitController : MonoBehaviour {
 		orderQueue = GetComponentInChildren<OrderQueue>();
 		statusEffectManager = GetComponentInChildren<StatusEffectManager>();
 		fov = GetComponentInChildren<FieldOfView>(true);
-		fov.OnTargetsVisibilityChange += OnTargetsVisibilityChange;
+		//fov.OnTargetsVisibilityChange += OnTargetsVisibilityChange;
 
 		targetFriendlyStand = transform.Find("Body/FX/Target friendly stand").GetComponent<MeshRenderer>();
 		targetEnemyStand = transform.Find("Body/FX/Target enemy stand").GetComponent<MeshRenderer>();
@@ -185,6 +185,25 @@ public class UnitController : MonoBehaviour {
 			default:
 				Debug.Log("Get both targets not supported yet");
 				return;
+		}
+	}
+
+
+	public bool IsForgottenTarget(UnitController target) {
+		return (forgottenEnemyTarget == target);
+	}
+
+	// units lost to FOW become "forgotten" and stored in temporary memory
+	public void ForgetTarget() {
+		forgottenEnemyTarget = currentEnemyTarget;
+		RemoveCurrentTarget(AbilityTargetTeams.ENEMY);
+	}
+	 
+	// newly revealed units may be "remembered" (automatically targeted) if a new enemy target wasn't chosen since forgetting
+	public void RememberTarget() {
+		if (forgottenEnemyTarget != null && currentEnemyTarget == null) {
+			SetCurrentTarget(forgottenEnemyTarget);
+			forgottenEnemyTarget = null;
 		}
 	}
 
@@ -440,7 +459,10 @@ public class UnitController : MonoBehaviour {
 			SetTurnRate(unitInfo.turnRate);
 			abilityManager.Initialize();
 			body.ResetAnimator();
-			body.bodyMesh.material.color = unitInfo.bodyColor;
+
+			for (int i = 0; i < body.bodyMeshes.Length; i++) {
+				body.bodyMeshes[i].material.color = unitInfo.bodyColor;
+			}
 		}
 
 		else
@@ -449,36 +471,18 @@ public class UnitController : MonoBehaviour {
 
 	// VISIBILITY
 	// NOTE: No network code syncs vision. Purely based on shared transforms.
+
+	public FieldOfView GetFieldOfView() {
+		return body.fov;
+	}
+
 	public void EnableVision(bool enable) {
 		fov.gameObject.SetActive(enable);
 		body.SetVisibility(enable);
 	}
 
-	public void OnTargetsVisibilityChange(List<Transform> currentVisibleTargets, List<Transform> previousVisibleTargets) {
-		if (!GameObject.Find("UI Canvas").GetComponent<UICanvas>().GetLocalPlayer().unit.SharesTeamWith(this)) return;
-
-		// make newly visible bodies visible
-		foreach (Transform t in currentVisibleTargets) {
-			if (!previousVisibleTargets.Contains(t)) {
-				BodyController b = t.gameObject.GetComponent<BodyController>();
-				if (b != null && !b.unit.SharesTeamWith(this)) {
-					b.SetVisibility(true);
-					// TODO: if previous enemy target was lost and no new target was selected, restore previous enemy target
-				}
-			}
-		}
-
-		// make newly hidden bodies invisible
-		foreach (Transform t in previousVisibleTargets) {
-			if (!currentVisibleTargets.Contains(t)) {
-				BodyController b = t.gameObject.GetComponent<BodyController>();
-				if (b != null && !b.unit.SharesTeamWith(this)) {
-					b.SetVisibility(false);
-					if (b.unit == currentEnemyTarget)
-						RemoveCurrentTarget(AbilityTargetTeams.ENEMY);
-				}
-			}
-		}
+	public void SetVision(VisionType vision) {
+		fov.SetObstacleMask(vision);
 	}
 
 }

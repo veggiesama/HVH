@@ -5,19 +5,17 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-	private GameObject uiCanvas;
+	private GameObject gameplayCanvas;
 	private Slider castbar;
 
     // Start is called before the first frame update
-    void Start()
-    {
-		uiCanvas = GameObject.Find("UI Canvas");
-		uiCanvas.GetComponent<UICanvas>().SetLocalPlayer( GetComponentInParent<Player>() );
-		castbar = uiCanvas.GetComponent<UICanvas>().castbar;
+    void Start() {
+		gameplayCanvas = GameObject.Find("GameplayCanvas");
+		castbar = gameplayCanvas.GetComponent<GameplayCanvas>().castbar;
 
 		// show each hud container
-		for (int n = 0; n < uiCanvas.transform.childCount; n++) {
-			uiCanvas.transform.GetChild(n).gameObject.SetActive(true);
+		for (int n = 0; n < gameplayCanvas.transform.childCount; n++) {
+			gameplayCanvas.transform.GetChild(n).gameObject.SetActive(true);
 		}
 	}
 

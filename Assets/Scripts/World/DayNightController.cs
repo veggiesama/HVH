@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AC.LSky;
 using Mirror;
+using UnityEngine.Events;
 
 public class DayNightController : MonoBehaviour {
 	public LSky lsky;
@@ -23,23 +24,19 @@ public class DayNightController : MonoBehaviour {
 	[Header("Readonly")]
 	[SerializeField] private bool isDay = true;
 	[SerializeField] private float currentTimer;
-	private bool gameplayStarted = false;
+	public UnityEvent onStartDay;
+	public UnityEvent onStartNight;
 
     public void Start() {
-		NetworkSceneManager.Instance.OnGameplayScenesInitializedEventHandler += OnGameplayScenesInitialized;
-		currentTimer = lengthOfDay;
+		if (Constants.StartDay)
+			StartDay(true);
+		else
+			StartNight(true);
+			
 		StartCoroutine( SlowUpdate() ); // is Server check?
 	}
 
-	private void OnGameplayScenesInitialized() {
-		gameplayStarted = true;
-	}	
-
-    // Update is called once per frame
     IEnumerator SlowUpdate() {
-		while (!gameplayStarted) {
-			yield return new WaitForSeconds(updateEvery);
-		}
 
 		while (true) {
 			currentTimer -= updateEvery;
@@ -51,20 +48,23 @@ public class DayNightController : MonoBehaviour {
 		}
     }
 
-	public void StartDay() {
+	public void StartDay(bool skipTransition = false) {
 		isDay = true;
-		StartCoroutine( TransitionToDay() );
 		currentTimer = lengthOfDay;
+		if (!skipTransition)
+			StartCoroutine( TransitionToDay() );
 	}
 
-	public void StartNight() {
+	public void StartNight(bool skipTransition = false) {
 		isDay = false;
-		StartCoroutine( TransitionToNight() );
 		currentTimer = lengthOfNight;
+		if (!skipTransition)
+			StartCoroutine( TransitionToNight() );
 	}
 
 	public IEnumerator TransitionToDay() {
 		//Debug.Log("Transitioning to day!");
+		onStartDay.Invoke();
 		float originalTimeline = GetTimeOfDay();
 		for (float t = 0; t <= lengthOfTransition; t += transitionUpdateEvery) {
 			SetTimeOfDay( Mathf.SmoothStep(originalTimeline, dayBegins, t / lengthOfTransition) );
@@ -74,6 +74,7 @@ public class DayNightController : MonoBehaviour {
 
 	public IEnumerator TransitionToNight() {
 		//Debug.Log("Transitioning to night!");
+		onStartNight.Invoke();
 		float originalTimeline = GetTimeOfDay();
 		for (float t = 0; t <= lengthOfTransition; t += transitionUpdateEvery) {
 			SetTimeOfDay( Mathf.SmoothStep(originalTimeline, nightBegins, t / lengthOfTransition) );

@@ -29,6 +29,7 @@ public class Player : Owner {
 			GameRules.Instance.SetLocalPlayer(this);
 			EnableLocalPlayerOnlyObjects(true);
 			UpdateTeamVision();
+			TeamFieldOfView.Instance.Initialize((Teams)team);
 		}
 	}
 

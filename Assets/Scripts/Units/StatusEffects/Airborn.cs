@@ -27,17 +27,15 @@ public class Airborn : StatusEffect {
 	{
 		base.Apply();
 		unit.DetachFromNav();
+		unit.SetVision(VisionType.FLYING);
 
 		switch (airbornClippingType) {
 			case AirbornClippingTypes.NO_CLIP:
 				unit.body.SetNoclip();
 				break;
 			case AirbornClippingTypes.TREE_CLIP:
-				//unit.body.SetTreeClipOnly();
 				break;
 			case AirbornClippingTypes.TREE_DESTROY:
-				//unit.body.SetTreeClipOnly();
-				//unit.body.SetTriggerable(true);
 				unit.body.OnCollidedTreeEventHandler += OnCollidedTree; // event sub
 				break;
 		}
@@ -60,6 +58,7 @@ public class Airborn : StatusEffect {
 	}
 
 	public override void End() {
+		unit.SetVision(VisionType.NORMAL);
 		unit.body.OnCollidedTreeEventHandler -= OnCollidedTree; // event unsub
 		unit.AttachToNav();
 		unit.body.ResetBody();

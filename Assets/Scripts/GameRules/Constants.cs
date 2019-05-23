@@ -7,6 +7,7 @@ public static class Constants {
 	public static float ProjectileSelfDestructTime = 6.0f;
 	public static float FrontAngle = 15.0f; //30.0f;
 	public static int RaycastLength = 100;
+	public static bool StartDay = true;
 
 	public static int DwarvesTotal = 4;
 	public static int MonstersTotal = 1;
@@ -86,6 +87,10 @@ public enum AirbornClippingTypes {
 // hit locations
 public enum BodyLocations {
 	NONE, HEAD, MOUTH, WEAPON, FEET
+}
+
+public enum VisionType {
+	NORMAL, FLYING
 }
 
 

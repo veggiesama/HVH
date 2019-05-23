@@ -1,23 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
-
-public delegate void TargetsVisibilityChange(List<Transform> currentVisibleTargets, List<Transform> previousVisibleTargets);
-
-[ExecuteInEditMode]
-public class FieldOfView : MonoBehaviour
-{
-    public float viewRadius;
+public class FieldOfView : MonoBehaviour {
+	public float dayViewRadius;
+	public float nightViewRadius;
+    [HideInInspector]
+	public float viewRadius;
 
     [Range(0, 360)]
     public float viewAngle;
-
     public float viewDepth;
-
     public LayerMask targetMask;
-    public LayerMask obstacleMask;
+    
+	public LayerMask normalObstacleMask;
+	public LayerMask flyingObstacleMask;
+    [HideInInspector]
+	public LayerMask obstacleMask;
 
     [HideInInspector]
     public List<Transform> currentVisibleTargets = new List<Transform>();
@@ -26,52 +25,78 @@ public class FieldOfView : MonoBehaviour
     public int edgeResolveIterations;
     public float edgeDstThreshold;
 
-
     public MeshFilter viewMeshFilter;
     public bool debug;
     Mesh viewMesh;
 	
-	// VEG: removed static keyword
-    public event TargetsVisibilityChange OnTargetsVisibilityChange;
-
-    public FogProjector fogProjector;
+    private FogProjector fogProjector;
     public float updateDistance = 1;
     Vector3 lastUpdatePos;
 
-    void OnEnable()
-    {
+	[HideInInspector]
+	public UnitController unit;
+	private bool forceFogUpdate = false;
+
+    void OnEnable() {
         viewMesh = new Mesh {name = "View Mesh"};
         viewMeshFilter.mesh = viewMesh;
+		fogProjector = FindObjectOfType<FogProjector>();
+		unit = GetComponentInParent<UnitController>();
 
-        fogProjector = fogProjector ?? FindObjectOfType<FogProjector>();
-
-        StartCoroutine("FindTargetsWithDelay", .2f);
     }
 
+	void Start() {
+		GameRules.Instance.GetComponent<DayNightController>().onStartDay.AddListener( OnStartDay );
+		GameRules.Instance.GetComponent<DayNightController>().onStartNight.AddListener( OnStartNight );
+		obstacleMask = normalObstacleMask;
 
-    IEnumerator FindTargetsWithDelay(float delay)
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(delay);
-            FindVisibleTargets();
-        }
-    }
+		if (Constants.StartDay)
+			OnStartDay();
+		else
+			OnStartNight();
+	}
 
-    void LateUpdate()
-    {
+	private void OnDisable() {
+		GameRules.Instance.GetComponent<DayNightController>().onStartDay.RemoveListener( OnStartDay );
+		GameRules.Instance.GetComponent<DayNightController>().onStartNight.RemoveListener( OnStartNight );
+	}
+
+	void OnStartDay() {
+		viewRadius = dayViewRadius;
+		StartCoroutine( ForceFogUpdate() );
+	}
+
+	void OnStartNight() {
+		viewRadius = nightViewRadius;
+		StartCoroutine( ForceFogUpdate() );
+	}
+
+	IEnumerator ForceFogUpdate() {
+		yield return new WaitForSeconds(0.5f); // not sure why delay is needed but otherwise it won't work
+		forceFogUpdate = true;
+	}
+
+    void LateUpdate() {
         DrawFieldOfView();
-        if (Vector3.Distance(transform.position, lastUpdatePos) > updateDistance || Time.time<.5f)
-        {
-            lastUpdatePos = transform.position;
-            fogProjector.UpdateFog();
+        if (forceFogUpdate || Vector3.Distance(transform.position, lastUpdatePos) > updateDistance) {
+			lastUpdatePos = transform.position;
+			fogProjector.UpdateFog();
+			forceFogUpdate = false;
         }
     }
 
+	public void SetObstacleMask(VisionType vision) {
+		switch (vision)	{
+			case VisionType.FLYING:
+				obstacleMask = flyingObstacleMask;
+				break;
+			default: // VisionType.NORMAL
+				obstacleMask = normalObstacleMask;
+				break;
+		}
+	}
 
-	void FindVisibleTargets()
-    {
-		List<Transform> previousVisibleTargets = currentVisibleTargets;
+	public List<Transform> FindVisibleTargets() {
 		currentVisibleTargets = new List<Transform>();
 
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
@@ -91,7 +116,7 @@ public class FieldOfView : MonoBehaviour
             }
         }
 
-        if (OnTargetsVisibilityChange != null) OnTargetsVisibilityChange(currentVisibleTargets, previousVisibleTargets);
+		return currentVisibleTargets;
     }
 
     void DrawFieldOfView()
@@ -214,7 +239,7 @@ public class FieldOfView : MonoBehaviour
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
 
-    public struct ObstacleInfo
+	public struct ObstacleInfo
     {
         public bool hit;
         public Vector3 point;

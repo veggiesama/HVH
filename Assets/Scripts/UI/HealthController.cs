@@ -17,7 +17,7 @@ public class HealthController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		player = GetComponentInParent<UICanvas>().GetLocalPlayer();
+		player = GameRules.Instance.GetLocalPlayer();
 		allyTargetHealthbarSlider.gameObject.SetActive(false);
 		enemyTargetHealthbarSlider.gameObject.SetActive(false);
 
@@ -66,7 +66,7 @@ public class HealthController : MonoBehaviour {
 			Slider slider = allies[slot];
 			slider.gameObject.SetActive(true);
 
-			if (p.unit.unitInfo != null)
+			if (p != null && p.unit.unitInfo != null)
 				slider.value = p.unit.networkHelper.currentHealth / p.unit.unitInfo.maxHealth;
 		}
 
@@ -77,7 +77,7 @@ public class HealthController : MonoBehaviour {
 			Slider slider = enemies[slot];
 			slider.gameObject.SetActive(true);
 
-			if (p.unit.unitInfo != null)
+			if (p != null && p.unit.unitInfo != null)
 				slider.value = p.unit.networkHelper.currentHealth / p.unit.unitInfo.maxHealth;
 		}
 		

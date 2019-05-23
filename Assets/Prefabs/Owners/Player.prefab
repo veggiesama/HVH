@@ -464,23 +464,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca7e4b4322d0ef04b90aec655351df16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 20
+  dayViewRadius: 30
+  nightViewRadius: 22
+  viewRadius: 30
   viewAngle: 270
   viewDepth: 1.5
   targetMask:
     serializedVersion: 2
     m_Bits: 8388608
-  obstacleMask:
+  normalObstacleMask:
     serializedVersion: 2
     m_Bits: 229376
+  flyingObstacleMask:
+    serializedVersion: 2
+    m_Bits: 65536
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
   currentVisibleTargets: []
   meshResolution: 16
   edgeResolveIterations: 1
   edgeDstThreshold: 0
   viewMeshFilter: {fileID: 7928111227557796622}
   debug: 0
-  fogProjector: {fileID: 0}
   updateDistance: 1
+  unit: {fileID: 114439122746566608}
 --- !u!1 &1255983822199124
 GameObject:
   m_ObjectHideFlags: 0
@@ -1018,7 +1026,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1528358687473395702}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.3, y: 0, z: -41.78}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4561490922741848}
@@ -1213,7 +1221,7 @@ GameObject:
   - component: {fileID: 22047862161967600}
   - component: {fileID: 7021595654887823476}
   - component: {fileID: 5776888321588450181}
-  m_Layer: 23
+  m_Layer: 0
   m_Name: Debug
   m_TagString: Untagged
   m_Icon: {fileID: 0}

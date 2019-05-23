@@ -6,14 +6,16 @@ using System.Collections.Generic;
 
 public class NetworkManagerHVH : NetworkManager {
 
-	private bool allScenesLoaded = false;
+	[Header("Scene Manager")]
+	public AdditiveSceneManager sceneManager;
+
 	private bool isHost = false;
 	private bool isServer = false;
 	//private bool isClient = false;
 
 	public override void Awake() {
 		base.Awake();
-		NetworkSceneManager.Instance.OnGameplayScenesInitializedEventHandler += OnGameplayScenesInitialized;
+		sceneManager.OnGameplayScenesInitializedEventHandler += OnGameplayScenesInitialized;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +63,7 @@ public class NetworkManagerHVH : NetworkManager {
 
     public override void OnStartServer() {
 		Debug.Log("Server has started");
-		NetworkSceneManager.Instance.InitializeGameplayScenes();
+		sceneManager.InitializeGameplayScenes();
 		isServer = true;
     }
 
@@ -89,7 +91,7 @@ public class NetworkManagerHVH : NetworkManager {
 
     public override void OnStopServer() {
         Debug.Log("Server has stopped");
-		NetworkSceneManager.Instance.UnloadSubScenes();
+		sceneManager.UnloadSubScenes();
     }
 
 	public override void OnServerRemovePlayer(NetworkConnection conn, NetworkIdentity player) {
@@ -112,7 +114,7 @@ public class NetworkManagerHVH : NetworkManager {
 
     public override void OnClientConnect(NetworkConnection conn) {
 		if (!isHost) {
-			NetworkSceneManager.Instance.InitializeGameplayScenes();
+			sceneManager.InitializeGameplayScenes();
 		}
 
 		StartCoroutine( WaitClientConnect(conn) );
@@ -130,12 +132,15 @@ public class NetworkManagerHVH : NetworkManager {
 
     public override void OnStopClient() {
         Debug.Log("Client has stopped");
-		NetworkSceneManager.Instance.UnloadSubScenes();
+		
+		if (!isHost) {
+			sceneManager.UnloadSubScenes();
+		}
     }
 
 	public override void OnClientDisconnect(NetworkConnection conn) {
 		base.OnClientDisconnect(conn);
-        Debug.Log("Client disconnected from server: " + conn);
+		Debug.Log("Client disconnected from server: " + conn);
     }
 	
     public override void OnClientError(NetworkConnection conn, int errorCode) {
@@ -156,12 +161,10 @@ public class NetworkManagerHVH : NetworkManager {
 			Debug.Log("Trying to spawn players.");
 			GameRules.Instance.SpawnUnassignedPlayers();
 		}
-
-		allScenesLoaded = true;
 	}
 
 	IEnumerator WaitServerReady(NetworkConnection conn) {
-		while (!allScenesLoaded) {
+		while (!sceneManager.gameplayScenesInitialized) {
 			yield return null;
 		}
 
@@ -175,7 +178,7 @@ public class NetworkManagerHVH : NetworkManager {
 	}
 
 	IEnumerator WaitClientConnect(NetworkConnection conn) {
-		while (!allScenesLoaded) {
+		while (!sceneManager.gameplayScenesInitialized) {
 			yield return null;
 		}
 

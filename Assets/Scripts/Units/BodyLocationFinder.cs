@@ -7,5 +7,5 @@ public class BodyLocationFinder : MonoBehaviour {
 	public GameObject head;
 	public GameObject mouth;
 	public GameObject feet;
-	public SkinnedMeshRenderer bodyMesh;
+	public Renderer[] bodyMeshes;
 }

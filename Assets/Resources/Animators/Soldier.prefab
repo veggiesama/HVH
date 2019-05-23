@@ -1192,7 +1192,10 @@ MonoBehaviour:
   head: {fileID: 7581806952379015663}
   mouth: {fileID: 1882003641086306324}
   feet: {fileID: 8273194286466919606}
-  bodyMesh: {fileID: 2048578494333500009}
+  bodyMeshes:
+  - {fileID: 2048578494333500009}
+  - {fileID: 2048578494340874723}
+  - {fileID: 2048578494341233621}
 --- !u!1 &7581806952379015663
 GameObject:
   m_ObjectHideFlags: 0

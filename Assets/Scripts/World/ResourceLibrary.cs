@@ -19,7 +19,7 @@ public class ResourceLibrary : Singleton<ResourceLibrary> {
 	}
 
     void Awake() {
-		DontDestroyOnLoad(this.gameObject);
+		//DontDestroyOnLoad(this.gameObject);
 	
 	    UnitInfo[] unitArray = Resources.LoadAll<UnitInfo>("ScriptableObjects\\UnitInfo");
 		foreach (UnitInfo o in unitArray) {

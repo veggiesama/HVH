@@ -15,7 +15,7 @@ public class DebugMenu : MonoBehaviour {
 	private UnitController unit; 
 
 	private void Start() {
-		unit = FindObjectOfType<UICanvas>().GetLocalPlayer().unit;
+		unit = GameRules.Instance.GetLocalPlayer().unit;
 
 		BuildPlayerSwapper();
 		BuildStatusApplier();

@@ -15,8 +15,8 @@ public class NetworkGameRules : NetworkBehaviour {
 	private DayNightController dayNightController;
 
 	public void Awake() {
-		dayNightController = FindObjectOfType<DayNightController>();
-		DontDestroyOnLoad(this.gameObject);
+		//DontDestroyOnLoad(this.gameObject);
+		dayNightController = GetComponent<DayNightController>();
 	}
 
 	public override void OnStartClient() {

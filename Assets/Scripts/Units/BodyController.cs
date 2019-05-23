@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
@@ -13,9 +13,10 @@ public class BodyController : MonoBehaviour {
 	[HideInInspector] public GameObject head;
 	[HideInInspector] public GameObject mouth;
 	[HideInInspector] public GameObject feet;
-	[HideInInspector] public SkinnedMeshRenderer bodyMesh;
+	[HideInInspector] public Renderer[] bodyMeshes;
 	[HideInInspector] public FieldOfView fov;
 
+	private bool isVisible = true;
 	private Vector3 lastPosition = Vector3.zero;
 	private float updateAnimationSpeedFloatEvery = 0.1f;
 
@@ -23,6 +24,7 @@ public class BodyController : MonoBehaviour {
 	void Awake () {
 		unit = GetComponentInParent<UnitController>();
 		rb = GetComponent<Rigidbody>();
+		fov = GetComponentInChildren<FieldOfView>();
 
 		InvokeRepeating("UpdateAnimationSpeedFloat", 0f, updateAnimationSpeedFloatEvery);
 	}
@@ -39,7 +41,7 @@ public class BodyController : MonoBehaviour {
 		head = finder.head;
 		mouth = finder.mouth;
 		feet = finder.feet;
-		bodyMesh = finder.bodyMesh;
+		bodyMeshes = finder.bodyMeshes;
 	}
 
 	private void FixedUpdate() {
@@ -146,13 +148,18 @@ public class BodyController : MonoBehaviour {
 	}
 	 
 	public void SetVisibility(bool enable) {
-		if (anim != null)
-			anim.gameObject.SetActive(enable);
+		if (anim != null) {
+			foreach (Renderer bodyMesh in bodyMeshes) {
+				bodyMesh.enabled = enable;
+			}
+			isVisible = enable;
+			//anim.gameObject.SetActive(enable);
+		}
 	}
 
 	public bool IsVisible() {
 		if (anim != null) 
-			return anim.gameObject.activeInHierarchy;
+			return isVisible;
 		else
 			return false;
 	}

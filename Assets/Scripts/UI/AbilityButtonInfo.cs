@@ -14,7 +14,7 @@ public class AbilityButtonInfo : MonoBehaviour {
 
 	private void Start()
 	{
-		Player player = GetComponentInParent<UICanvas>().GetLocalPlayer();
+		Player player = GameRules.Instance.GetLocalPlayer();
 
 		button = this.gameObject.GetComponent<Button>();
 		button.onClick.AddListener( delegate {
