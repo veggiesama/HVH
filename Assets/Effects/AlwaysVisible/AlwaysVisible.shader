@@ -1,4 +1,4 @@
-﻿Shader "Custom/AlwaysVisible"
+﻿Shader "HVH/AlwaysVisible"
 {
     Properties
     {

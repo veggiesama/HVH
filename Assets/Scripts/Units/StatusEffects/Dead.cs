@@ -29,7 +29,8 @@ public class Dead : StatusEffect {
 		else
 			killFromDirection = unit.GetBodyPosition() + Random.insideUnitSphere * 1.5f;
 		
-		networkHelper.Die(killFromDirection);
+		unit.Die(killFromDirection);
+		//networkHelper.Die(killFromDirection);
 	}
 
 	public override void Update() {
@@ -43,7 +44,8 @@ public class Dead : StatusEffect {
 	}
 
 	public override void End() {
-		networkHelper.Respawn();
+		unit.Respawn();
+		//networkHelper.Respawn();
 		unit.SetOrderRestricted(false);
 		base.End();
 	}

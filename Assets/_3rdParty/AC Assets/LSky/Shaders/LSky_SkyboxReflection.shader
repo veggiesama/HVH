@@ -1,6 +1,6 @@
 ﻿
 
-Shader "AC/LSky/Skybox Reflection"
+Shader "AC LSky/Skybox Reflection"
 {
 
 	Properties

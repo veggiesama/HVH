@@ -2,7 +2,7 @@
 // Uses a normal map to distort the image behind, and
 // an additional texture to tint the color.
 
-Shader "zzz_Custom/Stained BumpDistort (Orthographic)" {
+Shader "HVH/Stained BumpDistort (Orthographic)" {
 Properties {
 	_BumpAmt  ("Distortion", range (0,128)) = 10
 	_MainTex ("Tint Color (RGB)", 2D) = "white" {}

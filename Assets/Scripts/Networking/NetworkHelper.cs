@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using Tree = HVH.Tree;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.SceneManagement;
+using Smooth;
 
 public class NetworkHelper : NetworkBehaviour {
 
@@ -10,6 +12,7 @@ public class NetworkHelper : NetworkBehaviour {
 	UnitController unit;
 	[SyncVar] public float currentHealth = 1;
 	[SyncVar] public string unitInfo;
+	public SmoothSyncMirror smooth;
 	public bool isDisconnected = false;
 	public bool isUnassigned = true;
 	
@@ -33,7 +36,14 @@ public class NetworkHelper : NetworkBehaviour {
 	void Awake() {
 		player = GetComponent<Player>();
 		unit = player.unit;
-		//currentHealth = unit.unitInfo.maxHealth;
+		
+		var smooths = GetComponents<SmoothSyncMirror>();
+		foreach (SmoothSyncMirror sm in smooths) {
+			if (sm.childObjectToSync != null) {
+				smooth = sm;
+				break;
+			}
+		}
 	}
 
 	// TODO: add every network status effect from server (with current duration), remove status effects from server
@@ -273,9 +283,7 @@ public class NetworkHelper : NetworkBehaviour {
 
 	[ClientRpc]
 	private void Rpc_Die(Vector3 killFromDirection) {
-		unit.DetachFromNav();
-		unit.EnableNav(false);
-		unit.body.PerformDeath(killFromDirection);
+		unit.Die(killFromDirection, true);
 	}
 
 	public void Respawn() {
@@ -286,15 +294,12 @@ public class NetworkHelper : NetworkBehaviour {
 	private void Cmd_Respawn() {
 		Transform spawnLoc = GameRules.GetRandomSpawnPoint();
 		currentHealth = unit.unitInfo.maxHealth;
-		Rpc_Respawn(spawnLoc.position, spawnLoc.rotation);
+		Rpc_RespawnAt(spawnLoc.position, spawnLoc.rotation);
 	}
 
 	[ClientRpc]
-	private void Rpc_Respawn(Vector3 position, Quaternion rotation) {
-		unit.body.transform.SetPositionAndRotation(position, rotation);
-		unit.body.ResetBody();
-		unit.EnableNav(true);
-		unit.AttachToNav();
+	private void Rpc_RespawnAt(Vector3 position, Quaternion rotation) {
+		unit.RespawnAt(position, rotation);
 	}
 
 	// KNOCKBACK
@@ -408,6 +413,23 @@ public class NetworkHelper : NetworkBehaviour {
 				break;
 		}
 		return trans;
+	}
+
+	public void SyncTransform() {
+		smooth.forceStateSendNextFixedUpdate();
+		
+	}
+
+	public void SyncTeleport() {
+		smooth.teleportOwnedObjectFromOwner();
+	}
+
+	// unused
+	public void SyncFixedUpdate(bool enable) {
+		if (enable)
+			smooth.whenToUpdateTransform = SmoothSyncMirror.WhenToUpdateTransform.FixedUpdate;
+		else
+			smooth.whenToUpdateTransform = SmoothSyncMirror.WhenToUpdateTransform.Update;
 	}
 
 	// SCENE MANAGEMENT

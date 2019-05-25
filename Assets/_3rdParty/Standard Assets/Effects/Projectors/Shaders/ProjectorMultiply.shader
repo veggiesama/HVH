@@ -1,7 +1,7 @@
 // Upgrade NOTE: replaced '_Projector' with 'unity_Projector'
 // Upgrade NOTE: replaced '_ProjectorClip' with 'unity_ProjectorClip'
 
-Shader "Projector/Multiply" {
+Shader "Standard Assets/Projector/Multiply" {
 	Properties {
 		_ShadowTex ("Cookie", 2D) = "gray" {}
 		_FalloffTex ("FallOff", 2D) = "white" {}

@@ -1,7 +1,9 @@
-﻿ using System.Collections;
+﻿using Tree = HVH.Tree;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.Events;
 
 public class BodyController : MonoBehaviour {
 
@@ -20,7 +22,23 @@ public class BodyController : MonoBehaviour {
 	private Vector3 lastPosition = Vector3.zero;
 	private float updateAnimationSpeedFloatEvery = 0.1f;
 
-	// Use this for initialization
+	public UnityEventTree onCollidedTree;
+	public UnityEventCollision onCollidedTerrain;
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Events
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	public void OnCollisionEnter(Collision collision) {
+		GameObject o = collision.collider.gameObject;
+
+		if (Util.IsTerrain(o)) {
+			onCollidedTerrain.Invoke(collision);
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Initialization
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	void Awake () {
 		unit = GetComponentInParent<UnitController>();
 		rb = GetComponent<Rigidbody>();
@@ -126,27 +144,6 @@ public class BodyController : MonoBehaviour {
 		return Quaternion.Angle(transform.rotation, wantedRotation) < Constants.FrontAngle;
 	}
 
-	// THIS IS ALL SHIT
-
-	public delegate void OnCollidedTreeDelegate(Tree tree);
-	public event OnCollidedTreeDelegate OnCollidedTreeEventHandler;
-
-	public void OnCollidedTree(Tree tree) {
-		if (OnCollidedTreeEventHandler != null) {
-			OnCollidedTreeEventHandler(tree);	
-		}
-	}
-
-	public delegate void OnCollisionDelegate(Collision col);
-	public event OnCollisionDelegate OnCollisionEventHandler;
-	
-	public void OnCollisionEnter(Collision collision)
-	{
-		if (OnCollisionEventHandler != null) {
-			OnCollisionEventHandler(collision);	
-		}
-	}
-	 
 	public void SetVisibility(bool enable) {
 		if (anim != null) {
 			foreach (Renderer bodyMesh in bodyMeshes) {

@@ -1,6 +1,6 @@
 // Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
-Shader "Skybox/Procedural" {
+Shader "Standard Assets/Procedural" {
 Properties {
 	_SunTint ("Sun Tint", Color) = (1, 1, 1, 1)
 	_SunStrength ("Sun Strength", Float) = 1.0

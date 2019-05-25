@@ -1,7 +1,7 @@
 ﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 // http://wiki.unity3d.com/index.php/Silhouette-Outlined_Diffuse
 
-Shader "zzz_Custom/Silhouetted Diffuse" {
+Shader "HVH/Silhouetted Diffuse" {
 	Properties {
 		_Color ("Main Color", Color) = (.5,.5,.5,1)
 		_OutlineColor ("Outline Color", Color) = (0,0,0,1)

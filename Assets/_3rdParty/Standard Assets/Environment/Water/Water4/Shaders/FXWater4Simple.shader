@@ -1,6 +1,6 @@
 // Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
-Shader "FX/SimpleWater4" {
+Shader "Standard Assets/FX/SimpleWater4" {
 Properties {
 	_ReflectionTex ("Internal reflection", 2D) = "white" {}
 	

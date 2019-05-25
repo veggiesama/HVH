@@ -2,7 +2,7 @@
 // Upgrade NOTE: replaced '_ProjectorClip' with 'unity_ProjectorClip'
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-     Shader "Projector/AdditiveTint" {
+     Shader "HVH/AdditiveTint" {
          Properties {
              _Color ("Tint Color", Color) = (1,1,1,1)
              _Attenuation ("Falloff", Range(0.0, 1.0)) = 1.0

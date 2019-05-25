@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using Tree = HVH.Tree;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 [CreateAssetMenu(menuName = "Abilities/Dwarf/Grapple")]
 public class Grapple : Ability {
@@ -85,7 +87,7 @@ public class Grapple : Ability {
 		//caster.EnableNav(false);
 		caster.body.PerformAirborn(velocityVector);
 		//caster.body.SetTreeClipOnly();
-		caster.body.OnCollisionEventHandler += OnBodyCollision; // event sub
+		caster.body.onCollidedTerrain.AddListener(OnCollidedTerrain); // sub
 		isLaunching = true;
 
 		casterStartingPosition = caster.GetBodyPosition();
@@ -99,7 +101,7 @@ public class Grapple : Ability {
 		caster.RemoveStatusEffect(airbornStatusEffect.statusName);
 		//caster.EnableNav(true);
 		caster.body.ResetBody();
-		caster.body.OnCollisionEventHandler -= OnBodyCollision; // event unsub
+		caster.body.onCollidedTerrain.RemoveListener(OnCollidedTerrain); // unsub
 		isLaunching = false;
 
 		Vector3 casterEndingPosition = caster.GetBodyPosition();
@@ -112,16 +114,14 @@ public class Grapple : Ability {
 	}
 
 	// allows body to hilariously bounce
-	private void OnBodyCollision(Collision col) {
+	private void OnCollidedTerrain(Collision col) {
 		if (Util.GetDistanceIn2D(casterStartingPosition, caster.GetBodyPosition()) < 1.0f) return;
 
 		float magnitude = col.relativeVelocity.magnitude;
 		//Debug.Log("MAGNITUDE:" + magnitude);
 		currentSafetyTimer = safetyPostCollisionTimer; // if body lands too softly after bounce, end launch through Update()
 
-		if (col.gameObject.layer == LayerMask.NameToLayer("Terrain") &&
-			magnitude < collisionMagnitudeThreshold)
-		{
+		if (magnitude < collisionMagnitudeThreshold) {
 			EndLaunch();
 		}
 	}

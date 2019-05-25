@@ -235,6 +235,7 @@ MonoBehaviour:
   syncInterval: 0.1
   currentHealth: 0
   unitInfo: 
+  smooth: {fileID: 0}
   isDisconnected: 0
   isUnassigned: 1
 --- !u!114 &8879444565007247646
@@ -347,7 +348,7 @@ MonoBehaviour:
   sendAngularVelocityThreshold: 0
   receivedPositionThreshold: 0
   receivedRotationThreshold: 0
-  snapPositionThreshold: 0
+  snapPositionThreshold: 1
   snapRotationThreshold: 0
   snapScaleThreshold: 0
   positionLerpSpeed: 0.85
@@ -489,6 +490,8 @@ MonoBehaviour:
   debug: 0
   updateDistance: 1
   unit: {fileID: 114439122746566608}
+  initialized: 0
+  isAppQuitting: 0
 --- !u!1 &1255983822199124
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,7 +833,7 @@ MonoBehaviour:
   head: {fileID: 0}
   mouth: {fileID: 0}
   feet: {fileID: 0}
-  bodyMesh: {fileID: 0}
+  bodyMeshes: []
   fov: {fileID: 0}
 --- !u!1 &1556071493720860
 GameObject:

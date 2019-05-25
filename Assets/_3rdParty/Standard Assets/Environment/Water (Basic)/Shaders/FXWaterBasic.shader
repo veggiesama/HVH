@@ -1,6 +1,6 @@
 // Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
-Shader "FX/Water (Basic)" {
+Shader "Standard Assets/FX/Water (Basic)" {
 Properties {
 	_horizonColor ("Horizon color", COLOR)  = ( .172 , .463 , .435 , 0)
 	_WaveScale ("Wave scale", Range (0.02,0.15)) = .07

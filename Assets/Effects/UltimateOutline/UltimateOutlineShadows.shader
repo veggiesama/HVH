@@ -1,6 +1,6 @@
 //This version of the shader does support shadows, but it does not support transparent outlines
 
-Shader "Outlined/UltimateOutlineShadows"
+Shader "HVH/UltimateOutlineShadows"
 {
 	Properties
 	{

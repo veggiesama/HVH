@@ -1,4 +1,4 @@
-﻿Shader "Custom/VerticalFogIntersection"
+﻿Shader "HVH/VerticalFogIntersection"
 {
     Properties
     {

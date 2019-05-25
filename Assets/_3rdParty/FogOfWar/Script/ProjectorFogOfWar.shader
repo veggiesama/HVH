@@ -3,7 +3,7 @@
 // Upgrade NOTE: replaced '_Projector' with 'unity_Projector'
 // Upgrade NOTE: replaced '_ProjectorClip' with 'unity_ProjectorClip'
 
-Shader "Projector/Fog Of War" {
+Shader "FogOfWar/Fog Of War" {
 	Properties {
 		_OldFogTex ("Old Fog Texture", 2D) = "gray" {}
 		_FogTex ("Fog Texture", 2D) = "gray" {}

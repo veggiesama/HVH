@@ -1,4 +1,4 @@
-Shader "Standard(Two Sided)"
+Shader "Nature pack/Standard(Two Sided)"
 {
 	Properties
 	{

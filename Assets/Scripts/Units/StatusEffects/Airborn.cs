@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Tree = HVH.Tree;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,12 +37,12 @@ public class Airborn : StatusEffect {
 			case AirbornClippingTypes.TREE_CLIP:
 				break;
 			case AirbornClippingTypes.TREE_DESTROY:
-				unit.body.OnCollidedTreeEventHandler += OnCollidedTree; // event sub
+				unit.body.onCollidedTree.AddListener(OnCollidedTree); // sub
 				break;
 		}
 	}
 
-	public void OnCollidedTree(Tree tree) {
+	void OnCollidedTree(Tree tree) {
 		if (alreadyTriggeredList.Contains(tree)) return;
 		alreadyTriggeredList.Add(tree);
 		networkHelper.DestroyTree(tree, unit.GetBodyPosition(), 0f);
@@ -59,7 +60,7 @@ public class Airborn : StatusEffect {
 
 	public override void End() {
 		unit.SetVision(VisionType.NORMAL);
-		unit.body.OnCollidedTreeEventHandler -= OnCollidedTree; // event unsub
+		unit.body.onCollidedTree.RemoveListener(OnCollidedTree); // unsub
 		unit.AttachToNav();
 		unit.body.ResetBody();
 		base.End();

@@ -61,7 +61,6 @@ public class Leap : Ability {
 
 	protected override void OnDurationEnd () {
 		caster.RemoveStatusEffect(airbornStatusEffect.statusName);
-		caster.body.ResetBody();
 	}
 
 }

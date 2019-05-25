@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Tree = HVH.Tree;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -318,6 +319,8 @@ public class UnitController : MonoBehaviour {
 		agent.updatePosition = true;
 		agent.updateRotation = true;
 
+		networkHelper.SyncTransform();
+
 		if (!agent.isOnNavMesh) {
 			Debug.Log("Unit fell off map.");
 			ApplyStatusEffect(unitInfo.onDeathStatusEffect);
@@ -414,27 +417,19 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public void EnableKnockbackCollider() {
-		body.OnCollisionEventHandler += OnKnockbackCollision; // event sub
+		body.onCollidedTerrain.AddListener(OnKnockbackCollidedTerrain); // subs
+		//body.onCollideWithTree.AddListener(OnKnockbackCollideWithTree);
 	}
-	
-	public void OnKnockbackCollision(Collision col) {
-		//Debug.Log("Knockbacked unit collided with: " + col.collider.gameObject.name);
-		GameObject o = col.collider.gameObject;
 
-		if (Util.IsTree(o)) {
-			Tree tree = o.GetComponent<Tree>();	
-			networkHelper.DestroyTree(tree);
-		}
-
-
-		else if (Util.IsTerrain(o))
-			EndKnockback();
+	private void OnKnockbackCollidedTerrain(Collision col) {
+		EndKnockback();
 	}
 
 	public void EndKnockback() {
 		RemoveStatusEffect(unitInfo.onAirbornStatusEffect.statusName);
-		body.OnCollisionEventHandler -= OnKnockbackCollision; // event unsub
-		//EnableNav(true);
+
+		body.onCollidedTerrain.RemoveListener(OnKnockbackCollidedTerrain); // unsubs
+		//body.onCollideWithTree.RemoveListener(OnKnockbackCollideWithTree);
 	}
 
 	public List<StatusEffect> GetStatusEffectList() {
@@ -485,4 +480,24 @@ public class UnitController : MonoBehaviour {
 		fov.SetObstacleMask(vision);
 	}
 
+	public void Die(Vector3 killFromDirection, bool serverCalled = false) {
+		if (!serverCalled) networkHelper.Die(killFromDirection);
+
+		DetachFromNav();
+		EnableNav(false);
+		body.PerformDeath(killFromDirection);
+	}
+
+	public void Respawn(bool serverCalled = false) {
+		if (!serverCalled) networkHelper.Respawn();
+		else Debug.Log("Server is not supposed to call this.");
+	}
+
+	// server-only
+	public void RespawnAt(Vector3 position, Quaternion rotation) {
+		body.transform.SetPositionAndRotation(position, rotation);
+		body.ResetBody();
+		EnableNav(true);
+		AttachToNav();
+	}
 }

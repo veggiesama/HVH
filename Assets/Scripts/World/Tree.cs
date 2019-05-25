@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using Tree = HVH.Tree;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+
+namespace HVH {
 
 public class Tree : MonoBehaviour {
 
@@ -99,7 +102,7 @@ public class Tree : MonoBehaviour {
 		GameObject go = col.gameObject;
 
 		if (Util.IsBody(go)) {
-			go.GetComponent<BodyController>().OnCollidedTree(this);
+			go.GetComponent<BodyController>().onCollidedTree.Invoke(this);
 		}	
 	}
 
@@ -114,5 +117,7 @@ public class Tree : MonoBehaviour {
 	public GameObject GetTreeHandlerGO() {
 		return treeHandler.gameObject;
 	}
+
+}
 
 }

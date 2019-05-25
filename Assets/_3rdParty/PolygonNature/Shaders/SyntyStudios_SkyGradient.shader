@@ -49,7 +49,7 @@ Shader "SyntyStudios/SkyGradient"
 
 		ENDCG
 	}
-	CustomEditor "ASEMaterialInspector"
+	//CustomEditor "ASEMaterialInspector"
 }
 /*ASEBEGIN
 Version=16200
