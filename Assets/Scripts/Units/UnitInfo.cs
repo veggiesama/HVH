@@ -11,6 +11,9 @@ public class UnitInfo : ScriptableObject {
 	public float movementSpeed = 10;
 	public float turnRate = 1000f;
 	public int size = 1; // TODO: enum
+	public float daySightRange = 30f;
+	public float nightSightRange = 22f;
+	public float fovViewAngle = 360f;
 	[HideInInspector] public float movementSpeedOriginal;
 	[HideInInspector] public float turnRateOriginal;
 	[HideInInspector] public int sizeOriginal;

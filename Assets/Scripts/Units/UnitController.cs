@@ -1,4 +1,5 @@
 ﻿using Tree = HVH.Tree;
+using Outline = cakeslice.Outline;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,7 +43,6 @@ public class UnitController : MonoBehaviour {
 		orderQueue = GetComponentInChildren<OrderQueue>();
 		statusEffectManager = GetComponentInChildren<StatusEffectManager>();
 		fov = GetComponentInChildren<FieldOfView>(true);
-		//fov.OnTargetsVisibilityChange += OnTargetsVisibilityChange;
 
 		targetFriendlyStand = transform.Find("Body/FX/Target friendly stand").GetComponent<MeshRenderer>();
 		targetEnemyStand = transform.Find("Body/FX/Target enemy stand").GetComponent<MeshRenderer>();
@@ -103,12 +103,13 @@ public class UnitController : MonoBehaviour {
 			return;
 		}
 
-		if (!ability.quickCast && !player.IsMouseTargeting()) {
+		if (!ability.quickCast && !player.IsMouseTargeting() && ability.targetType != AbilityTargetTypes.UNIT) {
 			player.SetMouseTargeting(true, ability, slot);
 			return;
 		}
-		if (player.IsMouseTargeting())
-			player.SetMouseTargeting(false);
+
+		//if (player.IsMouseTargeting())
+		//	player.SetMouseTargeting(false);
 
 		Order castOrder;
 		switch (ability.targetType)
@@ -122,8 +123,27 @@ public class UnitController : MonoBehaviour {
 				((CastPosition)castOrder).Initialize(gameObject, ability, player.GetMouseLocationToGround());
 				break;
 			case AbilityTargetTypes.UNIT:
+
+				UnitController enemy;
+				// TODO: not working?
+				if (currentEnemyTarget != null) {
+					enemy = currentEnemyTarget;
+				}
+				else if (player.IsMouseTargeting()) {
+					enemy = player.GetUnitAtMouseLocation();
+					if (enemy == null) {
+						Debug.Log("No enemy at mouse location.");
+						return;
+					}
+				}
+				else {
+					player.SetMouseTargeting(true, ability, slot);
+					return;
+				}
+
 				castOrder = ScriptableObject.CreateInstance<CastTarget>();
-				((CastTarget)castOrder).Initialize(gameObject, ability, currentFriendlyTarget, currentEnemyTarget);
+				((CastTarget)castOrder).Initialize(gameObject, ability, currentFriendlyTarget, enemy);
+
 				break;
 			case AbilityTargetTypes.TREE:
 				Tree tree = player.GetTreeAtMouseLocation();
@@ -174,11 +194,13 @@ public class UnitController : MonoBehaviour {
 	public void RemoveCurrentTarget(AbilityTargetTeams targetTeam) {
 		switch (targetTeam)	{
 			case AbilityTargetTeams.ALLY:
+				if (currentFriendlyTarget == null) return;
 				currentFriendlyTarget.ShowTargetStand(false, targetTeam);
 				currentFriendlyTarget.SetTargetCamera(false, targetTeam);
 				currentFriendlyTarget = null;
 				break;
 			case AbilityTargetTeams.ENEMY:
+				if (currentEnemyTarget == null) return;
 				currentEnemyTarget.ShowTargetStand(false, targetTeam);
 				currentEnemyTarget.SetTargetCamera(false, targetTeam);
 				currentEnemyTarget = null;
@@ -438,6 +460,7 @@ public class UnitController : MonoBehaviour {
 
 	public void ReloadAbilities() {
 		abilityManager.LoadAbilities();
+		player.uiController.ResetButtons();
 	}
 
 	public void SetHealth(float newHealthValue) {
@@ -458,6 +481,10 @@ public class UnitController : MonoBehaviour {
 			for (int i = 0; i < body.bodyMeshes.Length; i++) {
 				body.bodyMeshes[i].material.color = unitInfo.bodyColor;
 			}
+
+			fov.dayViewRadius = unitInfo.daySightRange;
+			fov.nightViewRadius = unitInfo.nightSightRange;
+			fov.viewAngle = unitInfo.fovViewAngle;
 		}
 
 		else
@@ -499,5 +526,29 @@ public class UnitController : MonoBehaviour {
 		body.ResetBody();
 		EnableNav(true);
 		AttachToNav();
+	}
+
+	public void SetHighlighted(HighlightingState state) {
+		for (int i = 0; i < body.bodyMeshes.Length; i++) {
+			Renderer mesh = body.bodyMeshes[i];
+			Outline outline = mesh.GetComponent<Outline>();
+			switch (state) {
+				case HighlightingState.NONE:
+					outline.enabled = false;
+					break;
+				case HighlightingState.NORMAL:
+					outline.enabled = true;
+					outline.color = 0;
+					break;
+				case HighlightingState.INTEREST:
+					outline.enabled = true;
+					outline.color = 1;
+					break;
+				case HighlightingState.ENEMY:
+					outline.enabled = true;
+					outline.color = 2;
+					break;
+			}
+		}
 	}
 }

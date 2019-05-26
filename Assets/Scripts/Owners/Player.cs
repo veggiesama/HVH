@@ -44,17 +44,20 @@ public class Player : Owner {
 		// always register selections, even while disabled
 		if (Input.GetButtonDown("L-Click")) {
 
-			if(!mouseTargeter.IsTargetingEnabled()) 
+			if(!IsMouseTargeting()) {
 				SelectAtMouseCursor();
-			else
+			}
+			else {
 				unit.DoAbility(mouseTargeter.storedSlot);
+				SetMouseTargeting(false);
+			}
 		}
 
 		//if (!CanIssueCommands())
 		//	return;
 
 		if (Input.GetButtonDown("R-Click")) {
-			if(!mouseTargeter.IsTargetingEnabled()) 
+			if(!IsMouseTargeting()) 
 				MoveToMouseCursor();
 			else
 				SetMouseTargeting(false);
@@ -125,12 +128,7 @@ public class Player : Owner {
 		}
 	}
 
-	// Called at end of frame. Use for physics updates. If used for input, may result in input loss.
-	void FixedUpdate() {}
-
 	public void UI_ClickedAbilityButton(AbilitySlots slot) {
-		//print("Owner null: " + (this == this.isActiveAndEnabled) + ", Unit null: " + (this.unit.isActiveAndEnabled == null) );
-		//AbilitySlots slot = EventSystem.current.currentSelectedGameObject.GetComponent<AbilityButtonInfo>().abilitySlot;
 		unit.DoAbility(slot);
 	}
 
@@ -157,12 +155,16 @@ public class Player : Owner {
 		
 		// no target unselects enemies, retains friends
 		else { 
-			unit.SetCurrentTarget(null);
+			unit.RemoveCurrentTarget(AbilityTargetTeams.ENEMY);
 		}
 	}
 
 	public Tree GetTreeAtMouseLocation() {
 		return mouseTargeter.GetTreeAtMouseLocation();
+	}
+
+	public UnitController GetUnitAtMouseLocation() {
+		return mouseTargeter.GetUnitAtMouseLocation();
 	}
 
 	public Vector3 GetMouseLocationToGround() {

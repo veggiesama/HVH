@@ -34,6 +34,8 @@ public class Shriek : Ability {
 		CastResults baseCastResults = base.Cast(castOrder);
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
+		enemyTarget = castOrder.enemyTarget;
+
 		networkHelper.ApplyStatusEffectTo(enemyTarget, silenceStatusEffect, this);
 		//networkHelper.CreateProjectile(this, castOrder);
 		networkHelper.InstantiateParticle(particlePrefab, enemyTarget, BodyLocations.FEET, duration);

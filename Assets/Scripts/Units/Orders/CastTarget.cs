@@ -68,8 +68,8 @@ public class CastTarget : Cast {
 				break;
 		}
 
-		ability.allyTarget = unit.GetTarget(AbilityTargetTeams.ALLY);
-		ability.enemyTarget = unit.GetTarget(AbilityTargetTeams.ENEMY);
+		//ability.allyTarget = unit.GetTarget(AbilityTargetTeams.ALLY);
+		//ability.enemyTarget = unit.GetTarget(AbilityTargetTeams.ENEMY);
 
 		base.Execute();
 	}

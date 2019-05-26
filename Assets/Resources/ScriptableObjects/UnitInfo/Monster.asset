@@ -19,6 +19,9 @@ MonoBehaviour:
   movementSpeed: 9
   turnRate: 960
   size: 1
+  daySightRange: 30
+  nightSightRange: 26
+  fovViewAngle: 360
   movementSpeedOriginal: 0
   turnRateOriginal: 0
   sizeOriginal: 0

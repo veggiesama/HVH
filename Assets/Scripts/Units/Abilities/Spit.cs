@@ -34,6 +34,8 @@ public class Spit : Ability {
 		CastResults baseCastResults = base.Cast(castOrder);
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
+		enemyTarget = castOrder.enemyTarget;
+
 		networkHelper.ApplyStatusEffectTo(enemyTarget, slowStatusEffect, this);
 		networkHelper.DealDamageTo(enemyTarget, damage);
 		networkHelper.InstantiateParticle(particlePrefab, enemyTarget, BodyLocations.HEAD);

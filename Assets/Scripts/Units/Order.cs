@@ -8,9 +8,9 @@ public abstract class Order : ScriptableObject {
 	public OrderTypes orderType;
 
 	protected OrderQueue queue;
-	protected UnitController unit;
-	protected UnitController allyTarget;
-	protected UnitController enemyTarget;
+	public UnitController unit;
+	public UnitController allyTarget;
+	public UnitController enemyTarget;
 	public Vector3 targetLocation;
 	public Ability ability;
 	public Tree tree;

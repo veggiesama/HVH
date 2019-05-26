@@ -29,7 +29,7 @@ MonoBehaviour:
   castTime: 0.3
   duration: 0
   aoeRadius: 0
-  quickCast: 1
+  quickCast: 0
   doNotCancelOrderQueue: 0
   durationRemaining: 0
   projectilePrefab: {fileID: 0}

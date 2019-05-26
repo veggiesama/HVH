@@ -10,46 +10,68 @@ public class AbilityButtonInfo : MonoBehaviour {
 	private Text textComponent;
 	private Button button;
 	private Ability ability;
-	private UnitController unit;
+	private Player player;
 
-	private void Start()
-	{
-		Player player = GameRules.Instance.GetLocalPlayer();
+	private float updateEvery = 0.1f;
 
-		button = this.gameObject.GetComponent<Button>();
+	private void Awake() {
+		button = GetComponent<Button>();
+		textComponent = GetComponentInChildren<Text>();
+		originalText = textComponent.text;
+
+		Debug.Log("Awake");
+		StartCoroutine ( SlowUpdate() );
+	}
+
+	public void Initialize() {
+		Debug.Log("Initialize");
+
+		if (player != null) {
+			button.onClick.RemoveListener( delegate {
+				player.UI_ClickedAbilityButton(abilitySlot);
+			});
+			ability = null;
+			button.enabled = false;
+		}
+
+		player = GameRules.Instance.GetLocalPlayer();
+
 		button.onClick.AddListener( delegate {
 			player.UI_ClickedAbilityButton(abilitySlot);
 		});
 
-		textComponent = GetComponentInChildren<Text>();
-		originalText = textComponent.text;
-		unit = player.unit;
-
-		if (unit.HasAbilityInSlot(abilitySlot)) {
-			ability = unit.GetAbilityInSlot(abilitySlot);
+		if (player.unit.HasAbilityInSlot(abilitySlot)) {
+			ability = player.unit.GetAbilityInSlot(abilitySlot);
 			button.enabled = true;
 		}
 		else {
 			ability = null;
 			button.enabled = false;
 		}
+
+
 	}
 
-	// TODO: doesn't need to update every frame
-	private void Update()
-	{
-		if (ability == null) return;
+	IEnumerator SlowUpdate() {
+		Debug.Log("SlowUpdate");
+		while (true) {
+			if (ability == null) {
+				yield return new WaitForSeconds(updateEvery);
+				continue;
+			}
 
-		float cdRemaining = ability.GetCooldown();
-		if (cdRemaining > 0) {
-			textComponent.text = string.Format("{0:0.0}", cdRemaining);
-			button.interactable = false;
-		}
-		else {
-			textComponent.text = originalText;
-			button.interactable = true;
-		}
+			float cdRemaining = ability.GetCooldown();
+			if (cdRemaining > 0) {
+				textComponent.text = string.Format("{0:0.0}", cdRemaining);
+				button.interactable = false;
+			}
+			else {
+				textComponent.text = originalText;
+				button.interactable = true;
+			}
 
+			yield return new WaitForSeconds(updateEvery);
+		}
 	}
 
 }

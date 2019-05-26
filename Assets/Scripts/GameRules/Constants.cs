@@ -93,6 +93,9 @@ public enum VisionType {
 	NORMAL, FLYING
 }
 
+public enum HighlightingState {
+	NONE, NORMAL, INTEREST, ENEMY
+}
 
 // returns the screen position for ally and enemy viewports
 public static class CameraViewports {
@@ -107,5 +110,6 @@ public static class CameraViewports {
 		return new Rect(0.917f, 0.0f, 0.082f, 0.165f);
 	}
 }
+
 
 

@@ -12,11 +12,8 @@ public class DebugMenu : MonoBehaviour {
 	public Dropdown statusDropdown;
 	public Button statusButton;
 	public Button reloadAbilitiesButton;
-	private UnitController unit; 
 
 	private void Start() {
-		unit = GameRules.Instance.GetLocalPlayer().unit;
-
 		BuildPlayerSwapper();
 		BuildStatusApplier();
 		BuildAbilityReloader();
@@ -37,10 +34,16 @@ public class DebugMenu : MonoBehaviour {
 	}
 
 	private void SwapPlayer() {
+		Player localPlayer = GameRules.Instance.GetLocalPlayer();
+
 		int playerID = int.Parse(playerSwapDropdown.captionText.text);
 		foreach (Player p in GameRules.Instance.GetAllPlayers()) {
 			if (p.playerID == playerID) {
-				NetworkServer.ReplacePlayerForConnection(unit.player.connectionToClient, p.gameObject);
+				localPlayer.EnableLocalPlayerOnlyObjects(false);
+				NetworkServer.ReplacePlayerForConnection(localPlayer.connectionToClient, p.gameObject);
+				p.OnStartLocalPlayer();
+				ReloadAbilities();
+				break;
 			}
 		}
 	}
@@ -57,11 +60,13 @@ public class DebugMenu : MonoBehaviour {
 	}
 
 	private void ApplyStatus() {
+		UnitController localUnit = GameRules.Instance.GetLocalPlayer().unit;
+
 		var dict = ResourceLibrary.Instance.statusEffectDictionary;
 		string selectedOption = statusDropdown.captionText.text;
 		if (dict.TryGetValue(selectedOption, out StatusEffect status)) {
 			StatusEffect s = Instantiate(status);
-			unit.networkHelper.ApplyStatusEffectTo(s);
+			localUnit.networkHelper.ApplyStatusEffectTo(s);
 		} 
 
 	}
@@ -75,8 +80,10 @@ public class DebugMenu : MonoBehaviour {
 	}
 
 	private void ReloadAbilities() {
+		UnitController localUnit = GameRules.Instance.GetLocalPlayer().unit;
+
 		Debug.Log("Reloaded scriptable object abilities");
-		unit.ReloadAbilities();
+		localUnit.ReloadAbilities();
 	}
 
 }
