@@ -7,6 +7,7 @@ using UnityEngine;
 public class Echolocation : Ability, IProjectileAbility {
 
 	[Header("Echolocation")]
+	public GameObject particleWaves;
 	public float knockbackForce;
 
 	public override void Reset()
@@ -45,6 +46,7 @@ public class Echolocation : Ability, IProjectileAbility {
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
 		CreateProjectile(this, castOrder);
+		InstantiateParticle(particleWaves, caster, BodyLocations.MOUTH);
 
 		return CastResults.SUCCESS;
 	}

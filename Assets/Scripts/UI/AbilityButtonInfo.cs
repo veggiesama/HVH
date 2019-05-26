@@ -19,12 +19,10 @@ public class AbilityButtonInfo : MonoBehaviour {
 		textComponent = GetComponentInChildren<Text>();
 		originalText = textComponent.text;
 
-		Debug.Log("Awake");
 		StartCoroutine ( SlowUpdate() );
 	}
 
 	public void Initialize() {
-		Debug.Log("Initialize");
 
 		if (player != null) {
 			button.onClick.RemoveListener( delegate {
@@ -53,7 +51,6 @@ public class AbilityButtonInfo : MonoBehaviour {
 	}
 
 	IEnumerator SlowUpdate() {
-		Debug.Log("SlowUpdate");
 		while (true) {
 			if (ability == null) {
 				yield return new WaitForSeconds(updateEvery);

@@ -6,6 +6,10 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Abilities/Monster/Swipe")]
 public class Swipe : Ability, IProjectileAbility {
 
+	[Header("Swipe")]
+	public GameObject particleSlash;
+	public GameObject particleBloodImpact;
+
 	public override void Reset()
 	{
 		abilityName = "Swipe";
@@ -36,18 +40,8 @@ public class Swipe : Ability, IProjectileAbility {
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
 		CreateProjectile(this, castOrder);
+		networkHelper.InstantiateParticle(particleSlash, caster, BodyLocations.MOUTH);
 
-		/*
-		GameObject projectileObject = Instantiate(projectilePrefab,
-			caster.attackInfo.spawnerObject.transform.position,
-			caster.attackInfo.spawnerObject.transform.rotation,
-			caster.transform);
-
-		ConeBehaviour swipe = projectileObject.GetComponent<ConeBehaviour>();
-		swipe.Initialize(this, castOrder.targetLocation);
-		*/
-
-		//TrackDuration();
 		return CastResults.SUCCESS;
 	}
 
@@ -70,12 +64,14 @@ public class Swipe : Ability, IProjectileAbility {
 	public bool OnHitEnemy(UnitController unit)
 	{ 
 		networkHelper.DealDamageTo(unit, damage);
+		networkHelper.InstantiateParticle(particleBloodImpact, unit, BodyLocations.HEAD);
 		return false;
 	}
 
 	public bool OnHitAlly(UnitController unit)
 	{
 		networkHelper.DealDamageTo(unit, damage / 2);
+		networkHelper.InstantiateParticle(particleBloodImpact, unit, BodyLocations.HEAD);
 		return false;
 	}
 

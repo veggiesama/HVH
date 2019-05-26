@@ -112,5 +112,9 @@ public abstract class Ability : ScriptableObject {
 	public virtual void CreateProjectile(Ability ability, Order castOrder) {
 		networkHelper.CreateProjectile(ability, castOrder);
 	}
+
+	public virtual void InstantiateParticle(GameObject prefab, UnitController unit, BodyLocations loc, float duration = 0f) {
+		networkHelper.InstantiateParticle(prefab, unit, loc, duration);
+	}
 }
  

@@ -39,6 +39,8 @@ MonoBehaviour:
   projectileSpeed: 0
   projectileTimeAlive: 1
   projectileTimeUntilFullGrowth: 0.5
-  projectileGrowthFactor: {x: 4, y: 1, z: 4}
+  projectileGrowthFactor: {x: 6, y: 1, z: 6}
   grenadeTimeToHitTarget: 0
+  particleWaves: {fileID: 4215007016480766963, guid: c858fb643f765da4b8b243c6b1a3c35b,
+    type: 3}
   knockbackForce: 15

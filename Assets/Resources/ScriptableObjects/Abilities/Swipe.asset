@@ -41,3 +41,7 @@ MonoBehaviour:
   projectileTimeUntilFullGrowth: 0
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
+  particleSlash: {fileID: 7799245463436937716, guid: 2c962533e91c6f44cacb5f4958f19b39,
+    type: 3}
+  particleBloodImpact: {fileID: 1519487373399078973, guid: da3624aa79fc0674c9b3d05c4d548b1f,
+    type: 3}
