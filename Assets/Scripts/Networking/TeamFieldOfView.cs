@@ -61,9 +61,7 @@ public class TeamFieldOfView : Singleton<TeamFieldOfView> {
 			if (!visibleTargets.Contains(t)) {
 				BodyController b = t.gameObject.GetComponent<BodyController>();
 				if (b != null && b.unit.GetTeam() != this.team) {
-					b.SetVisibility(true);
-					if (localUnit.IsForgottenTarget(b.unit))
-						localUnit.RememberTarget();
+					b.AppearInFOV(true);
 				}
 			}
 		}
@@ -73,9 +71,7 @@ public class TeamFieldOfView : Singleton<TeamFieldOfView> {
 			if (!newVisibleTargets.Contains(t)) {
 				BodyController b = t.gameObject.GetComponent<BodyController>();
 				if (b != null && b.unit.GetTeam() != this.team) {
-					b.SetVisibility(false);
-					if (b.unit == localTarget)
-						localUnit.ForgetTarget();
+					b.AppearInFOV(false);
 				}
 			}
 		}

@@ -47,7 +47,7 @@ public static class Util {
 
 	public static Vector3 GetRandomVectorAround(UnitController unit, float distance) {
 		Vector2 rng = Random.insideUnitCircle;
-		return unit.GetBodyPosition() + new Vector3(rng.x, 0, rng.y) * distance;
+		return SnapVectorToTerrain(unit.GetBodyPosition() + new Vector3(rng.x, 0, rng.y) * distance);
 	}
 
 	public static Vector3 SnapVectorToTerrain(Vector3 loc) {
@@ -84,4 +84,31 @@ public static class Util {
 	public static void DebugDrawVector(Vector3 position, Color color, float dur = 1f) {
 		Debug.DrawLine(position, position + (Vector3.up * 2f), color, dur);
 	}
+
+	public static Transform GetBodyLocationTransform(BodyLocations bodyLoc, UnitController u) {
+		Transform trans;
+		switch (bodyLoc) {
+			case BodyLocations.HEAD:
+				trans = u.body.head.transform;
+				break;
+			case BodyLocations.MOUTH:
+				trans = u.body.mouth.transform;
+				break;
+			case BodyLocations.WEAPON:
+				trans = u.body.projectileSpawner.transform;
+				break;
+			case BodyLocations.FEET:
+				trans = u.body.feet.transform;
+				break;
+			default: // case BodyLocations.NONE:
+				trans = u.body.transform;
+				break;
+		}
+		return trans;
+	}
+
+	public static Color CreateFadedColor(Color originalColor) {
+		return new Color(originalColor.r * 0.5f, originalColor.g * 0.5f, originalColor.b * 0.5f);
+	}
+
 }

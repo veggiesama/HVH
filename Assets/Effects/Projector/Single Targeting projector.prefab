@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 131443334909646804}
   - component: {fileID: 131443334917019958}
   m_Layer: 0
-  m_Name: Area projector
+  m_Name: Single Targeting projector
   m_TagString: PlayerOnly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,7 @@ Projector:
   m_AspectRatio: 1
   m_Orthographic: 1
   m_OrthographicSize: 1
-  m_Material: {fileID: 2100000, guid: e30ff3588e719f34bbf0c66f22d97487, type: 2}
+  m_Material: {fileID: 2100000, guid: 6955677bce4c12041b7925e1548a2280, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
     m_Bits: 3758229287

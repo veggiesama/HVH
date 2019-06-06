@@ -5,14 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Status Effects/Invisible")]
 public class Invisible : StatusEffect {
 
-	private Material originalMat;
-	public Material transMat;
-	private Renderer rend;
 	private bool isRevealed = false;
 	private bool isFading = false;
 	private float fadeTimer = 0;
-	private Color originalColor;
-	private Color transColor;
 
 	[Header("Invisibility fade duration")]
 	public float fadeDuration;
@@ -30,13 +25,6 @@ public class Invisible : StatusEffect {
 	public override void Initialize(GameObject obj, Ability ability) {
 		base.Initialize(obj, ability);
 
-		rend = unit.body.GetComponent<Renderer>();
-		transMat = unit.GetComponent<UnitMaterials>().invisibility;
-		originalMat = rend.material;
-		if (rend.material.HasProperty("_Color")) {
-			originalColor = rend.material.GetColor("_Color");
-			transColor = new Color(originalColor.r * 0.5f, originalColor.g * 0.5f, originalColor.b * 0.5f);
-		}
 	}
 
 	public override void Apply() {
@@ -102,20 +90,14 @@ public class Invisible : StatusEffect {
 	private void StartFadeToHide() {
 		isFading = true;
 		fadeTimer = fadeDuration;
-		rend.material.color = transColor;
+		unit.SetVisibilityState(VisibilityState.FADING);
 	}
 
 	private void HideModel() {
-		rend.material = transMat;
-		// TODO: logic regarding which team you're on
-		//rend.enabled = false;
+		unit.SetVisibilityState(VisibilityState.INVISIBLE);
 	}
 
 	private void ShowModel() {
-		rend.material = originalMat;
-		rend.material.color = originalColor;
-		//isTransitioning = true;
-		//transitionTimer = transitionDuration;
-		//rend.enabled = true;
+		unit.SetVisibilityState(VisibilityState.VISIBLE);
 	}
 }

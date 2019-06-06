@@ -8,11 +8,12 @@ using Smooth;
 
 public class NetworkHelper : NetworkBehaviour {
 
-	Player player;
+	Owner owner;
+	//Player player;
 	UnitController unit;
 	[SyncVar] public float currentHealth = 1;
 	[SyncVar] public string unitInfo;
-	public SmoothSyncMirror smooth;
+	private SmoothSyncMirror smooth;
 	public bool isDisconnected = false;
 	public bool isUnassigned = true;
 	
@@ -34,8 +35,11 @@ public class NetworkHelper : NetworkBehaviour {
 	}
 
 	void Awake() {
-		player = GetComponent<Player>();
-		unit = player.unit;
+		owner = GetComponent<Owner>();
+		unit = owner.unit;
+
+		//if (unit.IsPlayerOwned())
+		//	player = GetComponent<Player>();
 		
 		var smooths = GetComponents<SmoothSyncMirror>();
 		foreach (SmoothSyncMirror sm in smooths) {
@@ -92,7 +96,7 @@ public class NetworkHelper : NetworkBehaviour {
 	[Command]
 	private void Cmd_CreateProjectile(int prefabIndex, int bodyLocation, int abilitySlotIndex, Vector3 targetLocation) {
 		GameObject prefab = NetworkManager.singleton.spawnPrefabs[prefabIndex];
-		Transform trans = GetBodyLocationTransform((BodyLocations)bodyLocation, unit);
+		Transform trans = Util.GetBodyLocationTransform((BodyLocations)bodyLocation, unit);
 
 		GameObject projectileObject = Instantiate(prefab, trans.position, trans.rotation);
 			//unit.transform); // bad for NetworkIdentity to be spawned as child?
@@ -139,17 +143,19 @@ public class NetworkHelper : NetworkBehaviour {
 
 	// DAMAGE
 
-	public void DealDamageTo(UnitController targetUnit, float dmg) {
+	public void DealDamageTo(UnitController targetUnit, int dmg) {
 		NetworkIdentity targetNetIdentity = targetUnit.networkHelper.netIdentity;
 		Cmd_DealDamageTo(targetNetIdentity, dmg);
 	}
 
 	[Command]
-	private void Cmd_DealDamageTo(NetworkIdentity targetNetIdentity, float dmg) {
-		UnitController targetUnit = targetNetIdentity.GetComponent<Player>().unit;
+	private void Cmd_DealDamageTo(NetworkIdentity targetNetIdentity, int dmg) {
+		UnitController targetUnit = targetNetIdentity.GetComponent<Owner>().unit;
 		if (targetUnit.HasStatusEffect(StatusEffectTypes.INVULNERABLE)) return;
 
+		Rpc_OnTakeDamage(targetNetIdentity, dmg);
 		targetUnit.networkHelper.currentHealth -= dmg;
+
 		if (targetUnit.networkHelper.currentHealth < 0) {
 			NetworkConnection conn = targetNetIdentity.connectionToClient; // connectionToServer?
 			if (conn != null)
@@ -157,6 +163,12 @@ public class NetworkHelper : NetworkBehaviour {
 			else
 				targetUnit.ApplyStatusEffect(targetUnit.unitInfo.onDeathStatusEffect, null);
 		}
+	}
+
+	[ClientRpc]
+	private void Rpc_OnTakeDamage(NetworkIdentity targetNetIdentity, int dmg) {
+		UnitController targetUnit = targetNetIdentity.GetComponent<Owner>().unit;
+		targetUnit.OnTakeDamage(dmg);
 	}
 
 	[TargetRpc]
@@ -227,10 +239,10 @@ public class NetworkHelper : NetworkBehaviour {
 	public void ApplyStatusEffectTo(UnitController targetUnit, StatusEffect status, Ability ability) {
 		string statusName = status.statusName;
 
-		GameObject inflictedGO = targetUnit.player.gameObject;
+		GameObject inflictedGO = targetUnit.owner.gameObject;
 		if (ability != null) {
 			int abilitySlotIndex = PackAbility(ability);
-			GameObject inflictorGO = ability.caster.player.gameObject;
+			GameObject inflictorGO = ability.caster.owner.gameObject;
 			Cmd_ApplyStatusEffectTo(inflictedGO, statusName, abilitySlotIndex, inflictorGO);
 		}
 		else
@@ -239,7 +251,7 @@ public class NetworkHelper : NetworkBehaviour {
 
 	[Command]
 	private void Cmd_ApplyStatusEffectTo(GameObject inflictedGO, string statusName, int abilitySlotIndex, GameObject inflictorGO) {
-		NetworkConnection conn = inflictedGO.GetComponent<Player>().connectionToClient;
+		NetworkConnection conn = inflictedGO.GetComponent<Owner>().connectionToClient;
 
 		NetworkHelper helper = inflictedGO.GetComponent<NetworkHelper>();
 		if (conn != null)
@@ -304,17 +316,17 @@ public class NetworkHelper : NetworkBehaviour {
 
 	// KNOCKBACK
 	public void ApplyKnockbackTo(UnitController targetUnit, Vector3 velocityVector, Ability ability) {
-		GameObject targetPlayerGO = targetUnit.player.gameObject;
-		GameObject inflictorGO = player.gameObject;
+		GameObject targetOwnerGO = targetUnit.owner.gameObject;
+		GameObject inflictorGO = owner.gameObject;
 		int abilitySlotIndex = PackAbility(ability);
-		Cmd_ApplyKnockbackTo(targetPlayerGO, velocityVector, inflictorGO, abilitySlotIndex);
+		Cmd_ApplyKnockbackTo(targetOwnerGO, inflictorGO, velocityVector, abilitySlotIndex);
 	}
 
 	[Command]
-	private void Cmd_ApplyKnockbackTo(GameObject targetPlayerGO, Vector3 velocityVector, GameObject inflictorGO, int abilitySlotIndex) {
-		NetworkConnection conn = targetPlayerGO.GetComponent<NetworkIdentity>().connectionToClient;
+	private void Cmd_ApplyKnockbackTo(GameObject targetOwnerGO, GameObject inflictorGO, Vector3 velocityVector, int abilitySlotIndex) {
+		NetworkConnection conn = targetOwnerGO.GetComponent<NetworkIdentity>().connectionToClient;
 
-		NetworkHelper helper = targetPlayerGO.GetComponent<NetworkHelper>();
+		NetworkHelper helper = targetOwnerGO.GetComponent<NetworkHelper>();
 		if (conn != null)
 			helper.TargetRpc_ApplyKnockbackTo(conn, velocityVector, inflictorGO, abilitySlotIndex);
 		else
@@ -327,31 +339,48 @@ public class NetworkHelper : NetworkBehaviour {
 	}
 
 	private void ApplyKnockbackToLocalUnit(Vector3 velocityVector, GameObject inflictorGO, int abilitySlotIndex) {
-		UnitController inflictor = inflictorGO.GetComponent<Player>().unit;
+		UnitController inflictor = inflictorGO.GetComponent<Owner>().unit;
 		Ability ability = UnpackAbility(inflictor, abilitySlotIndex);
 		unit.Knockback(velocityVector, ability);
 	}
 
 	// PARTICLES
 	public void InstantiateParticle(GameObject prefab, UnitController unit, BodyLocations loc, float duration = 0f) {
-		if (!ResourceLibrary.Instance.particlePrefabDictionary.ContainsKey(prefab.name)) {
-			Debug.Log(prefab.name + " not found in particle prefab dictionary.");
-			return;
+		if (!IsValidParticle(prefab.name)) return;
+		Cmd_InstantiateParticleOnUnit(prefab.name, unit.owner.gameObject, (int)loc, duration);
+	}
+
+	public void InstantiateParticle(GameObject prefab, Vector3 location, Quaternion rotation, float duration = 0f) {
+		if (!IsValidParticle(prefab.name)) return;
+		Cmd_InstantiateParticleAtLocation(prefab.name, location, rotation, duration);
+	}
+
+	private bool IsValidParticle(string prefabName) {
+		bool valid = ResourceLibrary.Instance.particlePrefabDictionary.ContainsKey(prefabName);
+		if (!valid) {
+			Debug.Log(prefabName + " not found in particle prefab dictionary.");
+			return false;
 		}
-		Cmd_InstantiateParticleOnClients(prefab.name, unit.player.gameObject, (int)loc, duration);
+		else return true;
+	}
+
+
+	[Command]
+	private void Cmd_InstantiateParticleOnUnit(string particlePrefabName, GameObject ownerGO, int bodyLocation, float duration) {
+		Rpc_InstantiateParticleOnUnit(particlePrefabName, ownerGO, bodyLocation, duration);
 	}
 
 	[Command]
-	private void Cmd_InstantiateParticleOnClients(string particlePrefabName, GameObject playerGO, int bodyLocation, float duration) {
-		Rpc_InstantiateParticle(particlePrefabName, playerGO, bodyLocation, duration);
+	private void Cmd_InstantiateParticleAtLocation(string particlePrefabName, Vector3 location, Quaternion rotation, float duration) {
+		Rpc_InstantiateParticleAtLocation(particlePrefabName, location, rotation, duration);
 	}
 
 	[ClientRpc]
-	private void Rpc_InstantiateParticle(string particlePrefabName, GameObject playerGO, int bodyLocation, float duration) {
+	private void Rpc_InstantiateParticleOnUnit(string particlePrefabName, GameObject ownerGO, int bodyLocation, float duration) {
 		GameObject prefab = ResourceLibrary.Instance.particlePrefabDictionary[particlePrefabName];
-		Player p = playerGO.GetComponent<Player>();
-		Transform trans = GetBodyLocationTransform((BodyLocations)bodyLocation, p.unit);
-		GameObject particleSystemGO = Instantiate(prefab, trans);
+		Owner o = ownerGO.GetComponent<Owner>();
+		Transform trans = Util.GetBodyLocationTransform((BodyLocations)bodyLocation, o.unit);
+		GameObject particleSystemGO = Instantiate(prefab, trans.position + prefab.transform.position, trans.rotation * prefab.transform.rotation, trans);
 
 		if (duration != 0f) {
 			ParticleSystem[] psArray = particleSystemGO.GetComponentsInChildren<ParticleSystem>();
@@ -362,6 +391,45 @@ public class NetworkHelper : NetworkBehaviour {
 				ps.Play();
 			}
 		}
+	}
+
+	[ClientRpc]
+	private void Rpc_InstantiateParticleAtLocation(string particlePrefabName, Vector3 location, Quaternion rotation, float duration) {
+		GameObject prefab = ResourceLibrary.Instance.particlePrefabDictionary[particlePrefabName];
+		GameObject particleSystemGO = Instantiate(prefab, location, rotation);
+
+		// TODO: simplify this (combine with above)
+		if (duration != 0f) {
+			ParticleSystem[] psArray = particleSystemGO.GetComponentsInChildren<ParticleSystem>();
+			foreach (ParticleSystem ps in psArray) {
+				ps.Stop();
+				var main = ps.main;
+				main.duration = duration;
+				ps.Play();
+			}
+		}
+	}
+
+	// VISIBILITY
+	public void SetVisibilityState(VisibilityState state) {
+		Cmd_SetVisibilityState((int)state);
+	}
+
+	[Command]
+	private void Cmd_SetVisibilityState(int state) {
+		Rpc_SetVisibilityState(state);
+	}
+
+	[ClientRpc]
+	private void Rpc_SetVisibilityState(int nState) {
+		VisibilityState state = (VisibilityState)nState;
+
+		UnitController localUnit = GameRules.Instance.GetLocalPlayer().unit;
+		if (state == VisibilityState.INVISIBLE && unit.SharesTeamWith(localUnit)) {
+			state = VisibilityState.VISIBLE_TO_TEAM_ONLY;
+		}
+
+		unit.body.SetVisibilityState(state); //Debug.Log("State: " + state.ToString());
 	}
 
 	// UNIT INFO
@@ -393,28 +461,6 @@ public class NetworkHelper : NetworkBehaviour {
 		return null;
 	}
 
-	private Transform GetBodyLocationTransform(BodyLocations bodyLoc, UnitController u) {
-		Transform trans;
-		switch (bodyLoc) {
-			case BodyLocations.HEAD:
-				trans = u.body.head.transform;
-				break;
-			case BodyLocations.MOUTH:
-				trans = u.body.mouth.transform;
-				break;
-			case BodyLocations.WEAPON:
-				trans = u.body.projectileSpawner.transform;
-				break;
-			case BodyLocations.FEET:
-				trans = u.body.feet.transform;
-				break;
-			default: // case BodyLocations.NONE:
-				trans = u.body.transform;
-				break;
-		}
-		return trans;
-	}
-
 	public void SyncTransform() {
 		smooth.forceStateSendNextFixedUpdate();
 		
@@ -432,10 +478,14 @@ public class NetworkHelper : NetworkBehaviour {
 			smooth.whenToUpdateTransform = SmoothSyncMirror.WhenToUpdateTransform.Update;
 	}
 
+
+
+
+
 	// SCENE MANAGEMENT
 
 	//public enum LoadAction { Load, Unload }
-   // bool isBusyLoadingScene = false;     // isBusy protects us from being overwhelmed by server messages to load several subscenes at once.
+	// bool isBusyLoadingScene = false;     // isBusy protects us from being overwhelmed by server messages to load several subscenes at once.
 
 	/*
     IEnumerator LoadUnloadScene(string sceneName, LoadAction loadAction)

@@ -38,7 +38,8 @@ public class FieldOfView : MonoBehaviour {
 	private bool forceFogUpdate = false;
 
 	public bool initialized = false;
-	public bool isAppQuitting = false;
+
+	private DayNightController dayNightController;
 
     void OnEnable() {
 		if (!initialized) {
@@ -46,16 +47,12 @@ public class FieldOfView : MonoBehaviour {
 			viewMeshFilter.mesh = viewMesh;
 			fogProjector = FindObjectOfType<FogProjector>();
 			unit = GetComponentInParent<UnitController>();
-			Application.quitting += OnAppQuitting;
 		}
 
-		GameRules.Instance.GetComponent<DayNightController>().onStartDay.AddListener( OnStartDay );
-		GameRules.Instance.GetComponent<DayNightController>().onStartNight.AddListener( OnStartNight );
+		dayNightController = GameRules.Instance.GetComponent<DayNightController>();
+		dayNightController.onStartDay.AddListener( OnStartDay );
+		dayNightController.onStartNight.AddListener( OnStartNight );
     }
-
-	private void OnAppQuitting() {
-		isAppQuitting = true;
-	}
 
 	void Start() {
 		obstacleMask = normalObstacleMask;
@@ -67,10 +64,9 @@ public class FieldOfView : MonoBehaviour {
 	}
 
 	private void OnDisable() {
-		if (!isAppQuitting) {
-			GameRules.Instance.GetComponent<DayNightController>().onStartDay.RemoveListener( OnStartDay );
-			GameRules.Instance.GetComponent<DayNightController>().onStartNight.RemoveListener( OnStartNight );
-		}
+		if (dayNightController == null) return;
+		dayNightController.onStartDay.RemoveListener( OnStartDay );
+		dayNightController.onStartNight.RemoveListener( OnStartNight );
 	}
 
 	void OnStartDay() {

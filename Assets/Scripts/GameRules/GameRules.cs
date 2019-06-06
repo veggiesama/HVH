@@ -12,6 +12,7 @@ public class GameRules : Singleton<GameRules> {
 	[HideInInspector]
 	public TeamFieldOfView teamFov;
 
+	public GameObject npcPrefab;
 	private GameObject playerPrefab;
 	private Player localPlayer;
 
@@ -31,7 +32,9 @@ public class GameRules : Singleton<GameRules> {
 		teamFov = GetComponentInChildren<TeamFieldOfView>();
 	}
 
+
 	// Use this for initialization
+	/*
 	void Start () {
 		GameObject[] editorOnlyObjects = GameObject.FindGameObjectsWithTag("EditorOnly");
 		foreach(GameObject obj in editorOnlyObjects) {
@@ -39,6 +42,22 @@ public class GameRules : Singleton<GameRules> {
 				//mesh.enabled = false;
 			}
 		}
+	}*/
+
+	public void SetupGame() {
+		Debug.Log("Trying to spawn players.");
+		SpawnUnassignedPlayers();
+
+		Debug.Log("Trying to spawn NPCs.");
+		SpawnNPCs();
+	}
+
+	public void SpawnNPCs() {
+		Transform spawnLoc = GetRandomPointOfInterest();
+		GameObject npc = Instantiate(npcPrefab, spawnLoc.position, spawnLoc.rotation);
+		NetworkServer.Spawn(npc);
+		//npc.GetComponent<NetworkIdentity>().AssignClientAuthority(NetworkServer.localConnection);
+		//npc.SetTeam();
 	}
 
 	public void SpawnUnassignedPlayers() {
@@ -119,8 +138,13 @@ public class GameRules : Singleton<GameRules> {
 	public static Transform GetRandomSpawnPoint() {
 		GameObject[] allSpawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
 		int rng = Random.Range(0, allSpawnPoints.Length);
-
 		return allSpawnPoints[rng].transform;
+	}
+
+	public static Transform GetRandomPointOfInterest() {
+		GameObject[] allPOIs = GameObject.FindGameObjectsWithTag("Point of Interest");
+		int rng = Random.Range(0, allPOIs.Length);
+		return allPOIs[rng].transform;
 	}
 
 	public void SetLocalPlayer(Player player) {
@@ -143,5 +167,7 @@ public class GameRules : Singleton<GameRules> {
 	public MonsterSlotsToPlayerID_SyncDictionary GetMonsterTeamDictionary() {
 		return networkGameRules.monsterDictionary;
 	}
+
+
 
 }

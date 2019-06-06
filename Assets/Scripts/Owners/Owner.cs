@@ -6,11 +6,12 @@ using UnityEngine.EventSystems;
 using Mirror;
 
 public class Owner : NetworkBehaviour {
-	public UnitController unit;
-	[SyncVar, SerializeField] protected int team;
-	public NetworkHelper networkHelper;
+	[HideInInspector] public UnitController unit;
+	[HideInInspector] public NetworkHelper networkHelper;
+	[SyncVar] protected int team;
 
-	public void Awake() {
+	public virtual void Awake() {
+		unit = GetComponentInChildren<UnitController>();
 		networkHelper = GetComponent<NetworkHelper>();
 	}
 
@@ -21,7 +22,11 @@ public class Owner : NetworkBehaviour {
 	public void SetTeam(Teams team) {
 		this.team = (int) team;
 
-		if (team == Teams.DWARVES) {
+		if (!unit.IsPlayerOwned()) {
+			networkHelper.SetUnitInfo("Dummy NPC");
+		}
+
+		else if (team == Teams.DWARVES) {
 			networkHelper.SetUnitInfo("Dwarf");
 		}
 		else if (team == Teams.MONSTERS) {

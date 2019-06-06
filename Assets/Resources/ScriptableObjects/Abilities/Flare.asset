@@ -18,6 +18,8 @@ MonoBehaviour:
   enemyTarget: {fileID: 0}
   unitInfo: {fileID: 0}
   abilityManager: {fileID: 0}
+  networkHelper: {fileID: 0}
+  player: {fileID: 0}
   targetType: 4
   targetTeam: 2
   damageType: 0
@@ -29,13 +31,24 @@ MonoBehaviour:
   aoeRadius: 4
   quickCast: 0
   doNotCancelOrderQueue: 0
+  durationRemaining: 0
   projectilePrefab: {fileID: 0}
+  projectileSpawner: 0
+  projectileBehaviour: 0
   projectileSpeed: 0
   projectileTimeAlive: 0
+  projectileTimeUntilFullGrowth: 0
+  projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
   aoeGeneratorPrefab: {fileID: 2635110162860501582, guid: 048b36c36f0f2ab428f5cef029e931c4,
     type: 3}
+  aoeGeneratorParticlePrefab: {fileID: 359356768983722974, guid: 3f42102e23652b64d9cc7584f4f7d7a2,
+    type: 3}
   reappliesEvery: 3
+  delay: 2
+  destroysTrees: 1
   statusEffects:
   - {fileID: 11400000, guid: 05fe61df5a953a048818baed427f37bf, type: 2}
   - {fileID: 11400000, guid: a2c024c32d1d9ad48b525321e3c76286, type: 2}
+  particleLaunch: {fileID: 1980084233810151752, guid: 22fac6d5d85f0934d80308b63a96d7d8,
+    type: 3}

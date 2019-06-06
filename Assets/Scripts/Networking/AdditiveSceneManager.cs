@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using Mirror;
+using UnityEngine.Events;
 
 public class AdditiveSceneManager : MonoBehaviour {
 
@@ -13,11 +14,14 @@ public class AdditiveSceneManager : MonoBehaviour {
 	[HideInInspector]
 	public bool gameplayScenesInitialized = false;
 
+	public UnityEvent OnGameplayerScenesInitialized;
+
 	public void Awake() {
 		 //DontDestroyOnLoad(this.gameObject);
 	}
 
 	// EVENT HANDLERS
+	/*
 	public delegate void OnGameplayScenesInitializedDelegate();
 	public event OnGameplayScenesInitializedDelegate OnGameplayScenesInitializedEventHandler;
 
@@ -25,7 +29,7 @@ public class AdditiveSceneManager : MonoBehaviour {
 		if (OnGameplayScenesInitializedEventHandler != null) {
 			OnGameplayScenesInitializedEventHandler();	
 		}
-	}
+	}*/
 
 	public void Start() {
 		initializerScene = SceneManager.GetActiveScene();
@@ -73,7 +77,7 @@ public class AdditiveSceneManager : MonoBehaviour {
 		gameplayScenesInitialized = true;
 		EnableMainMenu(false);
 		Debug.Log("All gameplay scenes initialized.");
-		OnGameplayScenesInitialized();
+		OnGameplayerScenesInitialized.Invoke();
 	}
 
 	public bool AreAllScenesLoaded(AsyncOperation[] asyncOps) {

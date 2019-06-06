@@ -1,4 +1,5 @@
 ﻿using Tree = HVH.Tree;
+using Outline = cakeslice.Outline;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,9 +17,17 @@ public class BodyController : MonoBehaviour {
 	[HideInInspector] public GameObject mouth;
 	[HideInInspector] public GameObject feet;
 	[HideInInspector] public Renderer[] bodyMeshes;
+	private Outline[] outlineScripts;
+	private VisibilityState localVisibilityState;
+
+	[HideInInspector] public Material[] originalBodyMeshMaterials;
+	[HideInInspector] public Color[] originalBodyMeshColors;
 	[HideInInspector] public FieldOfView fov;
 
-	private bool isVisible = true;
+	[HideInInspector] public Material invisMaterial;
+	[HideInInspector] public Color[] fadeColors;
+
+	//private bool isVisible = true;
 	private Vector3 lastPosition = Vector3.zero;
 	private float updateAnimationSpeedFloatEvery = 0.1f;
 
@@ -43,8 +52,10 @@ public class BodyController : MonoBehaviour {
 		unit = GetComponentInParent<UnitController>();
 		rb = GetComponent<Rigidbody>();
 		fov = GetComponentInChildren<FieldOfView>();
+		invisMaterial = unit.GetComponent<UnitMaterials>().invisibility;
 
-		InvokeRepeating("UpdateAnimationSpeedFloat", 0f, updateAnimationSpeedFloatEvery);
+		StartCoroutine( UpdateAnimationSpeedFloat() );
+		//InvokeRepeating("UpdateAnimationSpeedFloat", 0f, updateAnimationSpeedFloatEvery);
 	}
 
 	public void ResetAnimator() {
@@ -60,22 +71,58 @@ public class BodyController : MonoBehaviour {
 		mouth = finder.mouth;
 		feet = finder.feet;
 		bodyMeshes = finder.bodyMeshes;
+		
+		// NOTE: assumes only 1 material per body mesh
+		originalBodyMeshMaterials = new Material[bodyMeshes.Length];
+		originalBodyMeshColors = new Color[bodyMeshes.Length];
+		outlineScripts = new Outline[bodyMeshes.Length];
+		fadeColors = new Color[bodyMeshes.Length];
+
+		for (int i = 0; i < bodyMeshes.Length; i++) {
+			outlineScripts[i] = bodyMeshes[i].GetComponent<Outline>();
+			originalBodyMeshMaterials[i] = bodyMeshes[i].material;
+			originalBodyMeshColors[i] = bodyMeshes[i].material.color;
+			fadeColors[i] = Util.CreateFadedColor(bodyMeshes[i].material.color);
+		}
+
 	}
 
 	private void FixedUpdate() {
 		if (unit.IsMouseLooking()) {
-			Vector3 mousePosition = unit.GetPlayer().GetMouseLocationToGround();
+			Vector3 mousePosition = unit.player.GetMouseLocationToGround();
 			unit.body.FixedUpdate_ForceTurn(mousePosition);
 		}
 	}
 
+	/*
 	private void UpdateAnimationSpeedFloat() {
 		if (anim == null) return;
 
 		float speed = ((transform.position - lastPosition).magnitude) / Time.deltaTime;
 		lastPosition = transform.position;
 		anim.SetFloat("speed", speed);
+
+		if (speed > 0) {
+			unit.onMoved.Invoke();
+		}
 	}
+	*/
+
+	IEnumerator UpdateAnimationSpeedFloat() {
+		while (true) {
+			yield return new WaitForSeconds(updateAnimationSpeedFloatEvery);
+			if (anim == null) continue;
+
+			float speed = ((transform.position - lastPosition).magnitude) / Time.deltaTime;
+			lastPosition = transform.position;
+			anim.SetFloat("speed", speed);
+
+			if (speed > 0) {
+				unit.onMoved.Invoke();
+			}
+		}
+	}
+
 
 	// performances
 	public void PerformDeath(Vector3 killedFromDirection) {
@@ -144,21 +191,102 @@ public class BodyController : MonoBehaviour {
 		return Quaternion.Angle(transform.rotation, wantedRotation) < Constants.FrontAngle;
 	}
 
-	public void SetVisibility(bool enable) {
-		if (anim != null) {
-			foreach (Renderer bodyMesh in bodyMeshes) {
-				bodyMesh.enabled = enable;
+	public void SetVisibilityState(VisibilityState state) {
+		if (anim == null) return;
+
+		localVisibilityState = state;
+
+		UnitController localUnit = GameRules.Instance.GetLocalPlayer().unit;
+		UnitController localEnemyTarget = localUnit.GetTarget(AbilityTargetTeams.ENEMY);
+
+		if (state == VisibilityState.VISIBLE && localUnit.IsForgottenTarget(unit)) {
+			localUnit.RememberTarget();
+		}
+
+		if (state == VisibilityState.INVISIBLE && unit == localEnemyTarget) {
+			localUnit.ForgetTarget();
+		}
+
+		for (int i = 0; i < bodyMeshes.Length; i++) {
+			Renderer rend = bodyMeshes[i];
+
+			switch (state) {
+
+				case VisibilityState.VISIBLE:
+					bodyMeshes[i].enabled = true;
+					outlineScripts[i].enabled = true;
+					rend.material = originalBodyMeshMaterials[i];
+					if (rend.material.HasProperty("_Color")) {
+						rend.material.color = originalBodyMeshColors[i];
+					}
+
+					break;
+
+				case VisibilityState.VISIBLE_TO_TEAM_ONLY:
+					bodyMeshes[i].enabled = true;
+					outlineScripts[i].enabled = false;
+					rend.material = invisMaterial;
+					break;
+
+				case VisibilityState.FADING:
+					bodyMeshes[i].enabled = true;
+					outlineScripts[i].enabled = true;
+					rend.material = originalBodyMeshMaterials[i];
+					if (rend.material.HasProperty("_Color")) {
+						rend.material.color = fadeColors[i];
+					}
+					break;
+
+				case VisibilityState.INVISIBLE:
+					bodyMeshes[i].enabled = false;
+					outlineScripts[i].enabled = false;
+					break;
+
 			}
-			isVisible = enable;
-			//anim.gameObject.SetActive(enable);
+
+		}
+
+	}
+
+	public void AppearInFOV(bool enable) {
+		UnitController localUnit = GameRules.Instance.GetLocalPlayer().unit;
+		if (unit.SharesTeamWith(localUnit)) return;
+		
+		if (enable) {
+			if (!unit.HasStatusEffect(StatusEffectTypes.INVISIBLE) || unit.HasStatusEffect(StatusEffectTypes.REVEALED)) {
+				SetVisibilityState(VisibilityState.VISIBLE);
+			}
+		}
+
+		else {
+			SetVisibilityState(VisibilityState.INVISIBLE);
 		}
 	}
 
 	public bool IsVisible() {
-		if (anim != null) 
-			return isVisible;
-		else
-			return false;
+		return (localVisibilityState != VisibilityState.INVISIBLE);
 	}
+
+	public void ApplyMaterial(Material mat) {
+		foreach (Renderer rend in bodyMeshes) {
+			rend.material = mat;
+		}
+	}
+
+	public void ResetMaterial() {
+		for (int i = 0; i < bodyMeshes.Length; i++) {
+			bodyMeshes[i].material = originalBodyMeshMaterials[i];
+		}
+	}
+
+	public void SetColor(Color color) {
+		for (int i = 0; i < bodyMeshes.Length; i++) {
+			bodyMeshes[i].material.color = color;
+			originalBodyMeshColors[i] = color;
+			fadeColors[i] = Util.CreateFadedColor(color);
+		}
+	}
+
+
 
 }

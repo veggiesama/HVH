@@ -5,22 +5,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class UnitController : MonoBehaviour {
 	[HideInInspector] public BodyController body;
 	[HideInInspector] public NavMeshAgent agent;
 	[HideInInspector] public NetworkHelper networkHelper;
 	[HideInInspector] public Player player;
+	[HideInInspector] public Owner owner;
 
 	private Camera faceCam; 
 	private UnitController currentFriendlyTarget, currentEnemyTarget, forgottenEnemyTarget;
 	private OrderQueue orderQueue;
 	private StatusEffectManager statusEffectManager;
 	private AbilityManager abilityManager;
-	private MeshRenderer targetFriendlyStand, targetEnemyStand;
+	private Projector targetProjector;
+	private UnitMaterials unitMaterials;
 	private FieldOfView fov;
 
 	public UnitInfo unitInfo;
+
+	[HideInInspector] public UnityEventDamage onTakeDamage;
+	[HideInInspector] public UnityEvent onMoved;
+	[HideInInspector] public UnityEvent onCastAbility;
 
 	/*
 	public static explicit operator UnitController(GameObject v)
@@ -36,28 +43,23 @@ public class UnitController : MonoBehaviour {
 		body = GetComponentInChildren<BodyController>();
 		agent = body.GetComponent<NavMeshAgent>();
 		faceCam = GetComponentInChildren<Camera>(true);
-		player = GetComponentInParent<Player>();
-		networkHelper = player.GetComponent<NetworkHelper>();
-
-		abilityManager = GetComponentInChildren<AbilityManager>();
-		orderQueue = GetComponentInChildren<OrderQueue>();
-		statusEffectManager = GetComponentInChildren<StatusEffectManager>();
+		owner = GetComponentInParent<Owner>();
+		networkHelper = owner.GetComponent<NetworkHelper>();
+		abilityManager = GetComponent<AbilityManager>();
+		orderQueue = GetComponent<OrderQueue>();
+		statusEffectManager = GetComponent<StatusEffectManager>();
 		fov = GetComponentInChildren<FieldOfView>(true);
+		unitMaterials = GetComponent<UnitMaterials>();
+		targetProjector = transform.Find("Body/FX/Single Targeting projector").GetComponent<Projector>();
 
-		targetFriendlyStand = transform.Find("Body/FX/Target friendly stand").GetComponent<MeshRenderer>();
-		targetEnemyStand = transform.Find("Body/FX/Target enemy stand").GetComponent<MeshRenderer>();
+		if (owner is Player) {
+			player = (Player) owner;
+		}
 
-		// sniper = 0.135s to turn 180 degrees, or 1350 degrees/sec
-		// NS = 0.188s to turn 180 degrees, or 960 degrees/sec
 		SetTargetCamera(false, AbilityTargetTeams.ENEMY);
 	}
 
-	// UPDATE
-	//private void Update () {}
-	//private void FixedUpdate() {}
-
 	// ORDERS
-
 	public void MoveTo(Vector3 destination) {
 		if (IsOrderRestricted()) return;
 		MoveToPosition moveOrder = ScriptableObject.CreateInstance<MoveToPosition>();
@@ -84,13 +86,13 @@ public class UnitController : MonoBehaviour {
 			//Debug.Log("Order restricted.");
 			return;
 		}
+
 		if (!HasAbilityInSlot(slot)) {
 			Debug.Log("No ability in slot.");
 			return;
 		}
 
 		Ability ability = GetAbilityInSlot(slot);
-		Player player = GetPlayer();
 
 		if (!ability.IsCooldownReady()) {
 			//Debug.Log("Cooldown not ready.");
@@ -103,13 +105,10 @@ public class UnitController : MonoBehaviour {
 			return;
 		}
 
-		if (!ability.quickCast && !player.IsMouseTargeting() && ability.targetType != AbilityTargetTypes.UNIT) {
+		if (/*IsPlayerOwned() && */!ability.quickCast && !player.IsMouseTargeting() && ability.targetType != AbilityTargetTypes.UNIT) {
 			player.SetMouseTargeting(true, ability, slot);
 			return;
 		}
-
-		//if (player.IsMouseTargeting())
-		//	player.SetMouseTargeting(false);
 
 		Order castOrder;
 		switch (ability.targetType)
@@ -125,7 +124,6 @@ public class UnitController : MonoBehaviour {
 			case AbilityTargetTypes.UNIT:
 
 				UnitController enemy;
-				// TODO: not working?
 				if (currentEnemyTarget != null) {
 					enemy = currentEnemyTarget;
 				}
@@ -232,9 +230,11 @@ public class UnitController : MonoBehaviour {
 
 	private void ShowTargetStand(bool enable, AbilityTargetTeams targetTeam) {
 		if (targetTeam == AbilityTargetTeams.ALLY)
-			targetFriendlyStand.enabled = enable;
+			targetProjector.material = unitMaterials.allyTarget;
 		else
-			targetEnemyStand.enabled = enable;
+			targetProjector.material = unitMaterials.enemyTarget;
+
+		targetProjector.enabled = enable;
 	}
 	
 	private void SetTargetCamera(bool enable, AbilityTargetTeams targetTeam) {
@@ -261,12 +261,7 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public Teams GetTeam() {
-		return GetPlayer().GetTeam();
-	}
-
-	public Player GetPlayer() {
-		return player;
-		//return transform.parent.GetComponent<Player>();
+		return owner.GetTeam();
 	}
 
 	public Vector3 GetBodyPosition() {
@@ -333,6 +328,8 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public void AttachToNav() {
+		if (HasStatusEffect(StatusEffectTypes.DEAD)) return;
+
 		NavMesh.SamplePosition(GetBodyPosition(), out NavMeshHit hit, 100f, -1);
 		body.transform.position = hit.position;
 		Debug.DrawLine(GetBodyPosition(), hit.position, Color.cyan, 3.0f);
@@ -341,7 +338,8 @@ public class UnitController : MonoBehaviour {
 		agent.updatePosition = true;
 		agent.updateRotation = true;
 
-		networkHelper.SyncTransform();
+		//networkHelper.SyncTransform();
+		networkHelper.SyncTeleport();
 
 		if (!agent.isOnNavMesh) {
 			Debug.Log("Unit fell off map.");
@@ -364,8 +362,12 @@ public class UnitController : MonoBehaviour {
 		return HasStatusEffect(StatusEffectTypes.AIRBORN);
 	}
 
-	public bool HasStatusEffect(StatusEffectTypes status) {
-		return statusEffectManager.HasStatusEffect(status);
+	public bool HasStatusEffect(StatusEffectTypes statusType) {
+		return statusEffectManager.HasStatusEffect(statusType);
+	}
+
+	public bool HasStatusEffect(StatusEffect status) {
+		return HasStatusEffect(status.statusName);
 	}
 
 	public bool HasStatusEffect(string name) {
@@ -391,6 +393,10 @@ public class UnitController : MonoBehaviour {
 		statusEffectManager.Remove(statusName);
 	}
 
+	public void RemoveStatusEffect(StatusEffect status) {
+		RemoveStatusEffect(status.statusName);
+	}
+
 	public float GetStatusEffectDuration(StatusEffectTypes statusType) {
 		return statusEffectManager.GetStatusEffect(statusType).duration;
 	}
@@ -401,6 +407,14 @@ public class UnitController : MonoBehaviour {
 
 	public Order GetCurrentOrder() {
 		return orderQueue.GetCurrentOrder();
+	}
+
+	public OrderTypes GetCurrentOrderType() {
+		Order order = GetCurrentOrder();
+		if (order != null)
+			return order.orderType;
+		else
+			return OrderTypes.NONE;
 	}
 	
 	public bool HasAbilityInSlot(AbilitySlots slot) {
@@ -460,7 +474,9 @@ public class UnitController : MonoBehaviour {
 
 	public void ReloadAbilities() {
 		abilityManager.LoadAbilities();
-		player.uiController.ResetButtons();
+
+		if (IsPlayerOwned())
+			player.uiController.ResetButtons();
 	}
 
 	public void SetHealth(float newHealthValue) {
@@ -477,10 +493,7 @@ public class UnitController : MonoBehaviour {
 			SetTurnRate(unitInfo.turnRate);
 			abilityManager.Initialize();
 			body.ResetAnimator();
-
-			for (int i = 0; i < body.bodyMeshes.Length; i++) {
-				body.bodyMeshes[i].material.color = unitInfo.bodyColor;
-			}
+			body.SetColor(unitInfo.bodyColor);
 
 			fov.dayViewRadius = unitInfo.daySightRange;
 			fov.nightViewRadius = unitInfo.nightSightRange;
@@ -500,7 +513,7 @@ public class UnitController : MonoBehaviour {
 
 	public void EnableVision(bool enable) {
 		fov.gameObject.SetActive(enable);
-		body.SetVisibility(enable);
+		body.AppearInFOV(enable);
 	}
 
 	public void SetVision(VisionType vision) {
@@ -550,5 +563,21 @@ public class UnitController : MonoBehaviour {
 					break;
 			}
 		}
+	}
+
+	public void DealDamageTo(UnitController targetUnit, int dmg) {
+		networkHelper.DealDamageTo(targetUnit, dmg);
+	}
+
+	public void OnTakeDamage(int dmg) {
+		onTakeDamage.Invoke(dmg);
+	}
+
+	public void SetVisibilityState(VisibilityState state) {
+		networkHelper.SetVisibilityState(state);
+	}
+
+	public bool IsPlayerOwned() {
+		return (player != null);
 	}
 }

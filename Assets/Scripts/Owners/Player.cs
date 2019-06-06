@@ -12,7 +12,7 @@ public class Player : Owner {
 
 	//public ControlScheme controlScheme;
 	public UIController uiController;
-	public GameObject camObject;
+	public Camera cam;
 	private MouseTargeter mouseTargeter;
 
 	//public bool isNPC = false; // inspector
@@ -25,13 +25,17 @@ public class Player : Owner {
 	}
 
 	public override void OnStartLocalPlayer() {
-		mouseTargeter = GetComponent<MouseTargeter>();
 		if (isLocalPlayer) {
 			GameRules.Instance.SetLocalPlayer(this);
 			EnableLocalPlayerOnlyObjects(true);
 			UpdateTeamVision();
 			TeamFieldOfView.Instance.Initialize((Teams)team);
 		}
+	}
+
+	public override void Awake() {
+		base.Awake();
+		mouseTargeter = GetComponent<MouseTargeter>();
 	}
 
 	// Update is called once per frame. Use for input. Physics unstable.
@@ -168,7 +172,6 @@ public class Player : Owner {
 	}
 
 	public Vector3 GetMouseLocationToGround() {
-		if (networkHelper.isUnassigned) return mouseTargeter.GetNPCLocationToGround();
 		return mouseTargeter.GetMouseLocationToGround();
 	}
 

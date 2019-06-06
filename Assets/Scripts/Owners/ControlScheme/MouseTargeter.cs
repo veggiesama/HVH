@@ -6,7 +6,7 @@ using UnityEngine;
 using Mirror;
 
 public class MouseTargeter : MonoBehaviour {
-	public Camera cam;
+	private Camera cam;
  	private Player player;
 
 	public Texture2D normalCursor = null;
@@ -17,20 +17,15 @@ public class MouseTargeter : MonoBehaviour {
 	[HideInInspector] public Ability storedAbility;
 	private bool targetingEnabled = false;
 	private Tree lastTree;
-
-	#pragma warning disable 0649
 	private UnitController lastUnit; 
 
-	// Start is called before the first frame update
-    void Start()
-    {
+    void Awake() {
         player = GetComponent<Player>();
-		cam = player.camObject.GetComponent<Camera>();
+		cam = player.cam;
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
 		if (IsTargetingEnabled())
 			DoTargetCheckingAtMouseCursor();
     }
@@ -117,31 +112,13 @@ public class MouseTargeter : MonoBehaviour {
 	}
 
 	public Vector3 GetMouseLocationToGround() {
-		int layerMask = (int)LayerMasks.TERRAIN; //LayerMask.GetMask("Terrain"); // 1 << (int)Layers.GROUND;
+		int layerMask = (int)LayerMasks.TERRAIN;
 		Ray ray = (Ray)cam.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out RaycastHit hit, Constants.RaycastLength, layerMask)) {
 			return hit.point;
 		} 
-		/*else {
-			Plane navPlane = new Plane(Vector3.up, new Vector3(0, 20f, 0));
-			if (navPlane.Raycast(ray, out float enter)) {
-				Vector3 hitPoint = ray.GetPoint(enter);
-				Debug.DrawLine(hitPoint, (hitPoint + Vector3.up) * 2f, Color.green, 3.0f);
-			}
-
-			//NavMesh.SamplePosition(new Vector3(ray., 20f, z))
-		}*/
-
 
 		return Util.GetNullVector();
-	}
-
-	public Vector3 GetNPCLocationToGround() {
-		RaycastHit hit;
-		Vector3 rngOrigin = Util.GetRandomVectorAround(player.unit, 10.0f);
-		int layerMask = LayerMask.GetMask("Terrain");
-		Physics.Raycast(rngOrigin, Vector3.down, out hit, 100f, layerMask);
-		return hit.point;
 	}
 
 	public void SetMouseTargeting(bool enable, Ability ability = null, AbilitySlots slot = AbilitySlots.NONE) {
@@ -152,7 +129,9 @@ public class MouseTargeter : MonoBehaviour {
 				Cursor.visible = false;
 				DoAreaChecking(); // force it to move before revealing
 				areaProjector.orthographicSize = ability.aoeRadius;
-				areaProjector.gameObject.SetActive(true);
+				//areaProjector.gameObject.SetActive(true);
+				areaProjector.enabled = true;
+
 			}
 			else
 				Cursor.SetCursor(targetCursor, new Vector2(targetCursor.width/2, targetCursor.height/2), CursorMode.Auto);
@@ -166,7 +145,8 @@ public class MouseTargeter : MonoBehaviour {
 		else {
 			Cursor.visible = true;
 			Cursor.SetCursor(normalCursor, Vector2.zero, CursorMode.Auto);
-			areaProjector.gameObject.SetActive(false);
+			//areaProjector.gameObject.SetActive(false);
+			areaProjector.enabled = false;
 
 			targetingEnabled = false;
 			storedSlot = AbilitySlots.NONE;

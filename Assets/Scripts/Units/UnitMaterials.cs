@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class UnitMaterials : MonoBehaviour
 {
-	[Header("Materials")]
+	[Header("Reticules")]
+	public Material allyTarget;
+	public Material enemyTarget;
+
+	[Header("Body")]
 	public Material invisibility;
 }

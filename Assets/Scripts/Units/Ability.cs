@@ -9,15 +9,17 @@ public abstract class Ability : ScriptableObject {
 	[HideInInspector] public UnitInfo unitInfo;
 	[HideInInspector] public AbilityManager abilityManager;
 	[HideInInspector] public NetworkHelper networkHelper;
-	[HideInInspector] public Player player;
+	//[HideInInspector] public Player player;
+	[HideInInspector] public Owner owner;
 	//[HideInInspector] public Vector3 targetLocation;
 	protected bool isEmptyAbility = false;
 	protected Order castOrder;
 
-	public AbilityTargetTypes targetType;
-	public AbilityTargetTeams targetTeam;
-	public DamageTypes damageType;
-	public float damage = 0;
+	public bool isPassive = false;
+	public AbilityTargetTypes targetType = AbilityTargetTypes.NONE;
+	public AbilityTargetTeams targetTeam = AbilityTargetTeams.NONE;
+	public DamageTypes damageType = DamageTypes.NONE;
+	public int damage = 0;
 	public float cooldown = 0;
 	public float castRange = 0;
 	public float castTime = 0; 
@@ -46,12 +48,24 @@ public abstract class Ability : ScriptableObject {
 		//this.Ability = obj.GetComponentInChildren<Ability>();
 		this.abilityManager = obj.GetComponent<AbilityManager>();
 		this.caster = obj.GetComponentInParent<UnitController>();
-		this.player = obj.GetComponentInParent<Player>();
-		this.networkHelper = player.GetComponent<NetworkHelper>();
+		this.owner = obj.GetComponentInParent<Owner>();
+		//this.player = obj.GetComponentInParent<Player>();
+		this.networkHelper = owner.GetComponent<NetworkHelper>();
+
+		caster.onCastAbility.AddListener(OnCastAbility);
+		caster.onMoved.AddListener(OnMoved);
+		caster.onTakeDamage.AddListener(OnTakeDamage);
 	}
 
-	public virtual void Learn() {}
-	public virtual void Unlearn() {}
+	public virtual void OnDisable() {
+		if (caster == null) return;
+		caster.onCastAbility.RemoveListener(OnCastAbility);
+		caster.onMoved.RemoveListener(OnMoved);
+		caster.onTakeDamage.RemoveListener(OnTakeDamage);
+	}
+
+	public virtual void OnLearn() {}
+	public virtual void OnUnlearn() {}
 
 	public virtual void Update() {
 		if (cooldownTimeRemaining > 0) 
@@ -96,6 +110,13 @@ public abstract class Ability : ScriptableObject {
 	}
 
 	protected virtual void OnDurationEnd() {}
+	protected virtual void OnCastAbility() {}
+	protected virtual void OnTakeDamage(int dmg) {}
+	protected virtual void OnMoved() {}
+
+	public void SetCooldown(float sec) {
+		cooldownTimeRemaining = sec;
+	}
 
 	public float GetCooldown() {
 		return cooldownTimeRemaining;
@@ -115,6 +136,10 @@ public abstract class Ability : ScriptableObject {
 
 	public virtual void InstantiateParticle(GameObject prefab, UnitController unit, BodyLocations loc, float duration = 0f) {
 		networkHelper.InstantiateParticle(prefab, unit, loc, duration);
+	}
+
+	public virtual void InstantiateParticle(GameObject prefab, Vector3 location, Quaternion rotation, float duration = 0f) {
+		networkHelper.InstantiateParticle(prefab, location, rotation, duration);
 	}
 }
  

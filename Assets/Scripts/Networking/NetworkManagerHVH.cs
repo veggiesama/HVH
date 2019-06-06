@@ -15,7 +15,8 @@ public class NetworkManagerHVH : NetworkManager {
 
 	public override void Awake() {
 		base.Awake();
-		sceneManager.OnGameplayScenesInitializedEventHandler += OnGameplayScenesInitialized;
+		//sceneManager.OnGameplayScenesInitializedEventHandler += OnGameplayScenesInitialized;
+		sceneManager.OnGameplayerScenesInitialized.AddListener(OnGameplayScenesInitialized);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,12 +73,12 @@ public class NetworkManagerHVH : NetworkManager {
 	}
 
 	public override void OnServerConnect(NetworkConnection conn) {
+		Debug.Log("OnServerConnect Is ready: " + conn.isReady);
 		Debug.Log("A client connected to the server: " + conn);
     }
 
     public override void OnServerReady(NetworkConnection conn) {
-		base.OnServerReady(conn);
-		//NetworkServer.SetClientReady(conn);
+		//base.OnServerReady(conn);
 		StartCoroutine( WaitServerReady(conn) );
     }
 
@@ -156,10 +157,8 @@ public class NetworkManagerHVH : NetworkManager {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public void OnGameplayScenesInitialized() {
-
 		if (isServer) {
-			Debug.Log("Trying to spawn players.");
-			GameRules.Instance.SpawnUnassignedPlayers();
+			GameRules.Instance.SetupGame();
 		}
 	}
 
@@ -169,12 +168,25 @@ public class NetworkManagerHVH : NetworkManager {
 		}
 
 		Debug.Log("Assigning client to next available player slot.");
-		
 		Player player = GameRules.Instance.GetNextUnassignedPlayer();
 		player.GetComponent<NetworkHelper>().isUnassigned = false;
 
+		NetworkIdentity playerNetId = player.GetComponent<NetworkIdentity>();
+
+		if (playerNetId.clientAuthorityOwner != null)
+			playerNetId.RemoveClientAuthority(NetworkServer.localConnection);
+
 		GameObject playerGO = player.gameObject;
 		NetworkServer.AddPlayerForConnection(conn, playerGO);
+
+		// explicitly grant client authority to host (fixes Smooth Sync not syncing server-caused forced movement)
+		if (conn == NetworkServer.localConnection) {
+			foreach (Player p in GameRules.Instance.GetAllPlayers()) {
+				p.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
+			}
+		}
+
+		NetworkServer.SetClientReady(conn);
 	}
 
 	IEnumerator WaitClientConnect(NetworkConnection conn) {

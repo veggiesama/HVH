@@ -1,4 +1,4 @@
-Plugin Version: 3.21
+Plugin Version: 3.22
 Unity Version: 5.3.* - 2019 1.*
 
 # Smooth Sync

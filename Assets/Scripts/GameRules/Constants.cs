@@ -11,6 +11,9 @@ public static class Constants {
 
 	public static int DwarvesTotal = 4;
 	public static int MonstersTotal = 1;
+
+	public static Color AllyColor = Color.green;
+	public static Color EnemyColor = Color.red;
 }
 
 // Projectile types
@@ -77,7 +80,7 @@ public enum OrderTypes {
 
 public enum StatusEffectTypes {
 	BLINDED, DEAD, INVISIBLE, IMMOBILIZED, STUNNED, SLOWED, SILENCED, AIRBORN, REVEALED, WELL_FED, INVULNERABLE, RESISTANT,
-	SHARE_VISION, ORDER_RESTRICTED
+	SHARE_VISION, ORDER_RESTRICTED, BUFF_DISPELLABLE, BUFF_NOTDISPELLABLE
 }
 
 public enum AirbornClippingTypes {
@@ -95,6 +98,18 @@ public enum VisionType {
 
 public enum HighlightingState {
 	NONE, NORMAL, INTEREST, ENEMY
+}
+
+public enum VisibilityState {
+	VISIBLE, VISIBLE_TO_TEAM_ONLY, FADING, INVISIBLE
+}
+
+public enum Desire {
+	NONE = 0,
+	LOW = 25,
+	MEDIUM = 50,
+	HIGH = 75,
+	MAX = 100
 }
 
 // returns the screen position for ally and enemy viewports

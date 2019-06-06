@@ -2029,22 +2029,22 @@ PrefabInstance:
     - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: -10.192234
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 6.272144
+      value: 9.729467e+15
       objectReference: {fileID: 0}
     - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 1.5e-44
+      value: 5.59e-43
       objectReference: {fileID: 0}
     - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: 0
+      value: 7.9876556e+15
       objectReference: {fileID: 0}
     - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
@@ -4561,7 +4561,7 @@ MonoBehaviour:
   serverOnly: 0
   localPlayerAuthority: 0
   m_AssetId: 
-  m_SceneId: 4219363314
+  m_SceneId: 1422914638
 --- !u!114 &1086035108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4576,6 +4576,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkGameRules: {fileID: 0}
   teamFov: {fileID: 0}
+  npcPrefab: {fileID: 1149659272418656, guid: ef04114d3cb7c934aa1845189f8336b8, type: 3}
 --- !u!4 &1086035109
 Transform:
   m_ObjectHideFlags: 0

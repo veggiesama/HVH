@@ -23,8 +23,10 @@ public class NetworkGameRules : NetworkBehaviour {
 		if (isServer) return;
 		dwarfDictionary.Callback += OnDwarfTeamChange;
 		monsterDictionary.Callback += OnMonsterTeamChange;
+	}
 
-		Cmd_SyncToServerDayNight();
+	private void Start() {
+		//Cmd_SyncToServerDayNight();
 	}
 
 

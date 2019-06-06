@@ -4,12 +4,13 @@ using UnityEngine;
 
 public abstract class StatusEffect : ScriptableObject {
 
-	public string statusName;
-	public StatusEffectTypes type;
+	public string statusName = "None";
+	public StatusEffectTypes type = StatusEffectTypes.WELL_FED;
 
-	public float duration;
-	public bool hideIcon;
-	public bool dispellable;
+	public float duration = 0f;
+	public bool overrideAbilityDuration = false;
+	public bool hideIcon = false;
+	public bool dispellable = false;
 	
 	[Header("Runtime")]
 	public bool applied;
@@ -28,6 +29,9 @@ public abstract class StatusEffect : ScriptableObject {
 		this.networkHelper = obj.GetComponentInParent<NetworkHelper>();
 		this.unit = obj.GetComponentInParent<UnitController>();
 		this.ability = ability;
+
+		if (ability != null && !overrideAbilityDuration)
+			this.duration = ability.duration;
 	}
 	
 	public virtual void Apply() {
@@ -49,7 +53,7 @@ public abstract class StatusEffect : ScriptableObject {
 		}
 	}
 
-	public abstract void FixedUpdate();
+	public virtual void FixedUpdate() {}
 
 	// by default, duration resets but nothing else carries over
 	// TODO: could be more granular depending on the type of effect, counts, inflictor, etc.

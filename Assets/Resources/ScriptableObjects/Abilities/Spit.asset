@@ -20,10 +20,11 @@ MonoBehaviour:
   abilityManager: {fileID: 0}
   networkHelper: {fileID: 0}
   player: {fileID: 0}
+  isPassive: 0
   targetType: 1
   targetTeam: 2
   damageType: 1
-  damage: 30
+  damage: 50
   cooldown: 1
   castRange: 10
   castTime: 0.3

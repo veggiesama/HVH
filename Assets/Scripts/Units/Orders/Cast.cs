@@ -5,17 +5,21 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class Cast : Order {
-	private UIController uiController;
 	private float currentTimer = 0;
 	protected bool failCast = false;
 	
 	public override void Initialize(GameObject obj, Ability ability, Vector3 targetLocation, UnitController allyTarget, UnitController enemyTarget, Tree tree) {
 		base.Initialize(obj, ability, targetLocation, allyTarget, enemyTarget, tree);
 		this.orderType = OrderTypes.NONE;
-		uiController = unit.GetPlayer().uiController;
 	}
 
 	public override void Execute() {
+		if (ability.isPassive) {
+			Debug.Log("Cannot cast a passive spell.");
+			failCast = true;
+			return;
+		}
+
 		//CastResults.FAILURE_COOLDOWN_NOT_READY
 		if (!ability.IsCooldownReady()) {
 			failCast = true;
@@ -24,7 +28,7 @@ public class Cast : Order {
 
 		if (ability.castTime > 0) {
 			unit.ForceStop();
-			uiController.EnableCastbar(true);
+			EnableCastbar(true);
 			unit.body.anim.SetBool("isShooting", true);
 			currentTimer = ability.castTime;
 		}
@@ -38,7 +42,7 @@ public class Cast : Order {
 
 		if (currentTimer > 0) {
 			currentTimer -= Time.deltaTime;
-			uiController.UpdateCastbar(currentTimer / ability.castTime);
+			UpdateCastbar(currentTimer / ability.castTime);
 		}
 		else {
 			FinishCasting();
@@ -51,16 +55,17 @@ public class Cast : Order {
 		if (ability.castTime > 0) {
 			if (suspendedBy == OrderTypes.TURN_TO_FACE) return;
 			unit.body.anim.SetBool("isShooting", false);
-			uiController.EnableCastbar(false);
+			EnableCastbar(false);
 			//ability.StartCooldown();
 			failCast = true; // cancelling a spell
 		}
 	}
 
 	private void FinishCasting() {
-		uiController.EnableCastbar(false);
+		EnableCastbar(false);
 		unit.body.anim.SetBool("isShooting", false);
 
+		unit.onCastAbility.Invoke();
 		CastResults results = ability.Cast(this);
 		if (results == CastResults.SUCCESS) 
 			ability.StartCooldown();
@@ -86,6 +91,16 @@ public class Cast : Order {
 	
 	protected bool IsFacing(UnitController target) {
 		return unit.IsFacing(target.GetBodyPosition());
+	}
+
+	private void EnableCastbar(bool enable) {
+		if (unit.IsPlayerOwned())
+			unit.player.uiController.EnableCastbar(enable);
+	}
+
+	private void UpdateCastbar(float percentage) {
+		if (unit.IsPlayerOwned())
+			unit.player.uiController.UpdateCastbar(percentage);
 	}
 
 }
