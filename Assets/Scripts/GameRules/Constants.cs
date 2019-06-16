@@ -112,6 +112,29 @@ public enum Desire {
 	MAX = 100
 }
 
+public static class AnimFloats {
+	public static string SPEED { get { return "speed"; } }
+}
+
+public static class AnimBools {
+	public static string DIE    { get { return "isDead"; } }
+}
+
+public static class AnimTriggers {
+	public static string ATTACK   { get { return "StartAttack"; } }
+	public static string CAST     { get { return "StartCast"; } }
+	public static string DIE      { get { return "StartDie"; } }
+	public static string ATTACK_A { get { return "AttackA"; } }
+	public static string ATTACK_B { get { return "AttackB"; } }
+	public static string CAST_A   { get { return "CastA"; } }
+	public static string CAST_B   { get { return "CastB"; } }
+	public static string IDLE_B   { get { return "IdleB"; } }
+}
+
+public enum Animations {
+	NONE, ATTACK_A, ATTACK_B, CAST_A, CAST_B, DIE, RESPAWN, IDLE
+}
+
 // returns the screen position for ally and enemy viewports
 public static class CameraViewports {
 

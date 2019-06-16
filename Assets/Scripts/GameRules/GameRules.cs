@@ -50,6 +50,8 @@ public class GameRules : Singleton<GameRules> {
 
 		Debug.Log("Trying to spawn NPCs.");
 		SpawnNPCs();
+		SpawnNPCs();
+		SpawnNPCs();
 	}
 
 	public void SpawnNPCs() {
@@ -129,6 +131,19 @@ public class GameRules : Singleton<GameRules> {
 				return p;
 		}
 		return null;
+	}
+
+	public static List<UnitController> GetEnemyUnitsOf(UnitController unit, bool visibleOnly) {
+		UnitController[] units = FindObjectsOfType<UnitController>();
+		List<UnitController> validUnitList = new List<UnitController>();
+
+		foreach(UnitController u in units) {
+			if (!unit.SharesTeamWith(u))
+				if ((!visibleOnly) || (visibleOnly && u.body.IsVisible() ))
+					validUnitList.Add(u);
+		}
+
+		return validUnitList;
 	}
 
 	public Player[] GetAllPlayers() {

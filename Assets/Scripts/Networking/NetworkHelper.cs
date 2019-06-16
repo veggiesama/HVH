@@ -97,15 +97,24 @@ public class NetworkHelper : NetworkBehaviour {
 	private void Cmd_CreateProjectile(int prefabIndex, int bodyLocation, int abilitySlotIndex, Vector3 targetLocation) {
 		GameObject prefab = NetworkManager.singleton.spawnPrefabs[prefabIndex];
 		Transform trans = Util.GetBodyLocationTransform((BodyLocations)bodyLocation, unit);
-
 		GameObject projectileObject = Instantiate(prefab, trans.position, trans.rotation);
-			//unit.transform); // bad for NetworkIdentity to be spawned as child?
-		NetworkServer.SpawnWithClientAuthority(projectileObject, this.gameObject); // connectionToClient);
-		TargetRpc_InitializeProjectile(connectionToClient, projectileObject, abilitySlotIndex, targetLocation);
+	
+		if (connectionToClient != null) {
+			NetworkServer.SpawnWithClientAuthority(projectileObject, this.gameObject); // connectionToClient);
+			TargetRpc_InitializeProjectile(connectionToClient, projectileObject, abilitySlotIndex, targetLocation);
+		}
+		else {
+			NetworkServer.Spawn(projectileObject);	
+			InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
+		}
 	}
 
 	[TargetRpc]
 	private void TargetRpc_InitializeProjectile(NetworkConnection conn, GameObject projectileObject, int abilitySlotIndex, Vector3 targetLocation) {
+		InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
+	}
+
+	private void InitializeProjectile(GameObject projectileObject, int abilitySlotIndex, Vector3 targetLocation) {
 		Ability ability = UnpackAbility(unit, abilitySlotIndex);
 
 		switch (ability.projectileBehaviour) {
@@ -128,7 +137,6 @@ public class NetworkHelper : NetworkBehaviour {
 				Debug.Log("Trying to spawn unknown projectile type.");
 				break;
 		}
-
 	}
 
 	public void DestroyProjectile(GameObject projectileObject) {

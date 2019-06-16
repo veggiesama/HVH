@@ -115,7 +115,7 @@ public class BodyController : MonoBehaviour {
 
 			float speed = ((transform.position - lastPosition).magnitude) / Time.deltaTime;
 			lastPosition = transform.position;
-			anim.SetFloat("speed", speed);
+			SetAnimationSpeedFloat(speed);
 
 			if (speed > 0) {
 				unit.onMoved.Invoke();
@@ -135,7 +135,7 @@ public class BodyController : MonoBehaviour {
 		rb.AddForce(Vector3.up * upwardMagnitude);
 		if (!Util.IsNullVector(killedFromDirection))
 			rb.AddForce((transform.position - killedFromDirection).normalized * impactMagnitude);
-		anim.SetBool("isDead", true);
+		PlayAnimation(Animations.DIE);
 	}
 
 	public void PerformLaunch(Vector3 velocityVector) {
@@ -170,7 +170,7 @@ public class BodyController : MonoBehaviour {
 		rb.isKinematic = true;
 		SetDefaultClip();
 		SetTriggerable(false);
-		anim.SetBool("isDead", false);
+		PlayAnimation(Animations.RESPAWN);
 	}
 
 	public void FixedUpdate_ForceTurn(Vector3 targetPosition) {
@@ -182,6 +182,7 @@ public class BodyController : MonoBehaviour {
 		unit.body.transform.rotation = Quaternion.RotateTowards(unit.body.transform.rotation, wantedRotation, step);
 									// Quaternion.Lerp(unit.body.transform.rotation, wantedRotation, percentageComplete);
 	}
+
 
 	public bool IsFacing(Vector3 targetPosition) {
 		if (targetPosition.Equals(default)) return true;
@@ -287,6 +288,38 @@ public class BodyController : MonoBehaviour {
 		}
 	}
 
+	public void SetAnimationSpeedFloat(float speed) {
+		anim.SetFloat(AnimFloats.SPEED, speed);
+	}
 
+	public void PlayAnimation(Animations a) {
+		switch (a) {
+			case Animations.ATTACK_A:
+				anim.SetTrigger(AnimTriggers.ATTACK);
+				anim.SetTrigger(AnimTriggers.ATTACK_A);
+				break;
+			case Animations.ATTACK_B:
+				anim.SetTrigger(AnimTriggers.ATTACK);
+				anim.SetTrigger(AnimTriggers.ATTACK_B);
+				break;
+			case Animations.CAST_A:
+				anim.SetTrigger(AnimTriggers.CAST);
+				anim.SetTrigger(AnimTriggers.CAST_A);
+				break;
+			case Animations.CAST_B:
+				anim.SetTrigger(AnimTriggers.CAST);
+				anim.SetTrigger(AnimTriggers.CAST_B);
+				break;
+			case Animations.DIE:
+				anim.SetBool(AnimBools.DIE, true);
+				anim.SetTrigger(AnimTriggers.DIE);
+				break;
+			case Animations.RESPAWN:
+				anim.SetBool(AnimBools.DIE, false);
+				break;
+			default:
+				break;
+		}
+	}
 
 }

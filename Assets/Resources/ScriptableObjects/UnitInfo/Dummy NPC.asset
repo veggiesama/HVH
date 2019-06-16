@@ -32,7 +32,7 @@ MonoBehaviour:
     type: 2}
   onAirbornStatusEffect: {fileID: 11400000, guid: 602ec8d7899e5e644a690f77dc709914,
     type: 2}
-  startingAttackAbility: {fileID: 11400000, guid: 09094605b850e38448694f2777d291de,
+  startingAttackAbility: {fileID: 11400000, guid: 7c5bc42bd4e03df47857aa7808773005,
     type: 2}
   startingAbilitiesList:
   - {fileID: 11400000, guid: a30be00ac1b3bbd40a1e4c63b5a412ee, type: 2}
@@ -48,5 +48,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
-  animationPrefab: {fileID: 2048578494338918473, guid: b4d95473cafa7ab4fbbaebd9ae0302d0,
+  animationPrefab: {fileID: 1666637062901154, guid: 8af95b45772978d459e34bd1793199e9,
     type: 3}

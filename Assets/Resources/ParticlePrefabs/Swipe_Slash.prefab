@@ -156,6 +156,10 @@ PrefabInstance:
       propertyPath: ColorModule.gradient.maxGradient.m_NumColorKeys
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 19893024, guid: 305722bc3bbbf1f44aa7890efb7f31d9, type: 3}
+      propertyPath: scalingMode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 305722bc3bbbf1f44aa7890efb7f31d9, type: 3}
 --- !u!1 &7799245463436937716 stripped

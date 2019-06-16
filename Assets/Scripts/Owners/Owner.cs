@@ -5,10 +5,11 @@ using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using Mirror;
 
-public class Owner : NetworkBehaviour {
+public abstract class Owner : NetworkBehaviour {
 	[HideInInspector] public UnitController unit;
 	[HideInInspector] public NetworkHelper networkHelper;
 	[SyncVar] protected int team;
+	private Vector3 virtualPointerLocation;
 
 	public virtual void Awake() {
 		unit = GetComponentInChildren<UnitController>();
@@ -33,6 +34,23 @@ public class Owner : NetworkBehaviour {
 			networkHelper.SetUnitInfo("Monster");
 		}
 
+	}
+
+	public void SetVirtualPointerLocation(Vector3 vec) {
+		virtualPointerLocation = vec;
+	}
+
+	public Vector3 GetVirtualPointerLocation() {
+		if (this is Player) {
+			return ((Player)this).GetMouseLocationToGround();
+		}
+
+		else if (this is NPC) {
+			return virtualPointerLocation;
+		}
+
+		else
+			return default;
 	}
 
 }

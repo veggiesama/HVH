@@ -115,11 +115,11 @@ public class UnitController : MonoBehaviour {
 		{
 			case AbilityTargetTypes.AREA:
 				castOrder = ScriptableObject.CreateInstance<CastPosition>();
-				((CastPosition)castOrder).Initialize(gameObject, ability, player.GetMouseLocationToGround());
+				((CastPosition)castOrder).Initialize(gameObject, ability, owner.GetVirtualPointerLocation());
 				break;
 			case AbilityTargetTypes.POINT:
 				castOrder = ScriptableObject.CreateInstance<CastPosition>();
-				((CastPosition)castOrder).Initialize(gameObject, ability, player.GetMouseLocationToGround());
+				((CastPosition)castOrder).Initialize(gameObject, ability, owner.GetVirtualPointerLocation());
 				break;
 			case AbilityTargetTypes.UNIT:
 
@@ -144,7 +144,7 @@ public class UnitController : MonoBehaviour {
 
 				break;
 			case AbilityTargetTypes.TREE:
-				Tree tree = player.GetTreeAtMouseLocation();
+				Tree tree = player.GetTreeAtMouseLocation(); // TODO: fix for non-players
 				if (tree == null) {
 					Debug.Log("Invalid target (not a tree).");
 					return;
@@ -362,6 +362,10 @@ public class UnitController : MonoBehaviour {
 		return HasStatusEffect(StatusEffectTypes.AIRBORN);
 	}
 
+	public bool IsAlive() {
+		return !HasStatusEffect(StatusEffectTypes.DEAD);
+	}
+
 	public bool HasStatusEffect(StatusEffectTypes statusType) {
 		return statusEffectManager.HasStatusEffect(statusType);
 	}
@@ -439,7 +443,7 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public bool IsMouseLooking() {
-		return lockFacingToMouse;
+		return (IsPlayerOwned() && lockFacingToMouse);
 	}
 	
 	public bool SharesTeamWith(UnitController unit) {

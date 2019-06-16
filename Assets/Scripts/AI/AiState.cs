@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AiState : ScriptableObject {
+public abstract class AiState : ScriptableObject {
 
 	protected AiManager aiManager;
 	protected UnitController unit;
 
-	public bool hasExecuted;
+	[HideInInspector] public bool hasExecuted;
 
 	[Range(0, 100)]
 	public int desire;
@@ -16,8 +16,9 @@ public class AiState : ScriptableObject {
 	public bool hasDuration;
 	public float duration;
 	protected float currentTimer;
+	protected string stateName;
 
-	void Reset() {
+	public virtual void Reset() {
 		desire = (int) Desire.MEDIUM;
 	}
 
@@ -25,6 +26,7 @@ public class AiState : ScriptableObject {
 		this.aiManager = aiManager;
 		unit = aiManager.unit;
 		desireDefault = desire;
+		stateName = this.GetType().Name;
 	}
 
 	public virtual void Evaluate() {

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hasExecuted: 0
   desire: 50
-  hasDuration: 1
-  duration: 3
+  hasDuration: 0
+  duration: 0
   wanderDistance: 2

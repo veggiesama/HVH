@@ -111,4 +111,8 @@ public static class Util {
 		return new Color(originalColor.r * 0.5f, originalColor.g * 0.5f, originalColor.b * 0.5f);
 	}
 
+	public static UnitController[] FindUnitsInSphere(Vector3 center, float radius) {
+		return null;
+	}
+
 }

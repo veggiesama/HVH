@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "AI States/MoveTo")]
-public class MoveTo : AiState {
+public abstract class MoveTo : AiState {
 
 	protected Vector3 destination;
+	protected bool forceRepeatMoveOrder;
 
 	public override void Evaluate() {
 		if (HasDestination() && ReachedDestination()) {
@@ -15,12 +16,11 @@ public class MoveTo : AiState {
 
 	public override void Execute() {
 		base.Execute();
-		destination = GameRules.GetRandomPointOfInterest().position;
 	}
 
 	public override void Update() {
 		base.Update();
-		if (HasDestination() && !ReachedDestination() && unit.GetCurrentOrderType() != OrderTypes.MOVE_TO_POSITION) {
+		if ((forceRepeatMoveOrder) || (HasDestination() && !ReachedDestination() && unit.GetCurrentOrderType() != OrderTypes.MOVE_TO_POSITION)) {
 			unit.MoveTo(destination);
 		}
 	}

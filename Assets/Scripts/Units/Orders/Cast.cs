@@ -29,7 +29,8 @@ public class Cast : Order {
 		if (ability.castTime > 0) {
 			unit.ForceStop();
 			EnableCastbar(true);
-			unit.body.anim.SetBool("isShooting", true);
+			unit.body.PlayAnimation(Animations.CAST_A);
+
 			currentTimer = ability.castTime;
 		}
 	}
@@ -54,7 +55,7 @@ public class Cast : Order {
 	public override void Suspend(OrderTypes suspendedBy) {
 		if (ability.castTime > 0) {
 			if (suspendedBy == OrderTypes.TURN_TO_FACE) return;
-			unit.body.anim.SetBool("isShooting", false);
+			//unit.body.AnimCast(false);
 			EnableCastbar(false);
 			//ability.StartCooldown();
 			failCast = true; // cancelling a spell
@@ -63,7 +64,7 @@ public class Cast : Order {
 
 	private void FinishCasting() {
 		EnableCastbar(false);
-		unit.body.anim.SetBool("isShooting", false);
+		//unit.body.AnimCast(false);
 
 		unit.onCastAbility.Invoke();
 		CastResults results = ability.Cast(this);

@@ -139,7 +139,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unit: {fileID: 0}
   aiStates:
-  - {fileID: 11400000, guid: 6ce22892e4dcb994eb469971854873eb, type: 2}
+  - {fileID: 11400000, guid: 067814c6b642b284d9496282fccadacb, type: 2}
+  - {fileID: 11400000, guid: 931102616fd277b48b1707034e71a8ab, type: 2}
   updateEvery: 0.2
 --- !u!1 &1149659272418656
 GameObject:
@@ -536,7 +537,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 1
   m_WalkableMask: 1
-  m_ObstacleAvoidanceType: 0
+  m_ObstacleAvoidanceType: 3
 --- !u!114 &114845004866198694
 MonoBehaviour:
   m_ObjectHideFlags: 0
