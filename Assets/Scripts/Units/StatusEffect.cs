@@ -4,6 +4,17 @@ using UnityEngine;
 
 public abstract class StatusEffect : ScriptableObject {
 
+	[Header("Runtime")]
+	public bool applied;
+	public float remainingTime;
+	private float startTime;
+
+	protected StatusEffectManager statusEffectManager;
+	public UnitController unit;
+	public Ability ability;
+	protected NetworkHelper networkHelper;
+
+	[Header("Modifiable")]
 	public string statusName = "None";
 	public StatusEffectTypes type = StatusEffectTypes.WELL_FED;
 
@@ -12,16 +23,6 @@ public abstract class StatusEffect : ScriptableObject {
 	public bool hideIcon = false;
 	public bool dispellable = false;
 	
-	[Header("Runtime")]
-	public bool applied;
-	public float remainingTime;
-	private float startTime;
-
-	protected StatusEffectManager statusEffectManager;
-	protected UnitController unit;
-	protected Ability ability;
-	protected NetworkHelper networkHelper;
-
 	public virtual void Reset() {}
 
 	public virtual void Initialize(GameObject obj, Ability ability) {

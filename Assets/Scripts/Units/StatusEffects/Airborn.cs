@@ -61,8 +61,12 @@ public class Airborn : StatusEffect {
 	public override void End() {
 		unit.SetVision(VisionType.NORMAL);
 		unit.body.onCollidedTree.RemoveListener(OnCollidedTree); // unsub
-		unit.AttachToNav();
-		unit.body.ResetBody();
+
+		if (!unit.HasStatusEffect(StatusEffectTypes.DEAD)) {
+			unit.AttachToNav();
+			unit.body.ResetBody();
+		}
+
 		base.End();
 	}
 }

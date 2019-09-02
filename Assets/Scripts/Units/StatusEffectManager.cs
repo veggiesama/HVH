@@ -43,7 +43,7 @@ public class StatusEffectManager : MonoBehaviour {
 		// never add status effects to non-local players
 		if (!networkHelper.HasControllableAuthority()) return;
 
- 		var existingStatus = GetStatusEffect(status.type);
+ 		var existingStatus = GetStatusEffect(status.statusName);
 		if(existingStatus)
 			existingStatus.Stack(status);
 		else {

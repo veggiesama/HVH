@@ -13,7 +13,7 @@ public class Player : Owner {
 	//public ControlScheme controlScheme;
 	public UIController uiController;
 	public Camera cam;
-	private MouseTargeter mouseTargeter;
+	public MouseTargeter mouseTargeter;
 
 	//public bool isNPC = false; // inspector
 	[SyncVar] public int playerID;
@@ -35,7 +35,6 @@ public class Player : Owner {
 
 	public override void Awake() {
 		base.Awake();
-		mouseTargeter = GetComponent<MouseTargeter>();
 	}
 
 	// Update is called once per frame. Use for input. Physics unstable.

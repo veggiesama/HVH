@@ -20,30 +20,36 @@ public class MouseTargeter : MonoBehaviour {
 	private UnitController lastUnit; 
 
     void Awake() {
-        player = GetComponent<Player>();
+        player = GetComponentInParent<Player>();
 		cam = player.cam;
     }
 
     // Update is called once per frame
     void Update() {
-		if (IsTargetingEnabled())
-			DoTargetCheckingAtMouseCursor();
+		//if (IsTargetingEnabled())
+		DoTargetCheckingAtMouseCursor();
     }
 
 	private void DoTargetCheckingAtMouseCursor() {
-		switch (storedAbility.targetType) {
-			case AbilityTargetTypes.AREA:
-				DoAreaChecking();
-				break;
-			case AbilityTargetTypes.UNIT:
-				DoUnitChecking();
-				break;
-			case AbilityTargetTypes.TREE:
-				DoTreeChecking();
-				break;
-			default:
-				break;
+		if (IsTargetingEnabled()) {
+			switch (storedAbility.targetType) {
+				case AbilityTargetTypes.AREA:
+					DoAreaChecking();
+					break;
+				case AbilityTargetTypes.UNIT:
+					DoUnitChecking();
+					break;
+				case AbilityTargetTypes.TREE:
+					DoTreeChecking();
+					break;
+				default:
+					break;
+			}
 		}
+		else {
+			DoUnitChecking();
+		}
+
 	}
 
 	// TODO: opportunity to implement interface
@@ -68,8 +74,14 @@ public class MouseTargeter : MonoBehaviour {
 		UnitController unit = GetUnitAtMouseLocation();
 		if (unit != null) {
 			if (!unit.Equals(lastUnit)) {
-				unit.SetHighlighted(HighlightingState.INTEREST);
-				if (lastUnit != null) lastUnit.SetHighlighted(HighlightingState.NORMAL);
+				if (unit.SharesTeamWith(player.unit))
+					unit.SetHighlighted(HighlightingState.INTEREST);
+				else
+					unit.SetHighlighted(HighlightingState.ENEMY);
+
+				if (lastUnit != null)
+					lastUnit.SetHighlighted(HighlightingState.NORMAL);
+
 				lastUnit = unit;
 			}
 		}
@@ -99,11 +111,12 @@ public class MouseTargeter : MonoBehaviour {
 	}
 
 	public UnitController GetUnitAtMouseLocation() {
-		int layerMask = (int)LayerMasks.BODY; // ~((int)LayerMasks.TERRAIN | (int)LayerMasks.TREE); // cast at everything except terrain + tree
-		Ray ray = (Ray)cam.ScreenPointToRay(Input.mousePosition);
+		int layerMask = (int)LayerMasks.BODY_SELECTABLE; // ~((int)LayerMasks.TERRAIN | (int)LayerMasks.TREE); // cast at everything except terrain + tree
+		Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out RaycastHit hit, Constants.RaycastLength, layerMask)) {
+			Debug.DrawLine(ray.origin, hit.point, Color.red);
 			GameObject targetObject = hit.transform.gameObject;
-			UnitController targetUnit = targetObject.GetComponent<BodyController>().unit;
+			UnitController targetUnit = targetObject.GetComponent<SelectionCollider>().unit;
 			if (!targetUnit.body.IsVisible()) return null;
 			return targetUnit;
 		}

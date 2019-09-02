@@ -13,7 +13,7 @@ public class NPC : Owner {
 		//NetworkServer.Spawn(this.gameObject);
 		//NetworkServer.SpawnWithClientAuthority(this.gameObject, NetworkServer.localConnection);
 		//GetComponent<NetworkIdentity>().AssignClientAuthority(NetworkServer.localConnection);
-		SetTeam(Teams.NEUTRALS);
+		//SetTeam(Teams.NEUTRALS);
 		//StartCoroutine( DoAbil() );
 	}
 

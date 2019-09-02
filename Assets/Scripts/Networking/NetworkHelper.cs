@@ -150,19 +150,35 @@ public class NetworkHelper : NetworkBehaviour {
 	}
 
 	// DAMAGE
+	public void HealDamageOn(UnitController targetUnit, float healing) {
+		NetworkIdentity targetNetIdentity = targetUnit.networkHelper.netIdentity;
+		Cmd_DealDamageTo(targetNetIdentity, -healing);
+	}
 
-	public void DealDamageTo(UnitController targetUnit, int dmg) {
+	public void DealDamageTo(UnitController targetUnit, float dmg) {
 		NetworkIdentity targetNetIdentity = targetUnit.networkHelper.netIdentity;
 		Cmd_DealDamageTo(targetNetIdentity, dmg);
 	}
 
 	[Command]
-	private void Cmd_DealDamageTo(NetworkIdentity targetNetIdentity, int dmg) {
-		UnitController targetUnit = targetNetIdentity.GetComponent<Owner>().unit;
-		if (targetUnit.HasStatusEffect(StatusEffectTypes.INVULNERABLE)) return;
+	private void Cmd_DealDamageTo(NetworkIdentity targetNetIdentity, float dmg) {
+		if (dmg == 0) return;
 
-		Rpc_OnTakeDamage(targetNetIdentity, dmg);
+		UnitController targetUnit = targetNetIdentity.GetComponent<Owner>().unit;
+		if (dmg > 0 && targetUnit.HasStatusEffect(StatusEffectTypes.INVULNERABLE)) return;
+
+		if (dmg > 0)
+			Rpc_OnTakeDamage(targetNetIdentity, dmg);
+
+		if (dmg < 0)
+			Rpc_OnTakeHealing(targetNetIdentity, Mathf.Abs(dmg));
+
 		targetUnit.networkHelper.currentHealth -= dmg;
+
+		// prevent over-heal
+		if (targetUnit.networkHelper.currentHealth > targetUnit.unitInfo.maxHealth) {
+			targetUnit.networkHelper.currentHealth = targetUnit.unitInfo.maxHealth;
+		}
 
 		if (targetUnit.networkHelper.currentHealth < 0) {
 			NetworkConnection conn = targetNetIdentity.connectionToClient; // connectionToServer?
@@ -174,9 +190,15 @@ public class NetworkHelper : NetworkBehaviour {
 	}
 
 	[ClientRpc]
-	private void Rpc_OnTakeDamage(NetworkIdentity targetNetIdentity, int dmg) {
+	private void Rpc_OnTakeDamage(NetworkIdentity targetNetIdentity, float dmg) {
 		UnitController targetUnit = targetNetIdentity.GetComponent<Owner>().unit;
 		targetUnit.OnTakeDamage(dmg);
+	}
+
+	[ClientRpc]
+	private void Rpc_OnTakeHealing(NetworkIdentity targetNetIdentity, float healing) {
+		UnitController targetUnit = targetNetIdentity.GetComponent<Owner>().unit;
+		targetUnit.OnTakeHealing(healing);
 	}
 
 	[TargetRpc]

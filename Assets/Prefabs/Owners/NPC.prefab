@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5058756179685052615}
   - component: {fileID: 988594379088422369}
   - component: {fileID: 3099795874371507353}
-  - component: {fileID: 8587336247411384839}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -55,7 +54,13 @@ MonoBehaviour:
   player: {fileID: 0}
   owner: {fileID: 0}
   unitInfo: {fileID: 11400000, guid: c7f577dda4e76e94399daaa8551beb91, type: 2}
+  aiManager: {fileID: 0}
   onTakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEventDamage, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  onTakeHealing:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEventDamage, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
@@ -125,23 +130,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statusEffectList: []
   networkRefreshEvery: 0.1
---- !u!114 &8587336247411384839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1094043218024888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ec55cf60862cc84d82cf235605dd15f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unit: {fileID: 0}
-  aiStates:
-  - {fileID: 11400000, guid: 067814c6b642b284d9496282fccadacb, type: 2}
-  - {fileID: 11400000, guid: 931102616fd277b48b1707034e71a8ab, type: 2}
-  updateEvery: 0.2
 --- !u!1 &1149659272418656
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,6 +386,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -562,6 +551,9 @@ MonoBehaviour:
   fov: {fileID: 0}
   invisMaterial: {fileID: 0}
   fadeColors: []
+  bodyCollider: {fileID: 0}
+  ragdollColliders: []
+  ragdollRigidbodies: []
   onCollidedTree:
     m_PersistentCalls:
       m_Calls: []
@@ -666,6 +658,7 @@ GameObject:
   - component: {fileID: 22047862161967600}
   - component: {fileID: 7021595654887823476}
   - component: {fileID: 5776888321588450181}
+  - component: {fileID: 6755147413015020766}
   m_Layer: 0
   m_Name: Debug
   m_TagString: Untagged
@@ -694,7 +687,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5192940467925275099}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -712,6 +705,7 @@ LineRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -796,6 +790,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agentToDebug: {fileID: 195676953053588990}
   lineRenderer: {fileID: 7021595654887823476}
+--- !u!114 &6755147413015020766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5192940467925275099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3ecf493fcd1d4f46aa9f2b40ba88b0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  body: {fileID: 114845004866198694}
 --- !u!1 &6053985023443794750
 GameObject:
   m_ObjectHideFlags: 0

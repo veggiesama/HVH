@@ -5,29 +5,56 @@ using System.Linq;
 
 public class AiManager: MonoBehaviour {
 
+	private DayNightController dayNightController;
 	[HideInInspector] public UnitController unit;
 	[SerializeField] private List<AiState> aiStates;
+	[SerializeField] private List<AiState> aiStatesDay;
+	[SerializeField] private List<AiState> aiStatesNight;
 	private AiState currentState;
-
-	public float updateEvery = 0.2f;
+	public float updateEvery;
 
 	private void Awake() {
 		unit = GetComponent<UnitController>();		
 	}
 
-	private void Start() {
+	public void OnEnable() {
+		dayNightController = GameRules.Instance.GetComponent<DayNightController>();
+		dayNightController.onStartDay.AddListener(OnStartDay);
+		dayNightController.onStartNight.AddListener(OnStartNight);
+	}
 
-		// duplicating state list so that each NPC controls their own states
-		List<AiState> duplicateAiStates = new List<AiState>();
-		foreach (AiState state in aiStates) {
-			AiState duplicateState = Instantiate(state);
-			duplicateAiStates.Add(duplicateState);
-			duplicateState.Initialize(this);
-		}
-		aiStates = duplicateAiStates;
+	public void OnDisable() {
+		if (dayNightController == null) return;
+		dayNightController.onStartDay.RemoveListener(OnStartDay);
+		dayNightController.onStartNight.RemoveListener(OnStartNight);
+		dayNightController = null;
+	}
 
-
+	public void Initialize(UnitInfo unitInfo) {
+		this.aiStatesDay = CloneAiStateList(unitInfo.aiStatesDay);
+		this.aiStatesNight = CloneAiStateList(unitInfo.aiStatesNight);
+		this.updateEvery = unitInfo.aiUpdateEvery;
+		OnStartDay();
 		StartCoroutine( SlowUpdate() );
+	}
+
+	private void OnStartDay() {
+		aiStates = aiStatesDay;
+	}
+
+	private void OnStartNight() {
+		aiStates = aiStatesNight;
+	}
+
+	// clone state list so that each NPC controls their own states
+	private List<AiState> CloneAiStateList(List<AiState> list) {
+		List<AiState> cloneList = new List<AiState>();
+		foreach (AiState state in list) {
+			AiState cloneState = Instantiate(state);
+			cloneList.Add(cloneState);
+			cloneState.Initialize(this);
+		}
+		return cloneList;
 	}
 
 	IEnumerator SlowUpdate() {
@@ -52,13 +79,6 @@ public class AiManager: MonoBehaviour {
 		}
 	}
 
-	private void EndCurrentState() {
-		if (currentState != null) {
-			currentState.End();
-			currentState = null;
-		}
-	}
-
 	public AiState DetermineDesiredState() {
 		if (aiStates.Count > 0) {	
 			foreach (AiState state in aiStates) {
@@ -72,6 +92,13 @@ public class AiManager: MonoBehaviour {
 
 		// if no states or all states have 0 desire
 		return null;
+	}
+
+	private void EndCurrentState() {
+		if (currentState != null) {
+			currentState.End();
+			currentState = null;
+		}
 	}
 
 }

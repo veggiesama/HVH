@@ -71,11 +71,11 @@ public class MoveToPosition : Order {
 		return path;
 	}
 
-	public override void Update()
-	{
-		if (!unit.agent.pathPending && !unit.agent.hasPath) {
+	public override void Update() {
+		if (!unit.agent.pathPending && !unit.agent.hasPath)
 			End();
-		}
+		else
+			unit.onMoved.Invoke();
 	}
 
 	public override void FixedUpdate() {}

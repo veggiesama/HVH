@@ -18,6 +18,7 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 
 	protected float projectileSpeed, immobileDuration, grenadeTimeToHitTarget;
 	protected bool destroyOnHit;
+	protected bool grenadeLerpTimeByCastRange;
 
 	protected float currentTimer = 0;
 	protected Vector3 originalScale;
@@ -52,6 +53,7 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 		Initialize(ability);
 		this.targetLocation = targetLocation;
 		this.grenadeTimeToHitTarget = ability.grenadeTimeToHitTarget;
+		this.grenadeLerpTimeByCastRange = ability.grenadeLerpTimeByCastRange;
 		this.projectileSpeed = ability.projectileSpeed;
 	}
 

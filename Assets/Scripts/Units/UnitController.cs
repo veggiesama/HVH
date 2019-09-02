@@ -24,8 +24,10 @@ public class UnitController : MonoBehaviour {
 	private FieldOfView fov;
 
 	public UnitInfo unitInfo;
+	public AiManager aiManager;
 
 	[HideInInspector] public UnityEventDamage onTakeDamage;
+	[HideInInspector] public UnityEventDamage onTakeHealing;
 	[HideInInspector] public UnityEvent onMoved;
 	[HideInInspector] public UnityEvent onCastAbility;
 
@@ -111,8 +113,7 @@ public class UnitController : MonoBehaviour {
 		}
 
 		Order castOrder;
-		switch (ability.targetType)
-		{
+		switch (ability.targetType)	{
 			case AbilityTargetTypes.AREA:
 				castOrder = ScriptableObject.CreateInstance<CastPosition>();
 				((CastPosition)castOrder).Initialize(gameObject, ability, owner.GetVirtualPointerLocation());
@@ -122,26 +123,7 @@ public class UnitController : MonoBehaviour {
 				((CastPosition)castOrder).Initialize(gameObject, ability, owner.GetVirtualPointerLocation());
 				break;
 			case AbilityTargetTypes.UNIT:
-
-				UnitController enemy;
-				if (currentEnemyTarget != null) {
-					enemy = currentEnemyTarget;
-				}
-				else if (player.IsMouseTargeting()) {
-					enemy = player.GetUnitAtMouseLocation();
-					if (enemy == null) {
-						Debug.Log("No enemy at mouse location.");
-						return;
-					}
-				}
-				else {
-					player.SetMouseTargeting(true, ability, slot);
-					return;
-				}
-
-				castOrder = ScriptableObject.CreateInstance<CastTarget>();
-				((CastTarget)castOrder).Initialize(gameObject, ability, currentFriendlyTarget, enemy);
-
+				castOrder = DoAbilityUnitTarget(slot);
 				break;
 			case AbilityTargetTypes.TREE:
 				Tree tree = player.GetTreeAtMouseLocation(); // TODO: fix for non-players
@@ -157,9 +139,70 @@ public class UnitController : MonoBehaviour {
 				((CastNoTarget)castOrder).Initialize(gameObject, ability);
 				break;
 		}
-		 
-		orderQueue.Add(castOrder, ability.doNotCancelOrderQueue);
+
+		if (castOrder != null)
+			orderQueue.Add(castOrder, ability.doNotCancelOrderQueue);
 	}
+
+	private Order DoAbilityUnitTarget(AbilitySlots slot) {
+		UnitController target;
+		Ability ability = GetAbilityInSlot(slot);
+		Order castOrder = null;
+
+		switch (ability.targetTeam) {
+
+			case AbilityTargetTeams.NONE:
+				castOrder = ScriptableObject.CreateInstance<CastNoTarget>();
+				((CastNoTarget)castOrder).Initialize(gameObject, ability);
+				break;
+
+			case AbilityTargetTeams.ALLY:
+				if (currentFriendlyTarget != null)
+					target = currentFriendlyTarget;
+				else if (player.IsMouseTargeting()) {
+					target = player.GetUnitAtMouseLocation();
+					if (target == null || !this.SharesTeamWith(target))	{ // TODO: Overload GetUnitAtMouseLocation() to filter for teams?
+						Debug.Log("No ally at mouse location.");
+						return null;
+					}
+				}
+				else {
+					player.SetMouseTargeting(true, ability, slot);
+					return null;
+				}
+				castOrder = ScriptableObject.CreateInstance<CastTarget>();
+				((CastTarget)castOrder).Initialize(gameObject, ability, target, null);
+				break;
+
+			case AbilityTargetTeams.ENEMY:
+				if (currentEnemyTarget != null)
+					target = currentEnemyTarget;
+				else if (player.IsMouseTargeting()) {
+					target = player.GetUnitAtMouseLocation();
+					if (target == null || this.SharesTeamWith(target)) { // TODO: Overload GetUnitAtMouseLocation() to filter for teams?
+						Debug.Log("No enemy at mouse location.");
+						return null;
+					}
+				} 
+				else {
+					player.SetMouseTargeting(true, ability, slot);
+					return null;
+				}
+				castOrder = ScriptableObject.CreateInstance<CastTarget>();
+				((CastTarget)castOrder).Initialize(gameObject, ability, null, target);
+				break;
+
+			case AbilityTargetTeams.BOTH:
+				//? Not sure what this will look like yet.
+				castOrder = ScriptableObject.CreateInstance<CastNoTarget>();
+				((CastNoTarget)castOrder).Initialize(gameObject, ability);
+				break;
+		}
+	
+		return castOrder;
+
+	}
+
 
 
 	// targeting
@@ -450,6 +493,14 @@ public class UnitController : MonoBehaviour {
 		return (this.GetTeam() == unit.GetTeam());
 	}
 
+	public bool SharesUnitInfoWith(UnitController unit) {
+		return (this.unitInfo.unitName == unit.unitInfo.unitName);
+	}
+
+	public bool SharesUnitInfoWith(UnitInfo unitInfo) {
+		return (this.unitInfo.unitName == unitInfo.unitName);
+	}
+
 	public void Knockback(Vector3 velocityVector, Ability ability) {
 		ApplyStatusEffect(unitInfo.onAirbornStatusEffect, ability);
 		body.PerformAirborn(velocityVector);
@@ -483,7 +534,7 @@ public class UnitController : MonoBehaviour {
 			player.uiController.ResetButtons();
 	}
 
-	public void SetHealth(float newHealthValue) {
+	private void SetHealth(float newHealthValue) {
 		networkHelper.currentHealth = newHealthValue;
 	}
 
@@ -502,6 +553,12 @@ public class UnitController : MonoBehaviour {
 			fov.dayViewRadius = unitInfo.daySightRange;
 			fov.nightViewRadius = unitInfo.nightSightRange;
 			fov.viewAngle = unitInfo.fovViewAngle;
+
+			if (unitInfo.hasAI) {
+				aiManager = gameObject.AddComponent<AiManager>();
+				aiManager.Initialize(unitInfo);
+			}
+
 		}
 
 		else
@@ -569,12 +626,16 @@ public class UnitController : MonoBehaviour {
 		}
 	}
 
-	public void DealDamageTo(UnitController targetUnit, int dmg) {
+	public void DealDamageTo(UnitController targetUnit, float dmg) {
 		networkHelper.DealDamageTo(targetUnit, dmg);
 	}
 
-	public void OnTakeDamage(int dmg) {
+	public void OnTakeDamage(float dmg) {
 		onTakeDamage.Invoke(dmg);
+	}
+
+	public void OnTakeHealing(float healing) {
+		onTakeHealing.Invoke(healing);
 	}
 
 	public void SetVisibilityState(VisibilityState state) {

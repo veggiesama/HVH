@@ -27,6 +27,10 @@ public class BodyController : MonoBehaviour {
 	[HideInInspector] public Material invisMaterial;
 	[HideInInspector] public Color[] fadeColors;
 
+	[HideInInspector] public Collider bodyCollider;
+	[HideInInspector] public Collider[] ragdollColliders;
+	[HideInInspector] public Rigidbody[] ragdollRigidbodies;
+
 	//private bool isVisible = true;
 	private Vector3 lastPosition = Vector3.zero;
 	private float updateAnimationSpeedFloatEvery = 0.1f;
@@ -53,6 +57,7 @@ public class BodyController : MonoBehaviour {
 		rb = GetComponent<Rigidbody>();
 		fov = GetComponentInChildren<FieldOfView>();
 		invisMaterial = unit.GetComponent<UnitMaterials>().invisibility;
+		bodyCollider = GetComponent<Collider>();
 
 		StartCoroutine( UpdateAnimationSpeedFloat() );
 		//InvokeRepeating("UpdateAnimationSpeedFloat", 0f, updateAnimationSpeedFloatEvery);
@@ -63,8 +68,11 @@ public class BodyController : MonoBehaviour {
 			Destroy(anim.gameObject);
 				
 		GameObject animGO = Instantiate(unit.unitInfo.animationPrefab, this.transform);
-		anim = animGO.GetComponent<Animator>();
-		
+		anim = animGO.GetComponentInChildren<Animator>();
+		ragdollColliders = anim.GetComponentsInChildren<Collider>();
+		ragdollRigidbodies = anim.GetComponentsInChildren<Rigidbody>();
+		EnableRagdoll(false);
+
 		BodyLocationFinder finder = anim.GetComponent<BodyLocationFinder>();
 		projectileSpawner = finder.projectileSpawner;
 		head = finder.head;
@@ -94,48 +102,59 @@ public class BodyController : MonoBehaviour {
 		}
 	}
 
-	/*
-	private void UpdateAnimationSpeedFloat() {
-		if (anim == null) return;
-
-		float speed = ((transform.position - lastPosition).magnitude) / Time.deltaTime;
-		lastPosition = transform.position;
-		anim.SetFloat("speed", speed);
-
-		if (speed > 0) {
-			unit.onMoved.Invoke();
-		}
-	}
-	*/
-
 	IEnumerator UpdateAnimationSpeedFloat() {
 		while (true) {
 			yield return new WaitForSeconds(updateAnimationSpeedFloatEvery);
 			if (anim == null) continue;
 
 			float speed = ((transform.position - lastPosition).magnitude) / Time.deltaTime;
+			
 			lastPosition = transform.position;
 			SetAnimationSpeedFloat(speed);
 
-			if (speed > 0) {
-				unit.onMoved.Invoke();
-			}
+			//if (speed > Constants.OnMoveTolerance) {
+			//	unit.onMoved.Invoke();
+			//}
 		}
 	}
 
 
 	// performances
 	public void PerformDeath(Vector3 killedFromDirection) {
-		rb.isKinematic = false;
-		rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+		//rb.isKinematic = false;
+		//rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
+
+
+		//rb.AddForce(Vector3.up * upwardMagnitude);
+		//if (!Util.IsNullVector(killedFromDirection))
+		//	rb.AddForce((transform.position - killedFromDirection).normalized * impactMagnitude);
+		
+		//PlayAnimation(Animations.DIE);
+
+		EnableRagdoll(true);
+		//bodyCollider.enabled = false;
 
 		float upwardMagnitude = Random.Range(50f, 150f);
 		float impactMagnitude = 400f;
+		AddForceToRagdoll(killedFromDirection, upwardMagnitude, impactMagnitude);
+	}
 
-		rb.AddForce(Vector3.up * upwardMagnitude);
-		if (!Util.IsNullVector(killedFromDirection))
-			rb.AddForce((transform.position - killedFromDirection).normalized * impactMagnitude);
-		PlayAnimation(Animations.DIE);
+	public void AddForceToRagdoll(Vector3 fromDirection, float upwardMagnitude, float impactMagnitude) {
+		Vector3 upwardForce = Vector3.up * upwardMagnitude;
+		Vector3 impactForce = default;
+
+		if (fromDirection != default) {
+			Debug.DrawLine(transform.position, fromDirection, Color.green, 3.0f);
+			impactForce = (transform.position - fromDirection).normalized * impactMagnitude;
+		}
+
+		foreach (Rigidbody ragdollRB in ragdollRigidbodies) {
+			ragdollRB.AddForce(upwardForce);
+			if (fromDirection != default) {
+				ragdollRB.AddForce(impactForce);
+			}
+		}
 	}
 
 	public void PerformLaunch(Vector3 velocityVector) {
@@ -159,17 +178,14 @@ public class BodyController : MonoBehaviour {
 		gameObject.layer = LayerMask.NameToLayer("Body");
 	}
 
-	public void SetTriggerable(bool enable) {
-		GetComponent<Collider>().isTrigger = enable;
-	}
-
 	public void ResetBody() {
+		bodyCollider.enabled = true;
+		EnableRagdoll(false);
 		rb.constraints = RigidbodyConstraints.FreezeRotationX |
 			RigidbodyConstraints.FreezeRotationY |
 			RigidbodyConstraints.FreezeRotationZ;
 		rb.isKinematic = true;
 		SetDefaultClip();
-		SetTriggerable(false);
 		PlayAnimation(Animations.RESPAWN);
 	}
 
@@ -264,6 +280,10 @@ public class BodyController : MonoBehaviour {
 		}
 	}
 
+	public string GetVisibilityState() {
+		return System.Enum.GetName(typeof(VisibilityState), (int)localVisibilityState);
+	}
+
 	public bool IsVisible() {
 		return (localVisibilityState != VisibilityState.INVISIBLE);
 	}
@@ -311,15 +331,39 @@ public class BodyController : MonoBehaviour {
 				anim.SetTrigger(AnimTriggers.CAST_B);
 				break;
 			case Animations.DIE:
-				anim.SetBool(AnimBools.DIE, true);
+				anim.SetBool(AnimBools.DEAD, true);
 				anim.SetTrigger(AnimTriggers.DIE);
 				break;
 			case Animations.RESPAWN:
-				anim.SetBool(AnimBools.DIE, false);
+				anim.SetBool(AnimBools.DEAD, false);
+				break;
+			case Animations.LAYDOWN:
+				anim.SetBool(AnimBools.RESTING, true);
+				anim.SetTrigger(AnimTriggers.REST);
+				break;
+			case Animations.WAKEUP:
+				anim.SetBool(AnimBools.RESTING, false);
 				break;
 			default:
 				break;
 		}
+	}
+
+	public void EnableRagdoll(bool enable) {
+		foreach (Rigidbody ragdollRB in ragdollRigidbodies) {
+			if (enable) {
+				ragdollRB.velocity = rb.velocity;
+				ragdollRB.angularVelocity = rb.angularVelocity;
+			}
+
+			ragdollRB.isKinematic = !enable;
+		}
+
+		foreach (Collider col in ragdollColliders) {
+			col.enabled = enable;
+		}
+
+		anim.enabled = !enable;
 	}
 
 }

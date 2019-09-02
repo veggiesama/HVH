@@ -29,7 +29,7 @@ public abstract class Ability : ScriptableObject {
 	public bool doNotCancelOrderQueue = false;
 
 	private float cooldownTimeRemaining = 0.0f;
-	public float durationRemaining = 0;
+	[HideInInspector] public float durationRemaining = 0;
 
 	[Header("Projectile")]
 	public GameObject projectilePrefab = null;
@@ -40,6 +40,7 @@ public abstract class Ability : ScriptableObject {
 	public float projectileTimeUntilFullGrowth = 0;
 	public Vector3 projectileGrowthFactor = Vector3.one;
 	public float grenadeTimeToHitTarget = 0;
+	public bool grenadeLerpTimeByCastRange = false;
 
 	public abstract void Reset();
 
@@ -111,7 +112,7 @@ public abstract class Ability : ScriptableObject {
 
 	protected virtual void OnDurationEnd() {}
 	protected virtual void OnCastAbility() {}
-	protected virtual void OnTakeDamage(int dmg) {}
+	protected virtual void OnTakeDamage(float dmg) {}
 	protected virtual void OnMoved() {}
 
 	public void SetCooldown(float sec) {

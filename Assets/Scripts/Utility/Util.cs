@@ -111,8 +111,17 @@ public static class Util {
 		return new Color(originalColor.r * 0.5f, originalColor.g * 0.5f, originalColor.b * 0.5f);
 	}
 
-	public static UnitController[] FindUnitsInSphere(Vector3 center, float radius) {
-		return null;
+	public static List<UnitController> FindUnitsInSphere(Vector3 center, float radius, Teams team) {
+		Collider[] colliders = Physics.OverlapSphere(center, radius, (int) LayerMasks.BODY);
+
+		List<UnitController> unitList = new List<UnitController>();
+		foreach (Collider col in colliders) {
+			UnitController unit = col.gameObject.GetComponent<BodyController>().unit;
+			if (team.HasFlag(unit.GetTeam()))
+				unitList.Add(unit);
+		}
+
+		return unitList;
 	}
 
 }

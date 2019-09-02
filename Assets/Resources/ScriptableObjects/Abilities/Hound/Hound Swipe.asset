@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbef44b6fc1ec464ca87f256fed052e9, type: 3}
+  m_Name: Hound Swipe
+  m_EditorClassIdentifier: 
+  abilityName: Hound Swipe
+  caster: {fileID: 0}
+  allyTarget: {fileID: 0}
+  enemyTarget: {fileID: 0}
+  unitInfo: {fileID: 0}
+  abilityManager: {fileID: 0}
+  networkHelper: {fileID: 0}
+  owner: {fileID: 0}
+  isPassive: 0
+  targetType: 2
+  targetTeam: 2
+  damageType: 1
+  damage: 500
+  cooldown: 1
+  castRange: 0
+  castTime: 0
+  duration: 0.5
+  aoeRadius: 0
+  quickCast: 1
+  doNotCancelOrderQueue: 1
+  durationRemaining: 0
+  projectilePrefab: {fileID: 8222844098290283177, guid: 0e0a29864c746e049aa8edc3816b9f91,
+    type: 3}
+  projectileSpawner: 2
+  projectileBehaviour: 2
+  projectileSpeed: 0
+  projectileTimeAlive: 0.5
+  projectileTimeUntilFullGrowth: 0
+  projectileGrowthFactor: {x: 1, y: 1, z: 1}
+  grenadeTimeToHitTarget: 0
+  particleSlash: {fileID: 7799245463436937716, guid: 2c962533e91c6f44cacb5f4958f19b39,
+    type: 3}
+  particleBloodImpact: {fileID: 1519487373399078973, guid: da3624aa79fc0674c9b3d05c4d548b1f,
+    type: 3}

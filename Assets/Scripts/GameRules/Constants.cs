@@ -14,6 +14,8 @@ public static class Constants {
 
 	public static Color AllyColor = Color.green;
 	public static Color EnemyColor = Color.red;
+
+	public static float OnMoveTolerance = 1f; // actual distance a body needs to travel before OnMove event invoked
 }
 
 // Projectile types
@@ -24,18 +26,20 @@ public enum ProjectileBehaviourTypes {
 // Casting abilities
 public enum CastResults {
 	SUCCESS, FAILURE_COOLDOWN_NOT_READY, FAILURE_TARGET_OUT_OF_RANGE, FAILURE_NOT_FACING_TARGET, FAILURE_NAVIGATION_NOT_READY,
-	FAILURE_ALREADY_AIRBORN
+	FAILURE_ALREADY_AIRBORN, FAILURE_INVALID_TARGET
 }
 
 // Layers
 public enum LayerBits {
-	TERRAIN = 16, TREE = 17, BODY = 23
+	TERRAIN = 16, TREE = 17, BODY = 23, BODY_RAGDOLL = 24, BODY_SELECTABLE = 25
 }
 
 public enum LayerMasks {
-	TERRAIN = 1 << LayerBits.TERRAIN,
-	TREE = 1 << LayerBits.TREE,
-	BODY = 1 << LayerBits.BODY
+	TERRAIN = 1			<< LayerBits.TERRAIN,
+	TREE = 1			<< LayerBits.TREE,
+	BODY = 1			<< LayerBits.BODY,
+	BODY_RAGDOLL = 1	<< LayerBits.BODY_RAGDOLL,
+	BODY_SELECTABLE = 1 << LayerBits.BODY_SELECTABLE
 }
 
 // UI slots
@@ -48,8 +52,12 @@ public enum AbilitySlots {
 
 
 // Teams, allies, enemies
+[System.Flags]
 public enum Teams {
-	DWARVES, MONSTERS, NEUTRALS, OBSERVERS
+	DWARVES = 0x0,
+	MONSTERS = 0x1,
+	NEUTRALS = 0x2,
+	OBSERVERS = 0x3
 };
 
 public enum DwarfTeamSlots {
@@ -117,7 +125,8 @@ public static class AnimFloats {
 }
 
 public static class AnimBools {
-	public static string DIE    { get { return "isDead"; } }
+	public static string DEAD	 { get { return "isDead"; } }
+	public static string RESTING { get { return "isResting"; } }
 }
 
 public static class AnimTriggers {
@@ -128,11 +137,11 @@ public static class AnimTriggers {
 	public static string ATTACK_B { get { return "AttackB"; } }
 	public static string CAST_A   { get { return "CastA"; } }
 	public static string CAST_B   { get { return "CastB"; } }
-	public static string IDLE_B   { get { return "IdleB"; } }
+	public static string REST   { get { return "StartRest"; } }
 }
 
 public enum Animations {
-	NONE, ATTACK_A, ATTACK_B, CAST_A, CAST_B, DIE, RESPAWN, IDLE
+	NONE, ATTACK_A, ATTACK_B, CAST_A, CAST_B, DIE, RESPAWN, IDLE, LAYDOWN, WAKEUP
 }
 
 // returns the screen position for ally and enemy viewports

@@ -22,18 +22,10 @@ public abstract class Owner : NetworkBehaviour {
 
 	public void SetTeam(Teams team) {
 		this.team = (int) team;
+	}
 
-		if (!unit.IsPlayerOwned()) {
-			networkHelper.SetUnitInfo("Dummy NPC");
-		}
-
-		else if (team == Teams.DWARVES) {
-			networkHelper.SetUnitInfo("Dwarf");
-		}
-		else if (team == Teams.MONSTERS) {
-			networkHelper.SetUnitInfo("Monster");
-		}
-
+	public void SetUnitInfo(string unitInfo) {
+		networkHelper.SetUnitInfo(unitInfo);
 	}
 
 	public void SetVirtualPointerLocation(Vector3 vec) {
@@ -53,4 +45,6 @@ public abstract class Owner : NetworkBehaviour {
 			return default;
 	}
 
+
 }
+

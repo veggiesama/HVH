@@ -28,6 +28,7 @@ public class Net : Ability, IProjectileAbility {
 		projectileSpawner = BodyLocations.WEAPON;
 		projectileBehaviour = ProjectileBehaviourTypes.GRENADE;
 		grenadeTimeToHitTarget = 2f;
+		grenadeLerpTimeByCastRange = true;
 	}
 
 	public override CastResults Cast(Order castOrder) {

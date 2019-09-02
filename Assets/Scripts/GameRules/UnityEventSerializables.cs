@@ -14,4 +14,4 @@ public class UnityEventTree : UnityEvent <Tree> {}
 public class UnityEventCollision : UnityEvent <Collision> {}
 
 [System.Serializable]
-public class UnityEventDamage : UnityEvent <int> {}
+public class UnityEventDamage : UnityEvent <float> {}

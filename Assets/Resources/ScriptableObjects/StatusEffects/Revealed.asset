@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d3a14ffd00f39544a32cbce0252d663, type: 3}
+  m_Name: Revealed
+  m_EditorClassIdentifier: 
+  statusName: Revealed
+  type: 8
+  duration: 2
+  overrideAbilityDuration: 1
+  hideIcon: 0
+  dispellable: 0
+  applied: 0
+  remainingTime: 0

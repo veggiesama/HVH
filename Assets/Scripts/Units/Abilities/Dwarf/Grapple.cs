@@ -100,11 +100,11 @@ public class Grapple : Ability {
 	private void EndLaunch() {
 		caster.RemoveStatusEffect(airbornStatusEffect.statusName);
 		//caster.EnableNav(true);
-		caster.body.ResetBody();
+		//caster.body.ResetBody();
 		caster.body.onCollidedTerrain.RemoveListener(OnCollidedTerrain); // unsub
 		isLaunching = false;
 
-		Vector3 casterEndingPosition = caster.GetBodyPosition();
+		//Vector3 casterEndingPosition = caster.GetBodyPosition();
 		//Debug.Log("Launch distance: " + Util.GetDistanceIn2D(casterStartingPosition, casterEndingPosition));
 		
 		// cleanup

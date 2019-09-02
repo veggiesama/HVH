@@ -57,7 +57,7 @@ public class Stalker : Ability {
 		ResetInvisDelay(invisDelay);
 	}
 
-	protected override void OnTakeDamage(int dmg) {
+	protected override void OnTakeDamage(float dmg) {
 		if (dmg > minimumDmgToBreakInvis) {
 			ResetInvisDelay(invisDelayAfterDamage);
 		}

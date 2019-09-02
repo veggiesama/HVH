@@ -4,6 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "UnitInfo/UnitInfo")]
 public class UnitInfo : ScriptableObject {
+	public string unitName = "Unit name";
 	public float maxHealth = 100.0f;
 	public float healthRegen = 1.0f;
 	public int armor = 0;
@@ -32,6 +33,12 @@ public class UnitInfo : ScriptableObject {
 
 	[Header("Body locations")]
 	public GameObject animationPrefab;
+
+	[Header("AI")]
+	public bool hasAI = false;
+	public List<AiState> aiStatesDay;
+	public List<AiState> aiStatesNight;
+	public float aiUpdateEvery = 0.2f;
 
 	// Use this for initialization
 	public void Initialize () {

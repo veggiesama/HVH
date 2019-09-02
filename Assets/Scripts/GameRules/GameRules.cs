@@ -12,7 +12,8 @@ public class GameRules : Singleton<GameRules> {
 	[HideInInspector]
 	public TeamFieldOfView teamFov;
 
-	public GameObject npcPrefab;
+	public int houndsToSpawn;
+	public int testMonstersToSpawn;
 	private GameObject playerPrefab;
 	private Player localPlayer;
 
@@ -49,18 +50,44 @@ public class GameRules : Singleton<GameRules> {
 		SpawnUnassignedPlayers();
 
 		Debug.Log("Trying to spawn NPCs.");
-		SpawnNPCs();
-		SpawnNPCs();
-		SpawnNPCs();
+		SpawnHounds(houndsToSpawn);
+		SpawnTestMonsters(testMonstersToSpawn);
 	}
 
-	public void SpawnNPCs() {
+	public void SpawnHounds(int howMany) {
+		for (int i = 0; i < howMany; i++) {
+			SpawnHound();
+		}
+	}
+
+	public void SpawnHound() {
 		Transform spawnLoc = GetRandomPointOfInterest();
-		GameObject npc = Instantiate(npcPrefab, spawnLoc.position, spawnLoc.rotation);
+		GameObject npc = Instantiate(ResourceLibrary.Instance.npcPrefab, spawnLoc.position, spawnLoc.rotation);
 		NetworkServer.Spawn(npc);
+		Owner npcOwner = npc.GetComponent<Owner>();
+		npcOwner.SetTeam(Teams.DWARVES);
+		npcOwner.SetUnitInfo("Hound");
+
 		//npc.GetComponent<NetworkIdentity>().AssignClientAuthority(NetworkServer.localConnection);
 		//npc.SetTeam();
 	}
+
+	public void SpawnTestMonsters(int howMany) {
+		for (int i = 0; i < howMany; i++) {
+			SpawnTestMonster();
+		}
+	}
+
+
+	public void SpawnTestMonster() {
+		Transform spawnLoc = GetRandomPointOfInterest();
+		GameObject npc = Instantiate(ResourceLibrary.Instance.npcPrefab, spawnLoc.position, spawnLoc.rotation);
+		NetworkServer.Spawn(npc);
+		Owner npcOwner = npc.GetComponent<Owner>();
+		npcOwner.SetTeam(Teams.MONSTERS);
+		npcOwner.SetUnitInfo("MonsterTest");
+	}
+
 
 	public void SpawnUnassignedPlayers() {
 
@@ -76,6 +103,7 @@ public class GameRules : Singleton<GameRules> {
 			unassignedPlayer.MakeNPC();
 			NetworkServer.Spawn(unassignedPlayer.gameObject);
 			unassignedPlayer.SetTeam(Teams.DWARVES);
+			unassignedPlayer.SetUnitInfo("Dwarf");
 			n++;
 		}
 
@@ -88,6 +116,7 @@ public class GameRules : Singleton<GameRules> {
 			unassignedPlayer.MakeNPC();
 			NetworkServer.Spawn(unassignedPlayer.gameObject);
 			unassignedPlayer.SetTeam(Teams.MONSTERS);
+			unassignedPlayer.SetUnitInfo("Monster");
 			n++;
 		}
 
@@ -96,16 +125,34 @@ public class GameRules : Singleton<GameRules> {
 	}
 
 	public Player GetNextUnassignedPlayer() {
-		foreach (KeyValuePair<int, int> kv in networkGameRules.monsterDictionary) {
-			MonsterTeamSlots slot = (MonsterTeamSlots)kv.Key;
+		
+		Player p;
+		
+		p = GetNextDwarfPlayer();
+		if (p != null) return p;
+
+		p = GetNextMonsterPlayer();
+		if (p != null) return p;
+
+		return null;
+		
+	}
+
+	public Player GetNextDwarfPlayer() {
+		foreach (KeyValuePair<int, int> kv in networkGameRules.dwarfDictionary) {
+			DwarfTeamSlots slot = (DwarfTeamSlots)kv.Key;
 			Player player = GetPlayer(kv.Value);
 
 			if (player.GetComponent<NetworkHelper>().isUnassigned)
 				return player;
 		}
 
-		foreach (KeyValuePair<int, int> kv in networkGameRules.dwarfDictionary) {
-			DwarfTeamSlots slot = (DwarfTeamSlots)kv.Key;
+		return null;
+	}
+
+	public Player GetNextMonsterPlayer() {
+		foreach (KeyValuePair<int, int> kv in networkGameRules.monsterDictionary) {
+			MonsterTeamSlots slot = (MonsterTeamSlots)kv.Key;
 			Player player = GetPlayer(kv.Value);
 
 			if (player.GetComponent<NetworkHelper>().isUnassigned)

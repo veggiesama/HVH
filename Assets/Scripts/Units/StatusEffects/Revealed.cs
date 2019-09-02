@@ -11,6 +11,7 @@ public class Revealed : StatusEffect {
 		statusName = "Revealed";
 		type = StatusEffectTypes.REVEALED;
 		duration = 2f;
+		overrideAbilityDuration = true;
 	}
 	
 	// initializer

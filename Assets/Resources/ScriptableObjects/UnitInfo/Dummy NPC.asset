@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd697404dfc112446a95d5512bb2c8ca, type: 3}
   m_Name: Dummy NPC
   m_EditorClassIdentifier: 
+  unitName: Hound
   maxHealth: 100
   healthRegen: 0
   armor: 0
@@ -32,12 +33,12 @@ MonoBehaviour:
     type: 2}
   onAirbornStatusEffect: {fileID: 11400000, guid: 602ec8d7899e5e644a690f77dc709914,
     type: 2}
-  startingAttackAbility: {fileID: 11400000, guid: 7c5bc42bd4e03df47857aa7808773005,
+  startingAttackAbility: {fileID: 11400000, guid: 15c7923da61152d498335f18fdbf2b41,
     type: 2}
   startingAbilitiesList:
   - {fileID: 11400000, guid: a30be00ac1b3bbd40a1e4c63b5a412ee, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
+  - {fileID: 11400000, guid: 9f5d7838e937b484d921d7a3e1143ac4, type: 2}
+  - {fileID: 11400000, guid: 65943cc63a424fb4da40151f76e7cd4e, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}

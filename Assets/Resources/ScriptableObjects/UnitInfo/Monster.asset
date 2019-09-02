@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd697404dfc112446a95d5512bb2c8ca, type: 3}
   m_Name: Monster
   m_EditorClassIdentifier: 
+  unitName: Monster
   maxHealth: 300
   healthRegen: 1
   armor: 0

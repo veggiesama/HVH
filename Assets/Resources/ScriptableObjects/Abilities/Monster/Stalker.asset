@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5cd1bddb3a090f44ade524fe3fab668, type: 3}
+  m_Name: Stalker
+  m_EditorClassIdentifier: 
+  abilityName: Stalker
+  caster: {fileID: 0}
+  allyTarget: {fileID: 0}
+  enemyTarget: {fileID: 0}
+  unitInfo: {fileID: 0}
+  abilityManager: {fileID: 0}
+  networkHelper: {fileID: 0}
+  owner: {fileID: 0}
+  isPassive: 1
+  targetType: 0
+  targetTeam: 0
+  damageType: 0
+  damage: 0
+  cooldown: 0
+  castRange: 0
+  castTime: 0
+  duration: 0
+  aoeRadius: 0
+  quickCast: 0
+  doNotCancelOrderQueue: 0
+  durationRemaining: 0
+  projectilePrefab: {fileID: 0}
+  projectileSpawner: 0
+  projectileBehaviour: 0
+  projectileSpeed: 0
+  projectileTimeAlive: 0
+  projectileTimeUntilFullGrowth: 0
+  projectileGrowthFactor: {x: 1, y: 1, z: 1}
+  grenadeTimeToHitTarget: 0
+  grenadeLerpTimeByCastRange: 0
+  nightMoveSpeedBonus: 5
+  nightSwipeCooldownReduction: 0.5
+  invisDelay: 3
+  invisDelayAfterDamage: 2
+  invisDelayAfterMoving: 1
+  minimumDmgToBreakInvis: 10
+  invisRegenPercentPerSec: 1.5
+  killRegenDuration: 20
+  killRegenPercentPerSec: 0.5
+  nightStatusEffect: {fileID: 11400000, guid: fbbc2ad53c66ed14ea9bd67b23e46526, type: 2}
+  invisStatusEffect: {fileID: 11400000, guid: 862978fee122db24e90986b140a6cc04, type: 2}
