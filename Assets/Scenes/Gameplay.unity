@@ -2031,22 +2031,22 @@ PrefabInstance:
     - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 0.0078125
+      value: NaN
       objectReference: {fileID: 0}
     - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 0.04296875
+      value: 5e-44
       objectReference: {fileID: 0}
     - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 0.0087890625
+      value: 7.34685e-40
       objectReference: {fileID: 0}
     - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: -0.009765625
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
@@ -4572,7 +4572,7 @@ MonoBehaviour:
   serverOnly: 0
   localPlayerAuthority: 0
   m_AssetId: 
-  m_SceneId: 3601194039
+  m_SceneId: 4108258396
 --- !u!114 &1086035108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4587,8 +4587,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkGameRules: {fileID: 0}
   teamFov: {fileID: 0}
-  houndsToSpawn: 4
-  testMonstersToSpawn: 4
+  houndsToSpawn: 1
+  testMonstersToSpawn: 8
 --- !u!4 &1086035109
 Transform:
   m_ObjectHideFlags: 0

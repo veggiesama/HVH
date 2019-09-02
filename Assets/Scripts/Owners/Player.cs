@@ -14,6 +14,8 @@ public class Player : Owner {
 	public UIController uiController;
 	public Camera cam;
 	public MouseTargeter mouseTargeter;
+	private bool holdingShift = false;
+	private bool holdingCtrl = false;
 
 	//public bool isNPC = false; // inspector
 	[SyncVar] public int playerID;
@@ -37,12 +39,23 @@ public class Player : Owner {
 		base.Awake();
 	}
 
+	public bool IsShiftQueuing() {
+		return holdingShift;
+	}
+
+	public bool IsCtrlZooming() {
+		return holdingCtrl;
+	}
+
 	// Update is called once per frame. Use for input. Physics unstable.
 	public void Update () {
 		//controlScheme.UpdateInputs();
 
 		if (networkHelper.isUnassigned) return;
 		if (!isLocalPlayer) return;
+
+		holdingShift = Input.GetButton("Queue (Hold)");
+		holdingCtrl = Input.GetButton("Zoom (Hold)");
 
 		// always register selections, even while disabled
 		if (Input.GetButtonDown("L-Click")) {

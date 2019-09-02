@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   queue: []
+  unit: {fileID: 0}
 --- !u!114 &7132620267164966039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -793,12 +794,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff5a07eab22538409b1c2b56f646bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 114439122746566608}
-  followTightly: 0
-  innerOffsetRingRadius: 100
-  outerOffsetRingRadius: 150
-  smoothDampTime: 1
-  distanceMultiplier: 0.06
+  body: {fileID: 114845004866198694}
+  smoothDampTime: 0.5
+  zoomedSmoothDampTime: 0.1
+  zoomedDistanceMultiplier: 11
+  zoomRegionWidthPercentage: 0.4
+  zoomRegionHeightPercentage: 0.35
 --- !u!114 &3043463792562856697
 MonoBehaviour:
   m_ObjectHideFlags: 0

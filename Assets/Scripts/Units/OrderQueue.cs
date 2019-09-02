@@ -5,9 +5,10 @@ using UnityEngine;
 public class OrderQueue : MonoBehaviour {
 	[SerializeField] private List<Order> queue = new List<Order>();
 	private bool doingOrder = false;
+	public UnitController unit;
 
-    void Start()
-    {
+    void Start() {
+		unit = GetComponentInParent<UnitController>();
     }
 
     void Update()
@@ -30,7 +31,10 @@ public class OrderQueue : MonoBehaviour {
 	public void Add(Order order, bool doNotCancelOrderQueue = false) {
 
 		// new order is shift+queued to the back of queue
-	   	bool shiftQueueing = Input.GetButton("Queue (Hold)");
+		bool shiftQueueing = false;
+		if (unit.player != null)
+			shiftQueueing = unit.player.IsShiftQueuing();
+
 		if (shiftQueueing) {
 			QueueNewOrder(order);
 		}
