@@ -4,7 +4,6 @@ Shader "SyntyStudios/Trees"
 {
 	Properties
 	{
-		_Alpha("_Alpha", Range(0,1)) = 1 // VEG
 		_Emission("Emission", 2D) = "white" {}
 		_MainTexture("_MainTexture", 2D) = "white" {}
 		_ColorTint("_ColorTint", Color) = (0,0,0,0)
@@ -24,8 +23,7 @@ Shader "SyntyStudios/Trees"
 
 	SubShader
 	{
-		// VEG: changed RenderType and Queue
-		Tags{ "RenderType" = "Transparent"  "Queue" = "Transparent" "IgnoreProjector" = "True" "DisableBatching" = "True" "IsEmissive" = "true"  }
+		Tags{ "RenderType" = "Opaque"  "Queue" = "AlphaTest+0" "IgnoreProjector" = "True" "DisableBatching" = "True" "IsEmissive" = "true"  }
 		Cull Off
 		Stencil
 		{
@@ -37,7 +35,7 @@ Shader "SyntyStudios/Trees"
 		#pragma instancing_options procedural:setup
 		#pragma multi_compile GPU_FRUSTUM_ON __
 		#include "VS_indirect.cginc"
-		#pragma surface surf Standard keepalpha addshadow fullforwardshadows vertex:vertexDataFunc alpha // VEG: added alpha
+		#pragma surface surf Standard keepalpha addshadow fullforwardshadows vertex:vertexDataFunc 
 		struct Input
 		{
 			float2 uv_texcoord;
@@ -58,7 +56,6 @@ Shader "SyntyStudios/Trees"
 		uniform float4 _Emission_ST;
 		uniform float4 _EmissionColor;
 		uniform float _Cutoff = 0.5;
-		uniform float _Alpha; // VEG
 
 
 		float4 CalculateContrast( float contrastValue, float4 colorTarget )
@@ -87,14 +84,14 @@ Shader "SyntyStudios/Trees"
 			o.Albedo = ( tex2DNode2 * _ColorTint ).rgb;
 			float2 uv_Emission = i.uv_texcoord * _Emission_ST.xy + _Emission_ST.zw;
 			o.Emission = ( tex2D( _Emission, uv_Emission ) * _EmissionColor ).rgb;
-			o.Alpha = _Alpha; // VEG changed to _Alpha
+			o.Alpha = 1;
 			clip( tex2DNode2.a - _Cutoff );
 		}
 
 		ENDCG
 	}
 	Fallback "Diffuse"
-	//CustomEditor "ASEMaterialInspector"
+	CustomEditor "ASEMaterialInspector"
 }
 /*ASEBEGIN
 Version=16200

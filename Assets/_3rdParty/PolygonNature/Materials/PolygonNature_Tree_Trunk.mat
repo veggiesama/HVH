@@ -84,7 +84,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Alpha: 1
     - _Big_Wave: 7.7
     - _Big_WindAmount: 0.4
     - _Big_Windspeed: 0.75
@@ -116,7 +115,7 @@ Material:
     - _Wave: 8.42
     - _WindSpeed: 0.1
     - _ZWrite: 1
-    - __dirty: 1
+    - __dirty: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorTint: {r: 1, g: 1, b: 1, a: 0}

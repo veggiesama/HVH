@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3bdb2cd68f901469e7cc149151eb49, type: 3}
   m_Name: Polygon_Nature_Post_Profile_v1
   m_EditorClassIdentifier: 
-  m_Name: Polygon_Nature_Post_Profile_v1
-  m_EditorClassIdentifier: 
   debugViews:
     m_Enabled: 1
     m_Settings:

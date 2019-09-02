@@ -160,7 +160,7 @@ Shader "SyntyStudios/Moss"
 		}
 	}
 	Fallback "Diffuse"
-	//CustomEditor "ASEMaterialInspector"
+	CustomEditor "ASEMaterialInspector"
 }
 /*ASEBEGIN
 Version=16200
