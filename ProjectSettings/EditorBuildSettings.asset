@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Map_Small.unity
     guid: b75cbaeabae34d9439a1167dcb0df3e6
   - enabled: 1
+    path: Assets/Scenes/Map_Test.unity
+    guid: 7222c42ceb6b2d8478f743cfeffbee83
+  - enabled: 1
     path: Assets/Scenes/Gameplay.unity
     guid: 5afb127ddb7304e42ba19cade4920ec4
   m_configObjects: {}

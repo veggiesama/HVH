@@ -1,101 +1,107 @@
 ﻿using Tree = HVH.Tree;
+using Outline = cakeslice.Outline;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.AI;
 
 namespace HVH {
 
 public class Tree : MonoBehaviour {
 
+	public GameObject visionBlockerGO;
 	public GameObject meshGO;
+	public GameObject anchorGO;
 	public GameObject deadTreeGO;
-    public Transform abilityAnchor;
-	public Material[] highlightedTreeMaterials;
 
-	private Material[] originalTreeMaterials;
 	private TreeHandler treeHandler;
-	private Renderer meshRenderer;
-	private FadeMaterial fadeScript;
+	[HideInInspector] public Renderer meshRenderer;
+	private DeadTree deadTree;
+	private Outline outline;
+	private NavMeshObstacle navMeshObstacle;
+	private Collider capsuleCollider;
+
+	private MaterialPropertyBlock block;
+	public Color colorTint;
+	public Color emissionColor;
 
 	private void Start() {
+		SetColors(); // colors need to be set in both editor/play modes due to use of MaterialPropertyBlock
+
 		meshRenderer = meshGO.GetComponent<Renderer>();
 		treeHandler = GetComponentInParent<TreeHandler>();
-		//rend = GetComponent<Renderer>();
-		originalTreeMaterials = meshRenderer.materials;
-
-		if (originalTreeMaterials.Length != highlightedTreeMaterials.Length) {
-			Debug.Log("Number of highlighted tree materials must match number of tree materials. Fix prefab.");
-		}
-
-		// Fill in empty material slots
-		for (int n = 0; n < highlightedTreeMaterials.Length; n++) {
-			if (highlightedTreeMaterials[n] == null) {
-				highlightedTreeMaterials[n] = originalTreeMaterials[n];
-			}
-		} 
+		outline = meshGO.GetComponent<Outline>();
+		navMeshObstacle = GetComponent<NavMeshObstacle>();
+		capsuleCollider = GetComponent<CapsuleCollider>();
 
 		// dead tree mesh referenced from regular tree mesh
 		Mesh sm = meshGO.GetComponent<MeshFilter>().sharedMesh;
-		var deadTreeMeshFilter = deadTreeGO.AddComponent<MeshFilter>();
-		var deadTreeRenderer = deadTreeGO.AddComponent<MeshRenderer>();
+		var deadTreeMeshFilter = deadTreeGO.GetComponent<MeshFilter>();
+		var deadTreeRenderer = deadTreeGO.GetComponent<MeshRenderer>();
 		deadTreeMeshFilter.mesh = sm;
-		deadTreeRenderer.materials = originalTreeMaterials;
-		fadeScript = deadTreeGO.GetComponent<FadeMaterial>();
-		deadTreeGO.SetActive(false);
+		
+		deadTreeRenderer.sharedMaterials = meshRenderer.sharedMaterials;
+		deadTreeRenderer.SetPropertyBlock(block, 1); // bark is material 0, leaves/pines are material 1.
+
+		//deadTreeRenderer.materials = originalTreeMaterials;
+		deadTree = deadTreeGO.GetComponent<DeadTree>();
 	}
 
-	public void SetHighlighted(bool enable) {
-		// https://docs.unity3d.com/ScriptReference/Renderer-materials.html
-		//Note that like all arrays returned by Unity, this returns a copy of materials array. If you want to change some materials in it, get the value, change an entry and set materials back.
-		Material[] currentMats = meshRenderer.materials;
-
-		for (int n = 0; n < currentMats.Length; n++) {
-			if (enable)
-				currentMats[n] = highlightedTreeMaterials[n];
-			else
-				currentMats[n] = originalTreeMaterials[n];
+	public void EnableTree(bool enable) {
+		visionBlockerGO.SetActive(enable);
+		meshGO.SetActive(enable);
+		anchorGO.SetActive(enable);
+		navMeshObstacle.enabled = enable;
+		capsuleCollider.enabled = enable;
+		
+		if (enable) {
+			deadTreeGO.SetActive(false);
 		}
-
-		meshRenderer.materials = currentMats;
+		else {
+			deadTree.ResetTransform(meshGO.transform.position, 
+								meshGO.transform.rotation,
+								meshGO.transform.localScale);
+			deadTreeGO.SetActive(true);
+			deadTree.StartSinking();
+		}
 	}
 
-	// create a dead tree from the prefab that falls over and destroys itself
+
+	public void SetHighlighted(HighlightingState state) {
+		switch (state) {
+			case HighlightingState.NONE:
+				outline.enabled = false;
+				break;
+			case HighlightingState.NORMAL:
+				outline.enabled = true;
+				outline.color = 0;
+				break;
+			case HighlightingState.INTEREST:
+				outline.enabled = true;
+				outline.color = 1;
+				break;
+			case HighlightingState.ENEMY:
+				outline.enabled = true;
+				outline.color = 2;
+				break;
+		}
+	}
+
 	public void FallOver(Vector3 fromDirection, float force) {
-		GameObject deadTreeClone = Instantiate(deadTreeGO);
-		deadTreeClone.SetActive(true);
-		deadTreeClone.transform.position = meshGO.transform.position;
-		deadTreeClone.transform.rotation = meshGO.transform.rotation;
-		deadTreeClone.transform.localScale = meshGO.transform.localScale;
-
 		if (fromDirection != default) {
-			Rigidbody rb = deadTreeClone.GetComponent<Rigidbody>();
-			rb.AddForce((deadTreeClone.transform.position - fromDirection).normalized * force);
+			Rigidbody rb = deadTreeGO.GetComponent<Rigidbody>();
+			rb.AddForce((deadTreeGO.transform.position - fromDirection).normalized * force);
 		}
-
-		fadeScript.enabled = true;
-		Destroy(deadTreeClone, 5.0f);
 	}
 
-	/*
-	public void FallOver(Vector3 fromDirection, float force) {
-		GameObject deadTreeCopy = Instantiate(deadTreeGO);
-		deadTreeCopy.SetActive(true);		
-		deadTreeCopy.transform.position = meshGO.transform.position;
-		deadTreeCopy.transform.rotation = meshGO.transform.rotation;
-		deadTreeCopy.transform.localScale = meshGO.transform.localScale;
-		MeshFilter deadTreeCopyMesh = deadTreeCopy.AddComponent<MeshFilter>();
-		MeshRenderer deadTreeCopyRenderer = deadTreeCopy.AddComponent<MeshRenderer>();
-		deadTreeCopyMesh.mesh = Instantiate( meshGO.GetComponent<MeshFilter>().sharedMesh );
-		deadTreeCopyRenderer.materials = originalTreeMaterials;
-
-		if (fromDirection != default) {
-			Rigidbody rb = deadTreeCopy.GetComponent<Rigidbody>();
-			rb.AddForce((deadTreeCopy.transform.position - fromDirection).normalized * force);
-		}
-
-		Destroy(deadTreeCopy, 5.0f);
-	}*/
+	public void Grow() {
+		StartCoroutine(
+			deadTree.StartRising(meshGO.transform.position, 
+									meshGO.transform.rotation,
+									meshGO.transform.localScale)
+		);
+	}
 
 	public void OnTriggerEnter(Collider col) {
 		//Debug.Log("Tree triggered by: " + col.gameObject.name);
@@ -107,7 +113,7 @@ public class Tree : MonoBehaviour {
 	}
 
 	public Vector3 GetAnchorPoint() {
-		return abilityAnchor.position;
+		return anchorGO.transform.position;
 	}
 
 	public int GetSiblingIndex() {
@@ -116,6 +122,23 @@ public class Tree : MonoBehaviour {
 
 	public GameObject GetTreeHandlerGO() {
 		return treeHandler.gameObject;
+	}
+
+	// usable in edit mode
+	public void SaveColors(Color colorTint, Color emissionColor) {
+		this.colorTint = colorTint;
+		this.emissionColor = emissionColor;
+	}
+
+	// usable in edit mode
+	public void SetColors() {
+		if (block != null)
+			block.Clear();
+	
+		block = new MaterialPropertyBlock();
+		block.SetColor("_ColorTint", colorTint);
+		block.SetColor("_EmissionColor", emissionColor);
+		meshGO.GetComponent<Renderer>().SetPropertyBlock(block, 1); // bark is material 0, leaves/pines are material 1.
 	}
 
 }

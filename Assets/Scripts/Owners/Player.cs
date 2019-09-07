@@ -32,6 +32,7 @@ public class Player : Owner {
 			EnableLocalPlayerOnlyObjects(true);
 			UpdateTeamVision();
 			TeamFieldOfView.Instance.Initialize((Teams)team);
+			DisableTreeHighlighting();
 		}
 	}
 
@@ -222,6 +223,14 @@ public class Player : Owner {
 				u.EnableVision(true);
 			else
 				u.EnableVision(false);
+		}
+	}
+
+	public void DisableTreeHighlighting() {
+		Tree[] trees = FindObjectsOfType<Tree>();
+
+		foreach (Tree t in trees) {
+			t.SetHighlighted(HighlightingState.NONE);
 		}
 	}
 

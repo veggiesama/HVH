@@ -100,5 +100,12 @@ public class AiManager: MonoBehaviour {
 			currentState = null;
 		}
 	}
+	
+	public string GetCurrentState() {
+		if (currentState != null)
+			return currentState.GetType().ToString();
+		else
+			return "null";
+	}
 
 }

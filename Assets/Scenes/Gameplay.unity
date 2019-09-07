@@ -2031,17 +2031,17 @@ PrefabInstance:
     - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: NaN
+      value: 5.35e-41
       objectReference: {fileID: 0}
     - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 5e-44
+      value: 1.02e-43
       objectReference: {fileID: 0}
     - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 7.34685e-40
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
         type: 3}
@@ -4572,7 +4572,7 @@ MonoBehaviour:
   serverOnly: 0
   localPlayerAuthority: 0
   m_AssetId: 
-  m_SceneId: 4108258396
+  m_SceneId: 1575236671
 --- !u!114 &1086035108
 MonoBehaviour:
   m_ObjectHideFlags: 0

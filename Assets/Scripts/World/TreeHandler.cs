@@ -8,20 +8,22 @@ public class TreeHandler : NetworkBehaviour {
 
 	[ClientRpc]
 	public void Rpc_DestroyTree(int treeSiblingIndex, Vector3 destroyedFromDirection, float delay) {
-		//Debug.Log("Rpc_DestroyTree");
 		GameObject treeGO = GetTreeGOFromSiblingIndex(treeSiblingIndex);
-		Tree tree = treeGO.GetComponent<Tree>();
-		//GameObject deadTreePrefab = tree.deadTreePrefab;
-		//GameObject deadTree = Instantiate(deadTreePrefab, tree.transform.position, tree.transform.rotation, transform);
-
-		tree.FallOver(destroyedFromDirection, 400f);
-		treeGO.SetActive(false);
+		DestroyTree(treeGO, destroyedFromDirection);
 		StartCoroutine( RespawnTree(treeGO) );
+	}
+
+	private void DestroyTree(GameObject treeGO, Vector3 destroyedFromDirection) {
+		Tree tree = treeGO.GetComponent<Tree>();
+		tree.EnableTree(false);
+		tree.FallOver(destroyedFromDirection, 400f);
 	}
 
 	private IEnumerator RespawnTree(GameObject treeGO) {
 		yield return new WaitForSeconds(Constants.TreeRespawnTime);
-		treeGO.SetActive(true);
+		Tree tree = treeGO.GetComponent<Tree>();
+		//tree.EnableTree(true);
+		tree.Grow();
 	}
 
 	private GameObject GetTreeGOFromSiblingIndex(int siblingIndex) {

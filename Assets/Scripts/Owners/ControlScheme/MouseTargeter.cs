@@ -57,14 +57,14 @@ public class MouseTargeter : MonoBehaviour {
 		Tree tree = GetTreeAtMouseLocation();
 		if (tree != null) {
 			if (!tree.Equals(lastTree)) {
-				tree.SetHighlighted(true);
-				if (lastTree != null) lastTree.SetHighlighted(false);
+				tree.SetHighlighted(HighlightingState.INTEREST);
+				if (lastTree != null) lastTree.SetHighlighted(HighlightingState.NONE);
 				lastTree = tree;
 			}
 		}
 		else {
 			if (lastTree != null) {
-				lastTree.SetHighlighted(false);
+				lastTree.SetHighlighted(HighlightingState.NONE);
 				lastTree = null;
 			}
 		}
@@ -164,7 +164,7 @@ public class MouseTargeter : MonoBehaviour {
 			targetingEnabled = false;
 			storedSlot = AbilitySlots.NONE;
 			storedAbility = null;
-			if (lastTree != null) lastTree.SetHighlighted(false);
+			if (lastTree != null) lastTree.SetHighlighted(HighlightingState.NONE);
 			if (lastUnit != null) lastUnit.SetHighlighted(HighlightingState.NORMAL);
 		}
 	}
