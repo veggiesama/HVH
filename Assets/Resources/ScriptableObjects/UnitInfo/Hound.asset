@@ -36,10 +36,10 @@ MonoBehaviour:
   startingAttackAbility: {fileID: 11400000, guid: 15c7923da61152d498335f18fdbf2b41,
     type: 2}
   startingAbilitiesList:
-  - {fileID: 11400000, guid: a30be00ac1b3bbd40a1e4c63b5a412ee, type: 2}
-  - {fileID: 11400000, guid: 9f5d7838e937b484d921d7a3e1143ac4, type: 2}
   - {fileID: 11400000, guid: 65943cc63a424fb4da40151f76e7cd4e, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
+  - {fileID: 11400000, guid: 2377ea337d39d7f43aaec7811f8be1a8, type: 2}
+  - {fileID: 11400000, guid: 9f5d7838e937b484d921d7a3e1143ac4, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   startingItemsList:
@@ -57,10 +57,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7ae8ba42b61ac174d83977d3f48ebc24, type: 2}
   - {fileID: 11400000, guid: 6ce22892e4dcb994eb469971854873eb, type: 2}
   - {fileID: 11400000, guid: ae4d527583a0a6943ad4a2b5040a9691, type: 2}
+  - {fileID: 11400000, guid: edf590b7947208f4bb76b91bc3978133, type: 2}
   aiStatesNight:
   - {fileID: 11400000, guid: 931102616fd277b48b1707034e71a8ab, type: 2}
   - {fileID: 11400000, guid: 2acf84cb4f36ec143ab94ca77915ad51, type: 2}
   - {fileID: 11400000, guid: 6ce22892e4dcb994eb469971854873eb, type: 2}
   - {fileID: 11400000, guid: 012c6e450354ff74db0d8527857949a3, type: 2}
   - {fileID: 11400000, guid: cd034061174ee7947b2c0beace3ad68e, type: 2}
+  - {fileID: 11400000, guid: edf590b7947208f4bb76b91bc3978133, type: 2}
   aiUpdateEvery: 0.2

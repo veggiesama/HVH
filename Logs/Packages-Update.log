@@ -84,3 +84,15 @@ The following packages were updated:
   com.unity.package-manager-ui from version 2.1.2 to 2.2.0
   com.unity.textmeshpro from version 2.0.0 to 2.0.1
   com.unity.timeline from version 1.0.0 to 1.1.0
+
+=== Sat Sep  7 13:11:36 2019
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.multiplayer-hlapi from version 1.0.2 to 1.0.4
+  com.unity.probuilder from version 4.0.5 to 4.1.0
+  com.unity.test-framework from version 1.0.13 to 1.0.17
+The following packages were removed:
+  com.unity.package-manager-ui@2.2.0

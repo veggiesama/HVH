@@ -44,7 +44,6 @@ public class UnitController : MonoBehaviour {
 	void Awake () {
 		body = GetComponentInChildren<BodyController>();
 		agent = body.GetComponent<NavMeshAgent>();
-		faceCam = GetComponentInChildren<Camera>(true);
 		owner = GetComponentInParent<Owner>();
 		networkHelper = owner.GetComponent<NetworkHelper>();
 		abilityManager = GetComponent<AbilityManager>();
@@ -58,7 +57,7 @@ public class UnitController : MonoBehaviour {
 			player = (Player) owner;
 		}
 
-		SetTargetCamera(false, AbilityTargetTeams.ENEMY);
+		//SetTargetCamera(false, AbilityTargetTeams.ENEMY);
 	}
 
 	// ORDERS
@@ -203,32 +202,45 @@ public class UnitController : MonoBehaviour {
 
 	}
 
-
+	public bool IsLocalPlayer() {
+		return (IsPlayerOwned() && GameRules.Instance.GetLocalPlayer() == player);
+	}
 
 	// targeting
 
 	public void SetCurrentTarget(UnitController target) {
 		if (target == null) return;
 
+		bool isLocalPlayer = IsLocalPlayer();
+
 		if (SharesTeamWith(target)) {
 			if (currentFriendlyTarget != null) {
-				currentFriendlyTarget.ShowTargetStand(false, AbilityTargetTeams.ALLY);
-				currentFriendlyTarget.SetTargetCamera(false, AbilityTargetTeams.ALLY);
+
+				if (isLocalPlayer) {
+					currentFriendlyTarget.ShowTargetStand(false, AbilityTargetTeams.ALLY);
+					currentFriendlyTarget.SetTargetCamera(false, AbilityTargetTeams.ALLY);
+				}
 			}
 
 			currentFriendlyTarget = target;
-			target.ShowTargetStand(true, AbilityTargetTeams.ALLY);
-			target.SetTargetCamera(true, AbilityTargetTeams.ALLY);
+
+			if (isLocalPlayer) {
+				target.ShowTargetStand(true, AbilityTargetTeams.ALLY);
+				target.SetTargetCamera(true, AbilityTargetTeams.ALLY);
+			}
 		}
 		else {
-			if (currentEnemyTarget != null) {
+			if (currentEnemyTarget != null && isLocalPlayer) {
 				currentEnemyTarget.ShowTargetStand(false, AbilityTargetTeams.ENEMY);
 				currentEnemyTarget.SetTargetCamera(false, AbilityTargetTeams.ENEMY);
 			}
 
 			currentEnemyTarget = target;
-			target.ShowTargetStand(true, AbilityTargetTeams.ENEMY);
-			target.SetTargetCamera(true, AbilityTargetTeams.ENEMY);
+			
+			if (isLocalPlayer) {
+				target.ShowTargetStand(true, AbilityTargetTeams.ENEMY);
+				target.SetTargetCamera(true, AbilityTargetTeams.ENEMY);
+			}
 		}
 	}
 
@@ -281,14 +293,20 @@ public class UnitController : MonoBehaviour {
 	}
 	
 	private void SetTargetCamera(bool enable, AbilityTargetTeams targetTeam) {
+		if (faceCam == null) return;
+
 		faceCam.enabled = enable;
 
 		if (enable) {
 			if (targetTeam == AbilityTargetTeams.ALLY)
-				faceCam.rect = CameraViewports.GetAllyViewport();
+				faceCam.targetTexture = ResourceLibrary.Instance.allyRenderTexture;
 			else
-				faceCam.rect = CameraViewports.GetEnemyViewport();
+				faceCam.targetTexture = ResourceLibrary.Instance.enemyRenderTexture;
 		}
+
+		else
+			faceCam.targetTexture.Release();
+
 	}
 
 	public UnitController GetTarget(AbilityTargetTeams targetTeam) {
@@ -549,6 +567,7 @@ public class UnitController : MonoBehaviour {
 			abilityManager.Initialize();
 			body.ResetAnimator();
 			body.SetColor(unitInfo.bodyColor);
+			faceCam = GetComponentInChildren<Camera>(true);
 
 			fov.dayViewRadius = unitInfo.daySightRange;
 			fov.nightViewRadius = unitInfo.nightSightRange;

@@ -57,8 +57,6 @@ public class HealthController : MonoBehaviour {
 			enemyTargetHealthbarSlider.gameObject.SetActive(false);
 		}
 		
-		Player[] playerArray = GameRules.Instance.GetAllPlayers();
-
 		foreach (KeyValuePair<int,int> kv in GameRules.Instance.GetDwarfTeamDictionary()) {
 			DwarfTeamSlots slot = (DwarfTeamSlots)kv.Key;
 			Player p = GameRules.Instance.GetPlayer(kv.Value);

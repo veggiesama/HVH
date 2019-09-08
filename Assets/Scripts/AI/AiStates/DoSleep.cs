@@ -8,6 +8,7 @@ public class DoSleep : AiState {
 	[Header("DoSleep")]
 	public AbilitySlots abilitySlot;
 	public StatusEffect loyaltyBuff;
+	public StatusEffect sleepBuff;
 	private Ability ability;
 
 	public override void Reset() {
@@ -36,6 +37,11 @@ public class DoSleep : AiState {
 	public override void Execute() {
 		base.Execute();
 		unit.DoAbility(abilitySlot);
+	}
+
+	public override void End() {
+		if (unit.HasStatusEffect(sleepBuff))
+			unit.RemoveStatusEffect(sleepBuff);
 	}
 
 }

@@ -16,5 +16,5 @@ MonoBehaviour:
   desire: 100
   hasDuration: 0
   duration: 0
-  abilitySlot: 3
+  abilitySlot: 1
   sprintBuff: {fileID: 11400000, guid: e343e92b2bb2d20468454bad950ab0d5, type: 2}

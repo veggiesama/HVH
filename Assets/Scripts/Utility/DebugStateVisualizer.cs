@@ -18,7 +18,7 @@ public class DebugStateVisualizer : MonoBehaviour
 		Vector3 offset = Vector3.up * 1.1f;
 		string str = "VisibilityState: " + body.GetVisibilityState();
 
-		if (body.unit.aiManager != null) 
+		if (Application.IsPlaying(gameObject) && body.unit.aiManager != null) 
 			str += "\n" + "AIState: " + body.unit.aiManager.GetCurrentState();
 
 		Handles.Label(transform.position + offset, str);

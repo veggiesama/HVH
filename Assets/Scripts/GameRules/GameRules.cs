@@ -16,6 +16,7 @@ public class GameRules : Singleton<GameRules> {
 	public int testMonstersToSpawn;
 	private GameObject playerPrefab;
 	private Player localPlayer;
+	private List<Player> allPlayers;
 
 	// Singleton constructor
 	public static GameRules Instance {
@@ -31,19 +32,11 @@ public class GameRules : Singleton<GameRules> {
 		playerPrefab = NetworkManager.singleton.playerPrefab;
 		networkGameRules = GetComponent<NetworkGameRules>();
 		teamFov = GetComponentInChildren<TeamFieldOfView>();
+
+		int numPlayers = System.Enum.GetValues(typeof(MonsterTeamSlots)).Length + 
+						 System.Enum.GetValues(typeof(DwarfTeamSlots)).Length;
+		allPlayers = new List<Player>(numPlayers);
 	}
-
-
-	// Use this for initialization
-	/*
-	void Start () {
-		GameObject[] editorOnlyObjects = GameObject.FindGameObjectsWithTag("EditorOnly");
-		foreach(GameObject obj in editorOnlyObjects) {
-			foreach (MeshRenderer mesh in obj.GetComponentsInChildren<MeshRenderer>()) {
-				//mesh.enabled = false;
-			}
-		}
-	}*/
 
 	public void SetupGame() {
 		Debug.Log("Trying to spawn players.");
@@ -97,6 +90,8 @@ public class GameRules : Singleton<GameRules> {
 			Transform spawnLoc = NetworkManager.singleton.GetStartPosition();
 			GameObject unassignedPlayerGO = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation);
 			Player unassignedPlayer = unassignedPlayerGO.GetComponent<Player>(); 
+			allPlayers.Add(unassignedPlayer);
+
 			unassignedPlayer.playerID = n;
 			networkGameRules.dwarfDictionary.Add((int)slot, n);
 
@@ -109,7 +104,10 @@ public class GameRules : Singleton<GameRules> {
 
 		foreach (MonsterTeamSlots slot in System.Enum.GetValues(typeof(MonsterTeamSlots)))  {
 			Transform spawnLoc = NetworkManager.singleton.GetStartPosition();
-			Player unassignedPlayer = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation).GetComponent<Player>();
+			GameObject unassignedPlayerGO = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation);
+			Player unassignedPlayer = unassignedPlayerGO.GetComponent<Player>(); 
+			allPlayers.Add(unassignedPlayer);
+
 			unassignedPlayer.playerID = n;
 			networkGameRules.monsterDictionary.Add((int)slot, n);
 
@@ -193,8 +191,8 @@ public class GameRules : Singleton<GameRules> {
 		return validUnitList;
 	}
 
-	public Player[] GetAllPlayers() {
-		return FindObjectsOfType<Player>();
+	public List<Player> GetAllPlayers() {
+		return allPlayers;
 	}
 
 	public static Transform GetRandomSpawnPoint() {

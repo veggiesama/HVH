@@ -16,4 +16,5 @@ MonoBehaviour:
   desire: 50
   hasDuration: 0
   duration: 0
-  wanderDistance: 2
+  stoppingDistance: 2
+  wanderDistance: 10

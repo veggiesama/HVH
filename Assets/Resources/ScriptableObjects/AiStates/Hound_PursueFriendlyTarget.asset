@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Hound_PursueFriendlyTarget
   m_EditorClassIdentifier: 
   hasExecuted: 0
-  desire: 75
+  desire: 50
   hasDuration: 0
   duration: 0
-  stoppingDistance: 3
+  stoppingDistance: 5
   loyaltyBuff: {fileID: 11400000, guid: cdb8481e70691634fa28a7f823ebc673, type: 2}

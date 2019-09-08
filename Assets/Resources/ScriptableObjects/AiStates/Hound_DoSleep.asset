@@ -16,5 +16,6 @@ MonoBehaviour:
   desire: 50
   hasDuration: 0
   duration: 0
-  abilitySlot: 2
+  abilitySlot: 4
   loyaltyBuff: {fileID: 11400000, guid: cdb8481e70691634fa28a7f823ebc673, type: 2}
+  sleepBuff: {fileID: 11400000, guid: 81967ad75de54824fa6807e02980d5b9, type: 2}

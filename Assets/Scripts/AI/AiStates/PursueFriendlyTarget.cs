@@ -11,7 +11,7 @@ public class PursueFriendlyTarget : MoveTo {
 	
 	public override void Reset() {
 		base.Reset();
-		desire = (int) Desire.HIGH;
+		desire = (int) Desire.MEDIUM;
 	}
 
 	public override void Initialize(AiManager aiManager) {

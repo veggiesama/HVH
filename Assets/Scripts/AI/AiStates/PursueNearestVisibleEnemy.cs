@@ -7,13 +7,14 @@ using System.Linq;
 public class PursueNearestVisibleEnemy : MoveTo {
 
 	[Header("Pursue")]
-	float maxPursueDistance;
+	public float maxPursueDistance;
+	private UnitController currentTarget;
 
 	public override void Reset() {
 		base.Reset();
 
 		desire = (int) Desire.HIGH;
-		maxPursueDistance = 20f;
+		maxPursueDistance = 10f;
 		stoppingDistance = 1.0f;
 	}
 
@@ -25,8 +26,13 @@ public class PursueNearestVisibleEnemy : MoveTo {
 	public override void Evaluate() {
 		destination = GetClosestTargetPosition();
 
-		if (HasDestination() && !ReachedDestination() )
+		if (HasDestination() && !ReachedDestination() ) {
 			desire = desireDefault;
+
+			if (currentTarget != null && currentTarget.body.IsVisible())
+				unit.SetCurrentTarget(currentTarget);
+
+		}
 		else
 			desire = (int) Desire.NONE;
 	}
@@ -43,6 +49,7 @@ public class PursueNearestVisibleEnemy : MoveTo {
 				Vector3 targ = target.GetBodyPosition();
 				float dist = Util.GetDistanceIn2D(pos, targ);
 				if (targetDistance == 0 || dist < targetDistance) {
+					currentTarget = target;
 					targetDistance = dist;
 					targetPosition = targ;
 				}

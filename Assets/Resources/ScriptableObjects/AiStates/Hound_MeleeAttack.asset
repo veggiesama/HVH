@@ -17,4 +17,4 @@ MonoBehaviour:
   hasDuration: 0
   duration: 0
   abilitySlot: 0
-  meleeDistance: 3
+  meleeDistance: 3.5

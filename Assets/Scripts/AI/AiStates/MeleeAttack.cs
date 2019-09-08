@@ -12,7 +12,7 @@ public class MeleeAttack : AiState {
 
 	public override void Reset() {
 		base.Reset();
-		desire = (int) Desire.HIGH;
+		desire = (int) Desire.MAX;
 		meleeDistance = 1.5f;
 		abilitySlot = AbilitySlots.ATTACK;
 	}

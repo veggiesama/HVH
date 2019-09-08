@@ -16,5 +16,5 @@ MonoBehaviour:
   desire: 75
   hasDuration: 0
   duration: 0
-  stoppingDistance: 1
+  stoppingDistance: 0.5
   pursuedTeam: 1

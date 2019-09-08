@@ -8,6 +8,7 @@ public class PursueNearestUnitByTeam : MoveTo {
 
 	[Header("Pursue")]
 	public Teams pursuedTeam;
+	private UnitController currentTarget;
 
 	public override void Reset() {
 		base.Reset();
@@ -24,8 +25,14 @@ public class PursueNearestUnitByTeam : MoveTo {
 
 	public override void Evaluate() {
 		destination = GetClosestTargetPosition(pursuedTeam);
-		if (HasDestination() && !ReachedDestination() )
+
+		if (HasDestination() && !ReachedDestination() ) {
 			desire = desireDefault;
+
+			if (currentTarget != null && currentTarget.body.IsVisible())
+				unit.SetCurrentTarget(currentTarget);
+
+		}
 		else
 			desire = (int) Desire.NONE;
 	}
@@ -48,10 +55,8 @@ public class PursueNearestUnitByTeam : MoveTo {
 			for (int i = 0; i < unitList.Count; i++) {
 				UnitController target = unitList[i];
 				if (target.IsAlive()) {
-					if (target.body.IsVisible())
-						unit.SetCurrentTarget(target);
-
 					closestTargetPosition = target.GetBodyPosition();
+					currentTarget = target;
 					break;
 				}
 			}

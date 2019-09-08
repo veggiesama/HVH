@@ -58,23 +58,15 @@ MonoBehaviour:
   onTakeDamage:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEventDamage, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
   onTakeHealing:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEventDamage, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
   onMoved:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   onCastAbility:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &3591204734762448323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -383,6 +375,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -510,7 +503,6 @@ Transform:
   m_Children:
   - {fileID: 4445215210010622}
   - {fileID: 4986882392629510}
-  - {fileID: 4772089510465928}
   - {fileID: 22047862161967600}
   m_Father: {fileID: 4561490922741848}
   m_RootOrder: 0
@@ -597,96 +589,9 @@ MonoBehaviour:
   onCollidedTree:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEventTree, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
   onCollidedTerrain:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEventCollision, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
---- !u!1 &1574802763122534
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4772089510465928}
-  - component: {fileID: 20993962431054968}
-  - component: {fileID: 124549120071294482}
-  m_Layer: 0
-  m_Name: Target Camera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4772089510465928
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1574802763122534}
-  m_LocalRotation: {x: -0, y: 0.9576217, z: -0.2880291, w: 0}
-  m_LocalPosition: {x: 0, y: 1.0900002, z: 1.43}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4539851055164326}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 33.48, y: 180, z: 0}
---- !u!20 &20993962431054968
-Camera:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1574802763122534}
-  m_Enabled: 0
-  serializedVersion: 2
-  m_ClearFlags: 3
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 1
-  m_GateFitMode: 2
-  m_FOVAxisMode: 0
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0.6668
-    y: 0
-    width: 0.082
-    height: 0.165
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
-  m_Depth: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 1
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 0
-  m_AllowMSAA: 0
-  m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
-  m_OcclusionCulling: 0
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
---- !u!124 &124549120071294482
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1574802763122534}
-  m_Enabled: 1
 --- !u!1 &1860743903889731771
 GameObject:
   m_ObjectHideFlags: 0
@@ -861,7 +766,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4539851055164326}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &7021595654887823476
 LineRenderer:
@@ -877,6 +782,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1158,6 +1064,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4986882392629510}
     m_Modifications:
+    - target: {fileID: 131443334917019958, guid: 404900288c103724ebcb2429eda80531,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 131443334909938676, guid: 404900288c103724ebcb2429eda80531,
         type: 3}
       propertyPath: m_Name
@@ -1172,11 +1083,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 131443334917019958, guid: 404900288c103724ebcb2429eda80531,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 131443334909646804, guid: 404900288c103724ebcb2429eda80531,
         type: 3}
@@ -1254,21 +1160,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4986882392629510}
     m_Modifications:
-    - target: {fileID: 131443334909938676, guid: 105f4155e036f994182da5ce3eb4f039,
-        type: 3}
-      propertyPath: m_Name
-      value: Single Targeting projector
-      objectReference: {fileID: 0}
-    - target: {fileID: 131443334909938676, guid: 105f4155e036f994182da5ce3eb4f039,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
-    - target: {fileID: 131443334909938676, guid: 105f4155e036f994182da5ce3eb4f039,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 131443334909646804, guid: 105f4155e036f994182da5ce3eb4f039,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1323,6 +1214,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 131443334909938676, guid: 105f4155e036f994182da5ce3eb4f039,
+        type: 3}
+      propertyPath: m_Name
+      value: Single Targeting projector
+      objectReference: {fileID: 0}
+    - target: {fileID: 131443334909938676, guid: 105f4155e036f994182da5ce3eb4f039,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 131443334909938676, guid: 105f4155e036f994182da5ce3eb4f039,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 131443334917019958, guid: 105f4155e036f994182da5ce3eb4f039,
         type: 3}

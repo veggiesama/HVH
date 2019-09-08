@@ -7,6 +7,9 @@ public class ResourceLibrary : Singleton<ResourceLibrary> {
 
 	public GameObject npcPrefab;
 
+	public RenderTexture allyRenderTexture;
+	public RenderTexture enemyRenderTexture;
+
 	public Dictionary<string, UnitInfo> unitInfoDictionary = new Dictionary<string, UnitInfo>();
 	public Dictionary<string, StatusEffect> statusEffectDictionary = new Dictionary<string, StatusEffect>();
 	public Dictionary<string, GameObject> particlePrefabDictionary = new Dictionary<string, GameObject>();
