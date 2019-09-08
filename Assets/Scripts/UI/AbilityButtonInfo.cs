@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 public class AbilityButtonInfo : MonoBehaviour {
 
 	public AbilitySlots abilitySlot;
 	private string originalText;
-	private Text textComponent;
+	private TextMeshProUGUI textComponent;
 	private Button button;
 	private Ability ability;
 	private Player player;
@@ -15,8 +17,8 @@ public class AbilityButtonInfo : MonoBehaviour {
 	private float updateEvery = 0.1f;
 
 	private void Awake() {
-		button = GetComponent<Button>();
-		textComponent = GetComponentInChildren<Text>();
+		button = GetComponentInChildren<Button>();
+		textComponent = GetComponentInChildren<TextMeshProUGUI>();
 		originalText = textComponent.text;
 
 		StartCoroutine ( SlowUpdate() );
