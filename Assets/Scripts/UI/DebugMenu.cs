@@ -81,9 +81,9 @@ public class DebugMenu : MonoBehaviour {
 
 	private void ReloadAbilities() {
 		UnitController localUnit = GameRules.Instance.GetLocalPlayer().unit;
-
-		Debug.Log("Reloaded scriptable object abilities");
 		localUnit.ReloadAbilities();
+		Debug.Log("Reloaded scriptable object abilities");
+
 	}
 
 }

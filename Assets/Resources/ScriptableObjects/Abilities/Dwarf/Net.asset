@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Net
   m_EditorClassIdentifier: 
   abilityName: Net
+  iconImage: {fileID: 21300000, guid: 240094591dfb342dd9b5f4711bbe7fe4, type: 3}
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}

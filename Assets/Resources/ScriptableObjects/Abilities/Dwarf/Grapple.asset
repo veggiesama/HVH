@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Grapple
   m_EditorClassIdentifier: 
   abilityName: Grapple
+  iconImage: {fileID: 21300000, guid: 03a17c1d757774bc3be1b1a5ad57d729, type: 3}
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}

@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class Ability : ScriptableObject {
 
 	public string abilityName;
+	public Sprite iconImage;
 	[HideInInspector] public UnitController caster, allyTarget, enemyTarget;
 	[HideInInspector] public UnitInfo unitInfo;
 	[HideInInspector] public AbilityManager abilityManager;

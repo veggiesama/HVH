@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.AI;
 using UnityEngine;
 using Mirror;
+using UnityEngine.InputSystem;
 
 public class MouseTargeter : MonoBehaviour {
 	private Camera cam;
@@ -101,7 +102,7 @@ public class MouseTargeter : MonoBehaviour {
 
 	public Tree GetTreeAtMouseLocation() {
 		int layerMask = (int)LayerMasks.TREE;
-		Ray ray = (Ray)cam.ScreenPointToRay(Input.mousePosition);
+		Ray ray = (Ray)cam.ScreenPointToRay(Mouse.current.position.ReadValue());
 		if (Physics.Raycast(ray, out RaycastHit hit, Constants.RaycastLength, layerMask)) {
 			Tree tree =  hit.transform.gameObject.GetComponent<Tree>();
 			return tree;
@@ -112,7 +113,7 @@ public class MouseTargeter : MonoBehaviour {
 
 	public UnitController GetUnitAtMouseLocation() {
 		int layerMask = (int)LayerMasks.BODY_SELECTABLE; // ~((int)LayerMasks.TERRAIN | (int)LayerMasks.TREE); // cast at everything except terrain + tree
-		Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+		Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
 		if (Physics.Raycast(ray, out RaycastHit hit, Constants.RaycastLength, layerMask)) {
 			Debug.DrawLine(ray.origin, hit.point, Color.red);
 			GameObject targetObject = hit.transform.gameObject;
@@ -126,7 +127,7 @@ public class MouseTargeter : MonoBehaviour {
 
 	public Vector3 GetMouseLocationToGround() {
 		int layerMask = (int)LayerMasks.TERRAIN;
-		Ray ray = (Ray)cam.ScreenPointToRay(Input.mousePosition);
+		Ray ray = (Ray)cam.ScreenPointToRay(Mouse.current.position.ReadValue());
 		if (Physics.Raycast(ray, out RaycastHit hit, Constants.RaycastLength, layerMask)) {
 			return hit.point;
 		} 

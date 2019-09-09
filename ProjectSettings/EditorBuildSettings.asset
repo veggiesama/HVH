@@ -17,4 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Dynamic.unity
     guid: 7bd34aa0bb815b94e92a6ef8e0d975ca
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 76b2b192673307144988c2f620a06857,
+      type: 2}

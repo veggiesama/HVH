@@ -41,6 +41,13 @@ public class AdditiveSceneManager : MonoBehaviour {
 			if (sceneName != initializerScene.name)
 				StartCoroutine( UnloadScene(sceneName) );
 		}
+
+
+
+
+		// todo: REMOVE
+		FindObjectOfType<NetworkManager>().StartHost();
+
 	}
 
 	public void EnableMainMenu(bool enable) {

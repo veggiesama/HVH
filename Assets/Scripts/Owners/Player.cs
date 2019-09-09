@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.Interactions;
 using Mirror;
 
 public class Player : Owner {
@@ -14,8 +15,11 @@ public class Player : Owner {
 	public UIController uiController;
 	public Camera cam;
 	public MouseTargeter mouseTargeter;
-	private bool holdingShift = false;
-	private bool holdingCtrl = false;
+	//private bool holdingShift = false;
+	//private bool holdingCtrl = false;
+
+	public HVH_Inputs hvhInputs;
+
 
 	//public bool isNPC = false; // inspector
 	[SyncVar] public int playerID;
@@ -26,6 +30,19 @@ public class Player : Owner {
 		}
 	}
 
+	public override void Awake() {
+		base.Awake();
+		hvhInputs = new HVH_Inputs();
+	}
+
+	public void OnEnable() {
+		hvhInputs.Enable();
+	}
+
+	public void OnDisable() {
+		hvhInputs.Disable();
+	}
+
 	public override void OnStartLocalPlayer() {
 		if (isLocalPlayer) {
 			GameRules.Instance.SetLocalPlayer(this);
@@ -33,116 +50,57 @@ public class Player : Owner {
 			UpdateTeamVision();
 			TeamFieldOfView.Instance.Initialize((Teams)team);
 			DisableTreeHighlighting();
+
+			//if (networkHelper.isUnassigned) return;
+			//if (!isLocalPlayer) return;
+
+			hvhInputs.Player.Attack.started += _ => unit.DoAbility(AbilitySlots.ATTACK);
+			hvhInputs.Player.Ability1.started += _ => unit.DoAbility(AbilitySlots.ABILITY_1);
+			hvhInputs.Player.Ability2.started += _ => unit.DoAbility(AbilitySlots.ABILITY_2);
+			hvhInputs.Player.Ability3.started += _ => unit.DoAbility(AbilitySlots.ABILITY_3);
+			hvhInputs.Player.Ability4.started += _ => unit.DoAbility(AbilitySlots.ABILITY_4);
+			hvhInputs.Player.Ability5.started += _ => unit.DoAbility(AbilitySlots.ABILITY_5);
+			hvhInputs.Player.Ability6.started += _ => unit.DoAbility(AbilitySlots.ABILITY_6);
+			hvhInputs.Player.Item1.started += _ => unit.DoAbility(AbilitySlots.ITEM_1);
+			hvhInputs.Player.Item2.started += _ => unit.DoAbility(AbilitySlots.ITEM_2);
+			hvhInputs.Player.Item3.started += _ => unit.DoAbility(AbilitySlots.ITEM_3);
+			hvhInputs.Player.Item4.started += _ => unit.DoAbility(AbilitySlots.ITEM_4);
+			hvhInputs.Player.Item5.started += _ => unit.DoAbility(AbilitySlots.ITEM_5);
+			hvhInputs.Player.Item6.started += _ => unit.DoAbility(AbilitySlots.ITEM_6);
+
+			hvhInputs.Player.LClick.started += _ => DoLeftClick();
+			hvhInputs.Player.RClick.started += _ => DoRightClick();
+			hvhInputs.Player.Stop.started += _ => unit.Stop();
+
+			//if (!CanIssueCommands())
+			//	return;
+
 		}
 	}
 
-	public override void Awake() {
-		base.Awake();
+	private void DoLeftClick() {
+		if(!IsMouseTargeting()) {
+			SelectAtMouseCursor();
+		}
+		else {
+			unit.DoAbility(mouseTargeter.storedSlot);
+			SetMouseTargeting(false);
+		}
+	}
+
+	private void DoRightClick() {
+		if(!IsMouseTargeting()) 
+			MoveToMouseCursor();
+		else
+			SetMouseTargeting(false);
 	}
 
 	public bool IsShiftQueuing() {
-		return holdingShift;
+		return (hvhInputs.Player.QueueHold.ReadValue<float>() != 0f);
 	}
 
 	public bool IsCtrlZooming() {
-		return holdingCtrl;
-	}
-
-	// Update is called once per frame. Use for input. Physics unstable.
-	public void Update () {
-		//controlScheme.UpdateInputs();
-
-		if (networkHelper.isUnassigned) return;
-		if (!isLocalPlayer) return;
-
-		holdingShift = Input.GetButton("Queue (Hold)");
-		holdingCtrl = Input.GetButton("Zoom (Hold)");
-
-		// always register selections, even while disabled
-		if (Input.GetButtonDown("L-Click")) {
-
-			if(!IsMouseTargeting()) {
-				SelectAtMouseCursor();
-			}
-			else {
-				unit.DoAbility(mouseTargeter.storedSlot);
-				SetMouseTargeting(false);
-			}
-		}
-
-		//if (!CanIssueCommands())
-		//	return;
-
-		if (Input.GetButtonDown("R-Click")) {
-			if(!IsMouseTargeting()) 
-				MoveToMouseCursor();
-			else
-				SetMouseTargeting(false);
-		}
-
-		if (Input.GetButtonDown("MoveAttack")) {
-			//
-		}
-
-		if (Input.GetButtonDown("Move")) {
-			//
-		}
-
-		if (Input.GetButtonDown("Stop")) {
-			unit.Stop();
-		}
-
-		if (Input.GetButtonDown("Attack")) {
-			unit.DoAbility(AbilitySlots.ATTACK);
-		}
-
-		if (Input.GetButtonDown("Ability 1")) {
-			unit.DoAbility(AbilitySlots.ABILITY_1);
-		}
-
-		if (Input.GetButtonDown("Ability 2")) {
-			unit.DoAbility(AbilitySlots.ABILITY_2);
-		}
-
-		if (Input.GetButtonDown("Ability 3")) {
-			unit.DoAbility(AbilitySlots.ABILITY_3);
-		}
-
-		if (Input.GetButtonDown("Ability 4")) {
-			unit.DoAbility(AbilitySlots.ABILITY_4);
-		}
-
-		if (Input.GetButtonDown("Ability 5")) {
-			unit.DoAbility(AbilitySlots.ABILITY_5);
-		}
-
-		if (Input.GetButtonDown("Ability 6")) {
-			unit.DoAbility(AbilitySlots.ABILITY_6);
-		}
-
-		if (Input.GetButtonDown("Item 1")) {
-			unit.DoAbility(AbilitySlots.ITEM_1);
-		}
-
-		if (Input.GetButtonDown("Item 2")) {
-			unit.DoAbility(AbilitySlots.ITEM_2);
-		}
-
-		if (Input.GetButtonDown("Item 3")) {
-			unit.DoAbility(AbilitySlots.ITEM_3);
-		}
-
-		if (Input.GetButtonDown("Item 4")) {
-			unit.DoAbility(AbilitySlots.ITEM_4);
-		}
-
-		if (Input.GetButtonDown("Item 5")) {
-			unit.DoAbility(AbilitySlots.ITEM_5);
-		}
-
-		if (Input.GetButtonDown("Item 6")) {
-			unit.DoAbility(AbilitySlots.ITEM_6);
-		}
+		return (hvhInputs.Player.ZoomHold.ReadValue<float>() != 0f);
 	}
 
 	public void UI_ClickedAbilityButton(AbilitySlots slot) {

@@ -7,10 +7,10 @@ public class ControlScheme : MonoBehaviour {
 	public UnitController unit;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         
     }
+
 	/*
     public void UpdateInputs() {
 		if (player.isUnassigned) return;
