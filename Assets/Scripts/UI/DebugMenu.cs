@@ -13,7 +13,7 @@ public class DebugMenu : MonoBehaviour {
 	public Button statusButton;
 	public Button reloadAbilitiesButton;
 
-	private void Start() {
+	public void Initialize() {
 		BuildPlayerSwapper();
 		BuildStatusApplier();
 		BuildAbilityReloader();
@@ -40,6 +40,8 @@ public class DebugMenu : MonoBehaviour {
 		foreach (Player p in GameRules.Instance.GetAllPlayers()) {
 			if (p.playerID == playerID) {
 				localPlayer.EnableLocalPlayerOnlyObjects(false);
+				localPlayer.RefreshInputActions();
+
 				NetworkServer.ReplacePlayerForConnection(localPlayer.connectionToClient, p.gameObject);
 				p.OnStartLocalPlayer();
 				ReloadAbilities();

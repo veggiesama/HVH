@@ -31,25 +31,36 @@ public class AbilityManager : MonoBehaviour {
 			string slotName = slot.ToString();
 
 			if(slotName.Contains("ATTACK")) {
-				Ability a = Instantiate(unit.unitInfo.startingAttackAbility);
-				a.Initialize(unit.gameObject);
-				abilityDict[slot] = a;
+				CopyAbilityIntoSlot(unit.unitInfo.startingAttackAbility, slot);
 			}
 
 			else if(slotName.Contains("ABILITY")) {
-				Ability a = Instantiate(unit.unitInfo.startingAbilitiesList[n]);
-				a.Initialize(unit.gameObject);
-				abilityDict[slot] = a;
+				CopyAbilityIntoSlot(unit.unitInfo.startingAbilitiesList[n], slot);
 				n++;
 			}
 
 			else if(slotName.Contains("ITEM")) {
-				Ability a = Instantiate(unit.unitInfo.startingItemsList[n-6]);
-				a.Initialize(unit.gameObject);
-				abilityDict[slot] = a;
+				CopyAbilityIntoSlot(unit.unitInfo.startingItemsList[n-6], slot);
 				n++;
 			}
 		}
+	}
+
+	private void CopyAbilityIntoSlot(Ability ability, AbilitySlots slot) {
+
+		Ability copy;
+		if (ability == null) {
+			if (Util.GetSlotType(slot) == AbilitySlotTypes.ITEM)
+				copy = Instantiate(ResourceLibrary.Instance.emptyItem);
+			else
+				copy = Instantiate(ResourceLibrary.Instance.emptyAbility);
+		}
+		else {
+			copy = Instantiate(ability);
+		}
+
+		copy.Initialize(unit.gameObject);
+		abilityDict[slot] = copy;
 	}
 
 	private void Update()

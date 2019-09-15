@@ -4,6 +4,7 @@ using UnityEngine;
 using Extensions;
 using UnityEngine.SceneManagement;
 using Mirror;
+using System.Linq;
 
 public class GameRules : Singleton<GameRules> {
 
@@ -193,6 +194,11 @@ public class GameRules : Singleton<GameRules> {
 
 	public List<Player> GetAllPlayers() {
 		return allPlayers;
+	}
+
+	public List<Player> GetAllPlayers(Teams team) {
+		List<Player> players = GetAllPlayers().FindAll(x => x.GetTeam() == team);
+		return players;
 	}
 
 	public static Transform GetRandomSpawnPoint() {

@@ -7,6 +7,7 @@ public abstract class Ability : ScriptableObject {
 
 	public string abilityName;
 	public Sprite iconImage;
+	public bool isItem = false;
 	[HideInInspector] public UnitController caster, allyTarget, enemyTarget;
 	[HideInInspector] public UnitInfo unitInfo;
 	[HideInInspector] public AbilityManager abilityManager;
@@ -144,5 +145,10 @@ public abstract class Ability : ScriptableObject {
 	public virtual void InstantiateParticle(GameObject prefab, Vector3 location, Quaternion rotation, float duration = 0f) {
 		networkHelper.InstantiateParticle(prefab, location, rotation, duration);
 	}
+
+	public bool IsPassive() {
+		return isPassive;
+	}
+
 }
  

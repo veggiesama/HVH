@@ -18,5 +18,9 @@ namespace RotaryHeart.Lib.SerializableDictionary
         private AudioClip _audioClip;
 		[SerializeField]
 		private TreeColor _treeColor;
+
+		[SerializeField]
+		private UiPortrait _uiPortrait;
+
     }
 }

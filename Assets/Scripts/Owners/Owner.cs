@@ -11,6 +11,12 @@ public abstract class Owner : NetworkBehaviour {
 	[SyncVar] protected int team;
 	private Vector3 virtualPointerLocation;
 
+	public override void OnStartClient() {
+		if (!string.IsNullOrEmpty(networkHelper.unitInfo)) {
+			unit.SetUnitInfo(networkHelper.unitInfo);
+		}
+	}
+
 	public virtual void Awake() {
 		unit = GetComponentInChildren<UnitController>();
 		networkHelper = GetComponent<NetworkHelper>();

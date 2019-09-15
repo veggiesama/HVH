@@ -14,358 +14,8 @@ public class HVH_Inputs : IInputActionCollection
     ""name"": ""HVH_Inputs"",
     ""maps"": [
         {
-            ""name"": ""Player"",
-            ""id"": ""efc1e825-5654-4a2a-b1ad-9e56dc135c9a"",
-            ""actions"": [
-                {
-                    ""name"": ""L-Click"",
-                    ""type"": ""Button"",
-                    ""id"": ""d8abd8f9-2982-48d8-9b80-91af431a4b34"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""R-Click"",
-                    ""type"": ""Button"",
-                    ""id"": ""607a3612-0af7-4404-ad32-959bc1ea9736"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Attack"",
-                    ""type"": ""Button"",
-                    ""id"": ""63176a41-c8b1-406b-a05d-9563dee1bbc3"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Queue (Hold)"",
-                    ""type"": ""Button"",
-                    ""id"": ""3da575d6-3634-4ec8-9979-b443c2946abc"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Zoom (Hold)"",
-                    ""type"": ""Button"",
-                    ""id"": ""68614634-49b9-44fd-9d6f-af7caa9b6c1c"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Stop"",
-                    ""type"": ""Button"",
-                    ""id"": ""f1c7ffbf-c759-4e16-a784-238d9f0328e9"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Ability 1"",
-                    ""type"": ""Button"",
-                    ""id"": ""b1d61971-dd28-4df5-9116-ed79ebece4e3"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Ability 2"",
-                    ""type"": ""Button"",
-                    ""id"": ""925647dd-b29a-400f-86ad-b16149effe61"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Ability 3"",
-                    ""type"": ""Button"",
-                    ""id"": ""7cb15976-724a-4ebf-84cf-109200cda811"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Ability 4"",
-                    ""type"": ""Button"",
-                    ""id"": ""a6362ff6-2c06-4534-8f24-e5fbc9cab7ab"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Ability 5"",
-                    ""type"": ""Button"",
-                    ""id"": ""8f171a26-becf-4185-be3b-ae13859fd120"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Ability 6"",
-                    ""type"": ""Button"",
-                    ""id"": ""10639dc5-5005-43bd-8b3f-88132883b2ca"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Item 1"",
-                    ""type"": ""Button"",
-                    ""id"": ""0d01c9cf-45f7-47f3-a988-71224331d44b"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Item 2"",
-                    ""type"": ""Button"",
-                    ""id"": ""d7b271ee-8cf6-42eb-9fa5-3af958dbe1db"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Item 3"",
-                    ""type"": ""Button"",
-                    ""id"": ""5be6c9c3-2782-423f-8e94-96d0cde5cd65"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Item 4"",
-                    ""type"": ""Button"",
-                    ""id"": ""00487898-7dcc-4a02-94ab-7deef70317d9"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Item 5"",
-                    ""type"": ""Button"",
-                    ""id"": ""8c2a6ec2-e814-4b00-a485-03bcd7ef1180"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                },
-                {
-                    ""name"": ""Item 6"",
-                    ""type"": ""Button"",
-                    ""id"": ""b33ff94a-714a-43ed-a227-2eae7cde7a36"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""05f6913d-c316-48b2-a6bb-e225f14c7960"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ec758f90-6735-4d33-bb4c-ed187438ac94"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""L-Click"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6adcf509-e395-4269-9291-d22f39a5b77c"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""R-Click"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4f9fd4de-40df-4581-a69b-90d21fe71bc3"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Queue (Hold)"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f4e9b25a-0e06-47d6-be31-ed68433dd137"",
-                    ""path"": ""<Keyboard>/leftCtrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Zoom (Hold)"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b8ff3afc-33b6-47ac-ba40-1f65e3677263"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Stop"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4b84e07d-3e95-4263-a7f9-3bcc855814b7"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Ability 1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""05dd1e80-7a48-4953-a3f1-43a11b8d0e7d"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Ability 2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ddf361c9-da90-402b-b1d7-30c16031f8a5"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Ability 3"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""75bdfcbe-2183-41fc-a8bd-9554e1cc08ab"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Ability 4"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e1036411-402e-4ff0-9d1a-053e36708ff7"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Ability 5"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0022f1a9-e82f-4cbb-b2cf-67f58578dea0"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Ability 6"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9560040d-a3c5-4f5e-a0c9-b02a08309bdc"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Item 1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c0dc12c5-be2e-4810-8393-e888a4ef359d"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Item 2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""130470f5-6453-4b85-80ca-c9e9dd88d052"",
-                    ""path"": ""<Keyboard>/3"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Item 3"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ef5166c6-b71e-4c52-b925-a0ef392d091d"",
-                    ""path"": ""<Keyboard>/4"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Item 4"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e27e4290-409a-4ae1-8d03-23c786ff66fc"",
-                    ""path"": ""<Keyboard>/5"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Item 5"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""61cab68e-1efb-4c22-859b-93b710da7bb9"",
-                    ""path"": ""<Keyboard>/6"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Item 6"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
             ""name"": ""UI"",
-            ""id"": ""3cba4785-1a9a-4bd7-b049-c7208e1789b8"",
+            ""id"": ""efc1e825-5654-4a2a-b1ad-9e56dc135c9a"",
             ""actions"": [
                 {
                     ""name"": ""Navigate"",
@@ -613,44 +263,11 @@ public class HVH_Inputs : IInputActionCollection
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5693e57a-238a-46ed-b5ae-e64e6e574302"",
-                    ""path"": ""<Touchscreen>/touch*/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Point"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""4faf7dc9-b979-4210-aa8c-e808e1ef89f5"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Click"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8d66d5ba-88d7-48e6-b1cd-198bbfef7ace"",
-                    ""path"": ""<Pen>/tip"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Click"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""47c2a644-3ebc-4dae-a106-589b7ca75b59"",
-                    ""path"": ""<Touchscreen>/touch*/press"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
                     ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -722,6 +339,386 @@ public class HVH_Inputs : IInputActionCollection
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Player"",
+            ""id"": ""3cba4785-1a9a-4bd7-b049-c7208e1789b8"",
+            ""actions"": [
+                {
+                    ""name"": ""L-Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""d8abd8f9-2982-48d8-9b80-91af431a4b34"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""R-Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""607a3612-0af7-4404-ad32-959bc1ea9736"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""63176a41-c8b1-406b-a05d-9563dee1bbc3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Queue (Hold)"",
+                    ""type"": ""Button"",
+                    ""id"": ""3da575d6-3634-4ec8-9979-b443c2946abc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Zoom (Hold)"",
+                    ""type"": ""Button"",
+                    ""id"": ""68614634-49b9-44fd-9d6f-af7caa9b6c1c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Stop"",
+                    ""type"": ""Button"",
+                    ""id"": ""f1c7ffbf-c759-4e16-a784-238d9f0328e9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Ability 1"",
+                    ""type"": ""Button"",
+                    ""id"": ""b1d61971-dd28-4df5-9116-ed79ebece4e3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Ability 2"",
+                    ""type"": ""Button"",
+                    ""id"": ""925647dd-b29a-400f-86ad-b16149effe61"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Ability 3"",
+                    ""type"": ""Button"",
+                    ""id"": ""7cb15976-724a-4ebf-84cf-109200cda811"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Ability 4"",
+                    ""type"": ""Button"",
+                    ""id"": ""a6362ff6-2c06-4534-8f24-e5fbc9cab7ab"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Ability 5"",
+                    ""type"": ""Button"",
+                    ""id"": ""8f171a26-becf-4185-be3b-ae13859fd120"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Ability 6"",
+                    ""type"": ""Button"",
+                    ""id"": ""10639dc5-5005-43bd-8b3f-88132883b2ca"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Item 1"",
+                    ""type"": ""Button"",
+                    ""id"": ""0d01c9cf-45f7-47f3-a988-71224331d44b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Item 2"",
+                    ""type"": ""Button"",
+                    ""id"": ""d7b271ee-8cf6-42eb-9fa5-3af958dbe1db"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Item 3"",
+                    ""type"": ""Button"",
+                    ""id"": ""5be6c9c3-2782-423f-8e94-96d0cde5cd65"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Item 4"",
+                    ""type"": ""Button"",
+                    ""id"": ""00487898-7dcc-4a02-94ab-7deef70317d9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Item 5"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c2a6ec2-e814-4b00-a485-03bcd7ef1180"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Item 6"",
+                    ""type"": ""Button"",
+                    ""id"": ""b33ff94a-714a-43ed-a227-2eae7cde7a36"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Test"",
+                    ""type"": ""Button"",
+                    ""id"": ""fc5d690c-cf06-4928-a330-7aca8410787a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""05f6913d-c316-48b2-a6bb-e225f14c7960"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ec758f90-6735-4d33-bb4c-ed187438ac94"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""L-Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6adcf509-e395-4269-9291-d22f39a5b77c"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""R-Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f9fd4de-40df-4581-a69b-90d21fe71bc3"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Queue (Hold)"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4e9b25a-0e06-47d6-be31-ed68433dd137"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Zoom (Hold)"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b8ff3afc-33b6-47ac-ba40-1f65e3677263"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Stop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b84e07d-3e95-4263-a7f9-3bcc855814b7"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Ability 1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""05dd1e80-7a48-4953-a3f1-43a11b8d0e7d"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Ability 2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ddf361c9-da90-402b-b1d7-30c16031f8a5"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Ability 3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75bdfcbe-2183-41fc-a8bd-9554e1cc08ab"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Ability 4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e1036411-402e-4ff0-9d1a-053e36708ff7"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Ability 5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0022f1a9-e82f-4cbb-b2cf-67f58578dea0"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Ability 6"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9560040d-a3c5-4f5e-a0c9-b02a08309bdc"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Item 1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c0dc12c5-be2e-4810-8393-e888a4ef359d"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Item 2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""130470f5-6453-4b85-80ca-c9e9dd88d052"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Item 3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ef5166c6-b71e-4c52-b925-a0ef392d091d"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Item 4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e27e4290-409a-4ae1-8d03-23c786ff66fc"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Item 5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""61cab68e-1efb-4c22-859b-93b710da7bb9"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Item 6"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""653928d5-a773-40e2-ae07-efc295dc8af7"",
+                    ""path"": ""*/{Point}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3d79fb4-d810-4fd5-81f0-9a6666ffa56c"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -776,6 +773,19 @@ public class HVH_Inputs : IInputActionCollection
         }
     ]
 }");
+        // UI
+        m_UI = asset.GetActionMap("UI");
+        m_UI_Navigate = m_UI.GetAction("Navigate");
+        m_UI_Submit = m_UI.GetAction("Submit");
+        m_UI_Cancel = m_UI.GetAction("Cancel");
+        m_UI_Point = m_UI.GetAction("Point");
+        m_UI_Click = m_UI.GetAction("Click");
+        m_UI_ScrollWheel = m_UI.GetAction("ScrollWheel");
+        m_UI_MiddleClick = m_UI.GetAction("MiddleClick");
+        m_UI_RightClick = m_UI.GetAction("RightClick");
+        m_UI_TrackedDevicePosition = m_UI.GetAction("TrackedDevicePosition");
+        m_UI_TrackedDeviceOrientation = m_UI.GetAction("TrackedDeviceOrientation");
+        m_UI_TrackedDeviceSelect = m_UI.GetAction("TrackedDeviceSelect");
         // Player
         m_Player = asset.GetActionMap("Player");
         m_Player_LClick = m_Player.GetAction("L-Click");
@@ -796,19 +806,7 @@ public class HVH_Inputs : IInputActionCollection
         m_Player_Item4 = m_Player.GetAction("Item 4");
         m_Player_Item5 = m_Player.GetAction("Item 5");
         m_Player_Item6 = m_Player.GetAction("Item 6");
-        // UI
-        m_UI = asset.GetActionMap("UI");
-        m_UI_Navigate = m_UI.GetAction("Navigate");
-        m_UI_Submit = m_UI.GetAction("Submit");
-        m_UI_Cancel = m_UI.GetAction("Cancel");
-        m_UI_Point = m_UI.GetAction("Point");
-        m_UI_Click = m_UI.GetAction("Click");
-        m_UI_ScrollWheel = m_UI.GetAction("ScrollWheel");
-        m_UI_MiddleClick = m_UI.GetAction("MiddleClick");
-        m_UI_RightClick = m_UI.GetAction("RightClick");
-        m_UI_TrackedDevicePosition = m_UI.GetAction("TrackedDevicePosition");
-        m_UI_TrackedDeviceOrientation = m_UI.GetAction("TrackedDeviceOrientation");
-        m_UI_TrackedDeviceSelect = m_UI.GetAction("TrackedDeviceSelect");
+        m_Player_Test = m_Player.GetAction("Test");
     }
 
     ~HVH_Inputs()
@@ -854,175 +852,6 @@ public class HVH_Inputs : IInputActionCollection
     {
         asset.Disable();
     }
-
-    // Player
-    private readonly InputActionMap m_Player;
-    private IPlayerActions m_PlayerActionsCallbackInterface;
-    private readonly InputAction m_Player_LClick;
-    private readonly InputAction m_Player_RClick;
-    private readonly InputAction m_Player_Attack;
-    private readonly InputAction m_Player_QueueHold;
-    private readonly InputAction m_Player_ZoomHold;
-    private readonly InputAction m_Player_Stop;
-    private readonly InputAction m_Player_Ability1;
-    private readonly InputAction m_Player_Ability2;
-    private readonly InputAction m_Player_Ability3;
-    private readonly InputAction m_Player_Ability4;
-    private readonly InputAction m_Player_Ability5;
-    private readonly InputAction m_Player_Ability6;
-    private readonly InputAction m_Player_Item1;
-    private readonly InputAction m_Player_Item2;
-    private readonly InputAction m_Player_Item3;
-    private readonly InputAction m_Player_Item4;
-    private readonly InputAction m_Player_Item5;
-    private readonly InputAction m_Player_Item6;
-    public struct PlayerActions
-    {
-        private HVH_Inputs m_Wrapper;
-        public PlayerActions(HVH_Inputs wrapper) { m_Wrapper = wrapper; }
-        public InputAction @LClick => m_Wrapper.m_Player_LClick;
-        public InputAction @RClick => m_Wrapper.m_Player_RClick;
-        public InputAction @Attack => m_Wrapper.m_Player_Attack;
-        public InputAction @QueueHold => m_Wrapper.m_Player_QueueHold;
-        public InputAction @ZoomHold => m_Wrapper.m_Player_ZoomHold;
-        public InputAction @Stop => m_Wrapper.m_Player_Stop;
-        public InputAction @Ability1 => m_Wrapper.m_Player_Ability1;
-        public InputAction @Ability2 => m_Wrapper.m_Player_Ability2;
-        public InputAction @Ability3 => m_Wrapper.m_Player_Ability3;
-        public InputAction @Ability4 => m_Wrapper.m_Player_Ability4;
-        public InputAction @Ability5 => m_Wrapper.m_Player_Ability5;
-        public InputAction @Ability6 => m_Wrapper.m_Player_Ability6;
-        public InputAction @Item1 => m_Wrapper.m_Player_Item1;
-        public InputAction @Item2 => m_Wrapper.m_Player_Item2;
-        public InputAction @Item3 => m_Wrapper.m_Player_Item3;
-        public InputAction @Item4 => m_Wrapper.m_Player_Item4;
-        public InputAction @Item5 => m_Wrapper.m_Player_Item5;
-        public InputAction @Item6 => m_Wrapper.m_Player_Item6;
-        public InputActionMap Get() { return m_Wrapper.m_Player; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
-        public void SetCallbacks(IPlayerActions instance)
-        {
-            if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
-            {
-                LClick.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLClick;
-                LClick.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLClick;
-                LClick.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLClick;
-                RClick.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRClick;
-                RClick.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRClick;
-                RClick.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRClick;
-                Attack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
-                Attack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
-                Attack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
-                QueueHold.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQueueHold;
-                QueueHold.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQueueHold;
-                QueueHold.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQueueHold;
-                ZoomHold.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoomHold;
-                ZoomHold.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoomHold;
-                ZoomHold.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoomHold;
-                Stop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStop;
-                Stop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStop;
-                Stop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStop;
-                Ability1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility1;
-                Ability1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility1;
-                Ability1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility1;
-                Ability2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility2;
-                Ability2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility2;
-                Ability2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility2;
-                Ability3.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility3;
-                Ability3.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility3;
-                Ability3.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility3;
-                Ability4.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility4;
-                Ability4.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility4;
-                Ability4.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility4;
-                Ability5.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility5;
-                Ability5.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility5;
-                Ability5.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility5;
-                Ability6.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility6;
-                Ability6.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility6;
-                Ability6.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility6;
-                Item1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem1;
-                Item1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem1;
-                Item1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem1;
-                Item2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem2;
-                Item2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem2;
-                Item2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem2;
-                Item3.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem3;
-                Item3.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem3;
-                Item3.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem3;
-                Item4.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem4;
-                Item4.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem4;
-                Item4.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem4;
-                Item5.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem5;
-                Item5.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem5;
-                Item5.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem5;
-                Item6.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem6;
-                Item6.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem6;
-                Item6.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem6;
-            }
-            m_Wrapper.m_PlayerActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                LClick.started += instance.OnLClick;
-                LClick.performed += instance.OnLClick;
-                LClick.canceled += instance.OnLClick;
-                RClick.started += instance.OnRClick;
-                RClick.performed += instance.OnRClick;
-                RClick.canceled += instance.OnRClick;
-                Attack.started += instance.OnAttack;
-                Attack.performed += instance.OnAttack;
-                Attack.canceled += instance.OnAttack;
-                QueueHold.started += instance.OnQueueHold;
-                QueueHold.performed += instance.OnQueueHold;
-                QueueHold.canceled += instance.OnQueueHold;
-                ZoomHold.started += instance.OnZoomHold;
-                ZoomHold.performed += instance.OnZoomHold;
-                ZoomHold.canceled += instance.OnZoomHold;
-                Stop.started += instance.OnStop;
-                Stop.performed += instance.OnStop;
-                Stop.canceled += instance.OnStop;
-                Ability1.started += instance.OnAbility1;
-                Ability1.performed += instance.OnAbility1;
-                Ability1.canceled += instance.OnAbility1;
-                Ability2.started += instance.OnAbility2;
-                Ability2.performed += instance.OnAbility2;
-                Ability2.canceled += instance.OnAbility2;
-                Ability3.started += instance.OnAbility3;
-                Ability3.performed += instance.OnAbility3;
-                Ability3.canceled += instance.OnAbility3;
-                Ability4.started += instance.OnAbility4;
-                Ability4.performed += instance.OnAbility4;
-                Ability4.canceled += instance.OnAbility4;
-                Ability5.started += instance.OnAbility5;
-                Ability5.performed += instance.OnAbility5;
-                Ability5.canceled += instance.OnAbility5;
-                Ability6.started += instance.OnAbility6;
-                Ability6.performed += instance.OnAbility6;
-                Ability6.canceled += instance.OnAbility6;
-                Item1.started += instance.OnItem1;
-                Item1.performed += instance.OnItem1;
-                Item1.canceled += instance.OnItem1;
-                Item2.started += instance.OnItem2;
-                Item2.performed += instance.OnItem2;
-                Item2.canceled += instance.OnItem2;
-                Item3.started += instance.OnItem3;
-                Item3.performed += instance.OnItem3;
-                Item3.canceled += instance.OnItem3;
-                Item4.started += instance.OnItem4;
-                Item4.performed += instance.OnItem4;
-                Item4.canceled += instance.OnItem4;
-                Item5.started += instance.OnItem5;
-                Item5.performed += instance.OnItem5;
-                Item5.canceled += instance.OnItem5;
-                Item6.started += instance.OnItem6;
-                Item6.performed += instance.OnItem6;
-                Item6.canceled += instance.OnItem6;
-            }
-        }
-    }
-    public PlayerActions @Player => new PlayerActions(this);
 
     // UI
     private readonly InputActionMap m_UI;
@@ -1136,6 +965,183 @@ public class HVH_Inputs : IInputActionCollection
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // Player
+    private readonly InputActionMap m_Player;
+    private IPlayerActions m_PlayerActionsCallbackInterface;
+    private readonly InputAction m_Player_LClick;
+    private readonly InputAction m_Player_RClick;
+    private readonly InputAction m_Player_Attack;
+    private readonly InputAction m_Player_QueueHold;
+    private readonly InputAction m_Player_ZoomHold;
+    private readonly InputAction m_Player_Stop;
+    private readonly InputAction m_Player_Ability1;
+    private readonly InputAction m_Player_Ability2;
+    private readonly InputAction m_Player_Ability3;
+    private readonly InputAction m_Player_Ability4;
+    private readonly InputAction m_Player_Ability5;
+    private readonly InputAction m_Player_Ability6;
+    private readonly InputAction m_Player_Item1;
+    private readonly InputAction m_Player_Item2;
+    private readonly InputAction m_Player_Item3;
+    private readonly InputAction m_Player_Item4;
+    private readonly InputAction m_Player_Item5;
+    private readonly InputAction m_Player_Item6;
+    private readonly InputAction m_Player_Test;
+    public struct PlayerActions
+    {
+        private HVH_Inputs m_Wrapper;
+        public PlayerActions(HVH_Inputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @LClick => m_Wrapper.m_Player_LClick;
+        public InputAction @RClick => m_Wrapper.m_Player_RClick;
+        public InputAction @Attack => m_Wrapper.m_Player_Attack;
+        public InputAction @QueueHold => m_Wrapper.m_Player_QueueHold;
+        public InputAction @ZoomHold => m_Wrapper.m_Player_ZoomHold;
+        public InputAction @Stop => m_Wrapper.m_Player_Stop;
+        public InputAction @Ability1 => m_Wrapper.m_Player_Ability1;
+        public InputAction @Ability2 => m_Wrapper.m_Player_Ability2;
+        public InputAction @Ability3 => m_Wrapper.m_Player_Ability3;
+        public InputAction @Ability4 => m_Wrapper.m_Player_Ability4;
+        public InputAction @Ability5 => m_Wrapper.m_Player_Ability5;
+        public InputAction @Ability6 => m_Wrapper.m_Player_Ability6;
+        public InputAction @Item1 => m_Wrapper.m_Player_Item1;
+        public InputAction @Item2 => m_Wrapper.m_Player_Item2;
+        public InputAction @Item3 => m_Wrapper.m_Player_Item3;
+        public InputAction @Item4 => m_Wrapper.m_Player_Item4;
+        public InputAction @Item5 => m_Wrapper.m_Player_Item5;
+        public InputAction @Item6 => m_Wrapper.m_Player_Item6;
+        public InputAction @Test => m_Wrapper.m_Player_Test;
+        public InputActionMap Get() { return m_Wrapper.m_Player; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
+        public void SetCallbacks(IPlayerActions instance)
+        {
+            if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
+            {
+                LClick.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLClick;
+                LClick.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLClick;
+                LClick.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLClick;
+                RClick.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRClick;
+                RClick.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRClick;
+                RClick.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRClick;
+                Attack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                Attack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                Attack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                QueueHold.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQueueHold;
+                QueueHold.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQueueHold;
+                QueueHold.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQueueHold;
+                ZoomHold.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoomHold;
+                ZoomHold.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoomHold;
+                ZoomHold.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnZoomHold;
+                Stop.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStop;
+                Stop.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStop;
+                Stop.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnStop;
+                Ability1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility1;
+                Ability1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility1;
+                Ability1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility1;
+                Ability2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility2;
+                Ability2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility2;
+                Ability2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility2;
+                Ability3.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility3;
+                Ability3.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility3;
+                Ability3.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility3;
+                Ability4.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility4;
+                Ability4.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility4;
+                Ability4.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility4;
+                Ability5.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility5;
+                Ability5.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility5;
+                Ability5.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility5;
+                Ability6.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility6;
+                Ability6.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility6;
+                Ability6.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAbility6;
+                Item1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem1;
+                Item1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem1;
+                Item1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem1;
+                Item2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem2;
+                Item2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem2;
+                Item2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem2;
+                Item3.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem3;
+                Item3.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem3;
+                Item3.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem3;
+                Item4.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem4;
+                Item4.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem4;
+                Item4.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem4;
+                Item5.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem5;
+                Item5.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem5;
+                Item5.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem5;
+                Item6.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem6;
+                Item6.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem6;
+                Item6.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnItem6;
+                Test.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTest;
+                Test.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTest;
+                Test.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTest;
+            }
+            m_Wrapper.m_PlayerActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                LClick.started += instance.OnLClick;
+                LClick.performed += instance.OnLClick;
+                LClick.canceled += instance.OnLClick;
+                RClick.started += instance.OnRClick;
+                RClick.performed += instance.OnRClick;
+                RClick.canceled += instance.OnRClick;
+                Attack.started += instance.OnAttack;
+                Attack.performed += instance.OnAttack;
+                Attack.canceled += instance.OnAttack;
+                QueueHold.started += instance.OnQueueHold;
+                QueueHold.performed += instance.OnQueueHold;
+                QueueHold.canceled += instance.OnQueueHold;
+                ZoomHold.started += instance.OnZoomHold;
+                ZoomHold.performed += instance.OnZoomHold;
+                ZoomHold.canceled += instance.OnZoomHold;
+                Stop.started += instance.OnStop;
+                Stop.performed += instance.OnStop;
+                Stop.canceled += instance.OnStop;
+                Ability1.started += instance.OnAbility1;
+                Ability1.performed += instance.OnAbility1;
+                Ability1.canceled += instance.OnAbility1;
+                Ability2.started += instance.OnAbility2;
+                Ability2.performed += instance.OnAbility2;
+                Ability2.canceled += instance.OnAbility2;
+                Ability3.started += instance.OnAbility3;
+                Ability3.performed += instance.OnAbility3;
+                Ability3.canceled += instance.OnAbility3;
+                Ability4.started += instance.OnAbility4;
+                Ability4.performed += instance.OnAbility4;
+                Ability4.canceled += instance.OnAbility4;
+                Ability5.started += instance.OnAbility5;
+                Ability5.performed += instance.OnAbility5;
+                Ability5.canceled += instance.OnAbility5;
+                Ability6.started += instance.OnAbility6;
+                Ability6.performed += instance.OnAbility6;
+                Ability6.canceled += instance.OnAbility6;
+                Item1.started += instance.OnItem1;
+                Item1.performed += instance.OnItem1;
+                Item1.canceled += instance.OnItem1;
+                Item2.started += instance.OnItem2;
+                Item2.performed += instance.OnItem2;
+                Item2.canceled += instance.OnItem2;
+                Item3.started += instance.OnItem3;
+                Item3.performed += instance.OnItem3;
+                Item3.canceled += instance.OnItem3;
+                Item4.started += instance.OnItem4;
+                Item4.performed += instance.OnItem4;
+                Item4.canceled += instance.OnItem4;
+                Item5.started += instance.OnItem5;
+                Item5.performed += instance.OnItem5;
+                Item5.canceled += instance.OnItem5;
+                Item6.started += instance.OnItem6;
+                Item6.performed += instance.OnItem6;
+                Item6.canceled += instance.OnItem6;
+                Test.started += instance.OnTest;
+                Test.performed += instance.OnTest;
+                Test.canceled += instance.OnTest;
+            }
+        }
+    }
+    public PlayerActions @Player => new PlayerActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1172,6 +1178,20 @@ public class HVH_Inputs : IInputActionCollection
             return asset.controlSchemes[m_JoystickSchemeIndex];
         }
     }
+    public interface IUIActions
+    {
+        void OnNavigate(InputAction.CallbackContext context);
+        void OnSubmit(InputAction.CallbackContext context);
+        void OnCancel(InputAction.CallbackContext context);
+        void OnPoint(InputAction.CallbackContext context);
+        void OnClick(InputAction.CallbackContext context);
+        void OnScrollWheel(InputAction.CallbackContext context);
+        void OnMiddleClick(InputAction.CallbackContext context);
+        void OnRightClick(InputAction.CallbackContext context);
+        void OnTrackedDevicePosition(InputAction.CallbackContext context);
+        void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+        void OnTrackedDeviceSelect(InputAction.CallbackContext context);
+    }
     public interface IPlayerActions
     {
         void OnLClick(InputAction.CallbackContext context);
@@ -1192,19 +1212,6 @@ public class HVH_Inputs : IInputActionCollection
         void OnItem4(InputAction.CallbackContext context);
         void OnItem5(InputAction.CallbackContext context);
         void OnItem6(InputAction.CallbackContext context);
-    }
-    public interface IUIActions
-    {
-        void OnNavigate(InputAction.CallbackContext context);
-        void OnSubmit(InputAction.CallbackContext context);
-        void OnCancel(InputAction.CallbackContext context);
-        void OnPoint(InputAction.CallbackContext context);
-        void OnClick(InputAction.CallbackContext context);
-        void OnScrollWheel(InputAction.CallbackContext context);
-        void OnMiddleClick(InputAction.CallbackContext context);
-        void OnRightClick(InputAction.CallbackContext context);
-        void OnTrackedDevicePosition(InputAction.CallbackContext context);
-        void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
-        void OnTrackedDeviceSelect(InputAction.CallbackContext context);
+        void OnTest(InputAction.CallbackContext context);
     }
 }

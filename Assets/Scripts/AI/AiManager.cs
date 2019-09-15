@@ -35,6 +35,7 @@ public class AiManager: MonoBehaviour {
 		this.aiStatesNight = CloneAiStateList(unitInfo.aiStatesNight);
 		this.updateEvery = unitInfo.aiUpdateEvery;
 		OnStartDay();
+
 		StartCoroutine( SlowUpdate() );
 	}
 

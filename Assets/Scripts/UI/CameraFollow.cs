@@ -32,15 +32,14 @@ public class CameraFollow : MonoBehaviour {
 
 	// TODO: recalculations needed whenever resolution changes
 	void Start () {
-		camOffset = transform.position - body.transform.position;
 		cam = GetComponent<Camera>();
 		player = GetComponentInParent<Player>();
-
-		camVelocity = Vector3.zero;
-		mouseOffset = Vector3.zero;
 	}
 
-
+	public void Initialize() {
+		camOffset = transform.position - body.transform.position;
+		mouseOffset = Vector3.zero;
+	}
 
 	private void LateUpdate() {
 		int minX = (int) (Screen.width * zoomRegionWidthPercentage);

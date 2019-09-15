@@ -14,7 +14,6 @@ public class UnitController : MonoBehaviour {
 	[HideInInspector] public Player player;
 	[HideInInspector] public Owner owner;
 
-	private Camera faceCam; 
 	private UnitController currentFriendlyTarget, currentEnemyTarget, forgottenEnemyTarget;
 	private OrderQueue orderQueue;
 	private StatusEffectManager statusEffectManager;
@@ -57,7 +56,7 @@ public class UnitController : MonoBehaviour {
 			player = (Player) owner;
 		}
 
-		//SetTargetCamera(false, AbilityTargetTeams.ENEMY);
+		//SetTargetPortrait(false, AbilityTargetTeams.ENEMY);
 	}
 
 	// ORDERS
@@ -87,13 +86,16 @@ public class UnitController : MonoBehaviour {
 			//Debug.Log("Order restricted.");
 			return;
 		}
-
-		if (!HasAbilityInSlot(slot)) {
-			Debug.Log("No ability in slot.");
-			return;
-		}
+		//if (!HasAbilityInSlot(slot)) {
+		//	Debug.Log("No ability in slot.");
+		//	return;
+		//}
 
 		Ability ability = GetAbilityInSlot(slot);
+
+		if (ability.IsPassive()) {
+			return;
+		}
 
 		if (!ability.IsCooldownReady()) {
 			//Debug.Log("Cooldown not ready.");
@@ -218,7 +220,7 @@ public class UnitController : MonoBehaviour {
 
 				if (isLocalPlayer) {
 					currentFriendlyTarget.ShowTargetStand(false, AbilityTargetTeams.ALLY);
-					currentFriendlyTarget.SetTargetCamera(false, AbilityTargetTeams.ALLY);
+					currentFriendlyTarget.SetTargetPortrait(false, AbilityTargetTeams.ALLY);
 				}
 			}
 
@@ -226,20 +228,20 @@ public class UnitController : MonoBehaviour {
 
 			if (isLocalPlayer) {
 				target.ShowTargetStand(true, AbilityTargetTeams.ALLY);
-				target.SetTargetCamera(true, AbilityTargetTeams.ALLY);
+				target.SetTargetPortrait(true, AbilityTargetTeams.ALLY);
 			}
 		}
 		else {
 			if (currentEnemyTarget != null && isLocalPlayer) {
 				currentEnemyTarget.ShowTargetStand(false, AbilityTargetTeams.ENEMY);
-				currentEnemyTarget.SetTargetCamera(false, AbilityTargetTeams.ENEMY);
+				currentEnemyTarget.SetTargetPortrait(false, AbilityTargetTeams.ENEMY);
 			}
 
 			currentEnemyTarget = target;
 			
 			if (isLocalPlayer) {
 				target.ShowTargetStand(true, AbilityTargetTeams.ENEMY);
-				target.SetTargetCamera(true, AbilityTargetTeams.ENEMY);
+				target.SetTargetPortrait(true, AbilityTargetTeams.ENEMY);
 			}
 		}
 	}
@@ -249,13 +251,13 @@ public class UnitController : MonoBehaviour {
 			case AbilityTargetTeams.ALLY:
 				if (currentFriendlyTarget == null) return;
 				currentFriendlyTarget.ShowTargetStand(false, targetTeam);
-				currentFriendlyTarget.SetTargetCamera(false, targetTeam);
+				currentFriendlyTarget.SetTargetPortrait(false, targetTeam);
 				currentFriendlyTarget = null;
 				break;
 			case AbilityTargetTeams.ENEMY:
 				if (currentEnemyTarget == null) return;
 				currentEnemyTarget.ShowTargetStand(false, targetTeam);
-				currentEnemyTarget.SetTargetCamera(false, targetTeam);
+				currentEnemyTarget.SetTargetPortrait(false, targetTeam);
 				currentEnemyTarget = null;
 				break;
 			default:
@@ -291,24 +293,18 @@ public class UnitController : MonoBehaviour {
 
 		targetProjector.enabled = enable;
 	}
-	
-	private void SetTargetCamera(bool enable, AbilityTargetTeams targetTeam) {
-		if (faceCam == null) return;
 
-		faceCam.enabled = enable;
-
-		if (enable) {
-			if (targetTeam == AbilityTargetTeams.ALLY)
-				faceCam.targetTexture = ResourceLibrary.Instance.allyRenderTexture;
-			else
-				faceCam.targetTexture = ResourceLibrary.Instance.enemyRenderTexture;
-		}
-
+	private void SetTargetPortrait(bool enable, AbilityTargetTeams targetTeam) {
+		UnitController thisUnit = null;
+		if (enable)
+			thisUnit = this;
+		
+		if (targetTeam == AbilityTargetTeams.ALLY)
+			GameplayCanvas.Instance.SetPortraitCamera(UiPortraitSlots.ALLY_TARGET, thisUnit);
 		else
-			faceCam.targetTexture.Release();
-
+			GameplayCanvas.Instance.SetPortraitCamera(UiPortraitSlots.ENEMY_TARGET, thisUnit);
 	}
-
+	
 	public UnitController GetTarget(AbilityTargetTeams targetTeam) {
 		switch (targetTeam)	{
 			case AbilityTargetTeams.ALLY:
@@ -549,11 +545,15 @@ public class UnitController : MonoBehaviour {
 		abilityManager.LoadAbilities();
 
 		if (IsPlayerOwned())
-			player.uiController.ResetButtons();
+			GameplayCanvas.Instance.ResetButtons();
 	}
 
 	private void SetHealth(float newHealthValue) {
 		networkHelper.currentHealth = newHealthValue;
+	}
+
+	public float GetHealthPercentage() {
+		return networkHelper.currentHealth / unitInfo.maxHealth;
 	}
 
 	public void SetUnitInfo(string unitInfoName) {
@@ -567,13 +567,12 @@ public class UnitController : MonoBehaviour {
 			abilityManager.Initialize();
 			body.ResetAnimator();
 			body.SetColor(unitInfo.bodyColor);
-			faceCam = GetComponentInChildren<Camera>(true);
 
 			fov.dayViewRadius = unitInfo.daySightRange;
 			fov.nightViewRadius = unitInfo.nightSightRange;
 			fov.viewAngle = unitInfo.fovViewAngle;
 
-			if (unitInfo.hasAI) {
+			if (networkHelper.isServer && unitInfo.hasAI) {
 				aiManager = gameObject.AddComponent<AiManager>();
 				aiManager.Initialize(unitInfo);
 			}

@@ -40,15 +40,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e54b80e30327fb747844075884753beb, type: 2}
   - {fileID: 11400000, guid: 0551f01070a6e6f40b05f4ba8b458758, type: 2}
   - {fileID: 11400000, guid: 9b1704880fe3fa249872b713fc810c38, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   startingItemsList:
   - {fileID: 11400000, guid: 9f5d7838e937b484d921d7a3e1143ac4, type: 2}
   - {fileID: 11400000, guid: 65943cc63a424fb4da40151f76e7cd4e, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   animationPrefab: {fileID: 2048578494338918473, guid: b4d95473cafa7ab4fbbaebd9ae0302d0,
     type: 3}
   hasAI: 0

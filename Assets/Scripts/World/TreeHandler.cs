@@ -6,6 +6,10 @@ using Mirror;
 
 public class TreeHandler : NetworkBehaviour {
 
+	private void Awake() {
+		ResourceLibrary.Instance.RegisterTreeHandler(this);
+	}
+
 	[ClientRpc]
 	public void Rpc_DestroyTree(int treeSiblingIndex, Vector3 destroyedFromDirection, float delay) {
 		GameObject treeGO = GetTreeGOFromSiblingIndex(treeSiblingIndex);

@@ -50,6 +50,12 @@ public enum AbilitySlots {
 	NONE
 };
 
+public enum AbilitySlotTypes {
+	ABILITY,
+	ITEM,
+	NONE
+}
+
 
 // Teams, allies, enemies
 [System.Flags]
@@ -67,6 +73,10 @@ public enum DwarfTeamSlots {
 public enum MonsterTeamSlots {
 	ENEMY_1, ENEMY_2, ENEMY_3, ENEMY_4
 };
+
+public enum UiPortraitSlots {
+	ALLY_1, ALLY_2, ALLY_3, ALLY_TARGET, ENEMY_TARGET, SELF
+}
 
 // abilities
 public enum AbilityTargetTypes {
@@ -142,20 +152,6 @@ public static class AnimTriggers {
 
 public enum Animations {
 	NONE, ATTACK_A, ATTACK_B, CAST_A, CAST_B, DIE, RESPAWN, IDLE, LAYDOWN, WAKEUP
-}
-
-// returns the screen position for ally and enemy viewports
-public static class CameraViewports {
-
-	public static Rect GetAllyViewport()
-	{
-		return new Rect(0.6668f, 0.0f, 0.082f, 0.165f);
-	}
-
-	public static Rect GetEnemyViewport()
-	{
-		return new Rect(0.917f, 0.0f, 0.082f, 0.165f);
-	}
 }
 
 

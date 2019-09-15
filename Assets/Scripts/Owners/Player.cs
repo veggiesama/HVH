@@ -12,7 +12,6 @@ public class Player : Owner {
 	//public PlayerClass playerClass;
 
 	//public ControlScheme controlScheme;
-	public UIController uiController;
 	public Camera cam;
 	public MouseTargeter mouseTargeter;
 	//private bool holdingShift = false;
@@ -20,15 +19,8 @@ public class Player : Owner {
 
 	public HVH_Inputs hvhInputs;
 
-
 	//public bool isNPC = false; // inspector
 	[SyncVar] public int playerID;
-
-	public override void OnStartClient() {
-		if (!string.IsNullOrEmpty(networkHelper.unitInfo)) {
-			unit.SetUnitInfo(networkHelper.unitInfo);
-		}
-	}
 
 	public override void Awake() {
 		base.Awake();
@@ -45,11 +37,16 @@ public class Player : Owner {
 
 	public override void OnStartLocalPlayer() {
 		if (isLocalPlayer) {
+			Debug.Log("OnStartLocalPlayer");
 			GameRules.Instance.SetLocalPlayer(this);
 			EnableLocalPlayerOnlyObjects(true);
 			UpdateTeamVision();
 			TeamFieldOfView.Instance.Initialize((Teams)team);
-			DisableTreeHighlighting();
+			ResourceLibrary.Instance.DisableTreeHighlighting();
+			SetupAllyCameras();
+			GameplayCanvas.Instance.ResetButtons();
+			GameplayCanvas.Instance.debugMenu.Initialize();
+			cam.GetComponent<CameraFollow>().Initialize();
 
 			//if (networkHelper.isUnassigned) return;
 			//if (!isLocalPlayer) return;
@@ -76,6 +73,12 @@ public class Player : Owner {
 			//	return;
 
 		}
+	}
+
+	public void RefreshInputActions() {
+		hvhInputs.Disable();
+		hvhInputs = new HVH_Inputs();
+		hvhInputs.Enable();
 	}
 
 	private void DoLeftClick() {
@@ -184,11 +187,19 @@ public class Player : Owner {
 		}
 	}
 
-	public void DisableTreeHighlighting() {
-		Tree[] trees = FindObjectsOfType<Tree>();
+	public void SetupAllyCameras() {
+		List<Player> teammates = GameRules.Instance.GetAllPlayers(GetTeam());
 
-		foreach (Tree t in trees) {
-			t.SetHighlighted(HighlightingState.NONE);
+		int n = 1; // counts from 1 to 3
+		foreach (Player teammate in teammates) {
+			if (teammate != this) {
+				UiPortraitSlots slot = (UiPortraitSlots) System.Enum.Parse(typeof(UiPortraitSlots), "ALLY_" + n);
+				GameplayCanvas.Instance.SetPortraitCamera(slot, teammate.unit);
+				n++;
+			}
+			else {
+				GameplayCanvas.Instance.SetPortraitCamera(UiPortraitSlots.SELF, this.unit);
+			}
 		}
 	}
 

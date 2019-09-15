@@ -96,12 +96,12 @@ public class Cast : Order {
 
 	private void EnableCastbar(bool enable) {
 		if (unit.IsPlayerOwned())
-			unit.player.uiController.EnableCastbar(enable);
+			GameplayCanvas.Instance.EnableCastbar(enable);
 	}
 
 	private void UpdateCastbar(float percentage) {
 		if (unit.IsPlayerOwned())
-			unit.player.uiController.UpdateCastbar(percentage);
+			GameplayCanvas.Instance.UpdateCastbar(percentage);
 	}
 
 }

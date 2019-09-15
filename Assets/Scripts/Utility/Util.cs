@@ -124,6 +124,38 @@ public static class Util {
 		return unitList;
 	}
 
+	public static AbilitySlotTypes GetSlotType(AbilitySlots slot) {
+		switch (slot) {
+			case AbilitySlots.ATTACK:
+				return AbilitySlotTypes.ABILITY; 
+			case AbilitySlots.ABILITY_1:
+				return AbilitySlotTypes.ABILITY; 
+			case AbilitySlots.ABILITY_2:
+				return AbilitySlotTypes.ABILITY; 
+			case AbilitySlots.ABILITY_3:
+				return AbilitySlotTypes.ABILITY; 
+			case AbilitySlots.ABILITY_4:
+				return AbilitySlotTypes.ABILITY; 
+			case AbilitySlots.ABILITY_5:
+				return AbilitySlotTypes.ABILITY; 
+			case AbilitySlots.ABILITY_6:
+				return AbilitySlotTypes.ABILITY; 
+			case AbilitySlots.ITEM_1:
+				return AbilitySlotTypes.ITEM; 
+			case AbilitySlots.ITEM_2:
+				return AbilitySlotTypes.ITEM; 
+			case AbilitySlots.ITEM_3:
+				return AbilitySlotTypes.ITEM; 
+			case AbilitySlots.ITEM_4:
+				return AbilitySlotTypes.ITEM; 
+			case AbilitySlots.ITEM_5:
+				return AbilitySlotTypes.ITEM; 
+			case AbilitySlots.ITEM_6:
+				return AbilitySlotTypes.ITEM; 
+			case AbilitySlots.NONE:
+				return AbilitySlotTypes.NONE; 
+		}
 
-
+		return AbilitySlotTypes.NONE;
+	}
 }

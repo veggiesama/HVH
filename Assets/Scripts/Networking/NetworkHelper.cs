@@ -336,6 +336,7 @@ public class NetworkHelper : NetworkBehaviour {
 	private void Cmd_Respawn() {
 		Transform spawnLoc = GameRules.GetRandomSpawnPoint();
 		currentHealth = unit.unitInfo.maxHealth;
+		unit.OnTakeHealing(unit.unitInfo.maxHealth);
 		Rpc_RespawnAt(spawnLoc.position, spawnLoc.rotation);
 	}
 

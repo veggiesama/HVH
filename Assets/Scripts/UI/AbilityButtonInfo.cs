@@ -44,21 +44,19 @@ public class AbilityButtonInfo : MonoBehaviour {
 			player.UI_ClickedAbilityButton(abilitySlot);
 		});
 
-		if (player.unit.HasAbilityInSlot(abilitySlot)) {
-			ability = player.unit.GetAbilityInSlot(abilitySlot);
-			iconImage.sprite = ability.iconImage;
-			hotkeyText.text = AbilitySlotToInputActionString(abilitySlot);
-			button.enabled = true;
-		}
-		else {
-			ability = null;
-			iconImage.sprite = null;
-			hotkeyText.text = "";
-			cooldownText.text = "";
-			button.enabled = false;
-		}
-
-
+		//if (player.unit.HasAbilityInSlot(abilitySlot)) {
+		ability = player.unit.GetAbilityInSlot(abilitySlot);
+		iconImage.sprite = ability.iconImage;
+		hotkeyText.text = AbilitySlotToInputActionString(abilitySlot);
+		button.enabled = true;
+		//}
+		//else {
+		//	ability = null;
+		//	iconImage.sprite = null;
+		//	hotkeyText.text = "";
+		//	cooldownText.text = "";
+		//	button.enabled = false;
+		//}
 	}
 
 	IEnumerator SlowUpdate() {

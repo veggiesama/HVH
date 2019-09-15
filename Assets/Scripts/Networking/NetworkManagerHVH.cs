@@ -9,8 +9,8 @@ public class NetworkManagerHVH : NetworkManager {
 	[Header("Scene Manager")]
 	public AdditiveSceneManager sceneManager;
 
-	private bool isHost = false;
-	private bool isServer = false;
+	public bool isHost = false;
+	public bool isServer = false;
 	//private bool isClient = false;
 
 	public override void Awake() {

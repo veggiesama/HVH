@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: EmptyAbility
   m_EditorClassIdentifier: 
   abilityName: EmptyAbility
+  iconImage: {fileID: 21300000, guid: 52d5e45af337f754191f7a206fb26c00, type: 3}
+  isItem: 0
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}
   unitInfo: {fileID: 0}
   abilityManager: {fileID: 0}
+  networkHelper: {fileID: 0}
+  owner: {fileID: 0}
+  isPassive: 1
   targetType: 0
   targetTeam: 0
   damageType: 0
@@ -26,8 +31,16 @@ MonoBehaviour:
   castRange: 0
   castTime: 0
   duration: 0
-  bypassOrderQueue: 0
+  aoeRadius: 0
+  quickCast: 0
+  doNotCancelOrderQueue: 0
+  durationRemaining: 0
   projectilePrefab: {fileID: 0}
+  projectileSpawner: 0
+  projectileBehaviour: 0
   projectileSpeed: 0
   projectileTimeAlive: 0
+  projectileTimeUntilFullGrowth: 0
+  projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
+  grenadeLerpTimeByCastRange: 0

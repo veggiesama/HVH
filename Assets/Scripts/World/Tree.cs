@@ -26,7 +26,7 @@ public class Tree : MonoBehaviour {
 	public Color colorTint;
 	public Color emissionColor;
 
-	private void Start() {
+	private void Awake() {
 		SetColors(); // colors need to be set in both editor/play modes due to use of MaterialPropertyBlock
 
 		meshRenderer = meshGO.GetComponent<Renderer>();

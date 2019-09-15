@@ -17,6 +17,8 @@ public class BodyController : MonoBehaviour {
 	[HideInInspector] public GameObject mouth;
 	[HideInInspector] public GameObject feet;
 	[HideInInspector] public Renderer[] bodyMeshes;
+	[HideInInspector] public Camera allyCam;
+	[HideInInspector] public Camera targetCam;
 	private Outline[] outlineScripts;
 	private VisibilityState localVisibilityState;
 
@@ -79,6 +81,8 @@ public class BodyController : MonoBehaviour {
 		mouth = finder.mouth;
 		feet = finder.feet;
 		bodyMeshes = finder.bodyMeshes;
+		allyCam = finder.allyCam;
+		targetCam = finder.targetCam;
 		
 		// NOTE: assumes only 1 material per body mesh
 		originalBodyMeshMaterials = new Material[bodyMeshes.Length];

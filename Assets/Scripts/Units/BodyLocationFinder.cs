@@ -8,4 +8,7 @@ public class BodyLocationFinder : MonoBehaviour {
 	public GameObject mouth;
 	public GameObject feet;
 	public Renderer[] bodyMeshes;
+	
+	public Camera allyCam;
+	public Camera targetCam;
 }

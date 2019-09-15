@@ -20,17 +20,6 @@ public class AdditiveSceneManager : MonoBehaviour {
 		 //DontDestroyOnLoad(this.gameObject);
 	}
 
-	// EVENT HANDLERS
-	/*
-	public delegate void OnGameplayScenesInitializedDelegate();
-	public event OnGameplayScenesInitializedDelegate OnGameplayScenesInitializedEventHandler;
-
-	public void OnGameplayScenesInitialized() {
-		if (OnGameplayScenesInitializedEventHandler != null) {
-			OnGameplayScenesInitializedEventHandler();	
-		}
-	}*/
-
 	public void Start() {
 		initializerScene = SceneManager.GetActiveScene();
 
@@ -41,12 +30,6 @@ public class AdditiveSceneManager : MonoBehaviour {
 			if (sceneName != initializerScene.name)
 				StartCoroutine( UnloadScene(sceneName) );
 		}
-
-
-
-
-		// todo: REMOVE
-		FindObjectOfType<NetworkManager>().StartHost();
 
 	}
 
