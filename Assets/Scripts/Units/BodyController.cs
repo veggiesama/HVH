@@ -217,7 +217,7 @@ public class BodyController : MonoBehaviour {
 
 		localVisibilityState = state;
 
-		UnitController localUnit = GameRules.Instance.GetLocalPlayer().unit;
+		UnitController localUnit = GameResources.Instance.GetLocalPlayer().unit;
 		UnitController localEnemyTarget = localUnit.GetTarget(AbilityTargetTeams.ENEMY);
 
 		if (state == VisibilityState.VISIBLE && localUnit.IsForgottenTarget(unit)) {
@@ -270,7 +270,7 @@ public class BodyController : MonoBehaviour {
 	}
 
 	public void AppearInFOV(bool enable) {
-		UnitController localUnit = GameRules.Instance.GetLocalPlayer().unit;
+		UnitController localUnit = GameResources.Instance.GetLocalPlayer().unit;
 		if (unit.SharesTeamWith(localUnit)) return;
 		
 		if (enable) {

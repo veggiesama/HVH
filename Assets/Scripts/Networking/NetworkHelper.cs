@@ -334,7 +334,7 @@ public class NetworkHelper : NetworkBehaviour {
 
 	[Command]
 	private void Cmd_Respawn() {
-		Transform spawnLoc = GameRules.GetRandomSpawnPoint();
+		Transform spawnLoc = GameResources.Instance.GetRandomSpawnPoint();
 		currentHealth = unit.unitInfo.maxHealth;
 		unit.OnTakeHealing(unit.unitInfo.maxHealth);
 		Rpc_RespawnAt(spawnLoc.position, spawnLoc.rotation);
@@ -455,7 +455,7 @@ public class NetworkHelper : NetworkBehaviour {
 	private void Rpc_SetVisibilityState(int nState) {
 		VisibilityState state = (VisibilityState)nState;
 
-		UnitController localUnit = GameRules.Instance.GetLocalPlayer().unit;
+		UnitController localUnit = GameResources.Instance.GetLocalPlayer().unit;
 		if (state == VisibilityState.INVISIBLE && unit.SharesTeamWith(localUnit)) {
 			state = VisibilityState.VISIBLE_TO_TEAM_ONLY;
 		}

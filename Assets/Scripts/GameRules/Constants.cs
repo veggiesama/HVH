@@ -10,7 +10,7 @@ public static class Constants {
 	public static bool StartDay = true;
 
 	public static int DwarvesTotal = 4;
-	public static int MonstersTotal = 1;
+	public static int MonstersTotal = 4;
 
 	public static Color AllyColor = Color.green;
 	public static Color EnemyColor = Color.red;

@@ -53,7 +53,7 @@ public class TeamFieldOfView : Singleton<TeamFieldOfView> {
 				newVisibleTargets = newVisibleTargets.Union( unit.GetFieldOfView().FindVisibleTargets() ).ToList();
 		}
 
-		UnitController localUnit = GameRules.Instance.GetLocalPlayer().unit;
+		UnitController localUnit = GameResources.Instance.GetLocalPlayer().unit;
 		UnitController localTarget = localUnit.GetTarget(AbilityTargetTeams.ENEMY);
 
 		// make newly visible bodies visible

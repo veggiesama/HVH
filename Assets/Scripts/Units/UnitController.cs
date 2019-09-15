@@ -55,7 +55,6 @@ public class UnitController : MonoBehaviour {
 		if (owner is Player) {
 			player = (Player) owner;
 		}
-
 		//SetTargetPortrait(false, AbilityTargetTeams.ENEMY);
 	}
 
@@ -205,7 +204,7 @@ public class UnitController : MonoBehaviour {
 	}
 
 	public bool IsLocalPlayer() {
-		return (IsPlayerOwned() && GameRules.Instance.GetLocalPlayer() == player);
+		return (IsPlayerOwned() && GameResources.Instance.GetLocalPlayer() == player);
 	}
 
 	// targeting

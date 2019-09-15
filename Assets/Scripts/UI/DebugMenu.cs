@@ -22,7 +22,7 @@ public class DebugMenu : MonoBehaviour {
 	// PLAYER SWAPPER
 	private void BuildPlayerSwapper() {
 		List<string> playerList = new List<string>();
-		foreach (Player p in GameRules.Instance.GetAllPlayers()) {
+		foreach (Player p in GameResources.Instance.GetAllPlayers()) {
 			playerList.Add(p.playerID+"");
 		}
 
@@ -34,10 +34,10 @@ public class DebugMenu : MonoBehaviour {
 	}
 
 	private void SwapPlayer() {
-		Player localPlayer = GameRules.Instance.GetLocalPlayer();
+		Player localPlayer = GameResources.Instance.GetLocalPlayer();
 
 		int playerID = int.Parse(playerSwapDropdown.captionText.text);
-		foreach (Player p in GameRules.Instance.GetAllPlayers()) {
+		foreach (Player p in GameResources.Instance.GetAllPlayers()) {
 			if (p.playerID == playerID) {
 				localPlayer.EnableLocalPlayerOnlyObjects(false);
 				localPlayer.RefreshInputActions();
@@ -62,7 +62,7 @@ public class DebugMenu : MonoBehaviour {
 	}
 
 	private void ApplyStatus() {
-		UnitController localUnit = GameRules.Instance.GetLocalPlayer().unit;
+		UnitController localUnit = GameResources.Instance.GetLocalPlayer().unit;
 
 		var dict = ResourceLibrary.Instance.statusEffectDictionary;
 		string selectedOption = statusDropdown.captionText.text;
@@ -82,7 +82,7 @@ public class DebugMenu : MonoBehaviour {
 	}
 
 	private void ReloadAbilities() {
-		UnitController localUnit = GameRules.Instance.GetLocalPlayer().unit;
+		UnitController localUnit = GameResources.Instance.GetLocalPlayer().unit;
 		localUnit.ReloadAbilities();
 		Debug.Log("Reloaded scriptable object abilities");
 

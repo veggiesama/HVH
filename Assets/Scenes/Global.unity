@@ -806,8 +806,8 @@ MonoBehaviour:
   mainMenu: {fileID: 1392802632}
   subScenes:
   - Dynamic
-  - Map_Small
   - Gameplay
+  - Map_Small
   gameplayScenesInitialized: 0
   OnGameplayerScenesInitialized:
     m_PersistentCalls:

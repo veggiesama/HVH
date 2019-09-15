@@ -168,8 +168,8 @@ public class NetworkManagerHVH : NetworkManager {
 		}
 
 		Debug.Log("Assigning client to next available player slot.");
-		Player player = GameRules.Instance.GetNextUnassignedPlayer();
-		player.GetComponent<NetworkHelper>().isUnassigned = false;
+		Player player = GameResources.Instance.GetNextUnassignedPlayer();
+		player.networkHelper.isUnassigned = false;
 
 		NetworkIdentity playerNetId = player.GetComponent<NetworkIdentity>();
 
@@ -181,7 +181,7 @@ public class NetworkManagerHVH : NetworkManager {
 
 		// explicitly grant client authority to host (fixes Smooth Sync not syncing server-caused forced movement)
 		if (conn == NetworkServer.localConnection) {
-			foreach (Player p in GameRules.Instance.GetAllPlayers()) {
+			foreach (Player p in GameResources.Instance.GetAllPlayers()) {
 				p.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
 			}
 		}

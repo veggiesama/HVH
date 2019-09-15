@@ -7,7 +7,7 @@ using Mirror;
 public class TreeHandler : NetworkBehaviour {
 
 	private void Awake() {
-		ResourceLibrary.Instance.RegisterTreeHandler(this);
+		GameResources.Instance.RegisterTreeHandler(this);
 	}
 
 	[ClientRpc]

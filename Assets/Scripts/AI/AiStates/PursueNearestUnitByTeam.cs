@@ -43,7 +43,7 @@ public class PursueNearestUnitByTeam : MoveTo {
 
 	private Vector3 GetClosestTargetPosition(Teams team) {
 
-		List<UnitController> unitList = GameRules.GetEnemyUnitsOf(unit, false);
+		List<UnitController> unitList = GameResources.Instance.GetEnemyUnitsOf(unit, false);
 		Vector3 loc = unit.GetBodyPosition();
 		Vector3 closestTargetPosition = default;
 

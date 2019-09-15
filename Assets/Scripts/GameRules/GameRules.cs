@@ -16,8 +16,6 @@ public class GameRules : Singleton<GameRules> {
 	public int houndsToSpawn;
 	public int testMonstersToSpawn;
 	private GameObject playerPrefab;
-	private Player localPlayer;
-	private List<Player> allPlayers;
 
 	// Singleton constructor
 	public static GameRules Instance {
@@ -36,16 +34,16 @@ public class GameRules : Singleton<GameRules> {
 
 		int numPlayers = System.Enum.GetValues(typeof(MonsterTeamSlots)).Length + 
 						 System.Enum.GetValues(typeof(DwarfTeamSlots)).Length;
-		allPlayers = new List<Player>(numPlayers);
 	}
 
 	public void SetupGame() {
 		Debug.Log("Trying to spawn players.");
+		//SpawnUnassignedPlayers();
 		SpawnUnassignedPlayers();
 
 		Debug.Log("Trying to spawn NPCs.");
 		SpawnHounds(houndsToSpawn);
-		SpawnTestMonsters(testMonstersToSpawn);
+		//SpawnTestMonsters(testMonstersToSpawn);
 	}
 
 	public void SpawnHounds(int howMany) {
@@ -55,7 +53,7 @@ public class GameRules : Singleton<GameRules> {
 	}
 
 	public void SpawnHound() {
-		Transform spawnLoc = GetRandomPointOfInterest();
+		Transform spawnLoc = GameResources.Instance.GetRandomSpawnPoint();
 		GameObject npc = Instantiate(ResourceLibrary.Instance.npcPrefab, spawnLoc.position, spawnLoc.rotation);
 		NetworkServer.Spawn(npc);
 		Owner npcOwner = npc.GetComponent<Owner>();
@@ -74,7 +72,7 @@ public class GameRules : Singleton<GameRules> {
 
 
 	public void SpawnTestMonster() {
-		Transform spawnLoc = GetRandomPointOfInterest();
+		Transform spawnLoc = GameResources.Instance.GetRandomSpawnPoint();
 		GameObject npc = Instantiate(ResourceLibrary.Instance.npcPrefab, spawnLoc.position, spawnLoc.rotation);
 		NetworkServer.Spawn(npc);
 		Owner npcOwner = npc.GetComponent<Owner>();
@@ -82,7 +80,32 @@ public class GameRules : Singleton<GameRules> {
 		npcOwner.SetUnitInfo("MonsterTest");
 	}
 
+	public void SpawnUnassignedPlayers() {
+		int totalPlayers = Constants.DwarvesTotal + Constants.MonstersTotal;
+		for (int id = 0; id < totalPlayers; id++) {
+			Transform spawnLoc = NetworkManager.singleton.GetStartPosition();
+			GameObject unassignedPlayerGO = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation);
+			Player unassignedPlayer = unassignedPlayerGO.GetComponent<Player>(); 
 
+			unassignedPlayer.playerID = id;
+			GameResources.Instance.AddPlayerReference(id, unassignedPlayer);
+			GameResources.Instance.AddUnitReference(unassignedPlayer.unit);
+			//networkGameRules.dwarfDictionary.Add(playerIdCounter, n);
+
+			unassignedPlayer.MakeNPC();
+			NetworkServer.Spawn(unassignedPlayer.gameObject);
+
+			if (id < Constants.DwarvesTotal) {
+				unassignedPlayer.SetTeam(Teams.DWARVES);
+				unassignedPlayer.SetUnitInfo("Dwarf");
+			}
+			else {
+				unassignedPlayer.SetTeam(Teams.MONSTERS);
+				unassignedPlayer.SetUnitInfo("Monster");
+			}
+		}
+	}
+	/*
 	public void SpawnUnassignedPlayers() {
 
 		// NOTE: Enum count determines number of team slots
@@ -91,9 +114,9 @@ public class GameRules : Singleton<GameRules> {
 			Transform spawnLoc = NetworkManager.singleton.GetStartPosition();
 			GameObject unassignedPlayerGO = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation);
 			Player unassignedPlayer = unassignedPlayerGO.GetComponent<Player>(); 
-			allPlayers.Add(unassignedPlayer);
 
 			unassignedPlayer.playerID = n;
+			GameResources.Instance.AddPlayerReference(n, unassignedPlayer);
 			networkGameRules.dwarfDictionary.Add((int)slot, n);
 
 			unassignedPlayer.MakeNPC();
@@ -107,9 +130,9 @@ public class GameRules : Singleton<GameRules> {
 			Transform spawnLoc = NetworkManager.singleton.GetStartPosition();
 			GameObject unassignedPlayerGO = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation);
 			Player unassignedPlayer = unassignedPlayerGO.GetComponent<Player>(); 
-			allPlayers.Add(unassignedPlayer);
 
 			unassignedPlayer.playerID = n;
+			GameResources.Instance.AddPlayerReference(n, unassignedPlayer);
 			networkGameRules.monsterDictionary.Add((int)slot, n);
 
 			unassignedPlayer.MakeNPC();
@@ -122,118 +145,16 @@ public class GameRules : Singleton<GameRules> {
 		//Debug.Log(dwarfDictionary.DebugToString());
 		//Debug.Log(monsterDictionary.DebugToString());
 	}
+	*/
 
-	public Player GetNextUnassignedPlayer() {
-		
-		Player p;
-		
-		p = GetNextDwarfPlayer();
-		if (p != null) return p;
-
-		p = GetNextMonsterPlayer();
-		if (p != null) return p;
-
-		return null;
-		
-	}
-
-	public Player GetNextDwarfPlayer() {
-		foreach (KeyValuePair<int, int> kv in networkGameRules.dwarfDictionary) {
-			DwarfTeamSlots slot = (DwarfTeamSlots)kv.Key;
-			Player player = GetPlayer(kv.Value);
-
-			if (player.GetComponent<NetworkHelper>().isUnassigned)
-				return player;
-		}
-
-		return null;
-	}
-
-	public Player GetNextMonsterPlayer() {
-		foreach (KeyValuePair<int, int> kv in networkGameRules.monsterDictionary) {
-			MonsterTeamSlots slot = (MonsterTeamSlots)kv.Key;
-			Player player = GetPlayer(kv.Value);
-
-			if (player.GetComponent<NetworkHelper>().isUnassigned)
-				return player;
-		}
-
-		return null;
-	}
-
-	public Player GetPlayer(DwarfTeamSlots slot) {
-		int id = networkGameRules.dwarfDictionary[(int)slot];
-		return GetPlayer(id);
-	}
-
-	public Player GetPlayer(MonsterTeamSlots slot) {
-		int id = networkGameRules.monsterDictionary[(int)slot];
-		return GetPlayer(id);
-	}
-
-	public Player GetPlayer(int playerID) {
-		foreach (Player p in GetAllPlayers()) {
-			if (p.playerID == playerID)
-				return p;
-		}
-		return null;
-	}
-
-	public static List<UnitController> GetEnemyUnitsOf(UnitController unit, bool visibleOnly) {
-		UnitController[] units = FindObjectsOfType<UnitController>();
-		List<UnitController> validUnitList = new List<UnitController>();
-
-		foreach(UnitController u in units) {
-			if (!unit.SharesTeamWith(u))
-				if ((!visibleOnly) || (visibleOnly && u.body.IsVisible() ))
-					validUnitList.Add(u);
-		}
-
-		return validUnitList;
-	}
-
-	public List<Player> GetAllPlayers() {
-		return allPlayers;
-	}
-
-	public List<Player> GetAllPlayers(Teams team) {
-		List<Player> players = GetAllPlayers().FindAll(x => x.GetTeam() == team);
-		return players;
-	}
-
-	public static Transform GetRandomSpawnPoint() {
-		GameObject[] allSpawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
-		int rng = Random.Range(0, allSpawnPoints.Length);
-		return allSpawnPoints[rng].transform;
-	}
-
-	public static Transform GetRandomPointOfInterest() {
-		GameObject[] allPOIs = GameObject.FindGameObjectsWithTag("Point of Interest");
-		int rng = Random.Range(0, allPOIs.Length);
-		return allPOIs[rng].transform;
-	}
-
-	public void SetLocalPlayer(Player player) {
-		foreach (Player p in GetAllPlayers()) {
-			p.gameObject.tag = "Untagged";
-		}
-
-		player.gameObject.tag = "LocalPlayer";
-		localPlayer = player;
-	}
-
-	public Player GetLocalPlayer() {
-		return localPlayer;
-	}
-
+	/*
 	public DwarfSlotsToPlayerID_SyncDictionary GetDwarfTeamDictionary() {
 		return networkGameRules.dwarfDictionary;
 	}
 
 	public MonsterSlotsToPlayerID_SyncDictionary GetMonsterTeamDictionary() {
 		return networkGameRules.monsterDictionary;
-	}
-
+	}*/
 
 
 }

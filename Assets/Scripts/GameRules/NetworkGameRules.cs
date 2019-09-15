@@ -5,13 +5,11 @@ using Mirror;
 using Extensions;
 
 // SyncDictionary: https://vis2k.github.io/Mirror/Classes/SyncDictionary
-public class DwarfSlotsToPlayerID_SyncDictionary : SyncDictionary<int, int> {} // SyncDictionary<(int)DwarfTeamSlots, (int)PlayerID> 
-public class MonsterSlotsToPlayerID_SyncDictionary: SyncDictionary<int, int> {} // SyncDictionary<(int)DwarfTeamSlots, (int)PlayerID>
+//public class DwarfSlotsToPlayerID_SyncDictionary : SyncDictionary<int, int> {} // SyncDictionary<(int)DwarfTeamSlots, (int)PlayerID> 
+//public class MonsterSlotsToPlayerID_SyncDictionary: SyncDictionary<int, int> {} // SyncDictionary<(int)DwarfTeamSlots, (int)PlayerID>
 
 public class NetworkGameRules : NetworkBehaviour {
 
-	public DwarfSlotsToPlayerID_SyncDictionary dwarfDictionary = new DwarfSlotsToPlayerID_SyncDictionary();
-	public MonsterSlotsToPlayerID_SyncDictionary monsterDictionary = new MonsterSlotsToPlayerID_SyncDictionary();
 	private DayNightController dayNightController;
 
 	public void Awake() {
@@ -19,24 +17,8 @@ public class NetworkGameRules : NetworkBehaviour {
 		dayNightController = GetComponent<DayNightController>();
 	}
 
-	public override void OnStartClient() {
-		if (isServer) return;
-		dwarfDictionary.Callback += OnDwarfTeamChange;
-		monsterDictionary.Callback += OnMonsterTeamChange;
-	}
-
 	private void Start() {
 		//Cmd_SyncToServerDayNight();
-	}
-
-
-	// callbacks
-	private void OnDwarfTeamChange(DwarfSlotsToPlayerID_SyncDictionary.Operation op, int slot, int playerID) {
-		Debug.Log("OnDwarfTeamChange called");
-	}
-
-	private void OnMonsterTeamChange(MonsterSlotsToPlayerID_SyncDictionary.Operation op, int slot, int playerID) {
-		Debug.Log("OnMonsterTeamChange called");
 	}
 
 	// day night controller helpers

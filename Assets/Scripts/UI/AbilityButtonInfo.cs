@@ -38,7 +38,7 @@ public class AbilityButtonInfo : MonoBehaviour {
 			button.enabled = false;
 		}
 
-		player = GameRules.Instance.GetLocalPlayer();
+		player = GameResources.Instance.GetLocalPlayer();
 
 		button.onClick.AddListener( delegate {
 			player.UI_ClickedAbilityButton(abilitySlot);

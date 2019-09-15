@@ -38,11 +38,12 @@ public class Player : Owner {
 	public override void OnStartLocalPlayer() {
 		if (isLocalPlayer) {
 			Debug.Log("OnStartLocalPlayer");
-			GameRules.Instance.SetLocalPlayer(this);
+			GameResources.Instance.SetLocalPlayer(this);
 			EnableLocalPlayerOnlyObjects(true);
 			UpdateTeamVision();
 			TeamFieldOfView.Instance.Initialize((Teams)team);
-			ResourceLibrary.Instance.DisableTreeHighlighting();
+			GameResources.Instance.DisableTreeHighlighting();
+			Debug.Log("Setup Ally Cameras");
 			SetupAllyCameras();
 			GameplayCanvas.Instance.ResetButtons();
 			GameplayCanvas.Instance.debugMenu.Initialize();
@@ -188,7 +189,7 @@ public class Player : Owner {
 	}
 
 	public void SetupAllyCameras() {
-		List<Player> teammates = GameRules.Instance.GetAllPlayers(GetTeam());
+		List<Player> teammates = GameResources.Instance.GetAllPlayers(GetTeam());
 
 		int n = 1; // counts from 1 to 3
 		foreach (Player teammate in teammates) {
@@ -196,6 +197,9 @@ public class Player : Owner {
 				UiPortraitSlots slot = (UiPortraitSlots) System.Enum.Parse(typeof(UiPortraitSlots), "ALLY_" + n);
 				GameplayCanvas.Instance.SetPortraitCamera(slot, teammate.unit);
 				n++;
+
+				if (n > 3)
+					break;
 			}
 			else {
 				GameplayCanvas.Instance.SetPortraitCamera(UiPortraitSlots.SELF, this.unit);
