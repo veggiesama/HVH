@@ -53,6 +53,7 @@ public class AdditiveSceneManager : MonoBehaviour {
 		for (int n = 0; n < subScenes.Length; n++) {
 			string sceneName = subScenes[n];
 			AsyncOperation op = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+			op.allowSceneActivation = false;
 			asyncOps[n] = op;
 			Debug.LogFormat("Loaded {0}", sceneName);
 		}
@@ -72,7 +73,11 @@ public class AdditiveSceneManager : MonoBehaviour {
 
 	public bool AreAllScenesLoaded(AsyncOperation[] asyncOps) {
 		foreach (AsyncOperation op in asyncOps) {
-			if (!op.isDone) return false;
+			if (!op.isDone) {
+				if (op.progress >= 0.9f)
+					op.allowSceneActivation = true;
+				return false;
+			}
 		}
 		return true;
 	}

@@ -8,6 +8,7 @@ public class NetworkManagerHVH : NetworkManager {
 
 	[Header("Scene Manager")]
 	public AdditiveSceneManager sceneManager;
+	public NetworkHUD networkHUD;
 
 	public bool isHost = false;
 	public bool isServer = false;
@@ -19,10 +20,15 @@ public class NetworkManagerHVH : NetworkManager {
 		sceneManager.OnGameplayerScenesInitialized.AddListener(OnGameplayScenesInitialized);
 	}
 
+	public override void Start() {
+		base.Start();
+		networkHUD.enabled = true;
+	}
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// HOST CALLBACKS
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	// When the host is started:
 	// Start()
 
@@ -79,6 +85,7 @@ public class NetworkManagerHVH : NetworkManager {
 
     public override void OnServerReady(NetworkConnection conn) {
 		//base.OnServerReady(conn);
+		Debug.Log("On server ready");
 		StartCoroutine( WaitServerReady(conn) );
     }
 
@@ -114,6 +121,7 @@ public class NetworkManagerHVH : NetworkManager {
 	}
 
     public override void OnClientConnect(NetworkConnection conn) {
+		Debug.Log("Client has connected");
 		if (!isHost) {
 			sceneManager.InitializeGameplayScenes();
 		}
@@ -166,28 +174,53 @@ public class NetworkManagerHVH : NetworkManager {
 		while (!sceneManager.gameplayScenesInitialized) {
 			yield return null;
 		}
+		
+		var msg = new ChooseCharacterMessage() {
+			activate = true
+		};
 
-		Debug.Log("Assigning client to next available player slot.");
-		Player player = GameResources.Instance.GetNextUnassignedPlayer();
+		Debug.Log("Sending ChooseCharacterMessage to client");
+		//NetworkServer.SendToClient<MessageBase>(conn.connectionId, msg);
+		NetworkServer.SendToAll(msg);
+		networkHUD.OnChooseCharacter.AddListener(delegate(int playerID) {
+			//Debug.Log("Chose P" + playerID);
+			AssignClient(conn, playerID);
+		});
+		yield return null;
+	}
+
+
+	private void AssignClient(NetworkConnection conn, int playerID) {
+		//Debug.Log("Assigning client to next available player slot.");
+		//Player player = GameResources.Instance.GetNextUnassignedPlayer();
+		
+		Debug.Log("Assigning client " + conn.connectionId + " to chosen player " + playerID);
+		Player player = GameResources.Instance.GetPlayer(playerID);
 		player.networkHelper.isUnassigned = false;
 
-		NetworkIdentity playerNetId = player.GetComponent<NetworkIdentity>();
-
-		if (playerNetId.clientAuthorityOwner != null)
-			playerNetId.RemoveClientAuthority(NetworkServer.localConnection);
+		if (player.netIdentity.clientAuthorityOwner != null) {
+			NetworkServer.SetClientNotReady(player.netIdentity.connectionToClient);
+			//player.netIdentity.RemoveClientAuthority(NetworkServer.localConnection);
+		}
 
 		GameObject playerGO = player.gameObject;
+
+		//TODO: Couldn't figure out how to replace the user's connection to a new player object
+		// ERROR: SetClientOwner m_ClientAuthorityOwner already set!
+		//NetworkServer.ReplacePlayerForConnection(conn, playerGO);
 		NetworkServer.AddPlayerForConnection(conn, playerGO);
 
 		// explicitly grant client authority to host (fixes Smooth Sync not syncing server-caused forced movement)
 		if (conn == NetworkServer.localConnection) {
 			foreach (Player p in GameResources.Instance.GetAllPlayers()) {
-				p.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
+				p.netIdentity.AssignClientAuthority(conn);
 			}
 		}
-
 		NetworkServer.SetClientReady(conn);
+
+		player.Initialize();
 	}
+
 
 	IEnumerator WaitClientConnect(NetworkConnection conn) {
 		while (!sceneManager.gameplayScenesInitialized) {

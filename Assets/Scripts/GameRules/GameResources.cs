@@ -9,15 +9,6 @@ using Tree = HVH.Tree;
 
 public class GameResources : Singleton<GameResources> {
 
-	private NetworkGameResources networkGameResources;
-
-	private Player localPlayer;
-	//private Dictionary<int, Player> playerDictionary;
-	//private List<UnitController> unitList;
-	private List<TreeHandler> treeHandlers;
-	private List<GameObject> spawnPoints;
-	//private List<GameObject> pointsOfInterest;
-
 	// Singleton constructor
 	public static GameResources Instance {
 		get {
@@ -27,16 +18,21 @@ public class GameResources : Singleton<GameResources> {
 		}
 	}
 
+	private NetworkGameResources networkGameResources;
+
+	private Player localPlayer;
+	//private Dictionary<int, Player> playerDictionary;
+	//private List<UnitController> unitList;
+	private List<TreeHandler> treeHandlers;
+	private List<GameObject> spawnPoints;
+	//private List<GameObject> pointsOfInterest;
+
 	void Awake() {
 		//playerDictionary = new Dictionary<int, Player>();
 		//unitList = new List<UnitController>();
 		networkGameResources = GetComponent<NetworkGameResources>();
 		treeHandlers = new List<TreeHandler>();
 		spawnPoints = new List<GameObject>();
-
-		Debug.Log("GameResources AWAKE");
-
-
 		//int numPlayers = System.Enum.GetValues(typeof(MonsterTeamSlots)).Length + 
 		//				 System.Enum.GetValues(typeof(DwarfTeamSlots)).Length;
 	}
@@ -92,7 +88,6 @@ public class GameResources : Singleton<GameResources> {
 	}
 
 	public List<Player> GetAllPlayers() {
-		Debug.Log("GameResources GETALLPLAYERS");
 		return networkGameResources.GetAllPlayers();
 	}
 

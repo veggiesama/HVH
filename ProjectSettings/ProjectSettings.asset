@@ -49,7 +49,7 @@ PlayerSettings:
   m_StereoRenderingPath: 0
   m_ActiveColorSpace: 1
   m_MTRendering: 1
-  m_StackTraceTypes: 010000000100000001000000010000000100000001000000
+  m_StackTraceTypes: 010000000100000000000000010000000100000001000000
   iosShowActivityIndicatorOnLoading: -1
   androidShowActivityIndicatorOnLoading: -1
   iosUseCustomAppBackgroundBehavior: 0
@@ -627,7 +627,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
-    1: CROSS_PLATFORM_INPUT;MIRROR;MIRROR_1726_OR_NEWER;MIRROR_3_0_OR_NEWER;RHSD
+    1: CROSS_PLATFORM_INPUT;MIRROR;MIRROR_1726_OR_NEWER;MIRROR_3_0_OR_NEWER;RHSD;MIRROR_3_12_OR_NEWER
     2: CROSS_PLATFORM_INPUT
     4: CROSS_PLATFORM_INPUT
     7: CROSS_PLATFORM_INPUT

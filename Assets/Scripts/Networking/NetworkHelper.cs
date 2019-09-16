@@ -509,10 +509,6 @@ public class NetworkHelper : NetworkBehaviour {
 			smooth.whenToUpdateTransform = SmoothSyncMirror.WhenToUpdateTransform.Update;
 	}
 
-
-
-
-
 	// SCENE MANAGEMENT
 
 	//public enum LoadAction { Load, Unload }

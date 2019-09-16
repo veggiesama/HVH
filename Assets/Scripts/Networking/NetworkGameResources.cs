@@ -39,11 +39,6 @@ public class NetworkGameResources : NetworkBehaviour {
 		Debug.Log("OnMonsterTeamChange called");
 	}*/
 
-	public void Start()
-	{
-		
-	}
-
 	public void AddPlayerReference(int playerID, Player p) {
 		if (!playerDictionary.ContainsKey(playerID))
 			playerDictionary.Add(playerID, p.gameObject);

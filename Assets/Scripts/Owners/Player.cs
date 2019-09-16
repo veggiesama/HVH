@@ -35,12 +35,14 @@ public class Player : Owner {
 		hvhInputs.Disable();
 	}
 
-	public override void OnStartLocalPlayer() {
+	//public override void OnStartLocalPlayer() {
+	public void Initialize() {
+		//yield return new WaitForSeconds(6.0f);
 		if (isLocalPlayer) {
-			Debug.Log("OnStartLocalPlayer");
 			GameResources.Instance.SetLocalPlayer(this);
 			EnableLocalPlayerOnlyObjects(true);
 			UpdateTeamVision();
+
 			TeamFieldOfView.Instance.Initialize((Teams)team);
 			GameResources.Instance.DisableTreeHighlighting();
 			Debug.Log("Setup Ally Cameras");
