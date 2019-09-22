@@ -199,6 +199,161 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 65658875}
   m_CullTransparentMesh: 0
+--- !u!1 &122355339
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 122355340}
+  - component: {fileID: 122355342}
+  - component: {fileID: 122355341}
+  m_Layer: 5
+  m_Name: DayNightText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &122355340
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122355339}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 936846897}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &122355341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122355339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: DayNight 0:00
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_outlineColor:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontSize: 24
+  m_fontSizeBase: 24
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_textAlignment: 257
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_firstOverflowCharacterIndex: -1
+  m_linkedTextComponent: {fileID: 0}
+  m_isLinkedTextComponent: 0
+  m_isTextTruncated: 0
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_ignoreRectMaskCulling: 0
+  m_ignoreCulling: 1
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_VertexBufferAutoSizeReduction: 1
+  m_firstVisibleCharacter: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_textInfo:
+    textComponent: {fileID: 122355341}
+    characterCount: 13
+    spriteCount: 0
+    spaceCount: 1
+    wordCount: 3
+    linkCount: 0
+    lineCount: 1
+    pageCount: 1
+    materialCount: 1
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_spriteAnimator: {fileID: 0}
+  m_hasFontAssetChanged: 0
+  m_subTextObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &122355342
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122355339}
+  m_CullTransparentMesh: 0
 --- !u!1 &125932002
 GameObject:
   m_ObjectHideFlags: 0
@@ -1621,728 +1776,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451584277}
   m_CullTransparentMesh: 0
---- !u!1001 &453077822
-PrefabInstance:
+--- !u!1 &468933664
+GameObject:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1086035109}
-    m_Modifications:
-    - target: {fileID: 1182571763238688, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightIntensity.curve.m_Curve.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightMultiplier.curve.m_Curve.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: CRFoldout
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: atmosphereFoldout
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: celestialsFoldout
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonSize.inputValue
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunDiscSize.inputValue
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: mie.inputValue
-      value: 0.045
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: dayAtmosphereTint.inputColor.g
-      value: 0.86991096
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: dayAtmosphereTint.inputColor.b
-      value: 0.69472945
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: dayAtmosphereTint.inputColor.r
-      value: 0.9882353
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunMieColor.inputColor.g
-      value: 0.6862745
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunMieColor.inputColor.b
-      value: 0.23921569
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunMieColor.inputColor.r
-      value: 0.9882353
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: wavelengthR.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: wavelengthG.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: wavelengthB.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: atmosphereThickness.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: dayAtmosphereTint.evaluateTime
-      value: 0.3876276
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: nightAtmosphereTint.evaluateTime
-      value: 1.6123724
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunBrightness.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: mie.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunMieColor.evaluateTime
-      value: 0.3876276
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunMieAnisotropy.evaluateTime
-      value: 0.3876276
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunMieScattering.evaluateTime
-      value: 0.3876276
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonMieColor.inputColor.r
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonMieColor.inputColor.g
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonMieColor.evaluateTime
-      value: 1.6123724
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonMieAnisotropy.evaluateTime
-      value: 1.6123724
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonMieScattering.evaluateTime
-      value: 1.6123724
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonMieMultiplier.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunDiscSize.evaluateTime
-      value: 0.3876276
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunDiscColor.evaluateTime
-      value: 0.3876276
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonSize.evaluateTime
-      value: 1.6123724
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonColor.evaluateTime
-      value: 1.6123724
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonIntensity.evaluateTime
-      value: 1.6123724
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonMultiplier.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: starsColor.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: starsIntensity.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: starsScintillation.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: nebulaColor.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: nebulaIntensity.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: exposure.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightColor.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightIntensity.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightColor.evaluateTime
-      value: 1.6123724
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightIntensity.evaluateTime
-      value: 1.6123724
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightMultiplier.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: ambientSkyColor.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: ambientEquatorColor.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: ambientGroundColor.evaluateTime
-      value: 0.1938138
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunMieScattering.inputValue
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: colorCorrectionFoldout
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: HDR
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: lightingFoldout
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: enableUnityFog
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: unityFogColor.evaluateTime
-      value: 0.19335204
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: unityFogDensity.evaluateTime
-      value: 0.19335204
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightColor.gradient.ctime1
-      value: 16384
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightColor.gradient.ctime2
-      value: 32768
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightColor.gradient.ctime3
-      value: 36044
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightThreshold
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[1].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[1].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[2].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[3].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[3].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[0].time
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[0].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[2].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightColor.inputColor.r
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightColor.inputColor.g
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightColor.gradient.key2.r
-      value: 0.9882353
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightColor.gradient.key2.g
-      value: 0.6862745
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightColor.gradient.key2.b
-      value: 0.23921569
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightColor.gradient.key1.r
-      value: 0.9882353
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightColor.gradient.key1.g
-      value: 0.88744044
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightColor.gradient.key1.b
-      value: 0.73821175
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[2].value
-      value: 0.1875
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[1].time
-      value: 0.5041636
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[1].value
-      value: 1.0609436
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[2].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[0].time
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[0].value
-      value: 0.1875
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[1].inSlope
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[1].outSlope
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: sunLightColor.colorType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightColor.colorType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: unityFogMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: unityFogStartDistance.evaluateTime
-      value: 0.19335204
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: unityFogEndDistance.evaluateTime
-      value: 0.19335204
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: unityFogStartDistance.inputValue
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: unityFogEndDistance.inputValue
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: unityFogDensity.inputValue
-      value: 0.007
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonMieAnisotropy.inputValue
-      value: 0.902
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightColor.gradient.ctime1
-      value: 38550
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightColor.gradient.ctime3
-      value: 36044
-      objectReference: {fileID: 0}
-    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLightColor.gradient.ctime4
-      value: 65535
-      objectReference: {fileID: 0}
-    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.53
-      objectReference: {fileID: 0}
-    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: timeline
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: longitude.evaluateTime
-      value: 0.041666668
-      objectReference: {fileID: 0}
-    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: orientation
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: longitude.inputValue
-      value: -45
-      objectReference: {fileID: 0}
-    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: dayInSeconds
-      value: 900
-      objectReference: {fileID: 0}
-    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLatitude.inputValue
-      value: -30
-      objectReference: {fileID: 0}
-    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLongitude.inputValue
-      value: -45
-      objectReference: {fileID: 0}
-    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: autoRotateMoon
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLatitude.evaluateTime
-      value: 0.41708335
-      objectReference: {fileID: 0}
-    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: moonLongitude.evaluateTime
-      value: 0.41708335
-      objectReference: {fileID: 0}
-    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4625935479864302, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.46193975
-      objectReference: {fileID: 0}
-    - target: {fileID: 4625935479864302, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.8001031
-      objectReference: {fileID: 0}
-    - target: {fileID: 4625935479864302, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.3314136
-      objectReference: {fileID: 0}
-    - target: {fileID: 4625935479864302, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.19134173
-      objectReference: {fileID: 0}
-    - target: {fileID: 4295343559269956, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.8001032
-      objectReference: {fileID: 0}
-    - target: {fileID: 4295343559269956, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.46193972
-      objectReference: {fileID: 0}
-    - target: {fileID: 4295343559269956, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.19134171
-      objectReference: {fileID: 0}
-    - target: {fileID: 4295343559269956, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.3314136
-      objectReference: {fileID: 0}
-    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Intensity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_BoundingSphereOverride.x
-      value: 5.35e-41
-      objectReference: {fileID: 0}
-    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_BoundingSphereOverride.y
-      value: 1.02e-43
-      objectReference: {fileID: 0}
-    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_BoundingSphereOverride.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_BoundingSphereOverride.w
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Intensity
-      value: 0.1875
-      objectReference: {fileID: 0}
-    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 0.632
-      objectReference: {fileID: 0}
-    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0.794
-      objectReference: {fileID: 0}
-    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Shadows.m_Strength
-      value: 0.364
-      objectReference: {fileID: 0}
-    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_BounceIntensity
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1787894514696292, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 215501049139880166, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
---- !u!4 &453077823 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-    type: 3}
-  m_PrefabInstance: {fileID: 453077822}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 468933667}
+  - component: {fileID: 468933665}
+  - component: {fileID: 468933666}
+  m_Layer: 0
+  m_Name: NetworkGameResources
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &468933665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 468933664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39453b739b4590d47bfd45fae4b08592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+--- !u!114 &468933666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 468933664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverOnly: 0
+  localPlayerAuthority: 0
+  m_AssetId: 
+  m_SceneId: 3973275144
+--- !u!4 &468933667
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 468933664}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 137.5, y: 21.31, z: 195.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &482665162
 GameObject:
   m_ObjectHideFlags: 0
@@ -2505,81 +2000,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 547494613}
   m_CullTransparentMesh: 0
---- !u!1 &577048971
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 577048973}
-  - component: {fileID: 577048972}
-  - component: {fileID: 577048974}
-  - component: {fileID: 577048975}
-  m_Layer: 0
-  m_Name: GameResources
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &577048972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 577048971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c19bbac4b50b214498c42986df7a8af9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &577048973
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 577048971}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 137.5, y: 21.31, z: 195.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &577048974
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 577048971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39453b739b4590d47bfd45fae4b08592, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
---- !u!114 &577048975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 577048971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serverOnly: 0
-  localPlayerAuthority: 0
-  m_AssetId: 
-  m_SceneId: 4094597432
 --- !u!1 &581573197
 GameObject:
   m_ObjectHideFlags: 0
@@ -4829,6 +4249,7 @@ RectTransform:
   - {fileID: 1674811787}
   - {fileID: 1493573996}
   - {fileID: 1899826036}
+  - {fileID: 122355340}
   m_Father: {fileID: 2144362743}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4854,6 +4275,7 @@ MonoBehaviour:
   statusDropdown: {fileID: 581573199}
   statusButton: {fileID: 1109065283}
   reloadAbilitiesButton: {fileID: 1899826037}
+  dayNightText: {fileID: 122355341}
 --- !u!114 &936846899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4915,30 +4337,6 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
---- !u!114 &944851874 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-    type: 3}
-  m_PrefabInstance: {fileID: 453077822}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 465a0ae75bf725d4c9a3980f37923133, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &944851875 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
-    type: 3}
-  m_PrefabInstance: {fileID: 453077822}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bce61beb7ba196e40b86de80d06a1996, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &947436100
 GameObject:
   m_ObjectHideFlags: 0
@@ -5529,9 +4927,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1086035109}
   - component: {fileID: 1086035108}
-  - component: {fileID: 1086035106}
+  - component: {fileID: 1086035111}
   - component: {fileID: 1086035105}
-  - component: {fileID: 1086035107}
   m_Layer: 0
   m_Name: GameRules
   m_TagString: Untagged
@@ -5548,55 +4945,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1086035104}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48e4bfc2e0a542347b9c5ebb5fdc6026, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ef65efdcbdcef64b9859f1829d8a620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lsky: {fileID: 944851875}
-  tod: {fileID: 944851874}
+  lsky: {fileID: 1451776487}
+  tod: {fileID: 1451776485}
   startingTime: 10
   dayBegins: 10
-  nightBegins: 20
-  lengthOfDay: 30
-  lengthOfNight: 30
-  lengthOfTransition: 2
-  isDay: 1
-  currentTimer: 0
-  onStartDay:
-    m_PersistentCalls:
-      m_Calls: []
-  onStartNight:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &1086035106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1086035104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8564d4be9c501524a9313ad2cf27fdf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
---- !u!114 &1086035107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1086035104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serverOnly: 0
-  localPlayerAuthority: 0
-  m_AssetId: 
-  m_SceneId: 767961701
+  nightBegins: 22
+  dayDuration: 10
+  nightDuration: 10
+  transitionDuration: 2
+  updateEvery: 1
+  transitionUpdateEvery: 0.02
 --- !u!114 &1086035108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5609,7 +4970,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb3d2f92d9db2a64d8c1ae968f713d9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkGameRules: {fileID: 0}
   teamFov: {fileID: 0}
   houndsToSpawn: 1
   testMonstersToSpawn: 8
@@ -5623,11 +4983,23 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 137.5, y: 21.31, z: 195.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 453077823}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1086035111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1086035104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c19bbac4b50b214498c42986df7a8af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkGameResources: {fileID: 468933665}
 --- !u!1 &1096344478
 GameObject:
   m_ObjectHideFlags: 0
@@ -6788,6 +6160,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1319927567}
   m_CullTransparentMesh: 0
+--- !u!1 &1325572024
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1325572025}
+  - component: {fileID: 1325572027}
+  - component: {fileID: 1325572026}
+  m_Layer: 0
+  m_Name: DayNightServer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1325572025
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1325572024}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 137.5, y: 21.31, z: 195.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1325572026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1325572024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverOnly: 0
+  localPlayerAuthority: 0
+  m_AssetId: 
+  m_SceneId: 2473675388
+--- !u!114 &1325572027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1325572024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4384b645de7a97489112fbe516f15ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  settings: {fileID: 1086035105}
+  client: {fileID: 2083845551}
 --- !u!1 &1333241078
 GameObject:
   m_ObjectHideFlags: 0
@@ -7181,6 +6617,746 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1449736485}
   m_CullTransparentMesh: 0
+--- !u!1001 &1451776484
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1182571763238688, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightIntensity.curve.m_Curve.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightMultiplier.curve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: CRFoldout
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: atmosphereFoldout
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: celestialsFoldout
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonSize.inputValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunDiscSize.inputValue
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: mie.inputValue
+      value: 0.045
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: dayAtmosphereTint.inputColor.g
+      value: 0.86991096
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: dayAtmosphereTint.inputColor.b
+      value: 0.69472945
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: dayAtmosphereTint.inputColor.r
+      value: 0.9882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunMieColor.inputColor.g
+      value: 0.6862745
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunMieColor.inputColor.b
+      value: 0.23921569
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunMieColor.inputColor.r
+      value: 0.9882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: wavelengthR.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: wavelengthG.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: wavelengthB.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: atmosphereThickness.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: dayAtmosphereTint.evaluateTime
+      value: 0.3876276
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: nightAtmosphereTint.evaluateTime
+      value: 1.6123724
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunBrightness.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: mie.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunMieColor.evaluateTime
+      value: 0.3876276
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunMieAnisotropy.evaluateTime
+      value: 0.3876276
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunMieScattering.evaluateTime
+      value: 0.3876276
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonMieColor.inputColor.r
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonMieColor.inputColor.g
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonMieColor.evaluateTime
+      value: 1.6123724
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonMieAnisotropy.evaluateTime
+      value: 1.6123724
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonMieScattering.evaluateTime
+      value: 1.6123724
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonMieMultiplier.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunDiscSize.evaluateTime
+      value: 0.3876276
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunDiscColor.evaluateTime
+      value: 0.3876276
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonSize.evaluateTime
+      value: 1.6123724
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonColor.evaluateTime
+      value: 1.6123724
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonIntensity.evaluateTime
+      value: 1.6123724
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonMultiplier.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: starsColor.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: starsIntensity.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: starsScintillation.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: nebulaColor.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: nebulaIntensity.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: exposure.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightColor.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightIntensity.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightColor.evaluateTime
+      value: 1.6123724
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightIntensity.evaluateTime
+      value: 1.6123724
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightMultiplier.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: ambientSkyColor.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: ambientEquatorColor.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: ambientGroundColor.evaluateTime
+      value: 0.1938138
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunMieScattering.inputValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: colorCorrectionFoldout
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: HDR
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: lightingFoldout
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: enableUnityFog
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogColor.evaluateTime
+      value: 0.19335204
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogDensity.evaluateTime
+      value: 0.19335204
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightColor.gradient.ctime1
+      value: 16384
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightColor.gradient.ctime2
+      value: 32768
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightColor.gradient.ctime3
+      value: 36044
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightThreshold
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[2].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[3].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[3].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightMultiplier.curve.m_Curve.Array.data[2].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightColor.inputColor.r
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightColor.inputColor.g
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightColor.gradient.key2.r
+      value: 0.9882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightColor.gradient.key2.g
+      value: 0.6862745
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightColor.gradient.key2.b
+      value: 0.23921569
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightColor.gradient.key1.r
+      value: 0.9882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightColor.gradient.key1.g
+      value: 0.88744044
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightColor.gradient.key1.b
+      value: 0.73821175
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[2].value
+      value: 0.1875
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[1].time
+      value: 0.5041636
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[1].value
+      value: 1.0609436
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[2].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[0].value
+      value: 0.1875
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightIntensity.curve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: sunLightColor.colorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightColor.colorType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogStartDistance.evaluateTime
+      value: 0.19335204
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogEndDistance.evaluateTime
+      value: 0.19335204
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogStartDistance.inputValue
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogEndDistance.inputValue
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: unityFogDensity.inputValue
+      value: 0.007
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonMieAnisotropy.inputValue
+      value: 0.902
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightColor.gradient.ctime1
+      value: 38550
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightColor.gradient.ctime3
+      value: 36044
+      objectReference: {fileID: 0}
+    - target: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLightColor.gradient.ctime4
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 140.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 21.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 194.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852161098662608, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: timeline
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: longitude.evaluateTime
+      value: 0.041666668
+      objectReference: {fileID: 0}
+    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: orientation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: longitude.inputValue
+      value: -45
+      objectReference: {fileID: 0}
+    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: dayInSeconds
+      value: 900
+      objectReference: {fileID: 0}
+    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLatitude.inputValue
+      value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLongitude.inputValue
+      value: -45
+      objectReference: {fileID: 0}
+    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: autoRotateMoon
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLatitude.evaluateTime
+      value: 0.41708335
+      objectReference: {fileID: 0}
+    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: moonLongitude.evaluateTime
+      value: 0.41708335
+      objectReference: {fileID: 0}
+    - target: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4625935479864302, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.46193975
+      objectReference: {fileID: 0}
+    - target: {fileID: 4625935479864302, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8001031
+      objectReference: {fileID: 0}
+    - target: {fileID: 4625935479864302, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.3314136
+      objectReference: {fileID: 0}
+    - target: {fileID: 4625935479864302, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.19134173
+      objectReference: {fileID: 0}
+    - target: {fileID: 4295343559269956, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.8001032
+      objectReference: {fileID: 0}
+    - target: {fileID: 4295343559269956, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.46193972
+      objectReference: {fileID: 0}
+    - target: {fileID: 4295343559269956, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.19134171
+      objectReference: {fileID: 0}
+    - target: {fileID: 4295343559269956, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.3314136
+      objectReference: {fileID: 0}
+    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: 5.35e-41
+      objectReference: {fileID: 0}
+    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 1.02e-43
+      objectReference: {fileID: 0}
+    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 108272791496815524, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 0.1875
+      objectReference: {fileID: 0}
+    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.632
+      objectReference: {fileID: 0}
+    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.794
+      objectReference: {fileID: 0}
+    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Shadows.m_Strength
+      value: 0.364
+      objectReference: {fileID: 0}
+    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_BounceIntensity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 108350561749583414, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1787894514696292, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 215501049139880166, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b1bb2fa3ada00c243b7497b96bbc77a3, type: 3}
+--- !u!114 &1451776485 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114272981305417062, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1451776484}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 465a0ae75bf725d4c9a3980f37923133, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1451776487 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114066142701604874, guid: b1bb2fa3ada00c243b7497b96bbc77a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1451776484}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bce61beb7ba196e40b86de80d06a1996, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1463418264
 GameObject:
   m_ObjectHideFlags: 0
@@ -9085,7 +9261,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1827654443
 GameObject:
@@ -10948,6 +11124,57 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+--- !u!1 &2083845550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2083845552}
+  - component: {fileID: 2083845551}
+  m_Layer: 0
+  m_Name: DayNight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2083845551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083845550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2194c2a474777d8498f5985477a97ff6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settings: {fileID: 1086035105}
+  server: {fileID: 1325572027}
+  onStartDay:
+    m_PersistentCalls:
+      m_Calls: []
+  onStartNight:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &2083845552
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083845550}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 137.5, y: 21.31, z: 195.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2097952740
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11300,7 +11527,7 @@ RectTransform:
   - {fileID: 1685405484}
   - {fileID: 936846897}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

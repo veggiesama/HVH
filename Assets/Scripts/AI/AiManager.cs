@@ -5,7 +5,6 @@ using System.Linq;
 
 public class AiManager: MonoBehaviour {
 
-	private DayNightController dayNightController;
 	[HideInInspector] public UnitController unit;
 	[SerializeField] private List<AiState> aiStates;
 	[SerializeField] private List<AiState> aiStatesDay;
@@ -18,17 +17,17 @@ public class AiManager: MonoBehaviour {
 	}
 
 	public void OnEnable() {
-		dayNightController = GameRules.Instance.GetComponent<DayNightController>();
-		dayNightController.onStartDay.AddListener(OnStartDay);
-		dayNightController.onStartNight.AddListener(OnStartNight);
+		DayNight.Instance.onStartDay.AddListener(OnStartDay);
+		DayNight.Instance.onStartNight.AddListener(OnStartNight);
 	}
 
+	/*
 	public void OnDisable() {
-		if (dayNightController == null) return;
-		dayNightController.onStartDay.RemoveListener(OnStartDay);
-		dayNightController.onStartNight.RemoveListener(OnStartNight);
-		dayNightController = null;
-	}
+		if (DayNight.Instance == null) return;
+		DayNight.Instance.onStartDay.RemoveListener(OnStartDay);
+		DayNight.Instance.onStartNight.RemoveListener(OnStartNight);
+		//DayNight.Instance = null;
+	}*/
 
 	public void Initialize(UnitInfo unitInfo) {
 		this.aiStatesDay = CloneAiStateList(unitInfo.aiStatesDay);

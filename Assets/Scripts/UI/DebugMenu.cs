@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using Mirror;
+using TMPro;
 
 public class DebugMenu : MonoBehaviour {
 
@@ -12,11 +13,31 @@ public class DebugMenu : MonoBehaviour {
 	public Dropdown statusDropdown;
 	public Button statusButton;
 	public Button reloadAbilitiesButton;
+	public TMP_Text dayNightText;
 
 	public void Initialize() {
 		BuildPlayerSwapper();
 		BuildStatusApplier();
 		BuildAbilityReloader();
+		StartCoroutine( UpdateDayNightText() );
+	}
+
+	IEnumerator UpdateDayNightText() {
+		while (true) {
+			string s;
+
+			if (DayNight.Instance.IsDay())
+				s = "Day";
+			else
+				s = "Night";
+
+			s += " ";
+
+			float timeRemaining = DayNight.Instance.GetTimeRemaining();
+			s += System.Convert.ToString(System.TimeSpan.FromSeconds( timeRemaining ));
+			dayNightText.SetText(s);
+			yield return new WaitForSeconds(1.0f);
+		}
 	}
 
 	// PLAYER SWAPPER

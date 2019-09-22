@@ -9,8 +9,6 @@ using System.Linq;
 public class GameRules : Singleton<GameRules> {
 
 	[HideInInspector]
-	public NetworkGameRules networkGameRules;
-	[HideInInspector]
 	public TeamFieldOfView teamFov;
 
 	public int houndsToSpawn;
@@ -29,7 +27,6 @@ public class GameRules : Singleton<GameRules> {
 	void Awake() {
 		//DontDestroyOnLoad(this.gameObject);
 		playerPrefab = NetworkManager.singleton.playerPrefab;
-		networkGameRules = GetComponent<NetworkGameRules>();
 		teamFov = GetComponentInChildren<TeamFieldOfView>();
 
 		int numPlayers = System.Enum.GetValues(typeof(MonsterTeamSlots)).Length + 
@@ -37,6 +34,8 @@ public class GameRules : Singleton<GameRules> {
 	}
 
 	public void SetupGame() {
+		DayNight.Instance.server.Initialize();
+
 		Debug.Log("Trying to spawn players.");
 		//SpawnUnassignedPlayers();
 		SpawnUnassignedPlayers();

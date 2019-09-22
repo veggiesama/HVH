@@ -18,7 +18,7 @@ public class GameResources : Singleton<GameResources> {
 		}
 	}
 
-	private NetworkGameResources networkGameResources;
+	public NetworkGameResources networkGameResources;
 
 	private Player localPlayer;
 	//private Dictionary<int, Player> playerDictionary;
@@ -30,7 +30,6 @@ public class GameResources : Singleton<GameResources> {
 	void Awake() {
 		//playerDictionary = new Dictionary<int, Player>();
 		//unitList = new List<UnitController>();
-		networkGameResources = GetComponent<NetworkGameResources>();
 		treeHandlers = new List<TreeHandler>();
 		spawnPoints = new List<GameObject>();
 		//int numPlayers = System.Enum.GetValues(typeof(MonsterTeamSlots)).Length + 

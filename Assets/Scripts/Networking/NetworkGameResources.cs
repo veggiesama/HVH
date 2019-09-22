@@ -102,4 +102,8 @@ public class NetworkGameResources : NetworkBehaviour {
 		return null;
 	}
 
+	public int GetPlayerCount() {
+		return playerDictionary.Count;
+	}
+
 }

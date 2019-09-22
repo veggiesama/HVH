@@ -39,8 +39,6 @@ public class FieldOfView : MonoBehaviour {
 
 	public bool initialized = false;
 
-	private DayNightController dayNightController;
-
     void OnEnable() {
 		if (!initialized) {
 			viewMesh = new Mesh {name = "View Mesh"};
@@ -49,9 +47,8 @@ public class FieldOfView : MonoBehaviour {
 			unit = GetComponentInParent<UnitController>();
 		}
 
-		dayNightController = GameRules.Instance.GetComponent<DayNightController>();
-		dayNightController.onStartDay.AddListener( OnStartDay );
-		dayNightController.onStartNight.AddListener( OnStartNight );
+		DayNight.Instance.onStartDay.AddListener( OnStartDay );
+		DayNight.Instance.onStartNight.AddListener( OnStartNight );
     }
 
 	void Start() {
@@ -62,25 +59,33 @@ public class FieldOfView : MonoBehaviour {
 		else
 			OnStartNight();
 	}
-
+	/*
 	private void OnDisable() {
-		if (dayNightController == null) return;
-		dayNightController.onStartDay.RemoveListener( OnStartDay );
-		dayNightController.onStartNight.RemoveListener( OnStartNight );
-	}
+		if (DayNight.Instance != null
+		  && DayNight.Instance.onStartDay != null
+		  && DayNight.Instance.onStartNight != null)
+		{
+			DayNight.Instance.onStartDay.RemoveListener(OnStartDay);
+			DayNight.Instance.onStartNight.RemoveListener(OnStartNight);
+		}
+	}*/
 
 	void OnStartDay() {
+		if (!gameObject.activeInHierarchy) return;
+
 		viewRadius = dayViewRadius;
 		StartCoroutine( ForceFogUpdate() );
 	}
 
 	void OnStartNight() {
+		if (!gameObject.activeInHierarchy) return;
+
 		viewRadius = nightViewRadius;
 		StartCoroutine( ForceFogUpdate() );
 	}
 
 	IEnumerator ForceFogUpdate() {
-		yield return new WaitForSeconds(0.5f); // not sure why delay is needed but otherwise it won't work
+		yield return new WaitForSeconds(0.5f); //TODO: not sure why delay is needed but otherwise it won't work
 		forceFogUpdate = true;
 	}
 

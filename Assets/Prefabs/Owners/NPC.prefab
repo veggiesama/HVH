@@ -171,6 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d410911121b7764d9f069364b2b34ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
   syncInterval: 0.1
   unit: {fileID: 114439122746566608}
   networkHelper: {fileID: 0}
@@ -186,6 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bbb9db2e733e0e47ac58efda19d34db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
   syncInterval: 0.1
   currentHealth: 0
   unitInfo: 
@@ -219,6 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad225009ad414e1428332cab226f38fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
   syncInterval: 0.1
   interpolationBackTime: 0.1
   extrapolationMode: 1
@@ -272,6 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad225009ad414e1428332cab226f38fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
   syncInterval: 0.1
   interpolationBackTime: 0.1
   extrapolationMode: 1
@@ -344,7 +348,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4539851055164326}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7928111227557796622
 MeshFilter:
@@ -462,8 +466,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 5088019290645804724}
   - {fileID: 4445215210010622}
+  - {fileID: 5088019290645804724}
   - {fileID: 22047862161967600}
   m_Father: {fileID: 4561490922741848}
   m_RootOrder: 0
@@ -539,6 +543,8 @@ MonoBehaviour:
   mouth: {fileID: 0}
   feet: {fileID: 0}
   bodyMeshes: []
+  allyCam: {fileID: 0}
+  targetCam: {fileID: 0}
   originalBodyMeshMaterials: []
   originalBodyMeshColors: []
   fov: {fileID: 0}
@@ -739,7 +745,7 @@ Transform:
   m_Children:
   - {fileID: 886693085888067341}
   m_Father: {fileID: 4539851055164326}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &980889362709799129
 PrefabInstance:

@@ -50,6 +50,7 @@ public class Player : Owner {
 			GameplayCanvas.Instance.ResetButtons();
 			GameplayCanvas.Instance.debugMenu.Initialize();
 			cam.GetComponent<CameraFollow>().Initialize();
+			DayNight.Instance.Initialize();
 
 			//if (networkHelper.isUnassigned) return;
 			//if (!isLocalPlayer) return;

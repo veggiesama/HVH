@@ -18,8 +18,6 @@ public class Stalker : Ability {
 	public StatusEffect nightStatusEffect;
 	public StatusEffect invisStatusEffect;
 
-	private DayNightController dayNightController;
-
 	public override void Reset() {
 		abilityName = "Stalker";
 		isPassive = true;
@@ -27,20 +25,24 @@ public class Stalker : Ability {
 
 	public override void Initialize(GameObject obj) {
 		base.Initialize(obj);
-		dayNightController = GameRules.Instance.GetComponent<DayNightController>();
 		SetCooldown(invisDelay);
 
 		OnStartDay();
-		dayNightController.onStartDay.AddListener(OnStartDay);
-		dayNightController.onStartNight.AddListener(OnStartNight);
+		DayNight.Instance.onStartDay.AddListener(OnStartDay);
+		DayNight.Instance.onStartNight.AddListener(OnStartNight);
 	}
 
+	/*
 	public override void OnDisable() {
 		base.OnDisable();
-		if (dayNightController == null) return;
-		dayNightController.onStartDay.RemoveListener(OnStartDay);
-		dayNightController.onStartNight.RemoveListener(OnStartNight);
-	}
+		if (DayNight.Instance != null
+		  && DayNight.Instance.onStartDay != null
+		  && DayNight.Instance.onStartNight != null)
+		{ 
+			DayNight.Instance.onStartDay.RemoveListener(OnStartDay);
+			DayNight.Instance.onStartNight.RemoveListener(OnStartNight);
+		}
+	}*/
 
 	public override void Update() {
 		base.Update();
@@ -64,7 +66,7 @@ public class Stalker : Ability {
 	}
 
 	protected override void OnMoved() {
-		if (IsDay())
+		if (DayNight.Instance.IsDay())
 			ResetInvisDelay(invisDelayAfterMoving);
 	}
 	
@@ -94,15 +96,6 @@ public class Stalker : Ability {
 
 	public override void OnUnlearn() {
 
-	}
-
-
-	private bool IsDay() {
-		return dayNightController.IsDay();
-	}
-
-	private bool IsNight() {
-		return dayNightController.IsNight();
 	}
 
 }

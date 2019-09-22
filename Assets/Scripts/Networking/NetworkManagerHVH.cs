@@ -86,7 +86,7 @@ public class NetworkManagerHVH : NetworkManager {
     public override void OnServerReady(NetworkConnection conn) {
 		//base.OnServerReady(conn);
 		Debug.Log("On server ready");
-		StartCoroutine( WaitServerReady(conn) );
+		//StartCoroutine( WaitServerReady(conn) );
     }
 
 	public override void OnServerAddPlayer(NetworkConnection conn, AddPlayerMessage extraMessage) {
@@ -170,27 +170,25 @@ public class NetworkManagerHVH : NetworkManager {
 		}
 	}
 
-	IEnumerator WaitServerReady(NetworkConnection conn) {
+	public IEnumerator WaitServerReady() {
 		while (!sceneManager.gameplayScenesInitialized) {
+			Debug.Log("Waiting for gameplay scenes to initialize");
 			yield return null;
 		}
 		
-		var msg = new ChooseCharacterMessage() {
-			activate = true
-		};
+		networkHUD.SetState(NetworkStates.REQUESTING_SELECTION);
 
-		Debug.Log("Sending ChooseCharacterMessage to client");
-		//NetworkServer.SendToClient<MessageBase>(conn.connectionId, msg);
-		NetworkServer.SendToAll(msg);
-		networkHUD.OnChooseCharacter.AddListener(delegate(int playerID) {
-			//Debug.Log("Chose P" + playerID);
-			AssignClient(conn, playerID);
-		});
-		yield return null;
+		//NetworkServer.SendToAll(msg);
+		//networkHUD.OnChooseCharacter.AddListener(delegate(int playerID) {
+		//	//Debug.Log("Chose P" + playerID);
+		//	AssignClient(conn, playerID);
+		//	networkHUD.OnChooseCharacter.RemoveAllListeners();
+		//});
+		//yield return null;
 	}
 
 
-	private void AssignClient(NetworkConnection conn, int playerID) {
+	public void AssignClient(NetworkConnection conn, int playerID) {
 		//Debug.Log("Assigning client to next available player slot.");
 		//Player player = GameResources.Instance.GetNextUnassignedPlayer();
 		
@@ -207,18 +205,22 @@ public class NetworkManagerHVH : NetworkManager {
 
 		//TODO: Couldn't figure out how to replace the user's connection to a new player object
 		// ERROR: SetClientOwner m_ClientAuthorityOwner already set!
-		//NetworkServer.ReplacePlayerForConnection(conn, playerGO);
-		NetworkServer.AddPlayerForConnection(conn, playerGO);
+		
+		if (player.netIdentity.clientAuthorityOwner != null)
+			NetworkServer.ReplacePlayerForConnection(conn, playerGO);
+		else
+			NetworkServer.AddPlayerForConnection(conn, playerGO);
 
 		// explicitly grant client authority to host (fixes Smooth Sync not syncing server-caused forced movement)
-		if (conn == NetworkServer.localConnection) {
-			foreach (Player p in GameResources.Instance.GetAllPlayers()) {
-				p.netIdentity.AssignClientAuthority(conn);
-			}
-		}
-		NetworkServer.SetClientReady(conn);
+		//if (conn == NetworkServer.localConnection) {
+		//	foreach (Player p in GameResources.Instance.GetAllPlayers()) {
+		//		p.netIdentity.AssignClientAuthority(conn);
+		//	}
+		//}
+		
+		//NetworkServer.SetClientReady(conn);
 
-		player.Initialize();
+		//player.Initialize();
 	}
 
 
