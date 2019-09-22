@@ -378,6 +378,7 @@ MonoBehaviour:
   transport: {fileID: 206488529}
   networkAddress: localhost
   maxConnections: 5
+  authenticator: {fileID: 0}
   playerPrefab: {fileID: 1149659272418656, guid: 1b64ea0b5354f754f9eea2c6ccbad286,
     type: 3}
   autoCreatePlayer: 0
@@ -389,6 +390,8 @@ MonoBehaviour:
   - {fileID: 853468849521212290, guid: 4561564535d2a164db345c06ee34b762, type: 3}
   - {fileID: 1149659272418656, guid: ef04114d3cb7c934aa1845189f8336b8, type: 3}
   - {fileID: 1392497764110654, guid: 14d2007d0c75b9e4ead5e8788b22005c, type: 3}
+  - {fileID: 6339265506107722807, guid: bd564db19ceb7434483a91d07596ae56, type: 3}
+  - {fileID: 8799335638981604711, guid: 5c5cff4733b796644aa0665f5d9e1bbd, type: 3}
   sceneManager: {fileID: 676499610}
   networkHUD: {fileID: 637872839}
   isHost: 0

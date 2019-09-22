@@ -69,6 +69,7 @@ public class NetworkGameResources : NetworkBehaviour {
 
 	public List<Player> GetAllPlayers() {
 		var playerList = new List<Player>();
+
 		foreach (GameObject go in playerDictionary.Values) {
 			Player p = go.GetComponent<Player>();
 			if (p != null)

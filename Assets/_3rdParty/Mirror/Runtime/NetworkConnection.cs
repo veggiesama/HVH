@@ -33,6 +33,17 @@ namespace Mirror
         public int connectionId = -1;
 
         /// <summary>
+        /// Flag that indicates the client has been authenticated.
+        /// </summary>
+        public bool isAuthenticated;
+
+        /// <summary>
+        /// General purpose object to hold authentication data, character selection, tokens, etc.
+        /// associated with the connection for reference after Authentication completes.
+        /// </summary>
+        public object authenticationData;
+
+        /// <summary>
         /// Flag that tells if the connection has been marked as "ready" by a client calling ClientScene.Ready().
         /// <para>This property is read-only. It is set by the system on the client when ClientScene.Ready() is called, and set by the system on the server when a ready message is received from a client.</para>
         /// <para>A client that is ready is sent spawned objects by the server and updates to the state of spawned objects. A client that is not ready is not sent spawned objects.</para>
@@ -51,9 +62,25 @@ namespace Mirror
         public float lastMessageTime;
 
         /// <summary>
+        /// Obsolete: use <see cref="identity"/> instead
+        /// </summary>
+        [Obsolete("Use NetworkConnection.identity instead")]
+        public NetworkIdentity playerController
+        {
+            get
+            {
+                return identity;
+            }
+            internal set
+            {
+                identity = value;
+            }
+        }
+
+        /// <summary>
         /// The NetworkIdentity for this connection.
         /// </summary>
-        public NetworkIdentity playerController { get; internal set; }
+        public NetworkIdentity identity { get; internal set; }
 
         /// <summary>
         /// A list of the NetworkIdentity objects owned by this connection. This list is read-only.
@@ -208,10 +235,11 @@ namespace Mirror
         /// <param name="msg">The message to send.</param>
         /// <param name="channelId">The transport layer channel to send on.</param>
         /// <returns></returns>
-        public virtual bool Send<T>(T msg, int channelId = Channels.DefaultReliable) where T: IMessageBase
+        public virtual bool Send<T>(T msg, int channelId = Channels.DefaultReliable) where T : IMessageBase
         {
             // pack message and send
             byte[] message = MessagePacker.Pack(msg);
+            NetworkDiagnostics.OnSend(msg, channelId, message.Length, 1);
             return SendBytes(message, channelId);
         }
 

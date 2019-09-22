@@ -25,6 +25,8 @@ public class NetworkManagerHVH : NetworkManager {
 		networkHUD.enabled = true;
 	}
 
+
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// HOST CALLBACKS
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,6 +88,9 @@ public class NetworkManagerHVH : NetworkManager {
     public override void OnServerReady(NetworkConnection conn) {
 		//base.OnServerReady(conn);
 		Debug.Log("On server ready");
+		//NetworkServer.SetClientReady(conn);
+
+		//conn.Send(new ReadyMessage());
 		//StartCoroutine( WaitServerReady(conn) );
     }
 
@@ -121,6 +126,7 @@ public class NetworkManagerHVH : NetworkManager {
 	}
 
     public override void OnClientConnect(NetworkConnection conn) {
+		//base.OnClientConnect(conn);
 		Debug.Log("Client has connected");
 		if (!isHost) {
 			sceneManager.InitializeGameplayScenes();
@@ -130,9 +136,17 @@ public class NetworkManagerHVH : NetworkManager {
         //base.OnClientConnect(conn);
     }
 
-	public override void OnClientChangeScene(string newSceneName) {
-		base.OnClientChangeScene(newSceneName);
+	IEnumerator WaitClientConnect(NetworkConnection conn) {
+		while (!sceneManager.gameplayScenesInitialized) {
+			yield return null;
+		}
+
+		Debug.Log("Connected successfully to server, now to set up other stuff for the client...");
 	}
+
+	//public override void OnClientChangeScene(string newSceneName) {
+	//	base.OnClientChangeScene(newSceneName);
+	//}
 
     public override void OnClientSceneChanged(NetworkConnection conn) {
         base.OnClientSceneChanged(conn);
@@ -177,14 +191,6 @@ public class NetworkManagerHVH : NetworkManager {
 		}
 		
 		networkHUD.SetState(NetworkStates.REQUESTING_SELECTION);
-
-		//NetworkServer.SendToAll(msg);
-		//networkHUD.OnChooseCharacter.AddListener(delegate(int playerID) {
-		//	//Debug.Log("Chose P" + playerID);
-		//	AssignClient(conn, playerID);
-		//	networkHUD.OnChooseCharacter.RemoveAllListeners();
-		//});
-		//yield return null;
 	}
 
 
@@ -221,16 +227,6 @@ public class NetworkManagerHVH : NetworkManager {
 		//NetworkServer.SetClientReady(conn);
 
 		//player.Initialize();
-	}
-
-
-	IEnumerator WaitClientConnect(NetworkConnection conn) {
-		while (!sceneManager.gameplayScenesInitialized) {
-			yield return null;
-		}
-
-		ClientScene.Ready(conn);
-		Debug.Log("Connected successfully to server, now to set up other stuff for the client...");
 	}
 
 	public List<GameObject> GetSpawnPrefabList() {
