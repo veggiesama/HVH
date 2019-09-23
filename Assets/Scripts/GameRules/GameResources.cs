@@ -48,13 +48,17 @@ public class GameResources : Singleton<GameResources> {
 		networkGameResources.RemoveUnitReference(unit);
 	}
 
-	public void AddPlayerReference(int playerID, Player p) {
-		networkGameResources.AddPlayerReference(playerID, p);
+	//public void AddPlayerReference(int playerID, Player p) {
+	//	networkGameResources.AddPlayerReference(playerID, p);
+	//}
+
+	public void AddPlayerReference(Player p) {
+		networkGameResources.AddPlayerReference(p);
 	}
 
-	public void RemovePlayerReference(int playerID) {
-		networkGameResources.RemovePlayerReference(playerID);
-	}
+	//public void RemovePlayerReference(int playerID) {
+	//	networkGameResources.RemovePlayerReference(playerID);
+	//}
 
 	public void RemovePlayerReference(Player p) {
 		networkGameResources.RemovePlayerReference(p);
@@ -119,7 +123,7 @@ public class GameResources : Singleton<GameResources> {
 		return null;
 	}
 
-	public TeamSlotToPlayerID_SyncDictionary GetTeamDictionary(Teams team) {
+	public TeamSlotToPlayerIDSyncDictionary GetTeamDictionary(Teams team) {
 		return networkGameResources.GetTeamDictionary(team);
 	}
 

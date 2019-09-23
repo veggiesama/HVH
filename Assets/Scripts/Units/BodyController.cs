@@ -217,15 +217,19 @@ public class BodyController : MonoBehaviour {
 
 		localVisibilityState = state;
 
-		UnitController localUnit = GameResources.Instance.GetLocalPlayer().unit;
-		UnitController localEnemyTarget = localUnit.GetTarget(AbilityTargetTeams.ENEMY);
+		Player localPlayer = GameResources.Instance.GetLocalPlayer();
 
-		if (state == VisibilityState.VISIBLE && localUnit.IsForgottenTarget(unit)) {
-			localUnit.RememberTarget();
-		}
+		if (localPlayer != null) {
+			UnitController localUnit = GameResources.Instance.GetLocalPlayer().unit;
+			UnitController localEnemyTarget = localUnit.GetTarget(AbilityTargetTeams.ENEMY);
 
-		if (state == VisibilityState.INVISIBLE && unit == localEnemyTarget) {
-			localUnit.ForgetTarget();
+			if (state == VisibilityState.VISIBLE && localUnit.IsForgottenTarget(unit)) {
+				localUnit.RememberTarget();
+			}
+
+			if (state == VisibilityState.INVISIBLE && unit == localEnemyTarget) {
+				localUnit.ForgetTarget();
+			}
 		}
 
 		for (int i = 0; i < bodyMeshes.Length; i++) {

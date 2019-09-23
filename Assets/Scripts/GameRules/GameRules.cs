@@ -13,7 +13,7 @@ public class GameRules : Singleton<GameRules> {
 
 	public int houndsToSpawn;
 	public int testMonstersToSpawn;
-	private GameObject playerPrefab;
+	public GameObject playerPrefab;
 
 	// Singleton constructor
 	public static GameRules Instance {
@@ -26,7 +26,7 @@ public class GameRules : Singleton<GameRules> {
 
 	void Awake() {
 		//DontDestroyOnLoad(this.gameObject);
-		playerPrefab = NetworkManager.singleton.playerPrefab;
+		//playerPrefab = NetworkManager.singleton.playerPrefab;
 		teamFov = GetComponentInChildren<TeamFieldOfView>();
 
 		int numPlayers = System.Enum.GetValues(typeof(MonsterTeamSlots)).Length + 
@@ -87,12 +87,13 @@ public class GameRules : Singleton<GameRules> {
 			Player unassignedPlayer = unassignedPlayerGO.GetComponent<Player>(); 
 
 			unassignedPlayer.playerID = id;
-			GameResources.Instance.AddPlayerReference(id, unassignedPlayer);
-			GameResources.Instance.AddUnitReference(unassignedPlayer.unit);
-			//networkGameRules.dwarfDictionary.Add(playerIdCounter, n);
-
 			unassignedPlayer.MakeNPC();
 			NetworkServer.Spawn(unassignedPlayer.gameObject);
+
+			//GameResources.Instance.AddPlayerReference(id, unassignedPlayer);
+			GameResources.Instance.AddPlayerReference(unassignedPlayer);
+			GameResources.Instance.AddUnitReference(unassignedPlayer.unit);
+			//networkGameRules.dwarfDictionary.Add(playerIdCounter, n);
 
 			if (id < Constants.DwarvesTotal) {
 				unassignedPlayer.SetTeam(Teams.DWARVES);

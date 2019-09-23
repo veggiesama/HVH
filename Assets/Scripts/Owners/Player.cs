@@ -18,6 +18,7 @@ public class Player : Owner {
 	//private bool holdingCtrl = false;
 
 	public HVH_Inputs hvhInputs;
+	public GameObject networkPlayer;
 
 	//public bool isNPC = false; // inspector
 	[SyncVar] public int playerID;
@@ -37,46 +38,50 @@ public class Player : Owner {
 
 	//public override void OnStartLocalPlayer() {
 	public void Initialize() {
-		//yield return new WaitForSeconds(6.0f);
-		if (isLocalPlayer) {
-			GameResources.Instance.SetLocalPlayer(this);
-			EnableLocalPlayerOnlyObjects(true);
-			UpdateTeamVision();
 
-			TeamFieldOfView.Instance.Initialize((Teams)team);
-			GameResources.Instance.DisableTreeHighlighting();
-			Debug.Log("Setup Ally Cameras");
-			SetupAllyCameras();
-			GameplayCanvas.Instance.ResetButtons();
-			GameplayCanvas.Instance.debugMenu.Initialize();
-			cam.GetComponent<CameraFollow>().Initialize();
-			DayNight.Instance.Initialize();
+		//if (!isLocalPlayer) {
+		//	Debug.Log("Can't initialize non-local player");
+		//	return;
+		//}
 
-			//if (networkHelper.isUnassigned) return;
-			//if (!isLocalPlayer) return;
+		GameResources.Instance.SetLocalPlayer(this);
 
-			hvhInputs.Player.Attack.started += _ => unit.DoAbility(AbilitySlots.ATTACK);
-			hvhInputs.Player.Ability1.started += _ => unit.DoAbility(AbilitySlots.ABILITY_1);
-			hvhInputs.Player.Ability2.started += _ => unit.DoAbility(AbilitySlots.ABILITY_2);
-			hvhInputs.Player.Ability3.started += _ => unit.DoAbility(AbilitySlots.ABILITY_3);
-			hvhInputs.Player.Ability4.started += _ => unit.DoAbility(AbilitySlots.ABILITY_4);
-			hvhInputs.Player.Ability5.started += _ => unit.DoAbility(AbilitySlots.ABILITY_5);
-			hvhInputs.Player.Ability6.started += _ => unit.DoAbility(AbilitySlots.ABILITY_6);
-			hvhInputs.Player.Item1.started += _ => unit.DoAbility(AbilitySlots.ITEM_1);
-			hvhInputs.Player.Item2.started += _ => unit.DoAbility(AbilitySlots.ITEM_2);
-			hvhInputs.Player.Item3.started += _ => unit.DoAbility(AbilitySlots.ITEM_3);
-			hvhInputs.Player.Item4.started += _ => unit.DoAbility(AbilitySlots.ITEM_4);
-			hvhInputs.Player.Item5.started += _ => unit.DoAbility(AbilitySlots.ITEM_5);
-			hvhInputs.Player.Item6.started += _ => unit.DoAbility(AbilitySlots.ITEM_6);
+		EnableLocalPlayerOnlyObjects(true);
+		UpdateTeamVision();
 
-			hvhInputs.Player.LClick.started += _ => DoLeftClick();
-			hvhInputs.Player.RClick.started += _ => DoRightClick();
-			hvhInputs.Player.Stop.started += _ => unit.Stop();
+		TeamFieldOfView.Instance.Initialize((Teams)team);
+		GameResources.Instance.DisableTreeHighlighting();
+		Debug.Log("Setup Ally Cameras");
+		SetupAllyCameras();
+		GameplayCanvas.Instance.ResetButtons();
+		GameplayCanvas.Instance.debugMenu.Initialize();
+		cam.GetComponent<CameraFollow>().Initialize();
+		DayNight.Instance.Initialize();
 
-			//if (!CanIssueCommands())
-			//	return;
+		//if (networkHelper.isUnassigned) return;
+		//if (!isLocalPlayer) return;
 
-		}
+		hvhInputs.Player.Attack.started += _ => unit.DoAbility(AbilitySlots.ATTACK);
+		hvhInputs.Player.Ability1.started += _ => unit.DoAbility(AbilitySlots.ABILITY_1);
+		hvhInputs.Player.Ability2.started += _ => unit.DoAbility(AbilitySlots.ABILITY_2);
+		hvhInputs.Player.Ability3.started += _ => unit.DoAbility(AbilitySlots.ABILITY_3);
+		hvhInputs.Player.Ability4.started += _ => unit.DoAbility(AbilitySlots.ABILITY_4);
+		hvhInputs.Player.Ability5.started += _ => unit.DoAbility(AbilitySlots.ABILITY_5);
+		hvhInputs.Player.Ability6.started += _ => unit.DoAbility(AbilitySlots.ABILITY_6);
+		hvhInputs.Player.Item1.started += _ => unit.DoAbility(AbilitySlots.ITEM_1);
+		hvhInputs.Player.Item2.started += _ => unit.DoAbility(AbilitySlots.ITEM_2);
+		hvhInputs.Player.Item3.started += _ => unit.DoAbility(AbilitySlots.ITEM_3);
+		hvhInputs.Player.Item4.started += _ => unit.DoAbility(AbilitySlots.ITEM_4);
+		hvhInputs.Player.Item5.started += _ => unit.DoAbility(AbilitySlots.ITEM_5);
+		hvhInputs.Player.Item6.started += _ => unit.DoAbility(AbilitySlots.ITEM_6);
+
+		hvhInputs.Player.LClick.started += _ => DoLeftClick();
+		hvhInputs.Player.RClick.started += _ => DoRightClick();
+		hvhInputs.Player.Stop.started += _ => unit.Stop();
+
+		//if (!CanIssueCommands())
+		//	return;
+
 	}
 
 	public void RefreshInputActions() {

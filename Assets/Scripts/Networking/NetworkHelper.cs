@@ -9,7 +9,6 @@ using Smooth;
 public class NetworkHelper : NetworkBehaviour {
 
 	Owner owner;
-	//Player player;
 	UnitController unit;
 	[SyncVar] public float currentHealth = 1;
 	[SyncVar] public string unitInfo;
@@ -455,9 +454,11 @@ public class NetworkHelper : NetworkBehaviour {
 	private void Rpc_SetVisibilityState(int nState) {
 		VisibilityState state = (VisibilityState)nState;
 
-		UnitController localUnit = GameResources.Instance.GetLocalPlayer().unit;
-		if (state == VisibilityState.INVISIBLE && unit.SharesTeamWith(localUnit)) {
-			state = VisibilityState.VISIBLE_TO_TEAM_ONLY;
+		Player localPlayer = GameResources.Instance.GetLocalPlayer();
+		if (localPlayer != null) {
+			if (state == VisibilityState.INVISIBLE && unit.SharesTeamWith(localPlayer.unit)) {
+				state = VisibilityState.VISIBLE_TO_TEAM_ONLY;
+			}
 		}
 
 		unit.body.SetVisibilityState(state); //Debug.Log("State: " + state.ToString());
@@ -498,7 +499,8 @@ public class NetworkHelper : NetworkBehaviour {
 	}
 
 	public void SyncTeleport() {
-		smooth.teleportOwnedObjectFromOwner();
+		//smooth.teleportOwnedObjectFromOwner();
+		smooth.teleportAnyObjectFromServer(unit.body.transform.position, unit.body.transform.rotation, unit.body.transform.localScale);
 	}
 
 	// unused

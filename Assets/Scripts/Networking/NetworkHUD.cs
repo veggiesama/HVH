@@ -118,7 +118,7 @@ public class NetworkHUD : MonoBehaviour {
 	}
 	
 	public void ReplyCharacterSelection(NetworkConnection conn, RequestCharacterSelectionMsg msg) {
-		NetworkServer.SetClientReady(conn);
+		//NetworkServer.SetClientReady(conn);
 
 		//List<Player> playerList = GameResources.Instance.GetAllPlayers();
 		//var reply = new ReplyCharacterSelectionMsg() {
@@ -140,6 +140,7 @@ public class NetworkHUD : MonoBehaviour {
 	}
 
 	public void RequestPlayerID(int pid) {
+		Debug.Log("Request player ID");
 		var msg = new RequestPlayerIdMsg() {
 			playerID = pid
 		};
@@ -157,6 +158,7 @@ public class NetworkHUD : MonoBehaviour {
 	}
 
 	public void ReceivePlayerID(NetworkConnection conn, ReplyPlayerIdMsg msg) {
+		Debug.Log("Receive player ID");
 		if (msg.success) {
 			msg.playerGO.GetComponent<Player>().Initialize();
 			SetState(NetworkStates.GAME);
@@ -201,7 +203,12 @@ public class NetworkHUD : MonoBehaviour {
 			case NetworkStates.REQUESTING_SELECTION:
 				gameHudGO.SetActive(true);
 				statusText.text = "Requesting...";
-				RequestCharacterSelection();
+
+				if (networkManager.isHost || !networkManager.isServer)
+					RequestCharacterSelection();
+				else
+					SetState(NetworkStates.GAME);
+
 				break;
 
 			case NetworkStates.MAKING_SELECTION:

@@ -5,40 +5,62 @@ using Mirror;
 using System.Linq;
 using Tree = HVH.Tree;
 
-
-public class TeamSlotToPlayerID_SyncDictionary : SyncDictionary<int, int> {}
-public class PlayerIdToPlayerObject_SyncDictionary : SyncDictionary<int, GameObject> {}
-public class UnitOwner_SyncList : SyncList<GameObject> {}
+public class TeamSlotToPlayerIDSyncDictionary : SyncDictionary<int, int> {}
 
 public class NetworkGameResources : NetworkBehaviour {
 
-	private PlayerIdToPlayerObject_SyncDictionary playerDictionary = new PlayerIdToPlayerObject_SyncDictionary();
-	private UnitOwner_SyncList unitOwnerList = new UnitOwner_SyncList();
+	//public class SyncDictionaryPlayerIdToPlayerObject : SyncDictionary<int, GameObject> {}
+	public class SyncListPlayerObject : SyncList<GameObject> {}
+	public class UnitOwnerSyncList : SyncList<GameObject> {}
 
-	private TeamSlotToPlayerID_SyncDictionary dwarfDictionary = new TeamSlotToPlayerID_SyncDictionary();
-	private TeamSlotToPlayerID_SyncDictionary monsterDictionary = new TeamSlotToPlayerID_SyncDictionary();
+	//public SyncDictionaryPlayerIdToPlayerObject playerDictionary = new SyncDictionaryPlayerIdToPlayerObject();
+	public UnitOwnerSyncList unitOwnerList = new UnitOwnerSyncList();
+	public SyncListPlayerObject playerObjectList = new SyncListPlayerObject();
 
-	/*
+	public TeamSlotToPlayerIDSyncDictionary dwarfDictionary = new TeamSlotToPlayerIDSyncDictionary();
+	public TeamSlotToPlayerIDSyncDictionary monsterDictionary = new TeamSlotToPlayerIDSyncDictionary();
+
 	public override void OnStartClient() {
 		if (isServer) return;
 		dwarfDictionary.Callback += OnDwarfTeamChange;
 		monsterDictionary.Callback += OnMonsterTeamChange;
-		playerDictionary.Callback += OnPlayersChange;
+		//playerDictionary.Callback += OnPlayersChange;
 	}
+
+	/*private void Update()
+	{
+		//playerDictionary.TryGetValue(0, out GameObject value
+		if (playerObjectList.Count > 0 && playerObjectList[0] != null)
+			Debug.Log("PLAYER_DICT: " + (playerObjectList[0].name));
+		else
+			Debug.Log("PLAYER_DICT: null");
+	}*/
 
 	// callbacks
-	private void OnPlayersChange(PlayerIdToPlayerObject_SyncDictionary.Operation op, int playerId, GameObject go) {
-		Debug.Log("OnPlayersChange called");
-	}
+	//private void OnPlayersChange(SyncDictionaryPlayerIdToPlayerObject.Operation op, int playerId, GameObject go) {
+	//	Debug.Log("OnPlayersChange called");
+	//}
 
-	private void OnDwarfTeamChange(TeamSlotToPlayerID_SyncDictionary.Operation op, int slot, int playerID) {
+	private void OnDwarfTeamChange(TeamSlotToPlayerIDSyncDictionary.Operation op, int slot, int playerID) {
 		Debug.Log("OnDwarfTeamChange called");
 	}
 
-	private void OnMonsterTeamChange(TeamSlotToPlayerID_SyncDictionary.Operation op, int slot, int playerID) {
+	private void OnMonsterTeamChange(TeamSlotToPlayerIDSyncDictionary.Operation op, int slot, int playerID) {
 		Debug.Log("OnMonsterTeamChange called");
-	}*/
+	}
 
+	public void AddPlayerReference(Player p) {
+		if (!playerObjectList.Contains(p.gameObject))
+			playerObjectList.Add(p.gameObject);
+		else
+			Debug.Log("Player object list already contains player.");
+	}
+
+	public void RemovePlayerReference(Player p) {
+		playerObjectList.Remove(p.gameObject);
+	}
+
+	/*
 	public void AddPlayerReference(int playerID, Player p) {
 		if (!playerDictionary.ContainsKey(playerID))
 			playerDictionary.Add(playerID, p.gameObject);
@@ -57,7 +79,7 @@ public class NetworkGameResources : NetworkBehaviour {
 		GameObject playerGO = p.gameObject;
 		var item = playerDictionary.First(kv => kv.Value == playerGO);
 		playerDictionary.Remove(item.Key);
-	}
+	}*/
 
 	public void AddUnitReference(UnitController unit) {
 		unitOwnerList.Add(unit.owner.gameObject);
@@ -70,6 +92,36 @@ public class NetworkGameResources : NetworkBehaviour {
 	public List<Player> GetAllPlayers() {
 		var playerList = new List<Player>();
 
+		foreach (var kv in NetworkIdentity.spawned) {
+			//var key = kv.Key;
+			var value = kv.Value;
+			var player = value.GetComponent<Player>();
+
+			if (player != null) {
+				playerList.Add(player);
+			}
+		}
+
+		return playerList;
+	}
+
+	/*
+	public List<Player> GetAllPlayers() {
+		var playerList = new List<Player>();
+
+		foreach (GameObject go in playerObjectList) {
+			Player p = go.GetComponent<Player>();
+			if (p != null)
+				playerList.Add(p);
+		}
+
+		return playerList;
+	}*/
+
+	/*
+	public List<Player> GetAllPlayers() {
+		var playerList = new List<Player>();
+
 		foreach (GameObject go in playerDictionary.Values) {
 			Player p = go.GetComponent<Player>();
 			if (p != null)
@@ -77,7 +129,7 @@ public class NetworkGameResources : NetworkBehaviour {
 		}
 
 		return playerList;
-	}
+	}*/
 
 	public List<UnitController> GetAllUnits() {
 		var unitList = new List<UnitController>();
@@ -89,7 +141,7 @@ public class NetworkGameResources : NetworkBehaviour {
 		return unitList;
 	}
 
-	public TeamSlotToPlayerID_SyncDictionary GetTeamDictionary(Teams team) {
+	public TeamSlotToPlayerIDSyncDictionary GetTeamDictionary(Teams team) {
 
 		switch (team) {
 			case Teams.DWARVES:
@@ -103,8 +155,9 @@ public class NetworkGameResources : NetworkBehaviour {
 		return null;
 	}
 
+	/*
 	public int GetPlayerCount() {
 		return playerDictionary.Count;
-	}
+	}*/
 
 }

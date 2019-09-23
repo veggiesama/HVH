@@ -4923,6 +4923,8 @@ MonoBehaviour:
   teamFov: {fileID: 0}
   houndsToSpawn: 1
   testMonstersToSpawn: 8
+  playerPrefab: {fileID: 1149659272418656, guid: 1b64ea0b5354f754f9eea2c6ccbad286,
+    type: 3}
 --- !u!4 &1086035109
 Transform:
   m_ObjectHideFlags: 0

@@ -295,7 +295,7 @@ GameObject:
   - component: {fileID: 206488530}
   - component: {fileID: 206488529}
   m_Layer: 0
-  m_Name: NetworkManager
+  m_Name: NetworkManagerHVH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -379,9 +379,9 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 5
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 1149659272418656, guid: 1b64ea0b5354f754f9eea2c6ccbad286,
+  playerPrefab: {fileID: 1149659272418656, guid: 294170b230d40c54faffd9fe509e7882,
     type: 3}
-  autoCreatePlayer: 0
+  autoCreatePlayer: 1
   playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 1614867261836170, guid: fcb164ba73590584a93f4ba723df8fa0, type: 3}
@@ -392,6 +392,7 @@ MonoBehaviour:
   - {fileID: 1392497764110654, guid: 14d2007d0c75b9e4ead5e8788b22005c, type: 3}
   - {fileID: 6339265506107722807, guid: bd564db19ceb7434483a91d07596ae56, type: 3}
   - {fileID: 8799335638981604711, guid: 5c5cff4733b796644aa0665f5d9e1bbd, type: 3}
+  - {fileID: 1149659272418656, guid: 1b64ea0b5354f754f9eea2c6ccbad286, type: 3}
   sceneManager: {fileID: 676499610}
   networkHUD: {fileID: 637872839}
   isHost: 0
@@ -408,7 +409,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &224180986
 GameObject:
@@ -826,7 +827,7 @@ RectTransform:
   - {fileID: 224180987}
   - {fileID: 66871491}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
