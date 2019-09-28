@@ -5,6 +5,7 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.SceneManagement;
 using Smooth;
+using UnityEngine.Events;
 
 public class NetworkHelper : NetworkBehaviour {
 
@@ -12,26 +13,13 @@ public class NetworkHelper : NetworkBehaviour {
 	UnitController unit;
 	[SyncVar] public float currentHealth = 1;
 	[SyncVar] public string unitInfo;
-	private SmoothSyncMirror smooth;
+	private SmoothSyncMirror smoothBody;
 	public bool isDisconnected = false;
-	public bool isUnassigned = true;
+	[SyncVar] public bool isUnassigned = true;
 	
-	public class NetworkStatusEffectSyncList: SyncList<NetworkStatusEffect> {}
 	public NetworkStatusEffectSyncList networkStatusEffects = new NetworkStatusEffectSyncList();
-
-	public struct NetworkStatusEffect {
-		public string statusName;
-		public int type;
-		public float duration;
-		public float remainingTime;
-
-		public NetworkStatusEffect(string statusName, int type, float duration, float remainingTime) {
-			this.statusName = statusName;
-			this.type = type;
-			this.duration = duration;
-			this.remainingTime = remainingTime;
-		}
-	}
+	public UnityEventNetworkStatusEffect onRemoveNetworkStatusEffect;
+	public UnityEventNetworkStatusEffect onAddNetworkStatusEffect;
 
 	void Awake() {
 		owner = GetComponent<Owner>();
@@ -43,7 +31,7 @@ public class NetworkHelper : NetworkBehaviour {
 		var smooths = GetComponents<SmoothSyncMirror>();
 		foreach (SmoothSyncMirror sm in smooths) {
 			if (sm.childObjectToSync != null) {
-				smooth = sm;
+				smoothBody = sm;
 				break;
 			}
 		}
@@ -98,15 +86,25 @@ public class NetworkHelper : NetworkBehaviour {
 		Transform trans = Util.GetBodyLocationTransform((BodyLocations)bodyLocation, unit);
 		GameObject projectileObject = Instantiate(prefab, trans.position, trans.rotation);
 	
-		if (connectionToClient != null) {
-			NetworkServer.SpawnWithClientAuthority(projectileObject, this.gameObject); // connectionToClient);
-			TargetRpc_InitializeProjectile(connectionToClient, projectileObject, abilitySlotIndex, targetLocation);
-		}
-		else {
-			NetworkServer.Spawn(projectileObject);	
-			InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
-		}
+		if (connectionToClient != null)
+			NetworkServer.SpawnWithClientAuthority(projectileObject, connectionToClient);
+		else
+			NetworkServer.Spawn(projectileObject);
+
+		Rpc_InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
+
+		//TargetRpc_InitializeProjectile(connectionToClient, projectileObject, abilitySlotIndex, targetLocation);
+		//else {
+		//	NetworkServer.Spawn(projectileObject);	
+		//	InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
+		//}
 	}
+
+	[ClientRpc]
+	private void Rpc_InitializeProjectile(GameObject projectileObject, int abilitySlotIndex, Vector3 targetLocation) {
+		InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
+	}
+
 
 	[TargetRpc]
 	private void TargetRpc_InitializeProjectile(NetworkConnection conn, GameObject projectileObject, int abilitySlotIndex, Vector3 targetLocation) {
@@ -223,13 +221,19 @@ public class NetworkHelper : NetworkBehaviour {
 	}
 
 	public void TrackStatus(StatusEffect status) {
-		NetworkStatusEffect nse = new NetworkStatusEffect(status.statusName, (int)status.type, status.duration, status.remainingTime);
+		NetworkStatusEffect nse = new NetworkStatusEffect(status.statusName, (int)status.type, NetworkTime.time, status.duration);
 		Cmd_TrackStatus(nse);
 	}
 
 	[Command]
 	private void Cmd_TrackStatus(NetworkStatusEffect nse) {
 		networkStatusEffects.Add(nse);
+		Rpc_InvokeAddNetworkStatusEffect(nse);
+	}
+
+	[ClientRpc]
+	private void Rpc_InvokeAddNetworkStatusEffect(NetworkStatusEffect nse) {
+		onAddNetworkStatusEffect.Invoke(nse);
 	}
 	
 	public void StopTrackingStatus(string statusName) {
@@ -241,11 +245,18 @@ public class NetworkHelper : NetworkBehaviour {
 		foreach (NetworkStatusEffect status in networkStatusEffects) {
 			if (status.statusName == statusName) {
 				networkStatusEffects.Remove(status);
+				Rpc_InvokeRemoveNetworkStatusEffect(status);
 				return;
 			}
 		}
 	}
 
+	[ClientRpc]
+	private void Rpc_InvokeRemoveNetworkStatusEffect(NetworkStatusEffect nse) {
+		onRemoveNetworkStatusEffect.Invoke(nse);
+	}
+
+	/*
 	public void UpdateNetworkStatusSyncListDurations() {
 		for (int i = 0; i < networkStatusEffects.Count; i++) {
 			NetworkStatusEffect nse = networkStatusEffects[i];
@@ -255,7 +266,7 @@ public class NetworkHelper : NetworkBehaviour {
 				nse.duration = unit.GetStatusEffectDuration(nseType);
 			//Debug.Log("(Network) " + nse.statusName + ": " + nse.duration);
 		}
-	}
+	}*/
 
 	public void ApplyStatusEffectTo(StatusEffect status) {
 		ApplyStatusEffectTo(unit, status, null); // self
@@ -267,7 +278,7 @@ public class NetworkHelper : NetworkBehaviour {
 
 	public void ApplyStatusEffectTo(UnitController targetUnit, StatusEffect status, Ability ability) {
 		string statusName = status.statusName;
-
+		  
 		GameObject inflictedGO = targetUnit.owner.gameObject;
 		if (ability != null) {
 			int abilitySlotIndex = PackAbility(ability);
@@ -413,13 +424,7 @@ public class NetworkHelper : NetworkBehaviour {
 		GameObject particleSystemGO = Instantiate(prefab, trans.position + prefab.transform.position, trans.rotation * prefab.transform.rotation, trans);
 
 		if (duration != 0f) {
-			ParticleSystem[] psArray = particleSystemGO.GetComponentsInChildren<ParticleSystem>();
-			foreach (ParticleSystem ps in psArray) {
-				ps.Stop();
-				var main = ps.main;
-				main.duration = duration;
-				ps.Play();
-			}
+			OverrideParticleChildrenDuration(particleSystemGO, duration);
 		}
 	}
 
@@ -428,15 +433,18 @@ public class NetworkHelper : NetworkBehaviour {
 		GameObject prefab = ResourceLibrary.Instance.particlePrefabDictionary[particlePrefabName];
 		GameObject particleSystemGO = Instantiate(prefab, location, rotation);
 
-		// TODO: simplify this (combine with above)
 		if (duration != 0f) {
-			ParticleSystem[] psArray = particleSystemGO.GetComponentsInChildren<ParticleSystem>();
-			foreach (ParticleSystem ps in psArray) {
-				ps.Stop();
-				var main = ps.main;
-				main.duration = duration;
-				ps.Play();
-			}
+			OverrideParticleChildrenDuration(particleSystemGO, duration);
+		}
+	}
+
+	private void OverrideParticleChildrenDuration(GameObject particleSystemGO, float newDuration) {
+		ParticleSystem[] psArray = particleSystemGO.GetComponentsInChildren<ParticleSystem>();
+		foreach (ParticleSystem ps in psArray) {
+			ps.Stop();
+			var main = ps.main;
+			main.duration = newDuration;
+			ps.Play();
 		}
 	}
 
@@ -494,21 +502,21 @@ public class NetworkHelper : NetworkBehaviour {
 	}
 
 	public void SyncTransform() {
-		smooth.forceStateSendNextFixedUpdate();
+		smoothBody.forceStateSendNextFixedUpdate();
 		
 	}
 
 	public void SyncTeleport() {
-		//smooth.teleportOwnedObjectFromOwner();
-		smooth.teleportAnyObjectFromServer(unit.body.transform.position, unit.body.transform.rotation, unit.body.transform.localScale);
+		smoothBody.teleportOwnedObjectFromOwner();
+		//smoothBody.teleportAnyObjectFromServer(unit.body.transform.position, unit.body.transform.rotation, unit.body.transform.localScale);
 	}
 
 	// unused
 	public void SyncFixedUpdate(bool enable) {
 		if (enable)
-			smooth.whenToUpdateTransform = SmoothSyncMirror.WhenToUpdateTransform.FixedUpdate;
+			smoothBody.whenToUpdateTransform = SmoothSyncMirror.WhenToUpdateTransform.FixedUpdate;
 		else
-			smooth.whenToUpdateTransform = SmoothSyncMirror.WhenToUpdateTransform.Update;
+			smoothBody.whenToUpdateTransform = SmoothSyncMirror.WhenToUpdateTransform.Update;
 	}
 
 	// SCENE MANAGEMENT

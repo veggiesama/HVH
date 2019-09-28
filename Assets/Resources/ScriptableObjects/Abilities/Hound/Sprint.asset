@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Sprint
   m_EditorClassIdentifier: 
   abilityName: Sprint
+  icon: {fileID: 21300000, guid: c3c965a1962864787809890967abd29f, type: 3}
+  isItem: 0
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}
@@ -41,6 +43,7 @@ MonoBehaviour:
   projectileTimeUntilFullGrowth: 0
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
+  grenadeLerpTimeByCastRange: 0
   houndSprintBuff: {fileID: 11400000, guid: e343e92b2bb2d20468454bad950ab0d5, type: 2}
   dwarfSprintBuff: {fileID: 11400000, guid: 9568102e1d28ffa44ba1d21fe6bcf4e5, type: 2}
   houndSpeedBonus: 3

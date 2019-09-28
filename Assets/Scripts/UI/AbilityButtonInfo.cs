@@ -46,7 +46,7 @@ public class AbilityButtonInfo : MonoBehaviour {
 
 		//if (player.unit.HasAbilityInSlot(abilitySlot)) {
 		ability = player.unit.GetAbilityInSlot(abilitySlot);
-		iconImage.sprite = ability.iconImage;
+		iconImage.sprite = ability.icon;
 		hotkeyText.text = AbilitySlotToInputActionString(abilitySlot);
 		button.enabled = true;
 		//}

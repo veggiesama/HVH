@@ -26,20 +26,19 @@ public class GrenadeBehaviour : ProjectileBehaviour {
 		rb.AddForce(throwVector, ForceMode.VelocityChange);
 
 		// prevent early triggering
-		if (CanUpdate()) {
+		if (hasAuthority) {
 			GetComponent<BoxCollider>().enabled = false;
-			Invoke("EnableCollider", grenadeTimeToHitTarget * 0.75f);
+			StartCoroutine(EnableCollider(grenadeTimeToHitTarget * 0.75f));
 		}
 	}
 
-	private void EnableCollider() {
+	private IEnumerator EnableCollider(float delay) {
+		yield return new WaitForSeconds(delay);
 		GetComponent<BoxCollider>().enabled = true;
 	}
 
 	protected override void FixedUpdate () {
-		if (!CanUpdate()) return;
-		//if (!initialized) return;
-
+		if (!initialized) return;
  		base.FixedUpdate();
 		transform.Rotate(Vector3.up, rotationalSpeed * Time.fixedDeltaTime); // TODO: switch to Time.fixedDeltaTime?
 	}

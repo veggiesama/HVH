@@ -16,6 +16,7 @@ public abstract class StatusEffect : ScriptableObject {
 
 	[Header("Modifiable")]
 	public string statusName = "None";
+	public Sprite icon;
 	public StatusEffectTypes type = StatusEffectTypes.WELL_FED;
 
 	public float duration = 0f;

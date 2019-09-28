@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 858591e7530f5774d83af9f7dc25c640, type: 3}
   m_Name: Invisibility
   m_EditorClassIdentifier: 
+  applied: 0
+  remainingTime: 0
+  unit: {fileID: 0}
+  ability: {fileID: 0}
   statusName: Invisible
+  icon: {fileID: 21300000, guid: b84f3bbfdc682415fa4b8d146ac5682e, type: 3}
   type: 2
   duration: 60
   overrideAbilityDuration: 0
   hideIcon: 0
   dispellable: 0
-  applied: 0
-  remainingTime: 0
   fadeDuration: 1

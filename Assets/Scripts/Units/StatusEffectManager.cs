@@ -25,7 +25,7 @@ public class StatusEffectManager : MonoBehaviour {
 			status.Update();
 		}
 
-		UpdateNetworkDurations();
+		//UpdateNetworkDurations();
 		EmptyRemovalList();
     }
 
@@ -129,7 +129,7 @@ public class StatusEffectManager : MonoBehaviour {
 	public List<StatusEffect> GetStatusEffectList() {
 		return statusEffectList;
 	}
-
+	/*
 	public void UpdateNetworkDurations() {
 		//Debug.Log("UpdateNetworkDurations");
 
@@ -138,6 +138,6 @@ public class StatusEffectManager : MonoBehaviour {
 			networkHelper.UpdateNetworkStatusSyncListDurations();
 			currentTimer = networkRefreshEvery;
 		}
-	}
+	}*/
 
 }

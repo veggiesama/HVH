@@ -218,45 +218,65 @@ public class UnitController : MonoBehaviour {
 			if (currentFriendlyTarget != null) {
 
 				if (isLocalPlayer) {
-					currentFriendlyTarget.ShowTargetStand(false, AbilityTargetTeams.ALLY);
-					currentFriendlyTarget.SetTargetPortrait(false, AbilityTargetTeams.ALLY);
+					UnregisterPortrait(currentFriendlyTarget, UiPortraitSlots.ALLY_TARGET);
 				}
 			}
 
 			currentFriendlyTarget = target;
 
 			if (isLocalPlayer) {
-				target.ShowTargetStand(true, AbilityTargetTeams.ALLY);
-				target.SetTargetPortrait(true, AbilityTargetTeams.ALLY);
+				RegisterPortrait(target, UiPortraitSlots.ALLY_TARGET);
 			}
 		}
 		else {
 			if (currentEnemyTarget != null && isLocalPlayer) {
-				currentEnemyTarget.ShowTargetStand(false, AbilityTargetTeams.ENEMY);
-				currentEnemyTarget.SetTargetPortrait(false, AbilityTargetTeams.ENEMY);
+				UnregisterPortrait(currentEnemyTarget, UiPortraitSlots.ENEMY_TARGET);
 			}
 
 			currentEnemyTarget = target;
 			
 			if (isLocalPlayer) {
-				target.ShowTargetStand(true, AbilityTargetTeams.ENEMY);
-				target.SetTargetPortrait(true, AbilityTargetTeams.ENEMY);
+				RegisterPortrait(target, UiPortraitSlots.ENEMY_TARGET);
 			}
 		}
+	}
+
+	private void RegisterPortrait(UnitController target, UiPortraitSlots slot) {
+		SetPortraitRegistration(target, slot, true);
+
+	}
+
+	private void UnregisterPortrait(UnitController target, UiPortraitSlots slot) {
+		SetPortraitRegistration(target, slot, false);
+	}
+
+	private void SetPortraitRegistration(UnitController target, UiPortraitSlots slot, bool enabled) {
+		if (enabled)
+			GameplayCanvas.Instance.uiPortraits[slot].RegisterPortrait(target);
+		else
+			GameplayCanvas.Instance.uiPortraits[slot].UnregisterPortrait(target);
+
+		if (slot == UiPortraitSlots.ALLY_TARGET) {
+			target.ShowTargetStand(enabled, AbilityTargetTeams.ALLY);
+			target.SetTargetPortrait(enabled, AbilityTargetTeams.ALLY);
+		}
+		else if (slot == UiPortraitSlots.ENEMY_TARGET) {
+			target.ShowTargetStand(enabled, AbilityTargetTeams.ENEMY);
+			target.SetTargetPortrait(enabled, AbilityTargetTeams.ENEMY);
+		}
+
 	}
 
 	public void RemoveCurrentTarget(AbilityTargetTeams targetTeam) {
 		switch (targetTeam)	{
 			case AbilityTargetTeams.ALLY:
 				if (currentFriendlyTarget == null) return;
-				currentFriendlyTarget.ShowTargetStand(false, targetTeam);
-				currentFriendlyTarget.SetTargetPortrait(false, targetTeam);
+				UnregisterPortrait(currentFriendlyTarget, UiPortraitSlots.ALLY_TARGET);
 				currentFriendlyTarget = null;
 				break;
 			case AbilityTargetTeams.ENEMY:
 				if (currentEnemyTarget == null) return;
-				currentEnemyTarget.ShowTargetStand(false, targetTeam);
-				currentEnemyTarget.SetTargetPortrait(false, targetTeam);
+				UnregisterPortrait(currentEnemyTarget, UiPortraitSlots.ENEMY_TARGET);
 				currentEnemyTarget = null;
 				break;
 			default:
@@ -299,9 +319,9 @@ public class UnitController : MonoBehaviour {
 			thisUnit = this;
 		
 		if (targetTeam == AbilityTargetTeams.ALLY)
-			GameplayCanvas.Instance.SetPortraitCamera(UiPortraitSlots.ALLY_TARGET, thisUnit);
+			GameplayCanvas.Instance.uiPortraits[UiPortraitSlots.ALLY_TARGET].SetPortraitCamera(thisUnit);
 		else
-			GameplayCanvas.Instance.SetPortraitCamera(UiPortraitSlots.ENEMY_TARGET, thisUnit);
+			GameplayCanvas.Instance.uiPortraits[UiPortraitSlots.ENEMY_TARGET].SetPortraitCamera(thisUnit);
 	}
 	
 	public UnitController GetTarget(AbilityTargetTeams targetTeam) {

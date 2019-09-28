@@ -17,6 +17,7 @@ MonoBehaviour:
   unit: {fileID: 0}
   ability: {fileID: 0}
   statusName: Well fed
+  icon: {fileID: 21300000, guid: f3bd557ae2c6943d9b7c2cd713415d04, type: 3}
   type: 9
   duration: 4
   overrideAbilityDuration: 1

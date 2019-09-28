@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Flare
   m_EditorClassIdentifier: 
   abilityName: Flare
-  iconImage: {fileID: 21300000, guid: b84f3bbfdc682415fa4b8d146ac5682e, type: 3}
+  icon: {fileID: 21300000, guid: 03a17c1d757774bc3be1b1a5ad57d729, type: 3}
+  isItem: 0
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}

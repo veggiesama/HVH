@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Stalker
   m_EditorClassIdentifier: 
   abilityName: Stalker
+  icon: {fileID: 21300000, guid: 30d8dee429a1646ee83ac17a992bd5d7, type: 3}
+  isItem: 0
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}

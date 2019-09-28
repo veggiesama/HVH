@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Warn
   m_EditorClassIdentifier: 
   abilityName: Warn
+  icon: {fileID: 21300000, guid: bd9b283988d7441c3a90d31a2364f5b6, type: 3}
+  isItem: 0
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}

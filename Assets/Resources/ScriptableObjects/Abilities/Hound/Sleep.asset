@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Sleep
   m_EditorClassIdentifier: 
   abilityName: Sleep
+  icon: {fileID: 21300000, guid: 1877c7f3b40f243f2b9749386ce28990, type: 3}
+  isItem: 0
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}
@@ -41,4 +43,5 @@ MonoBehaviour:
   projectileTimeUntilFullGrowth: 0
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
+  grenadeLerpTimeByCastRange: 0
   sleepBuff: {fileID: 11400000, guid: 81967ad75de54824fa6807e02980d5b9, type: 2}

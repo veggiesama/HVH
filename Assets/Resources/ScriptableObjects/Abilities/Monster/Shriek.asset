@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Shriek
   m_EditorClassIdentifier: 
   abilityName: Shriek
+  icon: {fileID: 21300000, guid: 5633d53bc7d8b47e79491cd74d373ecc, type: 3}
+  isItem: 0
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}

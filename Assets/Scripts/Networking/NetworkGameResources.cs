@@ -160,4 +160,34 @@ public class NetworkGameResources : NetworkBehaviour {
 		return playerDictionary.Count;
 	}*/
 
+	public void AssignClient(NetworkConnection conn, int playerID) {
+		Debug.Log("Server: Assigning client " + conn.connectionId + " to chosen player " + playerID);
+		Player player = GameResources.Instance.GetPlayer(playerID);
+		player.networkHelper.isUnassigned = false;
+
+		//if (player.netIdentity.clientAuthorityOwner != null) {
+		//	NetworkServer.SetClientNotReady(player.netIdentity.connectionToClient);
+		//	//player.netIdentity.RemoveClientAuthority(NetworkServer.localConnection);
+		//}
+
+		//GameObject oldGO = conn.identity.gameObject;
+		GameObject playerGO = player.gameObject;
+		
+		NetworkServer.ReplacePlayerForConnection(conn, playerGO);
+		player.netIdentity.AssignClientAuthority(conn);
+		//NetworkServer.Destroy(oldGO);
+
+		//if (player.netIdentity.clientAuthorityOwner != null)
+		//	NetworkServer.ReplacePlayerForConnection(conn, playerGO);
+		//else
+		//	NetworkServer.AddPlayerForConnection(conn, playerGO);
+
+		// explicitly grant client authority to host (fixes Smooth Sync not syncing server-caused forced movement)
+		//if (conn == NetworkServer.localConnection) {
+		//	foreach (Player p in GameResources.Instance.GetAllPlayers()) {
+		//		p.netIdentity.AssignClientAuthority(conn);
+		//	}
+		//}
+	}
+
 }

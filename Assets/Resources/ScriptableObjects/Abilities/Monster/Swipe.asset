@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Swipe
   m_EditorClassIdentifier: 
   abilityName: Swipe
-  iconImage: {fileID: 21300000, guid: 42fd647b0588048d5b040a5a6a2e5212, type: 3}
+  icon: {fileID: 21300000, guid: ce8fef83a85534c009c7a55e315e7102, type: 3}
   isItem: 0
   caster: {fileID: 0}
   allyTarget: {fileID: 0}

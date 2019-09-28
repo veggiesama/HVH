@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Spit
   m_EditorClassIdentifier: 
   abilityName: Spit
+  icon: {fileID: 21300000, guid: 968f01bf1575d4798aafb52dcd788557, type: 3}
+  isItem: 0
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}

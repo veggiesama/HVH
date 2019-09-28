@@ -8,60 +8,7 @@ using UnityEngine.Events;
 using System.Linq;
 
 public enum NetworkStates {
-	MAIN_MENU, CONNECTING, LOADING, REQUESTING_SELECTION, MAKING_SELECTION, GAME
-}
-
-// Request: client to server
-// Reply: server to client
-
-public class RequestCharacterSelectionMsg : MessageBase { }
-
-public class ReplyCharacterSelectionMsg : MessageBase {
-	public bool enabled;
-	public bool[] playerAssignments;
-	public int[] playerIDs;
-	//private static readonly int playerCount = Constants.DwarvesTotal + Constants.MonstersTotal;
-
-	public ReplyCharacterSelectionMsg() {}
-
-	public ReplyCharacterSelectionMsg(bool enabled, List<Player> players) {
-		playerAssignments = new bool[players.Count];
-		playerIDs = new int[players.Count];
-		for (int i = 0; i < players.Count; i++) {
-			playerAssignments[i] = players[i].networkHelper.isUnassigned;
-			playerIDs[i] = players[i].playerID;
-		}
-	}
-	/*
-	public override void Serialize(NetworkWriter writer) {
-		writer.WriteBoolean(enabled);
-		for (int i = 0; i < 8; i++) {
-			writer.WriteBoolean(playerAssignments[i]);
-		}
-		for (int i = 0; i < 8; i++) {
-			writer.WritePackedInt32(playerIDs[i]);
-		}
-	}
-
-	public override void Deserialize(NetworkReader reader) {
-		enabled = reader.ReadBoolean();
-		for (int i = 0; i < 8; i++) {
-			playerAssignments[i] = reader.ReadBoolean();
-		}
-		for (int i = 0; i < 8; i++) {
-			playerIDs[i] = reader.ReadPackedInt32();
-		}
-		
-	}*/
-}
-
-public class RequestPlayerIdMsg : MessageBase {
-	public int playerID;
-}
-
-public class ReplyPlayerIdMsg : MessageBase { 
-	public bool success;
-	public GameObject playerGO;
+	MAIN_MENU, CONNECTING, LOADING, SELECTING_PLAYER, GAME
 }
 
 public class NetworkHUD : MonoBehaviour {
@@ -80,20 +27,15 @@ public class NetworkHUD : MonoBehaviour {
 
 	public Button stopButton;
 	public TMP_Text statusText;
+	public Observer localObserver;
 
 	private NetworkStates currentState;
-	private bool[] playerAssignments;
-	private int[] playerIDs;
 
 	private void OnEnable() {
 		startHostButton.onClick.AddListener(StartHost);
 		startClientButton.onClick.AddListener(StartClient);
 		startServerButton.onClick.AddListener(StartServer);
 		stopButton.onClick.AddListener(StopServer);
-		NetworkServer.RegisterHandler<RequestCharacterSelectionMsg>(ReplyCharacterSelection);
-		NetworkServer.RegisterHandler<RequestPlayerIdMsg>(ReplyPlayerID);
-		NetworkClient.RegisterHandler<ReplyCharacterSelectionMsg>(ReceiveCharacterSelection);
-		NetworkClient.RegisterHandler<ReplyPlayerIdMsg>(ReceivePlayerID);
 	}
 
 	private void OnDisable() {
@@ -101,75 +43,12 @@ public class NetworkHUD : MonoBehaviour {
 		startClientButton.onClick.RemoveListener(StartClient);
 		startServerButton.onClick.RemoveListener(StartServer);
 		stopButton.onClick.RemoveListener(StopServer);
-		NetworkServer.UnregisterHandler<RequestCharacterSelectionMsg>();
-		NetworkServer.UnregisterHandler<RequestPlayerIdMsg>();
-		NetworkClient.UnregisterHandler<ReplyCharacterSelectionMsg>();
-		NetworkClient.UnregisterHandler<ReplyPlayerIdMsg>();
-	}
-
-	//public void OnShowChooseCharacter(NetworkConnection conn, ChooseCharacterMessage msg) {
-	//	Debug.Log("OnShowChooseCharacter");
-	//	SetState(NetworkStates.MAKING_SELECTION);
-	//}
-
-	public void RequestCharacterSelection() {
-		var msg = new RequestCharacterSelectionMsg();
-		NetworkClient.Send(msg);
-	}
-	
-	public void ReplyCharacterSelection(NetworkConnection conn, RequestCharacterSelectionMsg msg) {
-		//NetworkServer.SetClientReady(conn);
-
-		//List<Player> playerList = GameResources.Instance.GetAllPlayers();
-		//var reply = new ReplyCharacterSelectionMsg() {
-		//	enabled = true
-		//};
-		//reply.SetPlayerAssignments( GameResources.Instance.GetAllPlayers() );
-
-		var reply = new ReplyCharacterSelectionMsg(true, GameResources.Instance.GetAllPlayers());
-
-		NetworkServer.SendToClient(conn.connectionId, reply);
-	}
-
-	public void ReceiveCharacterSelection(NetworkConnection conn, ReplyCharacterSelectionMsg msg) {
-		this.playerAssignments = msg.playerAssignments;
-		this.playerIDs = msg.playerIDs;
-		//NetworkServer.SetClientReady(conn);
-		//ClientScene.PrepareToSpawnSceneObjects();
-		SetState(NetworkStates.MAKING_SELECTION);
-	}
-
-	public void RequestPlayerID(int pid) {
-		Debug.Log("Request player ID");
-		var msg = new RequestPlayerIdMsg() {
-			playerID = pid
-		};
-		NetworkClient.Send(msg);
-	}
-
-	public void ReplyPlayerID(NetworkConnection conn, RequestPlayerIdMsg msg) {
-		var reply = new ReplyPlayerIdMsg() {
-			success = true,
-			playerGO = GameResources.Instance.GetPlayer(msg.playerID).gameObject
-		};
-		
-		networkManager.AssignClient(conn, msg.playerID);
-		NetworkServer.SendToClient(conn.connectionId, reply);
-	}
-
-	public void ReceivePlayerID(NetworkConnection conn, ReplyPlayerIdMsg msg) {
-		Debug.Log("Receive player ID");
-		if (msg.success) {
-			msg.playerGO.GetComponent<Player>().Initialize();
-			SetState(NetworkStates.GAME);
-		}
 	}
 
 	private void Start() {
 		EndState(NetworkStates.CONNECTING);
 		EndState(NetworkStates.LOADING);
-		EndState(NetworkStates.REQUESTING_SELECTION);
-		EndState(NetworkStates.MAKING_SELECTION);
+		EndState(NetworkStates.SELECTING_PLAYER);
 		EndState(NetworkStates.GAME);
 		StartState(NetworkStates.MAIN_MENU);
 	}
@@ -197,38 +76,12 @@ public class NetworkHUD : MonoBehaviour {
 			case NetworkStates.LOADING:
 				gameHudGO.SetActive(true);
 				statusText.text = "Loading scene"; 
-				StartCoroutine( WaitForLoading() ); // networkManager.WaitServerReady() );
+				StartCoroutine( WaitForLoading() );
 				break;
 			
-			case NetworkStates.REQUESTING_SELECTION:
-				gameHudGO.SetActive(true);
-				statusText.text = "Requesting...";
-
-				if (networkManager.isHost || !networkManager.isServer)
-					RequestCharacterSelection();
-				else
-					SetState(NetworkStates.GAME);
-
-				break;
-
-			case NetworkStates.MAKING_SELECTION:
+			case NetworkStates.SELECTING_PLAYER:
 				chooseCharacterHudGO.SetActive(true);
-
-				for (int i = 0; i < playerIDs.Length; i++) {
-					Button b = Instantiate(chooseCharacterButtonPrefab, chooseCharacterButtonContainer.transform).GetComponent<Button>();
-					b.GetComponentInChildren<TMP_Text>().text = "Player " + playerIDs[i];
-					if (playerAssignments[i]) {
-						int pid = playerIDs[i];
-						b.onClick.AddListener(delegate {
-							RequestPlayerID(pid);
-						});
-					}
-					else {
-						b.interactable = false;
-					}
-
-				}
-
+				StartCoroutine( WaitForObserver() );
 				break;
 
 			case NetworkStates.GAME:
@@ -241,6 +94,7 @@ public class NetworkHUD : MonoBehaviour {
 		}
 
 	}
+
 
 	private void EndState(NetworkStates state) {
 
@@ -259,12 +113,7 @@ public class NetworkHUD : MonoBehaviour {
 				statusText.text = "";
 				break;
 
-			case NetworkStates.REQUESTING_SELECTION:
-				gameHudGO.SetActive(false);
-				statusText.text = "";
-				break;
-
-			case NetworkStates.MAKING_SELECTION:
+			case NetworkStates.SELECTING_PLAYER:
 				foreach (Button b in chooseCharacterButtonContainer.GetComponentsInChildren<Button>()) {
 					b.onClick.RemoveAllListeners();
 				}
@@ -327,8 +176,6 @@ public class NetworkHUD : MonoBehaviour {
 				yield return null;
 			}
 		}
-
-		//SetState(NetworkStates.GAME);
 		SetState(NetworkStates.LOADING);
 		yield return null;
 	}
@@ -339,7 +186,47 @@ public class NetworkHUD : MonoBehaviour {
 			yield return null;
 		}
 
-		SetState(NetworkStates.REQUESTING_SELECTION);
+		if (networkManager.isHost || !networkManager.isServer)
+			SetState(NetworkStates.SELECTING_PLAYER);
+		else
+			SetState(NetworkStates.GAME);
+
 	}
 
+	public void SetLocalObserver(Observer obs) {
+		this.localObserver = obs;
+	}
+
+	public IEnumerator WaitForObserver() {
+		float timeout = 0f;
+		float maxTime = 10f;
+		float inc = 0.1f;
+
+		while (NetworkClient.connection.identity == null && timeout < maxTime) {
+			timeout += inc;
+			yield return new WaitForSeconds(inc);
+		}
+
+		if (timeout < maxTime)
+			BuildSelectingPlayerButtons();
+		else
+			SetState(NetworkStates.MAIN_MENU);
+	}
+
+	private void BuildSelectingPlayerButtons() {
+		Observer observer = NetworkClient.connection.identity.GetComponent<Observer>();
+		foreach (Player p in GameResources.Instance.GetAllPlayers()) {
+			int pid = p.playerID;
+			Button b = Instantiate(chooseCharacterButtonPrefab, chooseCharacterButtonContainer.transform).GetComponent<Button>();
+			b.GetComponentInChildren<TMP_Text>().text = "Player " + pid;
+			if (p.networkHelper.isUnassigned) {
+				b.onClick.AddListener(delegate {
+					observer.RequestPlayerID(pid);
+				});
+			}
+			else {
+				b.interactable = false;
+			}
+		}
+	}
 }

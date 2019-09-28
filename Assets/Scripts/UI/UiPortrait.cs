@@ -8,6 +8,7 @@ public class UiPortrait {
 	public Slider slider;
 	public Slider bigSlider;
 	public RenderTexture renderTexture;
+	public GameObject statusEffectContainer;
 	
 	[HideInInspector] public UiPortraitSlots slot;
 	[HideInInspector] public UnitController unit;
@@ -15,10 +16,143 @@ public class UiPortrait {
 	[HideInInspector] public UnityEventDamage onTakeHealing;
 
 	public void OnTakeDamage(float dmg) {
-		GameplayCanvas.Instance.UpdateHealth(slot, unit.GetHealthPercentage());
+		UpdateHealth(unit.GetHealthPercentage());
 	}
 
 	public void OnTakeHealing(float heal) {
-		GameplayCanvas.Instance.UpdateHealth(slot, unit.GetHealthPercentage());
+		UpdateHealth(unit.GetHealthPercentage());
 	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// SLIDERS
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public void UpdateHealth(float percentage) {
+		if (slider != null)
+			slider.value = Mathf.Clamp01(percentage);
+		if (bigSlider != null)
+			bigSlider.value = Mathf.Clamp01(percentage);
+	}
+
+	private void EnableSliders(bool enable) {
+		if (slider != null)
+			slider.gameObject.SetActive(enable);
+		if (bigSlider != null)
+			bigSlider.gameObject.SetActive(enable);
+	}
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// STATUS EFFECTS
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public void AddStatusEffect(NetworkStatusEffect nse) {
+		//UiPortrait uiPortrait = uiPortraits[slot];
+		GameObject panel = GameObject.Instantiate(GameplayCanvas.Instance.statusEffectPrefab, statusEffectContainer.transform);
+		UiStatusEffect uiStatusEffect = panel.GetComponent<UiStatusEffect>();
+		uiStatusEffect.Initialize(nse);
+	}
+
+	public void RemoveStatusEffect(NetworkStatusEffect nse) {
+		//UiPortrait uiPortrait = uiPortraits[slot];
+		var transforms = statusEffectContainer.GetComponentsInChildren<Transform>();
+		for (int i = 0; i < transforms.Length; i++) {
+			if (transforms[i] == statusEffectContainer.transform) continue;
+
+			var se = transforms[i].GetComponent<UiStatusEffect>();
+			if (se != null && nse.statusName == se.GetStatusName()) {
+				GameObject.Destroy(transforms[i].gameObject);
+				break;
+			}
+		}
+	}
+
+	public void ClearStatusEffects() {
+		var transforms = statusEffectContainer.GetComponentsInChildren<Transform>();
+
+		foreach (Transform t in transforms) {
+			if (t == statusEffectContainer.transform) continue;
+			GameObject.Destroy(t.gameObject);
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// REGISTRATION
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public void RegisterPortrait(UnitController target) {
+		SetPortraitRegistration(target, true);
+	}
+
+	public void UnregisterPortrait(UnitController target) {
+		SetPortraitRegistration(target, false);
+	}
+
+	private void SetPortraitRegistration(UnitController target, bool enabled) {
+		if (enabled) {
+			SetPortraitCamera(target);
+			target.networkHelper.onAddNetworkStatusEffect.AddListener(AddStatusEffect);
+			target.networkHelper.onRemoveNetworkStatusEffect.AddListener(RemoveStatusEffect);
+
+			foreach (NetworkStatusEffect nse in target.networkHelper.networkStatusEffects) {
+				AddStatusEffect(nse);
+			}
+		}
+
+		else {
+			SetPortraitCamera(null);
+			target.networkHelper.onAddNetworkStatusEffect.RemoveListener(AddStatusEffect);
+			target.networkHelper.onRemoveNetworkStatusEffect.RemoveListener(RemoveStatusEffect);
+			ClearStatusEffects();
+		}
+
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// PORTRAIT CAMERA
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public void SetPortraitCamera(UnitController unit) {
+		// null the current camera
+		if (unit != null) {
+			Camera activeCam = GetActiveCameraForSlot(slot, unit);		
+			
+			activeCam.enabled = false;
+			activeCam.targetTexture.Release();
+
+			unit.onTakeDamage.RemoveListener(OnTakeDamage); // TODO: remove listeners on disable?
+			unit.onTakeHealing.RemoveListener(OnTakeHealing);
+		}
+		else {
+			EnableSliders(true);
+		}
+
+		this.unit = unit;
+
+		if (unit != null) {
+			Camera activeCam = GetActiveCameraForSlot(slot, unit);
+
+			activeCam.targetTexture = renderTexture;
+			activeCam.enabled = true;
+
+			UpdateHealth(unit.GetHealthPercentage());
+			unit.onTakeDamage.AddListener(OnTakeDamage);
+			unit.onTakeHealing.AddListener(OnTakeHealing);
+		}
+		else {
+			EnableSliders(false);
+		}
+	}
+
+	private static Camera GetActiveCameraForSlot(UiPortraitSlots slot, UnitController unit) {
+		if (IsTargetingPanel(slot))
+			return unit.body.targetCam;
+		else
+			return unit.body.allyCam;
+	}
+
+	private static bool IsTargetingPanel(UiPortraitSlots slot) {
+		return (slot == UiPortraitSlots.ALLY_TARGET || slot == UiPortraitSlots.ENEMY_TARGET);
+	}
+
 }

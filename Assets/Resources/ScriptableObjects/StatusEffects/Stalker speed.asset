@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37ac1a25f18d2fe43a0143b835b662e0, type: 3}
   m_Name: Stalker speed
   m_EditorClassIdentifier: 
+  applied: 0
+  remainingTime: 0
+  unit: {fileID: 0}
+  ability: {fileID: 0}
   statusName: Stalker speed
+  icon: {fileID: 21300000, guid: e6e611c18a1804996a883c3cdfdfdbdf, type: 3}
   type: 15
   duration: 0
   overrideAbilityDuration: 0
   hideIcon: 0
   dispellable: 0
-  applied: 0
-  remainingTime: 0
-  bonusMoveSpeed: 25
   swipeCooldownReduction: 0.5

@@ -24,6 +24,9 @@ public class GameplayCanvas : Singleton<GameplayCanvas> {
     public Slider castbar;
 	private AbilityButtonInfo[] abilityButtons;
 
+	[Header("Prefab references")]
+	public GameObject statusEffectPrefab;
+
 	[Header("Debug")]
 	public DebugMenu debugMenu;
 
@@ -38,8 +41,8 @@ public class GameplayCanvas : Singleton<GameplayCanvas> {
 		abilityButtons = GetComponentsInChildren<AbilityButtonInfo>();
 		//ResetButtons();
 
-		EnableSliders(uiPortraits[UiPortraitSlots.ALLY_TARGET], false);
-		EnableSliders(uiPortraits[UiPortraitSlots.ENEMY_TARGET], false);
+		//EnableSliders(uiPortraits[UiPortraitSlots.ALLY_TARGET], false);
+		//EnableSliders(uiPortraits[UiPortraitSlots.ENEMY_TARGET], false);
 	}
 
 	// Start() not getting run because LocalPlayerOnly
@@ -63,64 +66,23 @@ public class GameplayCanvas : Singleton<GameplayCanvas> {
 		castbar.value = percentage;
 	}
 
-	public void UpdateHealth(UiPortraitSlots slot, float percentage) {
-		if (uiPortraits[slot].slider != null)
-			uiPortraits[slot].slider.value = Mathf.Clamp01(percentage);
-		if (uiPortraits[slot].bigSlider != null)
-			uiPortraits[slot].bigSlider.value = Mathf.Clamp01(percentage);
-	}
+	public void RegisterAllyPortraits(Player player) {
+		List<Player> teammates = GameResources.Instance.GetAllPlayers(player.GetTeam());
 
-	public void SetPortraitCamera(UiPortraitSlots slot, UnitController unit) {
-		UiPortrait port = uiPortraits[slot];
+		int n = 1; // counts from 1 to 3
+		foreach (Player teammate in teammates) {
+			if (teammate != player) {
+				UiPortraitSlots slot = (UiPortraitSlots) System.Enum.Parse(typeof(UiPortraitSlots), "ALLY_" + n);
+				uiPortraits[slot].RegisterPortrait(teammate.unit);
+				n++;
 
-		// null the current camera
-		if (port.unit != null) {
-			Camera activeCam = GetActiveCameraForSlot(slot, port.unit);		
-			
-			activeCam.enabled = false;
-			activeCam.targetTexture.Release();
-
-			port.unit.onTakeDamage.RemoveListener(port.OnTakeDamage); // TODO: remove listeners on disable?
-			port.unit.onTakeHealing.RemoveListener(port.OnTakeHealing);
+				if (n > 3)
+					break;
+			}
+			else {
+				uiPortraits[UiPortraitSlots.SELF].RegisterPortrait(player.unit);
+			}
 		}
-		else {
-			EnableSliders(port, true);
-		}
-
-		port.slot = slot;
-		port.unit = unit;
-
-		if (unit != null) {
-			Camera activeCam = GetActiveCameraForSlot(slot, port.unit);
-
-			activeCam.targetTexture = port.renderTexture;
-			activeCam.enabled = true;
-
-			UpdateHealth(slot, unit.GetHealthPercentage());
-			unit.onTakeDamage.AddListener(port.OnTakeDamage);
-			unit.onTakeHealing.AddListener(port.OnTakeHealing);
-		}
-		else {
-			EnableSliders(port, false);
-		}
-	}
-
-	private void EnableSliders(UiPortrait port, bool enable) {
-		if (port.slider != null)
-			port.slider.gameObject.SetActive(enable);
-		if (port.bigSlider != null)
-			port.bigSlider.gameObject.SetActive(enable);
-	}
-
-	private bool IsTargetingPanel(UiPortraitSlots slot) {
-		return (slot == UiPortraitSlots.ALLY_TARGET || slot == UiPortraitSlots.ENEMY_TARGET);
-	}
-
-	private Camera GetActiveCameraForSlot(UiPortraitSlots slot, UnitController unit) {
-		if (IsTargetingPanel(slot))
-			return unit.body.targetCam;
-		else
-			return unit.body.allyCam;
 	}
 
 }

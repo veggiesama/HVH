@@ -17,6 +17,7 @@ MonoBehaviour:
   unit: {fileID: 0}
   ability: {fileID: 0}
   statusName: Loyal
+  icon: {fileID: 21300000, guid: ce8fef83a85534c009c7a55e315e7102, type: 3}
   type: 15
   duration: 0
   overrideAbilityDuration: 0

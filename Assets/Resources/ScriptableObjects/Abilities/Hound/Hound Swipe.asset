@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Hound Swipe
   m_EditorClassIdentifier: 
   abilityName: Hound Swipe
+  icon: {fileID: 21300000, guid: 46834980c61d64fae93dfad26cb3a886, type: 3}
+  isItem: 0
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}
@@ -42,6 +44,7 @@ MonoBehaviour:
   projectileTimeUntilFullGrowth: 0
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
+  grenadeLerpTimeByCastRange: 0
   particleSlash: {fileID: 7799245463436937716, guid: 2c962533e91c6f44cacb5f4958f19b39,
     type: 3}
   particleBloodImpact: {fileID: 1519487373399078973, guid: da3624aa79fc0674c9b3d05c4d548b1f,

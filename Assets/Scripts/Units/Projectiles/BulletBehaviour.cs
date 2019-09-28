@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 public class BulletBehaviour : ProjectileBehaviour {
 	protected bool hasRolledToMiss = false;
@@ -14,12 +15,12 @@ public class BulletBehaviour : ProjectileBehaviour {
 		targetLocation = targetLocation + (Vector3.up * adjustTargetHeightBy);
 		base.Initialize(ability, targetLocation);
 		rb.transform.LookAt(targetLocation);
+		rb.velocity = transform.forward * projectileSpeed;
 	}
 
 	protected override void FixedUpdate () {
-		if (!CanUpdate()) return;
+		if (!initialized) return;
 		base.FixedUpdate();
-		rb.velocity = transform.forward * projectileSpeed;
 	}
 
 	// if the calling ability has a tree miss chance, apply it here
@@ -34,7 +35,8 @@ public class BulletBehaviour : ProjectileBehaviour {
 			}
 
 			if (missed) {
-				DestroySelf();
+				NetworkServer.Destroy(this.gameObject);
+				//DestroySelf();
 				return;
 			}
 		}

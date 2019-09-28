@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public abstract class Ability : ScriptableObject {
 
 	public string abilityName;
-	public Sprite iconImage;
+	public Sprite icon;
 	public bool isItem = false;
 	[HideInInspector] public UnitController caster, allyTarget, enemyTarget;
 	[HideInInspector] public UnitInfo unitInfo;

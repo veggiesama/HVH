@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25f794d80cafc41408d3d295aac804d5, type: 3}
   m_Name: Leaping
   m_EditorClassIdentifier: 
-  statusName: Leaping
-  type: 7
-  duration: 0
-  hideIcon: 0
-  dispellable: 0
   applied: 0
   remainingTime: 0
+  unit: {fileID: 0}
+  ability: {fileID: 0}
+  statusName: Leaping
+  icon: {fileID: 21300000, guid: ca5a31fc6c7514c32924938e52e0cc6a, type: 3}
+  type: 7
+  duration: 0
+  overrideAbilityDuration: 0
+  hideIcon: 0
+  dispellable: 0
   airbornClippingType: 0

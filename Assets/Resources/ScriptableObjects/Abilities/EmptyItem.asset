@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EmptyItem
   m_EditorClassIdentifier: 
   abilityName: EmptyItem
-  iconImage: {fileID: 21300000, guid: aaa0ba91bb9019c4b8607536628cd685, type: 3}
+  icon: {fileID: 21300000, guid: aaa0ba91bb9019c4b8607536628cd685, type: 3}
   isItem: 1
   caster: {fileID: 0}
   allyTarget: {fileID: 0}

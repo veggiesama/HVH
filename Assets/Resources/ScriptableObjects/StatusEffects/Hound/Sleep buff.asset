@@ -12,14 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fde03f7658dd1740bccd1a2440cd2e9, type: 3}
   m_Name: Sleep buff
   m_EditorClassIdentifier: 
+  applied: 0
+  remainingTime: 0
+  unit: {fileID: 0}
+  ability: {fileID: 0}
   statusName: Sleep buff
+  icon: {fileID: 21300000, guid: 62feffc46377c4c3c8d638b1da29a64f, type: 3}
   type: 15
   duration: 0
   overrideAbilityDuration: 0
   hideIcon: 0
   dispellable: 0
-  applied: 0
-  remainingTime: 0
   healPercentEverySecond: 0.04
   tickEvery: 0.1
   invisStatus: {fileID: 11400000, guid: 862978fee122db24e90986b140a6cc04, type: 2}

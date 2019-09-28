@@ -52,7 +52,7 @@ public class Player : Owner {
 		TeamFieldOfView.Instance.Initialize((Teams)team);
 		GameResources.Instance.DisableTreeHighlighting();
 		Debug.Log("Setup Ally Cameras");
-		SetupAllyCameras();
+		GameplayCanvas.Instance.RegisterAllyPortraits(this);
 		GameplayCanvas.Instance.ResetButtons();
 		GameplayCanvas.Instance.debugMenu.Initialize();
 		cam.GetComponent<CameraFollow>().Initialize();
@@ -193,25 +193,6 @@ public class Player : Owner {
 				u.EnableVision(true);
 			else
 				u.EnableVision(false);
-		}
-	}
-
-	public void SetupAllyCameras() {
-		List<Player> teammates = GameResources.Instance.GetAllPlayers(GetTeam());
-
-		int n = 1; // counts from 1 to 3
-		foreach (Player teammate in teammates) {
-			if (teammate != this) {
-				UiPortraitSlots slot = (UiPortraitSlots) System.Enum.Parse(typeof(UiPortraitSlots), "ALLY_" + n);
-				GameplayCanvas.Instance.SetPortraitCamera(slot, teammate.unit);
-				n++;
-
-				if (n > 3)
-					break;
-			}
-			else {
-				GameplayCanvas.Instance.SetPortraitCamera(UiPortraitSlots.SELF, this.unit);
-			}
 		}
 	}
 

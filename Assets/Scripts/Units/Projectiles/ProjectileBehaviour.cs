@@ -35,8 +35,11 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 		this.networkHelper = attacker.networkHelper;
 
 		float timeAlive = ability.projectileTimeAlive;
-		if (timeAlive <= 0) timeAlive = Constants.ProjectileSelfDestructTime; // fallback
-		Invoke( "DestroySelf", timeAlive);
+		if (timeAlive <= 0)
+			timeAlive = Constants.ProjectileSelfDestructTime; // fallback
+		if (hasAuthority)
+			StartCoroutine(DestroySelf(timeAlive));
+
 		this.initialized = true;
 	}
 
@@ -57,7 +60,8 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 		this.projectileSpeed = ability.projectileSpeed;
 	}
 
-	public void DestroySelf() {
+	public IEnumerator DestroySelf(float timeAlive) {
+		yield return new WaitForSeconds(timeAlive);
 		//Debug.Log("Projectile self-destructed due to time-out.");
 		networkHelper.DestroyProjectile(this.gameObject);
 	}
@@ -81,6 +85,8 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 	}
 
 	protected virtual void OnTriggerEnter(Collider other) {
+		if (!hasAuthority) return;
+
 		IProjectileAbility proj = GetIProjectileAbility();
 		if (proj == null) return; // not a projectile ability
 
@@ -107,14 +113,16 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 			destroyOnHit = proj.OnHitEnemy(target); // collided with enemy
 
 		alreadyTriggeredList.Add(target);
-		if (destroyOnHit) DestroySelf();
+		if (destroyOnHit)
+			NetworkServer.Destroy(this.gameObject); //DestroySelf();
 	}
 
+	/*
 	protected bool CanUpdate() {
 		// only update if the player has authority to
 		if (!hasAuthority) return false;
 		// don't start update until player receives RPC from server and initializes the object
 		if (!initialized) return false;
 		return true;
-	}
+	}*/
 }

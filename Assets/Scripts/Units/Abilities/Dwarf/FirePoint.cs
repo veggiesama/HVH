@@ -43,9 +43,9 @@ public class FirePoint : Ability, IProjectileAbility {
 		CastResults baseCastResults = base.Cast(castOrder);
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
-		networkHelper.CreateProjectile(this, castOrder);
-		networkHelper.InstantiateParticle(gunsmokePrefab, caster, BodyLocations.WEAPON);
-		networkHelper.InstantiateParticle(muzzleFlashPrefab, caster, BodyLocations.WEAPON);
+		CreateProjectile(this, castOrder);
+		InstantiateParticle(gunsmokePrefab, caster, BodyLocations.WEAPON);
+		InstantiateParticle(muzzleFlashPrefab, caster, BodyLocations.WEAPON);
 
 		return CastResults.SUCCESS;
 	}

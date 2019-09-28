@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: FirePoint
   m_EditorClassIdentifier: 
   abilityName: FirePoint
-  iconImage: {fileID: 21300000, guid: 63d91af7656594faba345807cd9e94bd, type: 3}
+  icon: {fileID: 21300000, guid: 63d91af7656594faba345807cd9e94bd, type: 3}
+  isItem: 0
   caster: {fileID: 0}
   allyTarget: {fileID: 0}
   enemyTarget: {fileID: 0}
