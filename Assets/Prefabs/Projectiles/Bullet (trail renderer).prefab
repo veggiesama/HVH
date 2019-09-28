@@ -140,9 +140,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serverOnly: 0
-  localPlayerAuthority: 1
+  localPlayerAuthority: 0
   m_AssetId: 
-  m_SceneId: 2239752240
+  m_SceneId: 667079284
 --- !u!96 &2452890626340642915
 TrailRenderer:
   serializedVersion: 2

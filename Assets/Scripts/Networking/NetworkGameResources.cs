@@ -165,16 +165,14 @@ public class NetworkGameResources : NetworkBehaviour {
 		Player player = GameResources.Instance.GetPlayer(playerID);
 		player.networkHelper.isUnassigned = false;
 
-		//if (player.netIdentity.clientAuthorityOwner != null) {
-		//	NetworkServer.SetClientNotReady(player.netIdentity.connectionToClient);
-		//	//player.netIdentity.RemoveClientAuthority(NetworkServer.localConnection);
-		//}
+		if (player.netIdentity.clientAuthorityOwner != null && player.netIdentity.isServer) {
+			player.netIdentity.RemoveClientAuthority(NetworkServer.localConnection);
+		}
 
-		//GameObject oldGO = conn.identity.gameObject;
 		GameObject playerGO = player.gameObject;
-		
 		NetworkServer.ReplacePlayerForConnection(conn, playerGO);
 		player.netIdentity.AssignClientAuthority(conn);
+
 		//NetworkServer.Destroy(oldGO);
 
 		//if (player.netIdentity.clientAuthorityOwner != null)

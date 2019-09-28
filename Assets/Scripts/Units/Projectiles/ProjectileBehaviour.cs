@@ -62,8 +62,9 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 
 	public IEnumerator DestroySelf(float timeAlive) {
 		yield return new WaitForSeconds(timeAlive);
-		//Debug.Log("Projectile self-destructed due to time-out.");
-		networkHelper.DestroyProjectile(this.gameObject);
+		Debug.Log("Projectile self-destructed due to time-out.");
+		//networkHelper.DestroyProjectile(this.gameObject);
+		NetworkServer.Destroy(this.gameObject);
 	}
 
 	private IProjectileAbility GetIProjectileAbility() {

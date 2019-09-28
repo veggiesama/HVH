@@ -87,7 +87,8 @@ public class NetworkManagerHVH : NetworkManager {
 
     public override void OnServerReady(NetworkConnection conn) {
 		base.OnServerReady(conn);
-		Debug.Log("Server: Ready");
+		Debug.Log("Server: Client is ready");
+		UpdateTransforms();
 
 		//for (int i = 0; i < GameResources.Instance.networkGameResources.playerObjectList.Count; i++) {
 		//	GameResources.Instance.networkGameResources.playerObjectList.Dirty(i);
@@ -144,12 +145,22 @@ public class NetworkManagerHVH : NetworkManager {
 
 		ClientScene.Ready(conn);
 		ClientScene.AddPlayer();
+		//UpdateTransforms();
 
 		//Observer obs = conn.identity.GetComponent<Observer>();
 
 		//obs.Request
 
 		Debug.Log("Client: Successfully connected to server");
+	}
+
+	private static void UpdateTransforms() {
+		foreach (var kv in NetworkIdentity.spawned) {
+			NetworkIdentity netId = kv.Value;
+			NetworkHelper helper = netId.GetComponent<NetworkHelper>();
+			if (helper != null)
+				helper.SyncTransform();
+		}
 	}
 
 	//public override void OnClientChangeScene(string newSceneName) {

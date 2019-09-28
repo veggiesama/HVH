@@ -86,8 +86,12 @@ public class NetworkHelper : NetworkBehaviour {
 		Transform trans = Util.GetBodyLocationTransform((BodyLocations)bodyLocation, unit);
 		GameObject projectileObject = Instantiate(prefab, trans.position, trans.rotation);
 	
-		if (connectionToClient != null)
-			NetworkServer.SpawnWithClientAuthority(projectileObject, connectionToClient);
+
+		// projectiles prefabs need local player authority turned on here, or NPCs won't work
+		if (netIdentity.clientAuthorityOwner != null) {
+			projectileObject.GetComponent<NetworkIdentity>().localPlayerAuthority = true;
+			NetworkServer.SpawnWithClientAuthority(projectileObject, netIdentity.clientAuthorityOwner);
+		}
 		else
 			NetworkServer.Spawn(projectileObject);
 

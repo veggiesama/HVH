@@ -58,9 +58,6 @@ public class Player : Owner {
 		cam.GetComponent<CameraFollow>().Initialize();
 		DayNight.Instance.Initialize();
 
-		//if (networkHelper.isUnassigned) return;
-		//if (!isLocalPlayer) return;
-
 		hvhInputs.Player.Attack.started += _ => unit.DoAbility(AbilitySlots.ATTACK);
 		hvhInputs.Player.Ability1.started += _ => unit.DoAbility(AbilitySlots.ABILITY_1);
 		hvhInputs.Player.Ability2.started += _ => unit.DoAbility(AbilitySlots.ABILITY_2);
@@ -83,6 +80,8 @@ public class Player : Owner {
 		//	return;
 
 	}
+
+
 
 	public void RefreshInputActions() {
 		hvhInputs.Disable();

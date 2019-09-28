@@ -88,7 +88,8 @@ public class GameRules : Singleton<GameRules> {
 
 			unassignedPlayer.playerID = id;
 			unassignedPlayer.MakeNPC();
-			NetworkServer.Spawn(unassignedPlayer.gameObject);
+			//NetworkServer.Spawn(unassignedPlayer.gameObject);
+			NetworkServer.SpawnWithClientAuthority(unassignedPlayer.gameObject, NetworkServer.localConnection);
 
 			//GameResources.Instance.AddPlayerReference(id, unassignedPlayer);
 			GameResources.Instance.AddPlayerReference(unassignedPlayer);
