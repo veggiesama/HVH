@@ -49,6 +49,7 @@ public class Player : Owner {
 		EnableLocalPlayerOnlyObjects(true);
 		UpdateTeamVision();
 
+		unit.EnableNav(true);
 		TeamFieldOfView.Instance.Initialize((Teams)team);
 		GameResources.Instance.DisableTreeHighlighting();
 		Debug.Log("Setup Ally Cameras");

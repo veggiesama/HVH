@@ -138,6 +138,10 @@ public abstract class Ability : ScriptableObject {
 		networkHelper.CreateProjectile(ability, castOrder);
 	}
 
+	public virtual void CreateAOEGenerator(Ability ability, Order castOrder) {
+		networkHelper.CreateAOEGenerator(ability, castOrder);
+	}
+
 	public virtual void InstantiateParticle(GameObject prefab, UnitController unit, BodyLocations loc, float duration = 0f) {
 		networkHelper.InstantiateParticle(prefab, unit, loc, duration);
 	}

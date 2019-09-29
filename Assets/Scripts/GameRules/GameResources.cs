@@ -67,21 +67,6 @@ public class GameResources : Singleton<GameResources> {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Get player references
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	public Player GetPlayer(DwarfTeamSlots slot) {
-		var dict = GetTeamDictionary(Teams.DWARVES);
-		int id = dict[(int)slot];
-		return GetPlayer(id);
-	}
-
-	public Player GetPlayer(MonsterTeamSlots slot) {
-		//int id = networkGameRules.monsterDictionary[(int)slot];
-		//return GetPlayer(id);
-		var dict = GetTeamDictionary(Teams.MONSTERS);
-		int id = dict[(int)slot];
-		return GetPlayer(id);
-	}
-
 	public Player GetPlayer(int playerID) {
 		foreach (Player p in GetAllPlayers()) {
 			if (p.playerID == playerID)

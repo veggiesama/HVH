@@ -43,7 +43,7 @@ MonoBehaviour:
   projectileTimeAlive: 3
   projectileTimeUntilFullGrowth: 0
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
-  grenadeTimeToHitTarget: 2
+  grenadeTimeToHitTarget: 1.5
   grenadeLerpTimeByCastRange: 1
   netImmobilizedStatus: {fileID: 11400000, guid: 9960d138f7088bc47840bc7c66d4ddb8,
     type: 2}

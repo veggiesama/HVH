@@ -258,11 +258,11 @@ public class UnitController : MonoBehaviour {
 
 		if (slot == UiPortraitSlots.ALLY_TARGET) {
 			target.ShowTargetStand(enabled, AbilityTargetTeams.ALLY);
-			target.SetTargetPortrait(enabled, AbilityTargetTeams.ALLY);
+			//target.SetTargetPortrait(enabled, AbilityTargetTeams.ALLY);
 		}
 		else if (slot == UiPortraitSlots.ENEMY_TARGET) {
 			target.ShowTargetStand(enabled, AbilityTargetTeams.ENEMY);
-			target.SetTargetPortrait(enabled, AbilityTargetTeams.ENEMY);
+			//target.SetTargetPortrait(enabled, AbilityTargetTeams.ENEMY);
 		}
 
 	}
@@ -312,7 +312,7 @@ public class UnitController : MonoBehaviour {
 
 		targetProjector.enabled = enable;
 	}
-
+	/*
 	private void SetTargetPortrait(bool enable, AbilityTargetTeams targetTeam) {
 		UnitController thisUnit = null;
 		if (enable)
@@ -322,7 +322,7 @@ public class UnitController : MonoBehaviour {
 			GameplayCanvas.Instance.uiPortraits[UiPortraitSlots.ALLY_TARGET].SetPortraitCamera(thisUnit);
 		else
 			GameplayCanvas.Instance.uiPortraits[UiPortraitSlots.ENEMY_TARGET].SetPortraitCamera(thisUnit);
-	}
+	}*/
 	
 	public UnitController GetTarget(AbilityTargetTeams targetTeam) {
 		switch (targetTeam)	{
@@ -415,7 +415,8 @@ public class UnitController : MonoBehaviour {
 		agent.updateRotation = true;
 
 		//networkHelper.SyncTransform();
-		networkHelper.SyncTeleport();
+		if (networkHelper.hasAuthority)
+			networkHelper.SyncTeleport();
 
 		if (!agent.isOnNavMesh) {
 			Debug.Log("Unit fell off map.");
@@ -634,6 +635,7 @@ public class UnitController : MonoBehaviour {
 	// server-only
 	public void RespawnAt(Vector3 position, Quaternion rotation) {
 		body.transform.SetPositionAndRotation(position, rotation);
+		//networkHelper.SyncTeleport(position, rotation, body.transform.localScale);
 		body.ResetBody();
 		EnableNav(true);
 		AttachToNav();

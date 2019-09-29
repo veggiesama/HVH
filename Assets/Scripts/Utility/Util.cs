@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public static class Util {
 
@@ -47,7 +48,11 @@ public static class Util {
 
 	public static Vector3 GetRandomVectorAround(UnitController unit, float distance) {
 		Vector2 rng = Random.insideUnitCircle;
-		return SnapVectorToTerrain(unit.GetBodyPosition() + new Vector3(rng.x, 0, rng.y) * distance);
+		Vector3 newPosition = unit.GetBodyPosition() + new Vector3(rng.x, 0, rng.y) * distance;
+		NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 100f, -1);
+		newPosition = SnapVectorToTerrain(hit.position);
+
+		return newPosition;
 	}
 
 	public static Vector3 SnapVectorToTerrain(Vector3 loc) {

@@ -41,8 +41,13 @@ public class GameplayCanvas : Singleton<GameplayCanvas> {
 		abilityButtons = GetComponentsInChildren<AbilityButtonInfo>();
 		//ResetButtons();
 
-		//EnableSliders(uiPortraits[UiPortraitSlots.ALLY_TARGET], false);
-		//EnableSliders(uiPortraits[UiPortraitSlots.ENEMY_TARGET], false);
+		foreach (var kv in uiPortraits) {
+			var slot = kv.Key;
+			var port = kv.Value;
+
+			port.Initialize(slot);
+		}
+
 	}
 
 	// Start() not getting run because LocalPlayerOnly
@@ -67,20 +72,30 @@ public class GameplayCanvas : Singleton<GameplayCanvas> {
 	}
 
 	public void RegisterAllyPortraits(Player player) {
-		List<Player> teammates = GameResources.Instance.GetAllPlayers(player.GetTeam());
+		Teams playerTeam = player.GetTeam();
+		List<Player> teammates = GameResources.Instance.GetAllPlayers(playerTeam);
 
-		int n = 1; // counts from 1 to 3
+		int teamCount;
+		if (playerTeam == Teams.DWARVES)
+			teamCount = Constants.DwarvesTotal;
+		else
+			teamCount = Constants.MonstersTotal;
+
+		int enumCounter = 1;
 		foreach (Player teammate in teammates) {
 			if (teammate != player) {
-				UiPortraitSlots slot = (UiPortraitSlots) System.Enum.Parse(typeof(UiPortraitSlots), "ALLY_" + n);
-				uiPortraits[slot].RegisterPortrait(teammate.unit);
-				n++;
-
-				if (n > 3)
-					break;
+				try {
+					UiPortraitSlots slot = (UiPortraitSlots) System.Enum.Parse(typeof(UiPortraitSlots), "ALLY_" + enumCounter);
+					uiPortraits[slot].RegisterPortrait(teammate.unit);
+					enumCounter++;
+				}
+				catch(System.ArgumentException) {
+					Debug.Log("Error: Too many players to see everyone's portrait. ALLY_" + enumCounter + " not valid portrait slot.");
+				}
 			}
 			else {
 				uiPortraits[UiPortraitSlots.SELF].RegisterPortrait(player.unit);
+
 			}
 		}
 	}

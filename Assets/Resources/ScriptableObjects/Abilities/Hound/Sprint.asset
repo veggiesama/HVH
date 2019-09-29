@@ -46,5 +46,5 @@ MonoBehaviour:
   grenadeLerpTimeByCastRange: 0
   houndSprintBuff: {fileID: 11400000, guid: e343e92b2bb2d20468454bad950ab0d5, type: 2}
   dwarfSprintBuff: {fileID: 11400000, guid: 9568102e1d28ffa44ba1d21fe6bcf4e5, type: 2}
-  houndSpeedBonus: 3
-  dwarfSpeedBonus: 1
+  houndSpeedBonus: 2
+  dwarfSpeedBonus: 0.5

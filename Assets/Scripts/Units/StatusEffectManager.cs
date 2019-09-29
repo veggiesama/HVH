@@ -9,7 +9,7 @@ public class StatusEffectManager : MonoBehaviour {
 	public float networkRefreshEvery = 0.1f;
 	private float currentTimer;
 
-	private void Start() {
+	private void Awake() {
 		networkHelper = GetComponentInParent<NetworkHelper>();
 		currentTimer = networkRefreshEvery;
 	}

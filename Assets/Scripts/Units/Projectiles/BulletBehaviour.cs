@@ -25,7 +25,7 @@ public class BulletBehaviour : ProjectileBehaviour {
 
 	// if the calling ability has a tree miss chance, apply it here
 	protected override void OnTriggerEnter(Collider col) {
-		if (!hasAuthority) return;
+		if (!HasControllableAuthority()) return;
 
 		// collided with tree
 		if (Util.IsTree(col.gameObject)) {
@@ -47,6 +47,6 @@ public class BulletBehaviour : ProjectileBehaviour {
 	private bool RollMissChance() {
 		float rng = Random.Range(0f, 1f); //Debug.Log("RNG: " + rng);
 		if (rng <= treeMissChance) return true;
-		return false;
+		return false; 
 	}
 }

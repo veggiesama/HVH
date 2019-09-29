@@ -37,8 +37,8 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 		float timeAlive = ability.projectileTimeAlive;
 		if (timeAlive <= 0)
 			timeAlive = Constants.ProjectileSelfDestructTime; // fallback
-		if (hasAuthority)
-			StartCoroutine(DestroySelf(timeAlive));
+
+		StartCoroutine(DestroySelf(timeAlive));
 
 		this.initialized = true;
 	}
@@ -62,7 +62,7 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 
 	public IEnumerator DestroySelf(float timeAlive) {
 		yield return new WaitForSeconds(timeAlive);
-		Debug.Log("Projectile self-destructed due to time-out.");
+		//Debug.Log("Projectile self-destructed due to time-out.");
 		//networkHelper.DestroyProjectile(this.gameObject);
 		NetworkServer.Destroy(this.gameObject);
 	}
@@ -86,7 +86,7 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 	}
 
 	protected virtual void OnTriggerEnter(Collider other) {
-		if (!hasAuthority) return;
+		if (!HasControllableAuthority()) return;
 
 		IProjectileAbility proj = GetIProjectileAbility();
 		if (proj == null) return; // not a projectile ability
@@ -105,7 +105,7 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 			return; //Debug.Log("Clipping self.");
 
 		target = other.gameObject.GetComponentInParent<UnitController>();
-		if (alreadyTriggeredList.Contains(target))
+		if (alreadyTriggeredList.Contains(target) || !target.IsAlive())
 			return; // Debug.Log("Already triggered against this target.");
 
 		if (target.SharesTeamWith(attacker))
@@ -118,12 +118,8 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 			NetworkServer.Destroy(this.gameObject); //DestroySelf();
 	}
 
-	/*
-	protected bool CanUpdate() {
-		// only update if the player has authority to
-		if (!hasAuthority) return false;
-		// don't start update until player receives RPC from server and initializes the object
-		if (!initialized) return false;
-		return true;
-	}*/
+	protected bool HasControllableAuthority() {
+		return networkHelper.HasControllableAuthority();
+	}
+
 }

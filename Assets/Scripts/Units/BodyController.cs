@@ -321,6 +321,8 @@ public class BodyController : MonoBehaviour {
 	}
 
 	public void PlayAnimation(Animations a) {
+		if (anim == null) return;
+
 		switch (a) {
 			case Animations.ATTACK_A:
 				anim.SetTrigger(AnimTriggers.ATTACK);
@@ -358,6 +360,8 @@ public class BodyController : MonoBehaviour {
 	}
 
 	public void EnableRagdoll(bool enable) {
+		if (anim == null) return;
+
 		foreach (Rigidbody ragdollRB in ragdollRigidbodies) {
 			if (enable) {
 				ragdollRB.velocity = rb.velocity;

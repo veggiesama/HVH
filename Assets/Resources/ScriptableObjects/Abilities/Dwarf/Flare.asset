@@ -27,9 +27,9 @@ MonoBehaviour:
   targetTeam: 2
   damageType: 0
   damage: 0
-  cooldown: 1
+  cooldown: 0.3
   castRange: 30
-  castTime: 1
+  castTime: 0.3
   duration: 6
   aoeRadius: 4
   quickCast: 0
@@ -49,7 +49,7 @@ MonoBehaviour:
   aoeGeneratorParticlePrefab: {fileID: 359356768983722974, guid: 3f42102e23652b64d9cc7584f4f7d7a2,
     type: 3}
   reappliesEvery: 1
-  delay: 2
+  delay: 1.2
   destroysTrees: 1
   statusEffects:
   - {fileID: 11400000, guid: 2be35b56ea3042d4aad3e91801c131a6, type: 2}

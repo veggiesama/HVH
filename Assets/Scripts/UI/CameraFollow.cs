@@ -12,6 +12,7 @@ public class CameraFollow : MonoBehaviour {
 	private Vector3 camVelocity;
 	private bool wasZooming;
 	private Vector3 mouseOffset;
+	private bool initialized = false;
 
 	//public bool followTightly = false;
 
@@ -37,11 +38,21 @@ public class CameraFollow : MonoBehaviour {
 	}
 
 	public void Initialize() {
+		transform.position = body.transform.position + transform.localPosition;
 		camOffset = transform.position - body.transform.position;
 		mouseOffset = Vector3.zero;
+		StartCoroutine( SetInitialized() );
+	}
+
+	// wait until cam.velocity settles down
+	private IEnumerator SetInitialized() {
+		yield return new WaitForSeconds(1f);
+		initialized = true;
 	}
 
 	private void LateUpdate() {
+		if (!initialized) return;
+
 		int minX = (int) (Screen.width * zoomRegionWidthPercentage);
 		int minY = (int) (Screen.height * zoomRegionHeightPercentage);
 		int maxX = Screen.width - minX;

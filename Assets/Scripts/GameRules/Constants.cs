@@ -20,7 +20,7 @@ public static class Constants {
 
 // Projectile types
 public enum ProjectileBehaviourTypes {
-	NONE, BULLET, CONE, GRENADE, HOMING
+	NONE, BULLET, CONE, GRENADE, HOMING, LINE
 }
 
 // Casting abilities
@@ -64,14 +64,6 @@ public enum Teams {
 	MONSTERS = 0x1,
 	NEUTRALS = 0x2,
 	OBSERVERS = 0x3
-};
-
-public enum DwarfTeamSlots {
-	ALLY_1, ALLY_2, ALLY_3, ALLY_4
-};
-
-public enum MonsterTeamSlots {
-	ENEMY_1, ENEMY_2, ENEMY_3, ENEMY_4
 };
 
 public enum UiPortraitSlots {

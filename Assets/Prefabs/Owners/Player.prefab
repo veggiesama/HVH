@@ -179,6 +179,7 @@ MonoBehaviour:
   networkHelper: {fileID: 0}
   cam: {fileID: 1320179214812775705}
   mouseTargeter: {fileID: 8815544990195114528}
+  networkPlayer: {fileID: 0}
   playerID: 0
 --- !u!114 &8234122456298103451
 MonoBehaviour:
@@ -198,6 +199,12 @@ MonoBehaviour:
   unitInfo: 
   isDisconnected: 0
   isUnassigned: 1
+  onRemoveNetworkStatusEffect:
+    m_PersistentCalls:
+      m_Calls: []
+  onAddNetworkStatusEffect:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &8879444565007247646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -546,7 +553,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1524426759739312}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5

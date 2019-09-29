@@ -29,8 +29,7 @@ public class GameRules : Singleton<GameRules> {
 		//playerPrefab = NetworkManager.singleton.playerPrefab;
 		teamFov = GetComponentInChildren<TeamFieldOfView>();
 
-		int numPlayers = System.Enum.GetValues(typeof(MonsterTeamSlots)).Length + 
-						 System.Enum.GetValues(typeof(DwarfTeamSlots)).Length;
+		int numPlayers = Constants.DwarvesTotal + Constants.MonstersTotal;
 	}
 
 	public void SetupGame() {
@@ -42,7 +41,7 @@ public class GameRules : Singleton<GameRules> {
 
 		Debug.Log("Trying to spawn NPCs.");
 		SpawnHounds(houndsToSpawn);
-		//SpawnTestMonsters(testMonstersToSpawn);
+		SpawnTestMonsters(testMonstersToSpawn);
 	}
 
 	public void SpawnHounds(int howMany) {
@@ -83,13 +82,14 @@ public class GameRules : Singleton<GameRules> {
 		int totalPlayers = Constants.DwarvesTotal + Constants.MonstersTotal;
 		for (int id = 0; id < totalPlayers; id++) {
 			Transform spawnLoc = NetworkManager.singleton.GetStartPosition();
-			GameObject unassignedPlayerGO = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation);
-			Player unassignedPlayer = unassignedPlayerGO.GetComponent<Player>(); 
+			GameObject unassignedPlayerGO = Instantiate(playerPrefab);
+			Player unassignedPlayer = unassignedPlayerGO.GetComponent<Player>();
 
 			unassignedPlayer.playerID = id;
 			unassignedPlayer.MakeNPC();
 			//NetworkServer.Spawn(unassignedPlayer.gameObject);
-			NetworkServer.SpawnWithClientAuthority(unassignedPlayer.gameObject, NetworkServer.localConnection);
+			NetworkServer.SpawnWithClientAuthority(unassignedPlayerGO, NetworkServer.localConnection);
+			unassignedPlayer.unit.RespawnAt(spawnLoc.position, spawnLoc.rotation);
 
 			//GameResources.Instance.AddPlayerReference(id, unassignedPlayer);
 			GameResources.Instance.AddPlayerReference(unassignedPlayer);
@@ -106,56 +106,5 @@ public class GameRules : Singleton<GameRules> {
 			}
 		}
 	}
-	/*
-	public void SpawnUnassignedPlayers() {
-
-		// NOTE: Enum count determines number of team slots
-		int n = 0;
-		foreach (DwarfTeamSlots slot in System.Enum.GetValues(typeof(DwarfTeamSlots)))  {
-			Transform spawnLoc = NetworkManager.singleton.GetStartPosition();
-			GameObject unassignedPlayerGO = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation);
-			Player unassignedPlayer = unassignedPlayerGO.GetComponent<Player>(); 
-
-			unassignedPlayer.playerID = n;
-			GameResources.Instance.AddPlayerReference(n, unassignedPlayer);
-			networkGameRules.dwarfDictionary.Add((int)slot, n);
-
-			unassignedPlayer.MakeNPC();
-			NetworkServer.Spawn(unassignedPlayer.gameObject);
-			unassignedPlayer.SetTeam(Teams.DWARVES);
-			unassignedPlayer.SetUnitInfo("Dwarf");
-			n++;
-		}
-
-		foreach (MonsterTeamSlots slot in System.Enum.GetValues(typeof(MonsterTeamSlots)))  {
-			Transform spawnLoc = NetworkManager.singleton.GetStartPosition();
-			GameObject unassignedPlayerGO = Instantiate(playerPrefab, spawnLoc.position, spawnLoc.rotation);
-			Player unassignedPlayer = unassignedPlayerGO.GetComponent<Player>(); 
-
-			unassignedPlayer.playerID = n;
-			GameResources.Instance.AddPlayerReference(n, unassignedPlayer);
-			networkGameRules.monsterDictionary.Add((int)slot, n);
-
-			unassignedPlayer.MakeNPC();
-			NetworkServer.Spawn(unassignedPlayer.gameObject);
-			unassignedPlayer.SetTeam(Teams.MONSTERS);
-			unassignedPlayer.SetUnitInfo("Monster");
-			n++;
-		}
-
-		//Debug.Log(dwarfDictionary.DebugToString());
-		//Debug.Log(monsterDictionary.DebugToString());
-	}
-	*/
-
-	/*
-	public DwarfSlotsToPlayerID_SyncDictionary GetDwarfTeamDictionary() {
-		return networkGameRules.dwarfDictionary;
-	}
-
-	public MonsterSlotsToPlayerID_SyncDictionary GetMonsterTeamDictionary() {
-		return networkGameRules.monsterDictionary;
-	}*/
-
 
 }

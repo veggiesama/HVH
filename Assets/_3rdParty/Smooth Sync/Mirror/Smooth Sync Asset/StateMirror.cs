@@ -3,6 +3,8 @@ using System.Collections;
 using Mirror;
 //using UnityEngine.Networking;
 using System;
+#pragma warning disable 618
+
 
 namespace Smooth
 {

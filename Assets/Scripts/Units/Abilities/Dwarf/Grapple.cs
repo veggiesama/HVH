@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
+using HVH;
 
 [CreateAssetMenu(menuName = "Abilities/Dwarf/Grapple")]
-public class Grapple : Ability {
+public class Grapple : Ability, IProjectileAbility {
 
 	[Header("Grapple")]
 	public StatusEffect airbornStatusEffect;
@@ -15,10 +16,9 @@ public class Grapple : Ability {
 	private float currentSafetyTimer = 0;
 	private bool isLaunching = false;
 	private Vector3 casterStartingPosition;
-	public LineRenderer ropePrefab;
-	private LineRenderer rope;
-	private float ropeLength = 0f;
-	private float ropeLengthLast = 0f;
+
+	public UnityEvent onLineBreak;
+
 
 	public override void Reset()
 	{
@@ -36,7 +36,8 @@ public class Grapple : Ability {
 		doNotCancelOrderQueue = false;
 
 		projectilePrefab = null; // set on scriptableObject
-		projectileSpeed = 5f;
+		projectileBehaviour = ProjectileBehaviourTypes.LINE;
+		projectileSpeed = 0f;
 		projectileTimeAlive = 10f;
 		grenadeTimeToHitTarget = 0;
 
@@ -55,9 +56,11 @@ public class Grapple : Ability {
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 		if (caster.IsAirborn()) return CastResults.FAILURE_ALREADY_AIRBORN;
 
-		Vector3 fromAnchor = castOrder.tree.GetAnchorPoint();
-		Debug.DrawLine(caster.GetBodyPosition(), fromAnchor, Color.yellow, 2.0f);
-		BeginLaunch(fromAnchor);
+		castOrder.targetLocation = castOrder.tree.GetAnchorPoint();
+		CreateProjectile(this, castOrder);
+
+		//Debug.DrawLine(caster.GetBodyPosition(), fromAnchor, Color.yellow, 2.0f);
+		BeginLaunch(castOrder.targetLocation);
 
 		return CastResults.SUCCESS;
 	}
@@ -68,10 +71,6 @@ public class Grapple : Ability {
 		//Debug.Log("Current safety timer: " + currentSafetyTimer);
 
 		if (!isLaunching) return;
-
-		if (rope != null) {
-			UpdateRope();
-		}
 
 		if (currentSafetyTimer > 0) {
 			currentSafetyTimer -= Time.deltaTime;
@@ -84,23 +83,17 @@ public class Grapple : Ability {
 	private void BeginLaunch(Vector3 anchor) {
 		caster.ApplyStatusEffect(airbornStatusEffect, this);
 		Vector3 velocityVector = (anchor - caster.GetBodyPosition()).normalized * launchForce;
-		//caster.EnableNav(false);
 		caster.body.PerformAirborn(velocityVector);
-		//caster.body.SetTreeClipOnly();
+
+		Vector3 direction = (anchor - caster.GetBodyPosition()).normalized;
 		caster.body.onCollidedTerrain.AddListener(OnCollidedTerrain); // sub
 		isLaunching = true;
 
 		casterStartingPosition = caster.GetBodyPosition();
-
-		rope = Instantiate(ropePrefab);
-		rope.SetPosition(0, caster.body.projectileSpawner.transform.position);
-		rope.SetPosition(1, anchor);
 	}
 
 	private void EndLaunch() {
 		caster.RemoveStatusEffect(airbornStatusEffect.statusName);
-		//caster.EnableNav(true);
-		//caster.body.ResetBody();
 		caster.body.onCollidedTerrain.RemoveListener(OnCollidedTerrain); // unsub
 		isLaunching = false;
 
@@ -109,8 +102,8 @@ public class Grapple : Ability {
 		
 		// cleanup
 		currentSafetyTimer = 0;
-		ropeLengthLast = 0;
-		DestroyRope();
+		networkHelper.DestroyTree(castOrder.tree, caster.GetBodyPosition(), 0);
+		onLineBreak.Invoke();
 	}
 
 	// allows body to hilariously bounce
@@ -126,20 +119,18 @@ public class Grapple : Ability {
 		}
 	}
 
-	private void DestroyRope() {
-		if (rope != null) Destroy(rope);
-		ropeLengthLast = 0f;
+	public bool OnHitEnemy(UnitController enemy)
+	{
+		throw new System.NotImplementedException();
 	}
 
-	private void UpdateRope() {
-		rope.SetPosition(0, caster.body.projectileSpawner.transform.position);
-		ropeLength = Util.GetDistanceIn2D(rope.GetPosition(0), rope.GetPosition(1));
+	public bool OnHitAlly(UnitController ally)
+	{
+		throw new System.NotImplementedException();
+	}
 
-		if (ropeLengthLast == 0 || ropeLength <= ropeLengthLast) // rope is shrinking
-			ropeLengthLast = ropeLength;
-		else { // rope snaps
-			networkHelper.DestroyTree(castOrder.tree, caster.GetBodyPosition(), 0);
-			DestroyRope();
-		}
+	public bool OnHitTree(Tree tree)
+	{
+		throw new System.NotImplementedException();
 	}
 }

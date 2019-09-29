@@ -16,11 +16,21 @@ public class UiPortrait {
 	[HideInInspector] public UnityEventDamage onTakeHealing;
 
 	public void OnTakeDamage(float dmg) {
-		UpdateHealth(unit.GetHealthPercentage());
+		if (unit != null)
+			UpdateHealth(unit.GetHealthPercentage());
 	}
 
 	public void OnTakeHealing(float heal) {
-		UpdateHealth(unit.GetHealthPercentage());
+		if (unit != null)
+			UpdateHealth(unit.GetHealthPercentage());
+	}
+
+	public void Initialize(UiPortraitSlots slot) {
+		this.slot = slot;
+
+		if (IsTargetingPanel()) {
+			EnableSliders(false);
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,14 +57,12 @@ public class UiPortrait {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public void AddStatusEffect(NetworkStatusEffect nse) {
-		//UiPortrait uiPortrait = uiPortraits[slot];
 		GameObject panel = GameObject.Instantiate(GameplayCanvas.Instance.statusEffectPrefab, statusEffectContainer.transform);
 		UiStatusEffect uiStatusEffect = panel.GetComponent<UiStatusEffect>();
 		uiStatusEffect.Initialize(nse);
 	}
 
 	public void RemoveStatusEffect(NetworkStatusEffect nse) {
-		//UiPortrait uiPortrait = uiPortraits[slot];
 		var transforms = statusEffectContainer.GetComponentsInChildren<Transform>();
 		for (int i = 0; i < transforms.Length; i++) {
 			if (transforms[i] == statusEffectContainer.transform) continue;
@@ -112,10 +120,10 @@ public class UiPortrait {
 	// PORTRAIT CAMERA
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public void SetPortraitCamera(UnitController unit) {
+	public void SetPortraitCamera(UnitController newUnit) {
 		// null the current camera
 		if (unit != null) {
-			Camera activeCam = GetActiveCameraForSlot(slot, unit);		
+			Camera activeCam = GetActiveCameraForSlot(unit);		
 			
 			activeCam.enabled = false;
 			activeCam.targetTexture.Release();
@@ -127,31 +135,31 @@ public class UiPortrait {
 			EnableSliders(true);
 		}
 
-		this.unit = unit;
+		this.unit = newUnit;
 
-		if (unit != null) {
-			Camera activeCam = GetActiveCameraForSlot(slot, unit);
+		if (newUnit != null) {
+			Camera activeCam = GetActiveCameraForSlot(newUnit);
 
 			activeCam.targetTexture = renderTexture;
 			activeCam.enabled = true;
 
-			UpdateHealth(unit.GetHealthPercentage());
-			unit.onTakeDamage.AddListener(OnTakeDamage);
-			unit.onTakeHealing.AddListener(OnTakeHealing);
+			UpdateHealth(newUnit.GetHealthPercentage());
+			newUnit.onTakeDamage.AddListener(OnTakeDamage);
+			newUnit.onTakeHealing.AddListener(OnTakeHealing);
 		}
 		else {
 			EnableSliders(false);
 		}
 	}
 
-	private static Camera GetActiveCameraForSlot(UiPortraitSlots slot, UnitController unit) {
-		if (IsTargetingPanel(slot))
+	private Camera GetActiveCameraForSlot(UnitController unit) {
+		if (IsTargetingPanel())
 			return unit.body.targetCam;
 		else
 			return unit.body.allyCam;
 	}
 
-	private static bool IsTargetingPanel(UiPortraitSlots slot) {
+	private bool IsTargetingPanel() {
 		return (slot == UiPortraitSlots.ALLY_TARGET || slot == UiPortraitSlots.ENEMY_TARGET);
 	}
 

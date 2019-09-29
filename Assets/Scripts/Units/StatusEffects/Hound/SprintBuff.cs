@@ -9,18 +9,21 @@ using UnityEngine;
  * 6s duration
  * */
 
+ public enum SprintBuffTargets {
+	DWARVES, HOUNDS
+ }
+
 [CreateAssetMenu(menuName = "Status Effects/Hound/Sprint")]
 public class SprintBuff : StatusEffect {
 	
 	[Header("SprintBuff")]
-	public float speedBonus;
+	public SprintBuffTargets sprintBuffTargets;
+	private float speedBonus;
 
 	// default field values; called by editor and serialized into asset before Initialize() is called
 	public override void Reset() {
 		statusName = "Sprint buff";
 		type = StatusEffectTypes.BUFF_DISPELLABLE;
-		
-		speedBonus = 5f;
 		overrideAbilityDuration = true;
 
 	}
@@ -28,6 +31,12 @@ public class SprintBuff : StatusEffect {
 	// initializer
 	public override void Initialize(GameObject obj, Ability ability) {
 		base.Initialize(obj, ability);
+
+		if (sprintBuffTargets == SprintBuffTargets.DWARVES)
+			speedBonus = ((Sprint)ability).dwarfSpeedBonus;
+		else
+			speedBonus = ((Sprint)ability).houndSpeedBonus;
+
 	}
 
 	public override void Apply() {

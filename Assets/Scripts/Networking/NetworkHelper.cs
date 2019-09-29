@@ -85,23 +85,17 @@ public class NetworkHelper : NetworkBehaviour {
 		GameObject prefab = NetworkManager.singleton.spawnPrefabs[prefabIndex];
 		Transform trans = Util.GetBodyLocationTransform((BodyLocations)bodyLocation, unit);
 		GameObject projectileObject = Instantiate(prefab, trans.position, trans.rotation);
-	
+		NetworkServer.Spawn(projectileObject);
 
-		// projectiles prefabs need local player authority turned on here, or NPCs won't work
-		if (netIdentity.clientAuthorityOwner != null) {
-			projectileObject.GetComponent<NetworkIdentity>().localPlayerAuthority = true;
-			NetworkServer.SpawnWithClientAuthority(projectileObject, netIdentity.clientAuthorityOwner);
-		}
-		else
-			NetworkServer.Spawn(projectileObject);
+		//if (netIdentity.clientAuthorityOwner != null) {
+		//	projectileObject.GetComponent<NetworkIdentity>().localPlayerAuthority = true;
+		//	NetworkServer.SpawnWithClientAuthority(projectileObject, netIdentity.clientAuthorityOwner);
+		//}
+		//else
+		//	NetworkServer.Spawn(projectileObject);
 
 		Rpc_InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
 
-		//TargetRpc_InitializeProjectile(connectionToClient, projectileObject, abilitySlotIndex, targetLocation);
-		//else {
-		//	NetworkServer.Spawn(projectileObject);	
-		//	InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
-		//}
 	}
 
 	[ClientRpc]
@@ -110,10 +104,10 @@ public class NetworkHelper : NetworkBehaviour {
 	}
 
 
-	[TargetRpc]
-	private void TargetRpc_InitializeProjectile(NetworkConnection conn, GameObject projectileObject, int abilitySlotIndex, Vector3 targetLocation) {
-		InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
-	}
+	//[TargetRpc]
+	//private void TargetRpc_InitializeProjectile(NetworkConnection conn, GameObject projectileObject, int abilitySlotIndex, Vector3 targetLocation) {
+	//	InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
+	//}
 
 	private void InitializeProjectile(GameObject projectileObject, int abilitySlotIndex, Vector3 targetLocation) {
 		Ability ability = UnpackAbility(unit, abilitySlotIndex);
@@ -134,6 +128,10 @@ public class NetworkHelper : NetworkBehaviour {
 			case ProjectileBehaviourTypes.HOMING:
 				Debug.Log("Homing type projectile (unimplemented)");
 				break;
+			case ProjectileBehaviourTypes.LINE:
+				LineBehaviour line = projectileObject.GetComponent<LineBehaviour>();
+				line.Initialize(ability, targetLocation);
+				break;
 			default:
 				Debug.Log("Trying to spawn unknown projectile type.");
 				break;
@@ -148,6 +146,32 @@ public class NetworkHelper : NetworkBehaviour {
 	private void Cmd_DestroyProjectile(GameObject projectileObject) {
 		if (projectileObject != null)
 			NetworkServer.Destroy(projectileObject);
+	}
+
+	// DUMMIES / AOE GENERATORS
+
+	public void CreateAOEGenerator(Ability ability, Order castOrder) {
+		GameObject prefab = ((Flare)ability).aoeGeneratorPrefab; // TODO: generalize
+		Vector3 targetLocation = castOrder.targetLocation;
+
+		int prefabIndex = NetworkManager.singleton.spawnPrefabs.IndexOf(prefab);
+		int abilitySlotIndex = PackAbility(ability); // (int) unit.GetAbilitySlot(ability);
+	   	Cmd_CreateAOEGenerator(prefabIndex, abilitySlotIndex, targetLocation);
+	}
+
+	[Command]
+	private void Cmd_CreateAOEGenerator(int prefabIndex, int abilitySlotIndex, Vector3 targetLocation) {
+		GameObject prefab = NetworkManager.singleton.spawnPrefabs[prefabIndex];
+		GameObject aoeGenObject = Instantiate(prefab, targetLocation, Quaternion.identity);
+		NetworkServer.Spawn(aoeGenObject);
+		Rpc_InitializeAOEGenerator(aoeGenObject, abilitySlotIndex, targetLocation);
+	}
+
+	[ClientRpc]
+	private void Rpc_InitializeAOEGenerator(GameObject aoeGenObject, int abilitySlotIndex, Vector3 targetLocation) {
+		Ability ability = UnpackAbility(unit, abilitySlotIndex);
+		var aoeGenerator = aoeGenObject.GetComponent<AOEGenerator>();
+		aoeGenerator.Initialize(unit, ability);
 	}
 
 	// DAMAGE
@@ -512,7 +536,10 @@ public class NetworkHelper : NetworkBehaviour {
 
 	public void SyncTeleport() {
 		smoothBody.teleportOwnedObjectFromOwner();
-		//smoothBody.teleportAnyObjectFromServer(unit.body.transform.position, unit.body.transform.rotation, unit.body.transform.localScale);
+	}
+
+	public void SyncTeleport(Vector3 position, Quaternion rotation, Vector3 scale) {
+		smoothBody.teleportAnyObjectFromServer(position, rotation, scale);
 	}
 
 	// unused

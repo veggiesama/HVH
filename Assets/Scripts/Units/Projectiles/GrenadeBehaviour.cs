@@ -26,7 +26,7 @@ public class GrenadeBehaviour : ProjectileBehaviour {
 		rb.AddForce(throwVector, ForceMode.VelocityChange);
 
 		// prevent early triggering
-		if (hasAuthority) {
+		if (HasControllableAuthority()) {
 			GetComponent<BoxCollider>().enabled = false;
 			StartCoroutine(EnableCollider(grenadeTimeToHitTarget * 0.75f));
 		}

@@ -5,9 +5,9 @@ using UnityEngine;
 
 public interface IAoeGeneratorAbility {
 	GameObject GetAoeGenParticlePrefab();
+	StatusEffect[] GetStatusEffects();
 	bool GetDestroysTrees();
 	float GetReappliesEvery();
-	StatusEffect[] GetStatusEffects();
 	float GetDelay();
 }
 

@@ -28,18 +28,21 @@ public class UiStatusEffect : MonoBehaviour {
 		statusName = nse.statusName;
 
 		SetIcon(nse.statusName);
-		SetTimerText(GetTimeRemaining());
-		StartCoroutine(SlowUpdate(0.1f));
+		SetTimerText();
+		StartCoroutine( SlowUpdate(0.1f) );
 	}
 
 	IEnumerator SlowUpdate(float updateEvery) {
 		while (true) {
 			yield return new WaitForSeconds(updateEvery);
-			SetTimerText(GetTimeRemaining());
-
-			if (GetTimeRemaining() <= 0)
+			SetTimerText();
+			if (HasDuration() && GetTimeRemaining() <= 0)
 				Destroy(this.gameObject);
 		}
+	}
+
+	bool HasDuration() {
+		return (duration != 0f);
 	}
 
 	float GetTimeRemaining() {
@@ -55,21 +58,29 @@ public class UiStatusEffect : MonoBehaviour {
 		icon.sprite = statusEffect.icon;
 	}
 
-	void SetTimerText(float time) {
+	void SetTimerText() {
 
-		TimeSpan t = TimeSpan.FromSeconds(time);
-		/*
-		string minutes = "";
-		int mins = (int) (time / 60);
-		if (mins >= 1)
-			minutes = string.Format("{0:D2}m", mins);
+		//TimeSpan t = TimeSpan.FromSeconds(time);
+		//timerText.text = string.Format("{0:D2}m:{1:D2}s", 
+        //        t.Minutes, 
+        //        t.Seconds);
+
+		if (HasDuration()) {
+			timerText.text = "";
+		}
+
+		else {
+			float time = GetTimeRemaining();
+
+			string minutes = "";
+			int mins = (int) (time / 60);
+			if (mins >= 1)
+				minutes = string.Format("{0:D}m", mins);
 	
-		string seconds = string.Format("{0:D2}s", time % 60);
-		timerText.text = minutes + seconds;*/
-
-		timerText.text = string.Format("{0:D2}m:{1:D2}s", 
-                t.Minutes, 
-                t.Seconds);
+			int secs = (int) (time % 60);
+			string seconds = string.Format("{0:D}s", secs);
+			timerText.text = minutes + seconds;
+		}
 	}
 
 

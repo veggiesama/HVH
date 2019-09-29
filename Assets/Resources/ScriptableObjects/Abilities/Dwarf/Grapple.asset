@@ -35,11 +35,12 @@ MonoBehaviour:
   quickCast: 0
   doNotCancelOrderQueue: 0
   durationRemaining: 0
-  projectilePrefab: {fileID: 0}
-  projectileSpawner: 0
-  projectileBehaviour: 0
+  projectilePrefab: {fileID: 6427190691582976980, guid: f3d4c212c8ffe9d4688e598b8bcb5b16,
+    type: 3}
+  projectileSpawner: 3
+  projectileBehaviour: 5
   projectileSpeed: 0
-  projectileTimeAlive: 0
+  projectileTimeAlive: 10
   projectileTimeUntilFullGrowth: 0
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
@@ -49,5 +50,6 @@ MonoBehaviour:
   launchForce: 20
   collisionMagnitudeThreshold: 10
   safetyPostCollisionTimer: 1.5
-  ropePrefab: {fileID: 817403440694301307, guid: f3d4c212c8ffe9d4688e598b8bcb5b16,
-    type: 3}
+  onLineBreak:
+    m_PersistentCalls:
+      m_Calls: []

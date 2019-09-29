@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class AOEGenerator : MonoBehaviour {
+public class AOEGenerator : NetworkBehaviour {
 	private float reappliesEvery;
 	private StatusEffect[] statusEffects;
 	private UnitController sourceUnit;
@@ -15,6 +16,7 @@ public class AOEGenerator : MonoBehaviour {
 	private float delay = 0f;
 	private float delayTimer = 0f;
 	private bool began = false;
+	private bool initialized = false;
 	private GameObject particlePrefab;
 
 	//public ParticleSystem particleSystem;
@@ -42,10 +44,14 @@ public class AOEGenerator : MonoBehaviour {
 		this.delayTimer = this.delay;
 
 		if (delay <= 0) began = true;
+		initialized = true;
+
 	}
 
     // Update is called once per frame
     private void Update() {
+		if (!isServer || !initialized) return;
+
 		// DELAY BEFORE BEGINNING
 		if (delayTimer > 0) {
 			delayTimer -= Time.deltaTime;
@@ -99,7 +105,7 @@ public class AOEGenerator : MonoBehaviour {
 	}
 
 	private void End() {
-		Destroy(this.gameObject);
+		NetworkServer.Destroy(this.gameObject);
 	}
 
 	private static IAoeGeneratorAbility GetIAoeGeneratorAbility(Ability abi) {

@@ -26,8 +26,8 @@ MonoBehaviour:
   targetType: 2
   targetTeam: 0
   damageType: 1
-  damage: 50
-  cooldown: 1
+  damage: 75
+  cooldown: 0.3
   castRange: 100
   castTime: 0
   duration: 0

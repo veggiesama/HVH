@@ -17,7 +17,7 @@ MonoBehaviour:
   healthRegen: 1
   armor: 0
   resist: 0
-  movementSpeed: 9
+  movementSpeed: 7
   turnRate: 960
   size: 1
   daySightRange: 30
@@ -51,3 +51,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   animationPrefab: {fileID: 2048578494338918473, guid: b4d95473cafa7ab4fbbaebd9ae0302d0,
     type: 3}
+  hasAI: 0
+  aiStatesDay: []
+  aiStatesNight: []
+  aiUpdateEvery: 0.2

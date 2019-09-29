@@ -17,7 +17,7 @@ MonoBehaviour:
   healthRegen: 0
   armor: 0
   resist: 0
-  movementSpeed: 5
+  movementSpeed: 5.5
   turnRate: 960
   size: 1
   daySightRange: 30
