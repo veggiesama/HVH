@@ -19,4 +19,10 @@ public struct NetworkStatusEffect {
 		this.duration = duration;
 		//this.remainingTime = remainingTime;
 	}
+
+	public void UpdateTimers(double startTime, float duration) {
+		this.startTime = startTime;
+		this.duration = duration;
+	}
+
 }

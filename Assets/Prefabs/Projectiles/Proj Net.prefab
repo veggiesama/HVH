@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 2247685987280142912}
   - component: {fileID: 114458676726121546}
   - component: {fileID: -4931150740310574655}
-  m_Layer: 0
-  m_Name: Net body
+  m_Layer: 26
+  m_Name: Proj Net
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -115,7 +115,7 @@ SkinnedMeshRenderer:
   m_RootBone: {fileID: 0}
   m_AABB:
     m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 5, y: 1.110223e-16, z: 5}
+    m_Extent: {x: 2, y: 1.110223e-17, z: 2}
   m_DirtyAABB: 0
 --- !u!183 &2247685987280142912
 Cloth:
@@ -408,6 +408,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7255e590255482429223b187be303bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   rotationalSpeed: 250
 --- !u!114 &-4931150740310574655
 MonoBehaviour:
@@ -423,8 +425,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serverOnly: 0
   localPlayerAuthority: 1
-  m_AssetId: 
-  m_SceneId: 113076514
+  m_AssetId: 048b36c36f0f2ab428f5cef029e931c4
+  m_SceneId: 0
 --- !u!1 &3381076855299590612
 GameObject:
   m_ObjectHideFlags: 0

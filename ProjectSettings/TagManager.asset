@@ -34,11 +34,11 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Body (Ignoring Trees)
   - Body
   - Body_Ragdoll
   - Body_Selectable
-  - 
+  - Projectile
   - 
   - 
   - HideFromGame

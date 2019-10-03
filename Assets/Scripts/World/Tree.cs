@@ -103,15 +103,6 @@ public class Tree : MonoBehaviour {
 		);
 	}
 
-	public void OnTriggerEnter(Collider col) {
-		//Debug.Log("Tree triggered by: " + col.gameObject.name);
-		GameObject go = col.gameObject;
-
-		if (Util.IsBody(go)) {
-			go.GetComponent<BodyController>().onCollidedTree.Invoke(this);
-		}	
-	}
-
 	public Vector3 GetAnchorPoint() {
 		return anchorGO.transform.position;
 	}

@@ -36,7 +36,7 @@ public class Flare : Ability, IAoeGeneratorAbility {
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
 		Vector3 casterHead = Util.GetBodyLocationTransform(BodyLocations.HEAD, caster).position;
-		InstantiateParticle(particleLaunch, casterHead, particleLaunch.transform.rotation);
+		InstantiateParticleAtLocation(particleLaunch, casterHead, particleLaunch.transform.rotation);
 		//var aoeGenerator = Instantiate(aoeGeneratorPrefab, castOrder.targetLocation, default, caster.transform).GetComponent<AOEGenerator>();
 		//aoeGenerator.Initialize(caster, this);
 

@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class AOEGenerator : NetworkBehaviour {
 	private float reappliesEvery;
 	private StatusEffect[] statusEffects;
@@ -78,7 +82,8 @@ public class AOEGenerator : NetworkBehaviour {
     }
 
 	private void Begin() {
-		networkHelper.InstantiateParticle(particlePrefab, transform.position, transform.rotation, sourceAbility.duration);
+		NetworkParticle np = new NetworkParticle(particlePrefab.name, transform.position, transform.rotation, sourceAbility.duration, sourceAbility.aoeRadius);
+		networkHelper.InstantiateParticle(np);
 		Pulse();
 	}
 
@@ -117,4 +122,11 @@ public class AOEGenerator : NetworkBehaviour {
 		}
 	}
 
+	#if UNITY_EDITOR
+	private void OnDrawGizmos() {
+		if (!initialized || !began) return;
+		Gizmos.color = Color.yellow;
+		Gizmos.DrawWireSphere(transform.position, sourceAbility.aoeRadius);
+	}
+	#endif
 }

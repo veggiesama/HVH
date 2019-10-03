@@ -119,7 +119,7 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 	}
 
 	protected bool HasControllableAuthority() {
-		return networkHelper.HasControllableAuthority();
+		return (networkHelper != null && networkHelper.HasControllableAuthority());
 	}
 
 }

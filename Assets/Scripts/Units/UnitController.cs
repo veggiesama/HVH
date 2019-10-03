@@ -639,6 +639,7 @@ public class UnitController : MonoBehaviour {
 		body.ResetBody();
 		EnableNav(true);
 		AttachToNav();
+		networkHelper.PlayAnimation(Animations.RESPAWN);
 	}
 
 	public void SetHighlighted(HighlightingState state) {

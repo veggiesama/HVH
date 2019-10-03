@@ -31,7 +31,7 @@ MonoBehaviour:
   castRange: 30
   castTime: 0.3
   duration: 6
-  aoeRadius: 4
+  aoeRadius: 6
   quickCast: 0
   doNotCancelOrderQueue: 0
   durationRemaining: 0

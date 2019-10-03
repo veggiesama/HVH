@@ -25,7 +25,7 @@ public class Warn : Ability {
 		CastResults baseCastResults = base.Cast(castOrder);
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
-		caster.body.PlayAnimation(Animations.CAST_B);
+		PlayAnimation(Animations.CAST_B);
 
 		return CastResults.SUCCESS;
 	}

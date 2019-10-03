@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 135742775047708344}
   - component: {fileID: 114050759290562058}
   - component: {fileID: -5373581833008916727}
-  m_Layer: 0
-  m_Name: Bullet (FirePoint)
+  m_Layer: 26
+  m_Name: Proj Bullet (FirePoint)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,6 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46412b52b5b8fb148a914a6a7c940c9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!114 &-5373581833008916727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,8 +141,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serverOnly: 0
   localPlayerAuthority: 1
-  m_AssetId: 
-  m_SceneId: 2136494695
+  m_AssetId: 048b36c36f0f2ab428f5cef029e931c4
+  m_SceneId: 0
 --- !u!1 &2609005283025940434
 GameObject:
   m_ObjectHideFlags: 0

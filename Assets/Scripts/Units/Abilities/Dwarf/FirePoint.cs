@@ -44,28 +44,25 @@ public class FirePoint : Ability, IProjectileAbility {
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
 		CreateProjectile(this, castOrder);
-		InstantiateParticle(gunsmokePrefab, caster, BodyLocations.WEAPON);
-		InstantiateParticle(muzzleFlashPrefab, caster, BodyLocations.WEAPON);
+		InstantiateParticleOnUnit(gunsmokePrefab, caster, BodyLocations.WEAPON);
+		InstantiateParticleOnUnit(muzzleFlashPrefab, caster, BodyLocations.WEAPON);
 
 		return CastResults.SUCCESS;
 	}
 
-	public bool OnHitEnemy(UnitController unit)
-	{
+	public bool OnHitEnemy(UnitController unit) {
 		networkHelper.DealDamageTo(unit, damage);
-		networkHelper.InstantiateParticle(impactHitPrefab, unit, BodyLocations.HEAD);
+		InstantiateParticleOnUnit(impactHitPrefab, unit, BodyLocations.HEAD);
 		return true;
 	}
 
-	public bool OnHitAlly(UnitController unit)
-	{
+	public bool OnHitAlly(UnitController unit) {
 		networkHelper.DealDamageTo(unit, damage / 2);
-		networkHelper.InstantiateParticle(impactHitPrefab, unit, BodyLocations.HEAD);
+		InstantiateParticleOnUnit(impactHitPrefab, unit, BodyLocations.HEAD);
 		return true;
 	}
 
-	public bool OnHitTree(Tree tree)
-	{
+	public bool OnHitTree(Tree tree) {
 		return false;
 	}
 

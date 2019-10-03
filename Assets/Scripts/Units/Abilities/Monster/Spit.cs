@@ -38,7 +38,7 @@ public class Spit : Ability {
 
 		networkHelper.ApplyStatusEffectTo(enemyTarget, slowStatusEffect, this);
 		networkHelper.DealDamageTo(enemyTarget, damage);
-		networkHelper.InstantiateParticle(particlePrefab, enemyTarget, BodyLocations.HEAD);
+		InstantiateParticleOnUnit(particlePrefab, enemyTarget, BodyLocations.HEAD);
 
 		return CastResults.SUCCESS;
 	}

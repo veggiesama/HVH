@@ -23,4 +23,4 @@ MonoBehaviour:
   overrideAbilityDuration: 0
   hideIcon: 0
   dispellable: 0
-  airbornClippingType: 1
+  airbornClippingType: 2

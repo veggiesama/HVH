@@ -31,15 +31,17 @@ public enum CastResults {
 
 // Layers
 public enum LayerBits {
-	TERRAIN = 16, TREE = 17, BODY = 23, BODY_RAGDOLL = 24, BODY_SELECTABLE = 25
+	PHYSICS_NOCLIP = 9, TERRAIN = 16, TREE = 17, BODY_IGNORINGTREES = 22, BODY = 23, BODY_RAGDOLL = 24, BODY_SELECTABLE = 25
 }
 
 public enum LayerMasks {
-	TERRAIN = 1			<< LayerBits.TERRAIN,
-	TREE = 1			<< LayerBits.TREE,
-	BODY = 1			<< LayerBits.BODY,
-	BODY_RAGDOLL = 1	<< LayerBits.BODY_RAGDOLL,
-	BODY_SELECTABLE = 1 << LayerBits.BODY_SELECTABLE
+	PHYSICS_NOCLIP = 1		<< LayerBits.PHYSICS_NOCLIP,
+	TERRAIN = 1				<< LayerBits.TERRAIN,
+	TREE = 1				<< LayerBits.TREE,
+	BODY_IGNORINGTREES = 1	<< LayerBits.BODY_IGNORINGTREES,
+	BODY = 1				<< LayerBits.BODY,
+	BODY_RAGDOLL = 1		<< LayerBits.BODY_RAGDOLL,
+	BODY_SELECTABLE = 1		<< LayerBits.BODY_SELECTABLE
 }
 
 // UI slots

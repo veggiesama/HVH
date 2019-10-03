@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 using Mirror;
 
 [System.Serializable]
-public class UiStatusEffect : MonoBehaviour {
+public class UiStatusEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 	private string statusName;
 	private TMP_Text timerText;
 	private Image icon;
@@ -41,6 +42,11 @@ public class UiStatusEffect : MonoBehaviour {
 		}
 	}
 
+	public void UpdateTimers(double startTime, float duration) {
+		this.startTime = startTime;
+		this.duration = duration;
+	}
+
 	bool HasDuration() {
 		return (duration != 0f);
 	}
@@ -65,7 +71,7 @@ public class UiStatusEffect : MonoBehaviour {
         //        t.Minutes, 
         //        t.Seconds);
 
-		if (HasDuration()) {
+		if (!HasDuration()) {
 			timerText.text = "";
 		}
 
@@ -81,6 +87,16 @@ public class UiStatusEffect : MonoBehaviour {
 			string seconds = string.Format("{0:D}s", secs);
 			timerText.text = minutes + seconds;
 		}
+	}
+
+	//TODO: fix bug: when status effect is destroyed, tooltip stays enabled screen until next EnableTooltip
+	public void OnPointerEnter(PointerEventData eventData) {
+		Tooltip.Instance.EnableTooltip(true);
+		Tooltip.Instance.SetName(statusName);
+	}
+
+	public void OnPointerExit(PointerEventData eventData) {
+		Tooltip.Instance.EnableTooltip(false);
 	}
 
 

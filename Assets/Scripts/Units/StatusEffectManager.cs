@@ -44,12 +44,14 @@ public class StatusEffectManager : MonoBehaviour {
 		if (!networkHelper.HasControllableAuthority()) return;
 
  		var existingStatus = GetStatusEffect(status.statusName);
-		if(existingStatus)
+		if(existingStatus) {
 			existingStatus.Stack(status);
+			networkHelper.StackStatusEffect(status);
+		}
 		else {
 			statusEffectList.Add(status);
 			status.Apply(); // new
-			networkHelper.TrackStatus(status);
+			networkHelper.AddStatusEffect(status);
 		}
 	}
 

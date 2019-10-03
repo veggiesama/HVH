@@ -134,6 +134,10 @@ public abstract class Ability : ScriptableObject {
 		return isEmptyAbility;
 	}
 
+	public virtual void PlayAnimation(Animations anim) {
+		networkHelper.PlayAnimation(anim);
+	}
+
 	public virtual void CreateProjectile(Ability ability, Order castOrder) {
 		networkHelper.CreateProjectile(ability, castOrder);
 	}
@@ -142,12 +146,14 @@ public abstract class Ability : ScriptableObject {
 		networkHelper.CreateAOEGenerator(ability, castOrder);
 	}
 
-	public virtual void InstantiateParticle(GameObject prefab, UnitController unit, BodyLocations loc, float duration = 0f) {
-		networkHelper.InstantiateParticle(prefab, unit, loc, duration);
+	public virtual void InstantiateParticleOnUnit(GameObject prefab, UnitController unit, BodyLocations loc, float duration = 0f, float radius = 0f) {
+		NetworkParticle np = new NetworkParticle(prefab.name, unit.networkHelper.netId, (int) loc, duration, radius);
+		networkHelper.InstantiateParticle(np);
 	}
 
-	public virtual void InstantiateParticle(GameObject prefab, Vector3 location, Quaternion rotation, float duration = 0f) {
-		networkHelper.InstantiateParticle(prefab, location, rotation, duration);
+	public virtual void InstantiateParticleAtLocation(GameObject prefab, Vector3 location, Quaternion rotation, float duration = 0f, float radius = 0f) {
+		NetworkParticle np = new NetworkParticle(prefab.name, location, rotation, duration, radius);
+		networkHelper.InstantiateParticle(np);
 	}
 
 	public bool IsPassive() {

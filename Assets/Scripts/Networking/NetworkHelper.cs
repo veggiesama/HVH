@@ -18,8 +18,7 @@ public class NetworkHelper : NetworkBehaviour {
 	[SyncVar] public bool isUnassigned = true;
 	
 	public NetworkStatusEffectSyncList networkStatusEffects = new NetworkStatusEffectSyncList();
-	public UnityEventNetworkStatusEffect onRemoveNetworkStatusEffect;
-	public UnityEventNetworkStatusEffect onAddNetworkStatusEffect;
+	public UnityEventNetworkStatusEffect onUpdateNetworkStatusEffect;
 
 	void Awake() {
 		owner = GetComponent<Owner>();
@@ -138,16 +137,6 @@ public class NetworkHelper : NetworkBehaviour {
 		}
 	}
 
-	public void DestroyProjectile(GameObject projectileObject) {
-		Cmd_DestroyProjectile(projectileObject);
-	}
-
-	[Command]
-	private void Cmd_DestroyProjectile(GameObject projectileObject) {
-		if (projectileObject != null)
-			NetworkServer.Destroy(projectileObject);
-	}
-
 	// DUMMIES / AOE GENERATORS
 
 	public void CreateAOEGenerator(Ability ability, Order castOrder) {
@@ -248,22 +237,37 @@ public class NetworkHelper : NetworkBehaviour {
 		return false;
 	}
 
-	public void TrackStatus(StatusEffect status) {
+	public void AddStatusEffect(StatusEffect status) {
 		NetworkStatusEffect nse = new NetworkStatusEffect(status.statusName, (int)status.type, NetworkTime.time, status.duration);
-		Cmd_TrackStatus(nse);
+		Cmd_AddStatusEffect(nse);
 	}
 
 	[Command]
-	private void Cmd_TrackStatus(NetworkStatusEffect nse) {
+	private void Cmd_AddStatusEffect(NetworkStatusEffect nse) {
 		networkStatusEffects.Add(nse);
-		Rpc_InvokeAddNetworkStatusEffect(nse);
+	}
+
+	public void StackStatusEffect(StatusEffect status) {
+		NetworkStatusEffect nse = new NetworkStatusEffect(status.statusName, (int)status.type, NetworkTime.time, status.duration);
+		Cmd_StackStatusEffect(nse);
+	}
+
+	[Command]
+	private void Cmd_StackStatusEffect(NetworkStatusEffect nse) {
+		for (int i = 0; i < networkStatusEffects.Count; i++) {
+			if (networkStatusEffects[i].statusName == nse.statusName) {
+				networkStatusEffects[i].UpdateTimers(nse.startTime, nse.duration);
+				break;
+			}
+		}
+		Rpc_InvokeUpdateNetworkStatusEffect(nse);
 	}
 
 	[ClientRpc]
-	private void Rpc_InvokeAddNetworkStatusEffect(NetworkStatusEffect nse) {
-		onAddNetworkStatusEffect.Invoke(nse);
+	private void Rpc_InvokeUpdateNetworkStatusEffect(NetworkStatusEffect nse) {
+		onUpdateNetworkStatusEffect.Invoke(nse);
 	}
-	
+
 	public void StopTrackingStatus(string statusName) {
 		Cmd_StopTrackingStatus(statusName);
 	}
@@ -273,17 +277,10 @@ public class NetworkHelper : NetworkBehaviour {
 		foreach (NetworkStatusEffect status in networkStatusEffects) {
 			if (status.statusName == statusName) {
 				networkStatusEffects.Remove(status);
-				Rpc_InvokeRemoveNetworkStatusEffect(status);
 				return;
 			}
 		}
 	}
-
-	[ClientRpc]
-	private void Rpc_InvokeRemoveNetworkStatusEffect(NetworkStatusEffect nse) {
-		onRemoveNetworkStatusEffect.Invoke(nse);
-	}
-
 	/*
 	public void UpdateNetworkStatusSyncListDurations() {
 		for (int i = 0; i < networkStatusEffects.Count; i++) {
@@ -414,14 +411,42 @@ public class NetworkHelper : NetworkBehaviour {
 	}
 
 	// PARTICLES
-	public void InstantiateParticle(GameObject prefab, UnitController unit, BodyLocations loc, float duration = 0f) {
-		if (!IsValidParticle(prefab.name)) return;
-		Cmd_InstantiateParticleOnUnit(prefab.name, unit.owner.gameObject, (int)loc, duration);
+	public void InstantiateParticle(NetworkParticle np) {
+		if (!IsValidParticle(np.prefabName)) return;
+		Cmd_InstantiateParticle(np);
 	}
 
-	public void InstantiateParticle(GameObject prefab, Vector3 location, Quaternion rotation, float duration = 0f) {
-		if (!IsValidParticle(prefab.name)) return;
-		Cmd_InstantiateParticleAtLocation(prefab.name, location, rotation, duration);
+	[Command]
+	private void Cmd_InstantiateParticle(NetworkParticle np) {
+		Rpc_InstantiateParticle(np);
+	}
+
+	[ClientRpc]
+	private void Rpc_InstantiateParticle(NetworkParticle np) {
+		GameObject prefab = ResourceLibrary.Instance.particlePrefabDictionary[np.prefabName];
+
+		GameObject particleSystemGO;
+		if (np.TargetsUnit()) {
+			NetworkIdentity ownerNetId = NetworkIdentity.spawned[np.unitNetId];
+			Owner o = ownerNetId.GetComponent<Owner>();
+			Transform trans = Util.GetBodyLocationTransform((BodyLocations)np.bodyLocationInt, o.unit);
+			particleSystemGO = Instantiate(prefab, trans.position + prefab.transform.position, trans.rotation * prefab.transform.rotation, trans);
+		}
+		else if (np.TargetsWorldspace()) {
+			particleSystemGO = Instantiate(prefab, np.location, np.rotation);
+		}
+		else {
+			Debug.Log("Error in NetworkParticle");
+			return;
+		}
+
+		if (np.OverridesScale()) {
+			OverrideParticleScale(particleSystemGO, np.radius);
+		}
+
+		if (np.OverridesDuration()) {
+			OverrideParticleChildrenDuration(particleSystemGO, np.duration);
+		}
 	}
 
 	private bool IsValidParticle(string prefabName) {
@@ -433,39 +458,6 @@ public class NetworkHelper : NetworkBehaviour {
 		else return true;
 	}
 
-
-	[Command]
-	private void Cmd_InstantiateParticleOnUnit(string particlePrefabName, GameObject ownerGO, int bodyLocation, float duration) {
-		Rpc_InstantiateParticleOnUnit(particlePrefabName, ownerGO, bodyLocation, duration);
-	}
-
-	[Command]
-	private void Cmd_InstantiateParticleAtLocation(string particlePrefabName, Vector3 location, Quaternion rotation, float duration) {
-		Rpc_InstantiateParticleAtLocation(particlePrefabName, location, rotation, duration);
-	}
-
-	[ClientRpc]
-	private void Rpc_InstantiateParticleOnUnit(string particlePrefabName, GameObject ownerGO, int bodyLocation, float duration) {
-		GameObject prefab = ResourceLibrary.Instance.particlePrefabDictionary[particlePrefabName];
-		Owner o = ownerGO.GetComponent<Owner>();
-		Transform trans = Util.GetBodyLocationTransform((BodyLocations)bodyLocation, o.unit);
-		GameObject particleSystemGO = Instantiate(prefab, trans.position + prefab.transform.position, trans.rotation * prefab.transform.rotation, trans);
-
-		if (duration != 0f) {
-			OverrideParticleChildrenDuration(particleSystemGO, duration);
-		}
-	}
-
-	[ClientRpc]
-	private void Rpc_InstantiateParticleAtLocation(string particlePrefabName, Vector3 location, Quaternion rotation, float duration) {
-		GameObject prefab = ResourceLibrary.Instance.particlePrefabDictionary[particlePrefabName];
-		GameObject particleSystemGO = Instantiate(prefab, location, rotation);
-
-		if (duration != 0f) {
-			OverrideParticleChildrenDuration(particleSystemGO, duration);
-		}
-	}
-
 	private void OverrideParticleChildrenDuration(GameObject particleSystemGO, float newDuration) {
 		ParticleSystem[] psArray = particleSystemGO.GetComponentsInChildren<ParticleSystem>();
 		foreach (ParticleSystem ps in psArray) {
@@ -474,6 +466,14 @@ public class NetworkHelper : NetworkBehaviour {
 			main.duration = newDuration;
 			ps.Play();
 		}
+	}
+
+	private void OverrideParticleScale(GameObject particleSystemGO, float newScale) {
+		ParticleSystem ps = particleSystemGO.GetComponent<ParticleSystem>();
+		ps.Stop();
+		var shape = ps.shape;
+		shape.scale = new Vector3(newScale, newScale, newScale);
+		ps.Play();
 	}
 
 	// VISIBILITY
@@ -548,6 +548,23 @@ public class NetworkHelper : NetworkBehaviour {
 			smoothBody.whenToUpdateTransform = SmoothSyncMirror.WhenToUpdateTransform.FixedUpdate;
 		else
 			smoothBody.whenToUpdateTransform = SmoothSyncMirror.WhenToUpdateTransform.Update;
+	}
+
+	// ANIMATION
+	public void PlayAnimation(Animations anim) {
+		int nAnim = (int) anim;
+		Cmd_PlayAnimation(nAnim);
+	}
+
+	[Command]
+	private void Cmd_PlayAnimation(int nAnim) {
+		Rpc_PlayAnimation(nAnim);
+	}
+
+	[ClientRpc]
+	private void Rpc_PlayAnimation(int nAnim) {
+		Animations anim = (Animations) nAnim;
+		unit.body.PlayAnimation(anim);
 	}
 
 	// SCENE MANAGEMENT

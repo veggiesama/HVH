@@ -29,7 +29,7 @@ public class Cast : Order {
 		if (ability.castTime > 0) {
 			unit.ForceStop();
 			EnableCastbar(true);
-			unit.body.PlayAnimation(Animations.CAST_A);
+			unit.networkHelper.PlayAnimation(Animations.CAST_A);
 
 			currentTimer = ability.castTime;
 		}

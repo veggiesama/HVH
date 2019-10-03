@@ -4,9 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
-
-public class AbilityButtonInfo : MonoBehaviour {
+public class AbilityButtonInfo : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
 	public AbilitySlots abilitySlot;
 
@@ -134,4 +134,13 @@ public class AbilityButtonInfo : MonoBehaviour {
 		return "";
 	}
 
+	public void OnPointerEnter(PointerEventData eventData) {
+		if (ability == null) return;
+		Tooltip.Instance.EnableTooltip(true);
+		Tooltip.Instance.SetName(ability.abilityName);
+	}
+
+	public void OnPointerExit(PointerEventData eventData) {
+		Tooltip.Instance.EnableTooltip(false);
+	}
 }

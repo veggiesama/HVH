@@ -24,8 +24,7 @@ public class Airborn : StatusEffect {
 		base.Initialize(obj, ability);
 	}
 
-	public override void Apply()
-	{
+	public override void Apply() {
 		base.Apply();
 		unit.DetachFromNav();
 		unit.SetVision(VisionType.FLYING);
@@ -35,21 +34,33 @@ public class Airborn : StatusEffect {
 				unit.body.SetNoclip();
 				break;
 			case AirbornClippingTypes.TREE_CLIP:
+				unit.body.SetTreeClip();
 				break;
 			case AirbornClippingTypes.TREE_DESTROY:
-				unit.body.onCollidedTree.AddListener(OnCollidedTree); // sub
+				unit.body.SetTreeClip();
 				break;
 		}
 	}
 
-	void OnCollidedTree(Tree tree) {
+	public override void Update() {
+		base.Update(); // tracks duration
+
+		if (airbornClippingType == AirbornClippingTypes.TREE_DESTROY) {
+			Collider[] colliders = Physics.OverlapSphere(unit.GetBodyPosition(), 2.0f, (int)LayerMasks.TREE);
+			foreach (Collider col in colliders) {
+				if (Util.IsTree(col.gameObject)) {
+					Tree tree = col.gameObject.GetComponent<Tree>();
+					DestroyTree(tree);
+				}
+			}
+
+		}
+	}
+
+	void DestroyTree(Tree tree) {
 		if (alreadyTriggeredList.Contains(tree)) return;
 		alreadyTriggeredList.Add(tree);
 		networkHelper.DestroyTree(tree, unit.GetBodyPosition(), 0f);
-	}
-
-	public override void Update() {
-		base.Update(); // tracks duration
 	}
 
 	public override void FixedUpdate() {}
@@ -60,7 +71,6 @@ public class Airborn : StatusEffect {
 
 	public override void End() {
 		unit.SetVision(VisionType.NORMAL);
-		unit.body.onCollidedTree.RemoveListener(OnCollidedTree); // unsub
 
 		if (!unit.HasStatusEffect(StatusEffectTypes.DEAD)) {
 			unit.AttachToNav();

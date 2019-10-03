@@ -44,7 +44,7 @@ MonoBehaviour:
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
   grenadeLerpTimeByCastRange: 0
-  nightMoveSpeedBonus: 5
+  nightMoveSpeedBonus: 2
   nightSwipeCooldownReduction: 0.5
   invisDelay: 3
   invisDelayAfterDamage: 2

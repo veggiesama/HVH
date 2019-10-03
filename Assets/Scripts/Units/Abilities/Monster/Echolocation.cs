@@ -46,7 +46,7 @@ public class Echolocation : Ability, IProjectileAbility {
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
 		CreateProjectile(this, castOrder);
-		InstantiateParticle(particleWaves, caster, BodyLocations.MOUTH);
+		InstantiateParticleOnUnit(particleWaves, caster, BodyLocations.MOUTH);
 
 		return CastResults.SUCCESS;
 	}

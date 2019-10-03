@@ -38,7 +38,7 @@ public class Shriek : Ability {
 
 		networkHelper.ApplyStatusEffectTo(enemyTarget, silenceStatusEffect, this);
 		//networkHelper.CreateProjectile(this, castOrder);
-		networkHelper.InstantiateParticle(particlePrefab, enemyTarget, BodyLocations.FEET, duration);
+		InstantiateParticleOnUnit(particlePrefab, enemyTarget, BodyLocations.FEET, duration);
 		return CastResults.SUCCESS;
 	}
 }

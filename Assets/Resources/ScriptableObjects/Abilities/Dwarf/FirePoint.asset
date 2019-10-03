@@ -40,7 +40,7 @@ MonoBehaviour:
   projectileSpawner: 3
   projectileBehaviour: 1
   projectileSpeed: 50
-  projectileTimeAlive: 10
+  projectileTimeAlive: 0.5
   projectileTimeUntilFullGrowth: 0
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0

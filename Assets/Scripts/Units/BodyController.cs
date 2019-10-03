@@ -37,7 +37,6 @@ public class BodyController : MonoBehaviour {
 	private Vector3 lastPosition = Vector3.zero;
 	private float updateAnimationSpeedFloatEvery = 0.1f;
 
-	public UnityEventTree onCollidedTree;
 	public UnityEventCollision onCollidedTerrain;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,20 +124,7 @@ public class BodyController : MonoBehaviour {
 
 	// performances
 	public void PerformDeath(Vector3 killedFromDirection) {
-		//rb.isKinematic = false;
-		//rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-
-
-
-		//rb.AddForce(Vector3.up * upwardMagnitude);
-		//if (!Util.IsNullVector(killedFromDirection))
-		//	rb.AddForce((transform.position - killedFromDirection).normalized * impactMagnitude);
-		
-		//PlayAnimation(Animations.DIE);
-
 		EnableRagdoll(true);
-		//bodyCollider.enabled = false;
-
 		float upwardMagnitude = Random.Range(50f, 150f);
 		float impactMagnitude = 400f;
 		AddForceToRagdoll(killedFromDirection, upwardMagnitude, impactMagnitude);
@@ -175,11 +161,15 @@ public class BodyController : MonoBehaviour {
 	//}
 
 	public void SetNoclip() {
-		gameObject.layer = LayerMask.NameToLayer("PhysicsNoclip"); 
+		gameObject.layer = (int)LayerBits.PHYSICS_NOCLIP;
 	}
 
 	public void SetDefaultClip() {
-		gameObject.layer = LayerMask.NameToLayer("Body");
+		gameObject.layer = (int)LayerBits.BODY;
+	}
+
+	public void SetTreeClip() {
+		gameObject.layer = (int)LayerBits.BODY_IGNORINGTREES;
 	}
 
 	public void ResetBody() {
@@ -190,7 +180,6 @@ public class BodyController : MonoBehaviour {
 			RigidbodyConstraints.FreezeRotationZ;
 		rb.isKinematic = true;
 		SetDefaultClip();
-		PlayAnimation(Animations.RESPAWN);
 	}
 
 	public void FixedUpdate_ForceTurn(Vector3 targetPosition) {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
 [System.Serializable]
 public class UiPortrait {
@@ -65,11 +66,26 @@ public class UiPortrait {
 	public void RemoveStatusEffect(NetworkStatusEffect nse) {
 		var transforms = statusEffectContainer.GetComponentsInChildren<Transform>();
 		for (int i = 0; i < transforms.Length; i++) {
-			if (transforms[i] == statusEffectContainer.transform) continue;
+			if (transforms[i] == statusEffectContainer.transform) continue; // don't include the container itself
 
 			var se = transforms[i].GetComponent<UiStatusEffect>();
 			if (se != null && nse.statusName == se.GetStatusName()) {
 				GameObject.Destroy(transforms[i].gameObject);
+				break;
+			}
+		}
+	}
+
+	public void UpdateStatusEffect(NetworkStatusEffect nse) {
+		//Debug.Log("NSE: Update");
+
+		var transforms = statusEffectContainer.GetComponentsInChildren<Transform>();
+		for (int i = 0; i < transforms.Length; i++) {
+			if (transforms[i] == statusEffectContainer.transform) continue; // don't include the container itself
+
+			var se = transforms[i].GetComponent<UiStatusEffect>();
+			if (se != null && nse.statusName == se.GetStatusName()) {
+				se.UpdateTimers(nse.startTime, nse.duration);
 				break;
 			}
 		}
@@ -99,8 +115,8 @@ public class UiPortrait {
 	private void SetPortraitRegistration(UnitController target, bool enabled) {
 		if (enabled) {
 			SetPortraitCamera(target);
-			target.networkHelper.onAddNetworkStatusEffect.AddListener(AddStatusEffect);
-			target.networkHelper.onRemoveNetworkStatusEffect.AddListener(RemoveStatusEffect);
+			target.networkHelper.networkStatusEffects.Callback += StatusEffectCallback;
+			target.networkHelper.onUpdateNetworkStatusEffect.AddListener(UpdateStatusEffect);
 
 			foreach (NetworkStatusEffect nse in target.networkHelper.networkStatusEffects) {
 				AddStatusEffect(nse);
@@ -109,9 +125,37 @@ public class UiPortrait {
 
 		else {
 			SetPortraitCamera(null);
-			target.networkHelper.onAddNetworkStatusEffect.RemoveListener(AddStatusEffect);
-			target.networkHelper.onRemoveNetworkStatusEffect.RemoveListener(RemoveStatusEffect);
+			target.networkHelper.networkStatusEffects.Callback -= StatusEffectCallback;
 			ClearStatusEffects();
+		}
+
+	}
+
+	private void StatusEffectCallback(NetworkStatusEffectSyncList.Operation op, int index, NetworkStatusEffect nse) {
+		//Debug.Log("NSE: " + System.Enum.GetName(typeof(NetworkStatusEffectSyncList.Operation), op));
+
+		switch (op) {
+			case NetworkStatusEffectSyncList.Operation.OP_ADD:
+				AddStatusEffect(nse);
+				break;
+			case NetworkStatusEffectSyncList.Operation.OP_CLEAR:
+				ClearStatusEffects();
+				break;
+			case NetworkStatusEffectSyncList.Operation.OP_INSERT:
+				AddStatusEffect(nse);
+				break;
+			case NetworkStatusEffectSyncList.Operation.OP_REMOVE:
+				RemoveStatusEffect(nse);
+				break;
+			case NetworkStatusEffectSyncList.Operation.OP_REMOVEAT:
+				RemoveStatusEffect(nse);
+				break;
+			case NetworkStatusEffectSyncList.Operation.OP_SET:
+				//UpdateStatusEffect(nse);
+				break;
+			case NetworkStatusEffectSyncList.Operation.OP_DIRTY:
+				//UpdateStatusEffect(nse);
+				break;
 		}
 
 	}

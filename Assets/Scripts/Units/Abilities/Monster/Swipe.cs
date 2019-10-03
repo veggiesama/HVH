@@ -40,8 +40,8 @@ public class Swipe : Ability, IProjectileAbility {
 		if (baseCastResults != CastResults.SUCCESS) return baseCastResults;
 
 		CreateProjectile(this, castOrder);
-		networkHelper.InstantiateParticle(particleSlash, caster, BodyLocations.MOUTH);
-		caster.body.PlayAnimation(Animations.ATTACK_A);
+		InstantiateParticleOnUnit(particleSlash, caster, BodyLocations.MOUTH);
+		PlayAnimation(Animations.ATTACK_A);
 
 		return CastResults.SUCCESS;
 	}
@@ -65,19 +65,18 @@ public class Swipe : Ability, IProjectileAbility {
 	public bool OnHitEnemy(UnitController unit)
 	{ 
 		networkHelper.DealDamageTo(unit, damage);
-		networkHelper.InstantiateParticle(particleBloodImpact, unit, BodyLocations.HEAD);
+		InstantiateParticleOnUnit(particleBloodImpact, unit, BodyLocations.HEAD);
 		return false;
 	}
 
 	public bool OnHitAlly(UnitController unit)
 	{
 		networkHelper.DealDamageTo(unit, damage / 2);
-		networkHelper.InstantiateParticle(particleBloodImpact, unit, BodyLocations.HEAD);
+		InstantiateParticleOnUnit(particleBloodImpact, unit, BodyLocations.HEAD);
 		return false;
 	}
 
-	public bool OnHitTree(Tree tree)
-	{
+	public bool OnHitTree(Tree tree) {
 		networkHelper.DestroyTree(tree, caster.GetBodyPosition(), 0);
 		return false;
 	}

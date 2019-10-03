@@ -40,7 +40,7 @@ public class SleepBuff : StatusEffect {
 
 		unit.ForceStop();
 		unit.ApplyStatusEffect(invisStatus);
-		unit.body.PlayAnimation(Animations.LAYDOWN);
+		unit.networkHelper.PlayAnimation(Animations.LAYDOWN);
 	}
 
 	public override void Update() {
@@ -55,7 +55,7 @@ public class SleepBuff : StatusEffect {
 	}
 
 	public override void End() {
-		unit.body.PlayAnimation(Animations.WAKEUP);
+		unit.networkHelper.PlayAnimation(Animations.WAKEUP);
 		unit.RemoveStatusEffect(invisStatus);
 		base.End();
 	}
