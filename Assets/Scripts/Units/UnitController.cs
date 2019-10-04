@@ -25,6 +25,7 @@ public class UnitController : MonoBehaviour {
 	public UnitInfo unitInfo;
 	public AiManager aiManager;
 
+	[HideInInspector] public UnityEventHealth onHealthChanged;
 	[HideInInspector] public UnityEventDamage onTakeDamage;
 	[HideInInspector] public UnityEventDamage onTakeHealing;
 	[HideInInspector] public UnityEvent onMoved;
@@ -627,12 +628,10 @@ public class UnitController : MonoBehaviour {
 		body.PerformDeath(killFromDirection);
 	}
 
-	public void Respawn(bool serverCalled = false) {
-		if (!serverCalled) networkHelper.Respawn();
-		else Debug.Log("Server is not supposed to call this.");
+	public void Respawn() {
+		networkHelper.Respawn();
 	}
 
-	// server-only
 	public void RespawnAt(Vector3 position, Quaternion rotation) {
 		body.transform.SetPositionAndRotation(position, rotation);
 		//networkHelper.SyncTeleport(position, rotation, body.transform.localScale);
@@ -668,6 +667,10 @@ public class UnitController : MonoBehaviour {
 
 	public void DealDamageTo(UnitController targetUnit, float dmg) {
 		networkHelper.DealDamageTo(targetUnit, dmg);
+	}
+
+	public void OnHealthChanged(float newPercentage) {
+		onHealthChanged.Invoke(newPercentage);
 	}
 
 	public void OnTakeDamage(float dmg) {

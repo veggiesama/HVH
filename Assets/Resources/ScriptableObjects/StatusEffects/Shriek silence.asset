@@ -19,7 +19,7 @@ MonoBehaviour:
   statusName: Shriek silence
   icon: {fileID: 21300000, guid: 91fad09382d6d401b98c49052882e017, type: 3}
   type: 6
-  duration: 3
+  duration: 0
   overrideAbilityDuration: 0
   hideIcon: 0
   dispellable: 0

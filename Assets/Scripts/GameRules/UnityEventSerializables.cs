@@ -17,6 +17,9 @@ public class UnityEventCollision : UnityEvent <Collision> {}
 public class UnityEventDamage : UnityEvent <float> {}
 
 [System.Serializable]
+public class UnityEventHealth : UnityEvent <float> {}
+
+[System.Serializable]
 public class UnityEventChooseCharacter: UnityEvent <int> {}
 
 [System.Serializable]

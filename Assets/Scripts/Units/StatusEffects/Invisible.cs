@@ -17,7 +17,7 @@ public class Invisible : StatusEffect {
 	{
 		statusName = "Invisible";
 		type = StatusEffectTypes.INVISIBLE;
-		duration = 60f;
+		duration = 0f;
 		fadeDuration = 1f;
 	}
 	

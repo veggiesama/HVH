@@ -1509,7 +1509,7 @@ MonoBehaviour:
   serverOnly: 0
   localPlayerAuthority: 0
   m_AssetId: 
-  m_SceneId: 2980833158
+  m_SceneId: 3731533169
 --- !u!4 &468933667
 Transform:
   m_ObjectHideFlags: 0
@@ -5354,7 +5354,7 @@ MonoBehaviour:
   serverOnly: 0
   localPlayerAuthority: 0
   m_AssetId: 
-  m_SceneId: 1188981033
+  m_SceneId: 859982002
 --- !u!114 &1325572027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10661,72 +10661,36 @@ MonoBehaviour:
       statusEffectContainer: {fileID: 910364474}
       slot: 0
       unit: {fileID: 0}
-      onTakeDamage:
-        m_PersistentCalls:
-          m_Calls: []
-      onTakeHealing:
-        m_PersistentCalls:
-          m_Calls: []
     - slider: {fileID: 396211914}
       bigSlider: {fileID: 0}
       renderTexture: {fileID: 8400000, guid: 494b0b53d1f7ca447a6aa605c434afd5, type: 2}
       statusEffectContainer: {fileID: 451584277}
       slot: 0
       unit: {fileID: 0}
-      onTakeDamage:
-        m_PersistentCalls:
-          m_Calls: []
-      onTakeHealing:
-        m_PersistentCalls:
-          m_Calls: []
     - slider: {fileID: 2147179451}
       bigSlider: {fileID: 0}
       renderTexture: {fileID: 8400000, guid: 4f6850767b7a1ea4f93317b19439a5a9, type: 2}
       statusEffectContainer: {fileID: 654450436}
       slot: 0
       unit: {fileID: 0}
-      onTakeDamage:
-        m_PersistentCalls:
-          m_Calls: []
-      onTakeHealing:
-        m_PersistentCalls:
-          m_Calls: []
     - slider: {fileID: 2025835360}
       bigSlider: {fileID: 0}
       renderTexture: {fileID: 8400000, guid: f53f61a2db1378a4b856d6e80c22e58b, type: 2}
       statusEffectContainer: {fileID: 925600148}
       slot: 0
       unit: {fileID: 0}
-      onTakeDamage:
-        m_PersistentCalls:
-          m_Calls: []
-      onTakeHealing:
-        m_PersistentCalls:
-          m_Calls: []
     - slider: {fileID: 1629587916}
       bigSlider: {fileID: 1857806526}
       renderTexture: {fileID: 8400000, guid: 69ce6f0d61c777f4d8c263b2646c9031, type: 2}
       statusEffectContainer: {fileID: 1941502368}
       slot: 0
       unit: {fileID: 0}
-      onTakeDamage:
-        m_PersistentCalls:
-          m_Calls: []
-      onTakeHealing:
-        m_PersistentCalls:
-          m_Calls: []
     - slider: {fileID: 0}
       bigSlider: {fileID: 1638201467}
       renderTexture: {fileID: 8400000, guid: 0d1a42ebfd0e54a4cbc11d745cde00a1, type: 2}
       statusEffectContainer: {fileID: 1534560977}
       slot: 0
       unit: {fileID: 0}
-      onTakeDamage:
-        m_PersistentCalls:
-          m_Calls: []
-      onTakeHealing:
-        m_PersistentCalls:
-          m_Calls: []
   castbar: {fileID: 1406661799}
   statusEffectPrefab: {fileID: 2688951624758249539, guid: 2a2bb42573014e44baddd0d881049d21,
     type: 3}

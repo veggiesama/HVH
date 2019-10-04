@@ -50,6 +50,9 @@ public class Stalker : Ability {
 		//if (caster.player == GameRules.Instance.GetLocalPlayer())
 		//	Debug.Log("Cooldown: " + GetCooldown());
 
+		if (caster.HasStatusEffect(StatusEffectTypes.DEAD))
+			return;
+
 		if (GetCooldown() <= 0 && !caster.HasStatusEffect(invisStatusEffect)) {
 			caster.ApplyStatusEffect(invisStatusEffect);
 		}

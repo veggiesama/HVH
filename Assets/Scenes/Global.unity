@@ -393,6 +393,7 @@ MonoBehaviour:
   - {fileID: 1149659272418656, guid: 1b64ea0b5354f754f9eea2c6ccbad286, type: 3}
   - {fileID: 6427190691582976980, guid: f3d4c212c8ffe9d4688e598b8bcb5b16, type: 3}
   - {fileID: 2635110162860501582, guid: 048b36c36f0f2ab428f5cef029e931c4, type: 3}
+  - {fileID: 1320339771136040, guid: e5409eb935dcc8841a5c63598ac72184, type: 3}
   sceneManager: {fileID: 676499610}
   networkHUD: {fileID: 637872839}
   isHost: 0

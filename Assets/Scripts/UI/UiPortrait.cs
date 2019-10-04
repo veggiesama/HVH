@@ -13,9 +13,10 @@ public class UiPortrait {
 	
 	[HideInInspector] public UiPortraitSlots slot;
 	[HideInInspector] public UnitController unit;
-	[HideInInspector] public UnityEventDamage onTakeDamage;
-	[HideInInspector] public UnityEventDamage onTakeHealing;
 
+
+	// fix  
+	/*
 	public void OnTakeDamage(float dmg) {
 		if (unit != null)
 			UpdateHealth(unit.GetHealthPercentage());
@@ -24,6 +25,10 @@ public class UiPortrait {
 	public void OnTakeHealing(float heal) {
 		if (unit != null)
 			UpdateHealth(unit.GetHealthPercentage());
+	}*/
+
+	private void OnHealthChanged(float newPercentage) {
+		UpdateHealthSliders(newPercentage);
 	}
 
 	public void Initialize(UiPortraitSlots slot) {
@@ -38,7 +43,7 @@ public class UiPortrait {
 	// SLIDERS
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public void UpdateHealth(float percentage) {
+	public void UpdateHealthSliders(float percentage) {
 		if (slider != null)
 			slider.value = Mathf.Clamp01(percentage);
 		if (bigSlider != null)
@@ -172,8 +177,10 @@ public class UiPortrait {
 			activeCam.enabled = false;
 			activeCam.targetTexture.Release();
 
-			unit.onTakeDamage.RemoveListener(OnTakeDamage); // TODO: remove listeners on disable?
-			unit.onTakeHealing.RemoveListener(OnTakeHealing);
+
+			unit.onHealthChanged.RemoveListener(OnHealthChanged);
+			//unit.onTakeDamage.RemoveListener(OnTakeDamage); // TODO: remove listeners on disable?
+			//unit.onTakeHealing.RemoveListener(OnTakeHealing);
 		}
 		else {
 			EnableSliders(true);
@@ -187,9 +194,10 @@ public class UiPortrait {
 			activeCam.targetTexture = renderTexture;
 			activeCam.enabled = true;
 
-			UpdateHealth(newUnit.GetHealthPercentage());
-			newUnit.onTakeDamage.AddListener(OnTakeDamage);
-			newUnit.onTakeHealing.AddListener(OnTakeHealing);
+			UpdateHealthSliders(newUnit.GetHealthPercentage());
+			newUnit.onHealthChanged.AddListener(OnHealthChanged);
+			//newUnit.onTakeDamage.AddListener(OnTakeDamage);
+			//newUnit.onTakeHealing.AddListener(OnTakeHealing);
 		}
 		else {
 			EnableSliders(false);

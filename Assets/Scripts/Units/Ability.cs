@@ -44,6 +44,7 @@ public abstract class Ability : ScriptableObject {
 	public Vector3 projectileGrowthFactor = Vector3.one;
 	public float grenadeTimeToHitTarget = 0;
 	public bool grenadeLerpTimeByCastRange = false;
+	public float homingRotationalSpeed = 0;
 
 	public abstract void Reset();
 

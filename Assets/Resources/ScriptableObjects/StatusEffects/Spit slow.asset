@@ -19,7 +19,7 @@ MonoBehaviour:
   statusName: Spit slow
   icon: {fileID: 21300000, guid: 3968ac051aa08437fa1eb0c15eea899c, type: 3}
   type: 5
-  duration: 3
+  duration: 0
   overrideAbilityDuration: 0
   hideIcon: 0
   dispellable: 0

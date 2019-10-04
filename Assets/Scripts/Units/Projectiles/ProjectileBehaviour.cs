@@ -14,9 +14,8 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 	protected Vector3 growthFactor;
 
 	protected Rigidbody rb;
-	protected bool hasCollided = false;
 
-	protected float projectileSpeed, immobileDuration, grenadeTimeToHitTarget;
+	protected float projectileSpeed, immobileDuration, grenadeTimeToHitTarget, homingRotationalSpeed;
 	protected bool destroyOnHit;
 	protected bool grenadeLerpTimeByCastRange;
 
@@ -49,6 +48,7 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 		this.target = target;
 		this.targetObject = target.body.gameObject;
 		this.projectileSpeed = ability.projectileSpeed;
+		this.homingRotationalSpeed = ability.homingRotationalSpeed;
 	}
 
 	// target location
@@ -104,16 +104,19 @@ public abstract class ProjectileBehaviour : NetworkBehaviour {
 		if (attacker.body.gameObject == other.gameObject)
 			return; //Debug.Log("Clipping self.");
 
-		target = other.gameObject.GetComponentInParent<UnitController>();
-		if (alreadyTriggeredList.Contains(target) || !target.IsAlive())
+		//target = other.gameObject.GetComponentInParent<UnitController>();
+
+		UnitController struckUnit = other.gameObject.GetComponent<BodyController>().unit;
+
+		if (alreadyTriggeredList.Contains(struckUnit) || !struckUnit.IsAlive())
 			return; // Debug.Log("Already triggered against this target.");
 
-		if (target.SharesTeamWith(attacker))
-			destroyOnHit = proj.OnHitAlly(target); // collided with ally
+		if (struckUnit.SharesTeamWith(attacker))
+			destroyOnHit = proj.OnHitAlly(struckUnit); // collided with ally
 		else
-			destroyOnHit = proj.OnHitEnemy(target); // collided with enemy
+			destroyOnHit = proj.OnHitEnemy(struckUnit); // collided with enemy
 
-		alreadyTriggeredList.Add(target);
+		alreadyTriggeredList.Add(struckUnit);
 		if (destroyOnHit)
 			NetworkServer.Destroy(this.gameObject); //DestroySelf();
 	}

@@ -35,15 +35,17 @@ MonoBehaviour:
   quickCast: 1
   doNotCancelOrderQueue: 0
   durationRemaining: 0
-  projectilePrefab: {fileID: 0}
-  projectileSpawner: 0
-  projectileBehaviour: 0
-  projectileSpeed: 0
-  projectileTimeAlive: 0
+  projectilePrefab: {fileID: 1320339771136040, guid: e5409eb935dcc8841a5c63598ac72184,
+    type: 3}
+  projectileSpawner: 3
+  projectileBehaviour: 4
+  projectileSpeed: 9
+  projectileTimeAlive: 12
   projectileTimeUntilFullGrowth: 0
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
   grenadeLerpTimeByCastRange: 0
+  homingRotationalSpeed: 360
   loyaltyStatusEffect: {fileID: 11400000, guid: cdb8481e70691634fa28a7f823ebc673,
     type: 2}
   wellFedStatusEffect: {fileID: 11400000, guid: 9e03a63986df0c44382065f5ed9073cb,

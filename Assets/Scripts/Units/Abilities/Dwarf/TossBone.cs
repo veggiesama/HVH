@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using HVH;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/Dwarf/TossBone")]
-public class TossBone : Ability {
+public class TossBone : Ability, IProjectileAbility {
 
 	[Header("TossBone")]
 	public StatusEffect loyaltyStatusEffect;
@@ -11,8 +12,7 @@ public class TossBone : Ability {
 	public UnitInfo targetUnitInfo;
 	//public GameObject particlePrefab;
 
-	public override void Reset()
-	{
+	public override void Reset() {
 		abilityName = "Toss bone";
 		targetType = AbilityTargetTypes.UNIT;
 		targetTeam = AbilityTargetTeams.ALLY;
@@ -23,6 +23,13 @@ public class TossBone : Ability {
 		duration = 45f;
 		quickCast = true;
 		doNotCancelOrderQueue = false;
+
+		projectilePrefab = null; // set in inspector
+		projectileSpawner = BodyLocations.WEAPON;
+		projectileBehaviour = ProjectileBehaviourTypes.HOMING;
+		projectileSpeed = 4f;
+		projectileTimeAlive = 12f;
+		homingRotationalSpeed = 360f;
 	}
 
 	public override void Initialize(GameObject obj) {
@@ -36,17 +43,30 @@ public class TossBone : Ability {
 
 		allyTarget = castOrder.allyTarget;
 		if (allyTarget.SharesUnitInfoWith(targetUnitInfo)) {
-			networkHelper.ApplyStatusEffectTo(allyTarget, loyaltyStatusEffect, this);
-			networkHelper.ApplyStatusEffectTo(allyTarget, wellFedStatusEffect, this);
-			//networkHelper.CreateProjectile(this, castOrder);
-			//networkHelper.InstantiateParticle(particlePrefab, allyTarget, BodyLocations.FEET, duration);
+			CreateProjectile(this, castOrder);
+			return CastResults.SUCCESS;
 		}
-
 		else {
 			Debug.Log("Toss Bone: Invalid target.");
 			return CastResults.FAILURE_INVALID_TARGET;
 		}
+	}
 
-		return CastResults.SUCCESS;
+	public bool OnHitEnemy(UnitController enemy) {
+		return false;
+	}
+
+	public bool OnHitAlly(UnitController ally) {
+		if (ally.Equals(allyTarget)) {
+			networkHelper.ApplyStatusEffectTo(allyTarget, loyaltyStatusEffect, this);
+			networkHelper.ApplyStatusEffectTo(allyTarget, wellFedStatusEffect, this);
+			return true;
+		}
+
+		return false;
+	}
+
+	public bool OnHitTree(HVH.Tree tree) {
+		return false;
 	}
 }

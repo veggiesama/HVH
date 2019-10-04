@@ -41,6 +41,8 @@ public class GameplayCanvas : Singleton<GameplayCanvas> {
 		abilityButtons = GetComponentsInChildren<AbilityButtonInfo>();
 		//ResetButtons();
 
+		EnableCastbar(false);
+
 		foreach (var kv in uiPortraits) {
 			var slot = kv.Key;
 			var port = kv.Value;

@@ -19,7 +19,7 @@ MonoBehaviour:
   statusName: Net immobilization
   icon: {fileID: 21300000, guid: af232c02221104dbf9bf909db370a48b, type: 3}
   type: 3
-  duration: 2
+  duration: 0
   overrideAbilityDuration: 0
   hideIcon: 0
   dispellable: 0

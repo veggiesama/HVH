@@ -55,6 +55,9 @@ MonoBehaviour:
   owner: {fileID: 0}
   unitInfo: {fileID: 0}
   aiManager: {fileID: 0}
+  onHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
   onTakeDamage:
     m_PersistentCalls:
       m_Calls: []
@@ -199,10 +202,7 @@ MonoBehaviour:
   unitInfo: 
   isDisconnected: 0
   isUnassigned: 1
-  onRemoveNetworkStatusEffect:
-    m_PersistentCalls:
-      m_Calls: []
-  onAddNetworkStatusEffect:
+  onUpdateNetworkStatusEffect:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &8879444565007247646
@@ -597,9 +597,6 @@ MonoBehaviour:
   bodyCollider: {fileID: 0}
   ragdollColliders: []
   ragdollRigidbodies: []
-  onCollidedTree:
-    m_PersistentCalls:
-      m_Calls: []
   onCollidedTerrain:
     m_PersistentCalls:
       m_Calls: []
@@ -670,7 +667,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 25625143
+    m_Bits: 96928311
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

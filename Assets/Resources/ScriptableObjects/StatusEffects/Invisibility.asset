@@ -19,7 +19,7 @@ MonoBehaviour:
   statusName: Invisible
   icon: {fileID: 21300000, guid: b84f3bbfdc682415fa4b8d146ac5682e, type: 3}
   type: 2
-  duration: 60
+  duration: 0
   overrideAbilityDuration: 0
   hideIcon: 0
   dispellable: 0

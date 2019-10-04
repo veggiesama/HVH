@@ -11,7 +11,10 @@ public class NetworkHelper : NetworkBehaviour {
 
 	Owner owner;
 	UnitController unit;
-	[SyncVar] public float currentHealth = 1;
+
+
+
+	[SyncVar(hook = nameof(OnHealthChanged))] public float currentHealth = 1;
 	[SyncVar] public string unitInfo;
 	private SmoothSyncMirror smoothBody;
 	public bool isDisconnected = false;
@@ -71,65 +74,67 @@ public class NetworkHelper : NetworkBehaviour {
 
 	public void CreateProjectile(Ability ability, Order castOrder) {
 		GameObject projectilePrefab = ability.projectilePrefab;
-		Vector3 targetLocation = castOrder.targetLocation;
 
 		int prefabIndex = NetworkManager.singleton.spawnPrefabs.IndexOf(projectilePrefab);
 		int abilitySlotIndex = PackAbility(ability); // (int) unit.GetAbilitySlot(ability);
 		int bodyLocation = (int)ability.projectileSpawner;
-	   	Cmd_CreateProjectile(prefabIndex, bodyLocation, abilitySlotIndex, targetLocation);
+
+		Vector3 targetLocation;
+		uint targetNetId;
+
+		switch (ability.projectileBehaviour) {
+			case ProjectileBehaviourTypes.HOMING:
+				if (ability.targetTeam == AbilityTargetTeams.ALLY)
+					targetNetId = castOrder.allyTarget.networkHelper.netId;
+				else
+					targetNetId = castOrder.enemyTarget.networkHelper.netId;
+				Cmd_CreateProjectile(new NetworkProjectile(prefabIndex, bodyLocation, abilitySlotIndex, targetNetId));
+				break;
+
+			default:
+				targetLocation = castOrder.targetLocation;
+				Cmd_CreateProjectile(new NetworkProjectile(prefabIndex, bodyLocation, abilitySlotIndex, targetLocation));
+				break;
+		}
 	}
 
 	[Command]
-	private void Cmd_CreateProjectile(int prefabIndex, int bodyLocation, int abilitySlotIndex, Vector3 targetLocation) {
-		GameObject prefab = NetworkManager.singleton.spawnPrefabs[prefabIndex];
-		Transform trans = Util.GetBodyLocationTransform((BodyLocations)bodyLocation, unit);
+	private void Cmd_CreateProjectile(NetworkProjectile np) {
+
+		GameObject prefab = NetworkManager.singleton.spawnPrefabs[np.prefabIndex];
+		Transform trans = Util.GetBodyLocationTransform((BodyLocations)np.bodyLocationInt, unit);
 		GameObject projectileObject = Instantiate(prefab, trans.position, trans.rotation);
 		NetworkServer.Spawn(projectileObject);
 
-		//if (netIdentity.clientAuthorityOwner != null) {
-		//	projectileObject.GetComponent<NetworkIdentity>().localPlayerAuthority = true;
-		//	NetworkServer.SpawnWithClientAuthority(projectileObject, netIdentity.clientAuthorityOwner);
-		//}
-		//else
-		//	NetworkServer.Spawn(projectileObject);
-
-		Rpc_InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
+		Rpc_InitializeProjectile(projectileObject, np);
 
 	}
 
 	[ClientRpc]
-	private void Rpc_InitializeProjectile(GameObject projectileObject, int abilitySlotIndex, Vector3 targetLocation) {
-		InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
-	}
-
-
-	//[TargetRpc]
-	//private void TargetRpc_InitializeProjectile(NetworkConnection conn, GameObject projectileObject, int abilitySlotIndex, Vector3 targetLocation) {
-	//	InitializeProjectile(projectileObject, abilitySlotIndex, targetLocation);
-	//}
-
-	private void InitializeProjectile(GameObject projectileObject, int abilitySlotIndex, Vector3 targetLocation) {
-		Ability ability = UnpackAbility(unit, abilitySlotIndex);
+	private void Rpc_InitializeProjectile(GameObject projectileObject, NetworkProjectile np) {
+		Ability ability = UnpackAbility(unit, np.abilitySlotIndex);
 
 		switch (ability.projectileBehaviour) {
 			case ProjectileBehaviourTypes.BULLET:
 				BulletBehaviour bullet = projectileObject.GetComponent<BulletBehaviour>();
-				bullet.Initialize(ability, targetLocation);
+				bullet.Initialize(ability, np.targetLocation);
 				break;
 			case ProjectileBehaviourTypes.CONE:
 				ConeBehaviour cone = projectileObject.GetComponent<ConeBehaviour>();
-				cone.Initialize(ability, targetLocation);
+				cone.Initialize(ability, np.targetLocation);
 				break;
 			case ProjectileBehaviourTypes.GRENADE:
 				GrenadeBehaviour grenade = projectileObject.GetComponent<GrenadeBehaviour>();
-				grenade.Initialize(ability, targetLocation);
+				grenade.Initialize(ability, np.targetLocation);
 				break;
 			case ProjectileBehaviourTypes.HOMING:
-				Debug.Log("Homing type projectile (unimplemented)");
+				HomingBehaviour homer = projectileObject.GetComponent<HomingBehaviour>();
+				UnitController targetUnit = NetworkIdentity.spawned[np.targetNetId].GetComponent<Owner>().unit;
+				homer.Initialize(ability, targetUnit);
 				break;
 			case ProjectileBehaviourTypes.LINE:
 				LineBehaviour line = projectileObject.GetComponent<LineBehaviour>();
-				line.Initialize(ability, targetLocation);
+				line.Initialize(ability, np.targetLocation);
 				break;
 			default:
 				Debug.Log("Trying to spawn unknown projectile type.");
@@ -163,13 +168,32 @@ public class NetworkHelper : NetworkBehaviour {
 		aoeGenerator.Initialize(unit, ability);
 	}
 
-	// DAMAGE
+	// DAMAGE AND HEALING
+
+	// called by SyncVar hook
+	private void OnHealthChanged(float newHealth) {
+		if (unit.unitInfo == null) return;
+
+		//Debug.Log("CurrentHealth: " + currentHealth + " vs NewHealth: " + newHealth);
+		float dmg = currentHealth - newHealth;
+		float newPercentage = newHealth / unit.unitInfo.maxHealth;
+
+		unit.OnHealthChanged(newPercentage);
+
+		if (dmg > 0)
+			unit.OnTakeDamage(dmg);
+		else
+			unit.OnTakeHealing(Mathf.Abs(dmg));
+	}
+
 	public void HealDamageOn(UnitController targetUnit, float healing) {
+		if (targetUnit.networkHelper.currentHealth == targetUnit.unitInfo.maxHealth) return;
 		NetworkIdentity targetNetIdentity = targetUnit.networkHelper.netIdentity;
 		Cmd_DealDamageTo(targetNetIdentity, -healing);
 	}
 
 	public void DealDamageTo(UnitController targetUnit, float dmg) {
+		if (targetUnit.networkHelper.currentHealth <= 0f) return;
 		NetworkIdentity targetNetIdentity = targetUnit.networkHelper.netIdentity;
 		Cmd_DealDamageTo(targetNetIdentity, dmg);
 	}
@@ -181,38 +205,24 @@ public class NetworkHelper : NetworkBehaviour {
 		UnitController targetUnit = targetNetIdentity.GetComponent<Owner>().unit;
 		if (dmg > 0 && targetUnit.HasStatusEffect(StatusEffectTypes.INVULNERABLE)) return;
 
-		if (dmg > 0)
-			Rpc_OnTakeDamage(targetNetIdentity, dmg);
-
-		if (dmg < 0)
-			Rpc_OnTakeHealing(targetNetIdentity, Mathf.Abs(dmg));
-
-		targetUnit.networkHelper.currentHealth -= dmg;
-
-		// prevent over-heal
-		if (targetUnit.networkHelper.currentHealth > targetUnit.unitInfo.maxHealth) {
-			targetUnit.networkHelper.currentHealth = targetUnit.unitInfo.maxHealth;
+		if (dmg < 0) {
+			// prevent over-heal
+			if ((targetUnit.networkHelper.currentHealth - dmg) > targetUnit.unitInfo.maxHealth) {
+				dmg = targetUnit.networkHelper.currentHealth - targetUnit.unitInfo.maxHealth;
+			}
 		}
 
-		if (targetUnit.networkHelper.currentHealth < 0) {
+		// apply the damage
+		targetUnit.networkHelper.currentHealth -= dmg;
+
+		// check for death
+		if (targetUnit.networkHelper.currentHealth <= 0) {
 			NetworkConnection conn = targetNetIdentity.connectionToClient; // connectionToServer?
 			if (conn != null)
 				targetUnit.networkHelper.TargetRpc_ApplyOnDeathStatusEffect(conn);
 			else
 				targetUnit.ApplyStatusEffect(targetUnit.unitInfo.onDeathStatusEffect, null);
 		}
-	}
-
-	[ClientRpc]
-	private void Rpc_OnTakeDamage(NetworkIdentity targetNetIdentity, float dmg) {
-		UnitController targetUnit = targetNetIdentity.GetComponent<Owner>().unit;
-		targetUnit.OnTakeDamage(dmg);
-	}
-
-	[ClientRpc]
-	private void Rpc_OnTakeHealing(NetworkIdentity targetNetIdentity, float healing) {
-		UnitController targetUnit = targetNetIdentity.GetComponent<Owner>().unit;
-		targetUnit.OnTakeHealing(healing);
 	}
 
 	[TargetRpc]
@@ -281,17 +291,6 @@ public class NetworkHelper : NetworkBehaviour {
 			}
 		}
 	}
-	/*
-	public void UpdateNetworkStatusSyncListDurations() {
-		for (int i = 0; i < networkStatusEffects.Count; i++) {
-			NetworkStatusEffect nse = networkStatusEffects[i];
-			StatusEffectTypes nseType = (StatusEffectTypes) nse.type;
-		
-			if (unit.HasStatusEffect(nseType))
-				nse.duration = unit.GetStatusEffectDuration(nseType);
-			//Debug.Log("(Network) " + nse.statusName + ": " + nse.duration);
-		}
-	}*/
 
 	public void ApplyStatusEffectTo(StatusEffect status) {
 		ApplyStatusEffectTo(unit, status, null); // self
@@ -371,14 +370,22 @@ public class NetworkHelper : NetworkBehaviour {
 	private void Cmd_Respawn() {
 		Transform spawnLoc = GameResources.Instance.GetRandomSpawnPoint();
 		currentHealth = unit.unitInfo.maxHealth;
-		unit.OnTakeHealing(unit.unitInfo.maxHealth);
-		Rpc_RespawnAt(spawnLoc.position, spawnLoc.rotation);
+
+		if (connectionToClient != null)
+			TargetRpc_RespawnAt(connectionToClient, spawnLoc.position, spawnLoc.rotation);
+		else
+			unit.RespawnAt(spawnLoc.position, spawnLoc.rotation);
 	}
 
-	[ClientRpc]
-	private void Rpc_RespawnAt(Vector3 position, Quaternion rotation) {
+	[TargetRpc]
+	private void TargetRpc_RespawnAt(NetworkConnection conn, Vector3 position, Quaternion rotation) {
 		unit.RespawnAt(position, rotation);
 	}
+
+	//[ClientRpc]
+	//private void Rpc_RespawnAt(Vector3 position, Quaternion rotation) {
+	//	unit.RespawnAt(position, rotation);
+	//}
 
 	// KNOCKBACK
 	public void ApplyKnockbackTo(UnitController targetUnit, Vector3 velocityVector, Ability ability) {
