@@ -27,20 +27,6 @@ public class NetworkGameResources : NetworkBehaviour {
 		//playerDictionary.Callback += OnPlayersChange;
 	}
 
-	/*private void Update()
-	{
-		//playerDictionary.TryGetValue(0, out GameObject value
-		if (playerObjectList.Count > 0 && playerObjectList[0] != null)
-			Debug.Log("PLAYER_DICT: " + (playerObjectList[0].name));
-		else
-			Debug.Log("PLAYER_DICT: null");
-	}*/
-
-	// callbacks
-	//private void OnPlayersChange(SyncDictionaryPlayerIdToPlayerObject.Operation op, int playerId, GameObject go) {
-	//	Debug.Log("OnPlayersChange called");
-	//}
-
 	private void OnDwarfTeamChange(TeamSlotToPlayerIDSyncDictionary.Operation op, int slot, int playerID) {
 		Debug.Log("OnDwarfTeamChange called");
 	}
@@ -130,7 +116,7 @@ public class NetworkGameResources : NetworkBehaviour {
 
 		return playerList;
 	}*/
-
+	/*
 	public List<UnitController> GetAllUnits() {
 		var unitList = new List<UnitController>();
 		foreach (GameObject go in unitOwnerList) {
@@ -138,6 +124,22 @@ public class NetworkGameResources : NetworkBehaviour {
 			if (o != null && o.unit != null)
 				unitList.Add(o.unit);
 		}
+		return unitList;
+	}
+	*/
+
+	public List<UnitController> GetAllUnits() {
+		var unitList = new List<UnitController>();
+		foreach (var kv in NetworkIdentity.spawned) {
+			//var key = kv.Key;
+			var value = kv.Value;
+			var owner = value.GetComponent<Owner>();
+
+			if (owner != null && owner.unit != null) {
+				unitList.Add(owner.unit);
+			}
+		}
+
 		return unitList;
 	}
 
@@ -164,6 +166,7 @@ public class NetworkGameResources : NetworkBehaviour {
 		Debug.Log("Server: Assigning client " + conn.connectionId + " to chosen player " + playerID);
 		Player player = GameResources.Instance.GetPlayer(playerID);
 		player.networkHelper.isUnassigned = false;
+		player.unit.RemoveAllStatusEffects(true);
 
 		if (player.netIdentity.clientAuthorityOwner != null && player.netIdentity.isServer) {
 			player.netIdentity.RemoveClientAuthority(NetworkServer.localConnection);

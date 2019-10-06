@@ -30,6 +30,8 @@ public class UnitController : MonoBehaviour {
 	[HideInInspector] public UnityEventDamage onTakeHealing;
 	[HideInInspector] public UnityEvent onMoved;
 	[HideInInspector] public UnityEvent onCastAbility;
+	[HideInInspector] public UnityEvent onDeath;
+	[HideInInspector] public UnityEvent onRespawn;
 
 	/*
 	public static explicit operator UnitController(GameObject v)
@@ -268,7 +270,7 @@ public class UnitController : MonoBehaviour {
 
 	}
 
-	public void RemoveCurrentTarget(AbilityTargetTeams targetTeam) {
+	public void RemoveCurrentTarget(AbilityTargetTeams targetTeam, bool doNotRememberLater=false) {
 		switch (targetTeam)	{
 			case AbilityTargetTeams.ALLY:
 				if (currentFriendlyTarget == null) return;
@@ -279,13 +281,17 @@ public class UnitController : MonoBehaviour {
 				if (currentEnemyTarget == null) return;
 				UnregisterPortrait(currentEnemyTarget, UiPortraitSlots.ENEMY_TARGET);
 				currentEnemyTarget = null;
+
+				if (doNotRememberLater) {
+					forgottenEnemyTarget = null;
+				}
+
 				break;
 			default:
 				Debug.Log("Get both targets not supported yet");
 				return;
 		}
 	}
-
 
 	public bool IsForgottenTarget(UnitController target) {
 		return (forgottenEnemyTarget == target);
@@ -479,6 +485,10 @@ public class UnitController : MonoBehaviour {
 		RemoveStatusEffect(status.statusName);
 	}
 
+	public void RemoveAllStatusEffects(bool force = false) {
+		statusEffectManager.RemoveAll(force);
+	}
+
 	public float GetStatusEffectDuration(StatusEffectTypes statusType) {
 		return statusEffectManager.GetStatusEffect(statusType).duration;
 	}
@@ -626,19 +636,37 @@ public class UnitController : MonoBehaviour {
 		DetachFromNav();
 		EnableNav(false);
 		body.PerformDeath(killFromDirection);
+		body.EnableClickableHitbox(false);
+		onDeath.Invoke();
 	}
 
 	public void Respawn() {
 		networkHelper.Respawn();
 	}
 
-	public void RespawnAt(Vector3 position, Quaternion rotation) {
+	public void Respawn(Vector3 position, Quaternion rotation) {
+		StartCoroutine( DelayedRespawn(position, rotation, 0.1f) );
+	}
+
+	public void ServerRespawn(Vector3 position, Quaternion rotation) {
+		DoRespawn(position, rotation);
+	}
+
+	private IEnumerator DelayedRespawn(Vector3 position, Quaternion rotation, float delay) {
+		yield return new WaitForSeconds(delay);
+		DoRespawn(position, rotation);
+	}
+
+	private void DoRespawn(Vector3 position, Quaternion rotation) {
+
 		body.transform.SetPositionAndRotation(position, rotation);
-		//networkHelper.SyncTeleport(position, rotation, body.transform.localScale);
 		body.ResetBody();
 		EnableNav(true);
 		AttachToNav();
-		networkHelper.PlayAnimation(Animations.RESPAWN);
+		onRespawn.Invoke();
+
+		if (IsLocalPlayer())
+			networkHelper.PlayAnimation(Animations.RESPAWN);
 	}
 
 	public void SetHighlighted(HighlightingState state) {

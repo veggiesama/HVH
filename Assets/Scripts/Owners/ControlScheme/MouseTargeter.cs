@@ -80,18 +80,26 @@ public class MouseTargeter : MonoBehaviour {
 				else
 					unit.SetHighlighted(HighlightingState.ENEMY);
 
-				if (lastUnit != null)
-					lastUnit.SetHighlighted(HighlightingState.NORMAL);
-
+				RemoveLastUnitHighlighting();
 				lastUnit = unit;
 			}
 		}
 		else {
-			if (lastUnit != null) {
-				lastUnit.SetHighlighted(HighlightingState.NORMAL);
-				lastUnit = null;
-			}
+			RemoveLastUnitHighlighting();
 		}
+	}
+
+	private void RemoveLastUnitHighlighting() {
+		if (lastUnit == null) return;
+
+		var visState = lastUnit.body.GetVisibilityState();
+
+		if (visState == VisibilityState.VISIBLE_TO_TEAM_ONLY || visState == VisibilityState.INVISIBLE)
+			lastUnit.SetHighlighted(HighlightingState.NONE);
+		else
+			lastUnit.SetHighlighted(HighlightingState.NORMAL);
+
+		lastUnit = null;
 	}
 
 	private void DoAreaChecking() {
@@ -112,7 +120,7 @@ public class MouseTargeter : MonoBehaviour {
 	}
 
 	public UnitController GetUnitAtMouseLocation() {
-		int layerMask = (int)LayerMasks.BODY_SELECTABLE; // ~((int)LayerMasks.TERRAIN | (int)LayerMasks.TREE); // cast at everything except terrain + tree
+		int layerMask = (int)LayerMasks.CLICKABLE_HITBOX; // ~((int)LayerMasks.TERRAIN | (int)LayerMasks.TREE); // cast at everything except terrain + tree
 		Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue());
 		if (Physics.Raycast(ray, out RaycastHit hit, Constants.RaycastLength, layerMask)) {
 			Debug.DrawLine(ray.origin, hit.point, Color.red);

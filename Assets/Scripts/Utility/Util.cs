@@ -70,7 +70,7 @@ public static class Util {
 	}
 
 	public static bool IsBody(GameObject gameObject) {
-		return gameObject.layer == (int)LayerBits.BODY;
+		return (gameObject.layer == (int)LayerBits.BODY || gameObject.layer == (int)LayerBits.BODY_IGNORINGTREES);
 	}
 
 	public static bool IsTree(GameObject gameObject) {

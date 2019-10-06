@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hasExecuted: 0
   desire: 50
-  hasDuration: 0
-  duration: 0
+  hasDuration: 1
+  duration: 1.5
   stoppingDistance: 2
-  wanderDistance: 10
+  wanderDistance: 8

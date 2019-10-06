@@ -26,8 +26,8 @@ MonoBehaviour:
   movementSpeedOriginal: 0
   turnRateOriginal: 0
   sizeOriginal: 0
-  bodyColorA: {r: 1, g: 1, b: 0, a: 0}
-  bodyColorB: {r: 0, g: 0, b: 1, a: 1}
+  bodyColorA: {r: 0.9952855, g: 1, b: 0.8160377, a: 1}
+  bodyColorB: {r: 0.4528302, g: 0.3145255, b: 0, a: 1}
   bodyColor: {r: 0, g: 0, b: 0, a: 0}
   onDeathStatusEffect: {fileID: 11400000, guid: a2c024c32d1d9ad48b525321e3c76286,
     type: 2}

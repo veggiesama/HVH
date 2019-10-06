@@ -68,10 +68,12 @@ public class StatusEffectManager : MonoBehaviour {
 			status.End();
 	}
 
-	public void RemoveAll() {
+	public void RemoveAll(bool forceEmptyRemovalList) {
 		foreach (StatusEffect status in statusEffectList)
 			status.End();
-		//statusEffectList.Clear();
+
+		if (forceEmptyRemovalList)
+			EmptyRemovalList();
 	}
 
 	// removal list (items deleted at the end of update)

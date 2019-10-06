@@ -7,7 +7,4 @@ public class UnitMaterials : MonoBehaviour
 	[Header("Reticules")]
 	public Material allyTarget;
 	public Material enemyTarget;
-
-	[Header("Body")]
-	public Material invisibility;
 }

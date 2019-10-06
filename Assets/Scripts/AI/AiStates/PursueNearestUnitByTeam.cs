@@ -29,7 +29,7 @@ public class PursueNearestUnitByTeam : MoveTo {
 		if (HasDestination() && !ReachedDestination() ) {
 			desire = desireDefault;
 
-			if (currentTarget != null && currentTarget.body.IsVisible())
+			if (currentTarget != null && currentTarget.body.IsVisibleToUnit(this.unit))
 				unit.SetCurrentTarget(currentTarget);
 
 		}

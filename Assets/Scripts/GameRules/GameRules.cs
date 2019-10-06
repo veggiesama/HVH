@@ -12,7 +12,9 @@ public class GameRules : Singleton<GameRules> {
 	public TeamFieldOfView teamFov;
 
 	public int houndsToSpawn;
-	public int testMonstersToSpawn;
+	public int dwarfMooksToSpawn;
+	public int monsterMooksToSpawn;
+
 	public GameObject playerPrefab;
 
 	// Singleton constructor
@@ -41,7 +43,8 @@ public class GameRules : Singleton<GameRules> {
 
 		Debug.Log("Trying to spawn NPCs.");
 		SpawnHounds(houndsToSpawn);
-		SpawnTestMonsters(testMonstersToSpawn);
+		SpawnMooks("MookMonster", Teams.MONSTERS, monsterMooksToSpawn);
+		SpawnMooks("MookDwarf", Teams.DWARVES, dwarfMooksToSpawn);
 	}
 
 	public void SpawnHounds(int howMany) {
@@ -62,20 +65,20 @@ public class GameRules : Singleton<GameRules> {
 		//npc.SetTeam();
 	}
 
-	public void SpawnTestMonsters(int howMany) {
+	public void SpawnMooks(string unitInfo, Teams team, int howMany) {
 		for (int i = 0; i < howMany; i++) {
-			SpawnTestMonster();
+			SpawnMook(unitInfo, team);
 		}
 	}
 
 
-	public void SpawnTestMonster() {
+	public void SpawnMook(string unitInfo, Teams team) {
 		Transform spawnLoc = GameResources.Instance.GetRandomSpawnPoint();
 		GameObject npc = Instantiate(ResourceLibrary.Instance.npcPrefab, spawnLoc.position, spawnLoc.rotation);
 		NetworkServer.Spawn(npc);
 		Owner npcOwner = npc.GetComponent<Owner>();
-		npcOwner.SetTeam(Teams.MONSTERS);
-		npcOwner.SetUnitInfo("MonsterTest");
+		npcOwner.SetTeam(team);
+		npcOwner.SetUnitInfo(unitInfo);
 	}
 
 	public void SpawnUnassignedPlayers() {
@@ -89,7 +92,7 @@ public class GameRules : Singleton<GameRules> {
 			unassignedPlayer.MakeNPC();
 			//NetworkServer.Spawn(unassignedPlayer.gameObject);
 			NetworkServer.SpawnWithClientAuthority(unassignedPlayerGO, NetworkServer.localConnection);
-			unassignedPlayer.unit.RespawnAt(spawnLoc.position, spawnLoc.rotation);
+			unassignedPlayer.unit.ServerRespawn(spawnLoc.position, spawnLoc.rotation);
 
 			//GameResources.Instance.AddPlayerReference(id, unassignedPlayer);
 			GameResources.Instance.AddPlayerReference(unassignedPlayer);

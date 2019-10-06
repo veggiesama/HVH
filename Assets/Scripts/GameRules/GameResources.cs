@@ -19,6 +19,7 @@ public class GameResources : Singleton<GameResources> {
 	}
 
 	public NetworkGameResources networkGameResources;
+	public Camera miniMapCamera;
 
 	private Player localPlayer;
 	//private Dictionary<int, Player> playerDictionary;
@@ -122,7 +123,7 @@ public class GameResources : Singleton<GameResources> {
 
 		foreach(UnitController u in GetAllUnits()) {
 			if (!unit.SharesTeamWith(u))
-				if ((!visibleOnly) || (visibleOnly && u.body.IsVisible() ))
+				if ((!visibleOnly) || (visibleOnly && u.body.IsVisibleToUnit(unit) ))
 					validUnitList.Add(u);
 		}
 

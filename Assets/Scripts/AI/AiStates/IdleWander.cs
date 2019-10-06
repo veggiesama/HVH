@@ -9,7 +9,9 @@ public class IdleWander : MoveTo {
 	public float wanderDistance = 2f;
 
 	public override void Evaluate() {
-		if (HasDestination() && ReachedDestination() && currentTimer <= 0) {
+		if (currentTimer > 0)
+			desire = (int) Desire.MAX;
+		else if (HasDestination() && ReachedDestination() && currentTimer <= 0) {
 			desire = (int) Desire.NONE;
 		}
 	}

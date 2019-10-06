@@ -10,45 +10,45 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd697404dfc112446a95d5512bb2c8ca, type: 3}
-  m_Name: MonsterTest
+  m_Name: MookDwarf
   m_EditorClassIdentifier: 
-  unitName: Monster
-  maxHealth: 300
+  unitName: MookDwarf
+  maxHealth: 100
   healthRegen: 1
   armor: 0
   resist: 0
-  movementSpeed: 9
-  turnRate: 960
+  movementSpeed: 4
+  turnRate: 1350
   size: 1
   daySightRange: 30
-  nightSightRange: 26
-  fovViewAngle: 360
+  nightSightRange: 22
+  fovViewAngle: 270
   movementSpeedOriginal: 0
   turnRateOriginal: 0
   sizeOriginal: 0
-  bodyColorA: {r: 1, g: 0.4292453, b: 0.4292453, a: 0}
-  bodyColorB: {r: 0.7075472, g: 0.37046102, b: 0.7075472, a: 1}
+  bodyColorA: {r: 0.9882353, g: 0.6862745, b: 0.23921569, a: 1}
+  bodyColorB: {r: 0.97741103, g: 1, b: 0.7216981, a: 1}
   bodyColor: {r: 0, g: 0, b: 0, a: 0}
   onDeathStatusEffect: {fileID: 11400000, guid: a2c024c32d1d9ad48b525321e3c76286,
     type: 2}
   onAirbornStatusEffect: {fileID: 11400000, guid: 602ec8d7899e5e644a690f77dc709914,
     type: 2}
-  startingAttackAbility: {fileID: 11400000, guid: 7c5bc42bd4e03df47857aa7808773005,
+  startingAttackAbility: {fileID: 11400000, guid: 4fa7664bb02623a49a83f67053c76990,
     type: 2}
   startingAbilitiesList:
-  - {fileID: 11400000, guid: f6ca03d93f06b4f43b989426eb79c31c, type: 2}
-  - {fileID: 11400000, guid: 8ceb464a0b562a944acfc19a031158c9, type: 2}
-  - {fileID: 11400000, guid: a30be00ac1b3bbd40a1e4c63b5a412ee, type: 2}
-  - {fileID: 11400000, guid: bd2b85926ef9a814884418a361399750, type: 2}
+  - {fileID: 11400000, guid: c681a514064dbec49a0bf9da1bb1c09c, type: 2}
+  - {fileID: 11400000, guid: e54b80e30327fb747844075884753beb, type: 2}
+  - {fileID: 11400000, guid: 0551f01070a6e6f40b05f4ba8b458758, type: 2}
   - {fileID: 11400000, guid: 9b1704880fe3fa249872b713fc810c38, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   startingItemsList:
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
-  - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
+  - {fileID: 11400000, guid: 9f5d7838e937b484d921d7a3e1143ac4, type: 2}
+  - {fileID: 11400000, guid: 65943cc63a424fb4da40151f76e7cd4e, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   animationPrefab: {fileID: 2048578494338918473, guid: b4d95473cafa7ab4fbbaebd9ae0302d0,
     type: 3}
   hasAI: 1

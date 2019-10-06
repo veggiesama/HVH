@@ -12,6 +12,7 @@ public class BodyController : MonoBehaviour {
 	[HideInInspector] public UnitController unit;
 	[HideInInspector] public Animator anim;
 
+	[HideInInspector] public GameObject clickableHitbox;
 	[HideInInspector] public GameObject projectileSpawner;
 	[HideInInspector] public GameObject head;
 	[HideInInspector] public GameObject mouth;
@@ -33,7 +34,8 @@ public class BodyController : MonoBehaviour {
 	[HideInInspector] public Collider[] ragdollColliders;
 	[HideInInspector] public Rigidbody[] ragdollRigidbodies;
 
-	//private bool isVisible = true;
+	[HideInInspector] public MinimapIcon minimapIcon;
+
 	private Vector3 lastPosition = Vector3.zero;
 	private float updateAnimationSpeedFloatEvery = 0.1f;
 
@@ -57,8 +59,8 @@ public class BodyController : MonoBehaviour {
 		unit = GetComponentInParent<UnitController>();
 		rb = GetComponent<Rigidbody>();
 		fov = GetComponentInChildren<FieldOfView>();
-		invisMaterial = unit.GetComponent<UnitMaterials>().invisibility;
 		bodyCollider = GetComponent<Collider>();
+		minimapIcon = GetComponentInChildren<MinimapIcon>();
 
 		StartCoroutine( UpdateAnimationSpeedFloat() );
 		//InvokeRepeating("UpdateAnimationSpeedFloat", 0f, updateAnimationSpeedFloatEvery);
@@ -80,6 +82,7 @@ public class BodyController : MonoBehaviour {
 		mouth = finder.mouth;
 		feet = finder.feet;
 		bodyMeshes = finder.bodyMeshes;
+		invisMaterial = finder.invisMaterial;
 		allyCam = finder.allyCam;
 		targetCam = finder.targetCam;
 		
@@ -161,7 +164,7 @@ public class BodyController : MonoBehaviour {
 	//}
 
 	public void SetNoclip() {
-		gameObject.layer = (int)LayerBits.PHYSICS_NOCLIP;
+		gameObject.layer = (int)LayerBits.BODY_NOCLIP;
 	}
 
 	public void SetDefaultClip() {
@@ -180,6 +183,7 @@ public class BodyController : MonoBehaviour {
 			RigidbodyConstraints.FreezeRotationZ;
 		rb.isKinematic = true;
 		SetDefaultClip();
+		EnableClickableHitbox(true);
 	}
 
 	public void FixedUpdate_ForceTurn(Vector3 targetPosition) {
@@ -209,7 +213,7 @@ public class BodyController : MonoBehaviour {
 		Player localPlayer = GameResources.Instance.GetLocalPlayer();
 
 		if (localPlayer != null) {
-			UnitController localUnit = GameResources.Instance.GetLocalPlayer().unit;
+			UnitController localUnit = localPlayer.unit;
 			UnitController localEnemyTarget = localUnit.GetTarget(AbilityTargetTeams.ENEMY);
 
 			if (state == VisibilityState.VISIBLE && localUnit.IsForgottenTarget(unit)) {
@@ -277,10 +281,26 @@ public class BodyController : MonoBehaviour {
 		}
 	}
 
-	public string GetVisibilityState() {
+	public VisibilityState GetVisibilityState() {
+		return localVisibilityState;
+	}
+
+	public string GetVisibilityStateToString() {
 		return System.Enum.GetName(typeof(VisibilityState), (int)localVisibilityState);
 	}
 
+	// visible from unit's perspective (important for hosts and AI)
+	public bool IsVisibleToUnit(UnitController viewer) {
+		if (unit.SharesTeamWith(viewer))
+			return true;
+		else if (localVisibilityState == VisibilityState.INVISIBLE ||
+				 localVisibilityState == VisibilityState.VISIBLE_TO_TEAM_ONLY)
+			return false;
+		else
+			return true;
+	}
+
+	// visible on client's computer
 	public bool IsVisible() {
 		return (localVisibilityState != VisibilityState.INVISIBLE);
 	}
@@ -365,6 +385,11 @@ public class BodyController : MonoBehaviour {
 		}
 
 		anim.enabled = !enable;
+	}
+
+	public void EnableClickableHitbox(bool enable) {
+		if (clickableHitbox == null) return;
+		clickableHitbox.SetActive(enable);
 	}
 
 }

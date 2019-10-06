@@ -33,7 +33,10 @@ public class MeleeAttack : AiState {
 
 		UnitController target = unit.GetTarget(AbilityTargetTeams.ENEMY);
 
-		if (target != null && target.body.IsVisible() && Util.GetDistanceIn2D(unit.GetBodyPosition(), target.GetBodyPosition()) <= meleeDistance) {
+		if (target != null &&
+		  target.body.IsVisibleToUnit(this.unit) &&
+		  Util.GetDistanceIn2D(unit.GetBodyPosition(), target.GetBodyPosition()) <= meleeDistance)
+		{
 			desire = desireDefault;
 		}
 

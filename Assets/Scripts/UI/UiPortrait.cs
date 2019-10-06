@@ -10,26 +10,8 @@ public class UiPortrait {
 	public Slider bigSlider;
 	public RenderTexture renderTexture;
 	public GameObject statusEffectContainer;
-	
 	[HideInInspector] public UiPortraitSlots slot;
 	[HideInInspector] public UnitController unit;
-
-
-	// fix  
-	/*
-	public void OnTakeDamage(float dmg) {
-		if (unit != null)
-			UpdateHealth(unit.GetHealthPercentage());
-	}
-
-	public void OnTakeHealing(float heal) {
-		if (unit != null)
-			UpdateHealth(unit.GetHealthPercentage());
-	}*/
-
-	private void OnHealthChanged(float newPercentage) {
-		UpdateHealthSliders(newPercentage);
-	}
 
 	public void Initialize(UiPortraitSlots slot) {
 		this.slot = slot;
@@ -39,6 +21,25 @@ public class UiPortrait {
 		}
 	}
 
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// LISTENERS
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////0
+
+	private void OnHealthChanged(float newPercentage) {
+		UpdateHealthSliders(newPercentage);
+	}
+
+	public void OnRespawn() {
+		AbilityTargetTeams targetTeam;
+		if (this.slot == UiPortraitSlots.ALLY_TARGET)
+			targetTeam = AbilityTargetTeams.ALLY;
+		else
+			targetTeam = AbilityTargetTeams.ENEMY;
+
+		GameResources.Instance.GetLocalPlayer().unit.RemoveCurrentTarget(targetTeam, true);
+
+	}
+	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SLIDERS
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +120,7 @@ public class UiPortrait {
 
 	private void SetPortraitRegistration(UnitController target, bool enabled) {
 		if (enabled) {
-			SetPortraitCamera(target);
+			SetupPortrait(target);
 			target.networkHelper.networkStatusEffects.Callback += StatusEffectCallback;
 			target.networkHelper.onUpdateNetworkStatusEffect.AddListener(UpdateStatusEffect);
 
@@ -129,7 +130,7 @@ public class UiPortrait {
 		}
 
 		else {
-			SetPortraitCamera(null);
+			SetupPortrait(null);
 			target.networkHelper.networkStatusEffects.Callback -= StatusEffectCallback;
 			ClearStatusEffects();
 		}
@@ -169,18 +170,17 @@ public class UiPortrait {
 	// PORTRAIT CAMERA
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public void SetPortraitCamera(UnitController newUnit) {
-		// null the current camera
+	public void SetupPortrait(UnitController newUnit) {
 		if (unit != null) {
+			// null current camera
 			Camera activeCam = GetActiveCameraForSlot(unit);		
-			
 			activeCam.enabled = false;
 			activeCam.targetTexture.Release();
 
-
+			// remove current listeners
 			unit.onHealthChanged.RemoveListener(OnHealthChanged);
-			//unit.onTakeDamage.RemoveListener(OnTakeDamage); // TODO: remove listeners on disable?
-			//unit.onTakeHealing.RemoveListener(OnTakeHealing);
+			if (IsTargetingPanel())
+				unit.onRespawn.RemoveListener(OnRespawn);
 		}
 		else {
 			EnableSliders(true);
@@ -189,15 +189,19 @@ public class UiPortrait {
 		this.unit = newUnit;
 
 		if (newUnit != null) {
-			Camera activeCam = GetActiveCameraForSlot(newUnit);
 
+			// set up new camera
+			Camera activeCam = GetActiveCameraForSlot(newUnit);
 			activeCam.targetTexture = renderTexture;
 			activeCam.enabled = true;
 
+			// set initial health
 			UpdateHealthSliders(newUnit.GetHealthPercentage());
+
+			// set up new listeners
 			newUnit.onHealthChanged.AddListener(OnHealthChanged);
-			//newUnit.onTakeDamage.AddListener(OnTakeDamage);
-			//newUnit.onTakeHealing.AddListener(OnTakeHealing);
+			if (IsTargetingPanel())
+				unit.onRespawn.AddListener(OnRespawn);
 		}
 		else {
 			EnableSliders(false);

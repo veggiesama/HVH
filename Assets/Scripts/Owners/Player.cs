@@ -47,12 +47,11 @@ public class Player : Owner {
 		GameResources.Instance.SetLocalPlayer(this);
 
 		EnableLocalPlayerOnlyObjects(true);
-		UpdateTeamVision();
+		UpdateTeamVariables();
 
 		unit.EnableNav(true);
 		TeamFieldOfView.Instance.Initialize((Teams)team);
 		GameResources.Instance.DisableTreeHighlighting();
-		Debug.Log("Setup Ally Cameras");
 		GameplayCanvas.Instance.RegisterAllyPortraits(this);
 		GameplayCanvas.Instance.ResetButtons();
 		GameplayCanvas.Instance.debugMenu.Initialize();
@@ -187,13 +186,32 @@ public class Player : Owner {
 		}
 	}
 
-	public void UpdateTeamVision() {
-		 foreach (UnitController u in FindObjectsOfType<UnitController>()) {
-			if (u.SharesTeamWith(this.unit))
+	
+	public void UpdateTeamVariables() {
+		foreach (UnitController u in GameResources.Instance.GetAllUnits()) {
+			u.body.minimapIcon.Initialize();
+			
+			if (u.SharesTeamWith(this.unit)) {
 				u.EnableVision(true);
-			else
+			}
+			else {
 				u.EnableVision(false);
+			}
+
+			if (u.GetTeam() == Teams.DWARVES) {
+				//var img = u.body.allyCam.backgroundColor;
+				//img = new Color(252, 175, 61, 255);
+				//u.body.allyCam.backgroundColor = img;
+				//u.body.allyCam.backgroundColor = new Color(252f, 175f, 61f, 255f); //TeamColors.DWARVES;
+				//u.body.targetCam.backgroundColor = new Color(252, 175, 61); //TeamColors.DWARVES;
+			}
+			else {
+				//u.body.allyCam.backgroundColor = TeamColors.MONSTERS;
+				//u.body.targetCam.backgroundColor = TeamColors.MONSTERS;
+			}
 		}
 	}
+
+
 
 }

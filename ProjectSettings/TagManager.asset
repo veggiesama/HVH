@@ -21,7 +21,7 @@ TagManager:
   - 
   - 
   - Vision
-  - PhysicsNoclip
+  - 
   - 
   - 
   - 
@@ -33,14 +33,14 @@ TagManager:
   - DeadTree
   - 
   - 
-  - 
+  - Body (Noclip)
   - Body (Ignoring Trees)
   - Body
-  - Body_Ragdoll
-  - Body_Selectable
+  - Body (Ragdoll)
+  - Clickable Hitbox
   - Projectile
   - 
-  - 
+  - MinimapIcon
   - HideFromGame
   - HideFromEditor
   - UnselectableInEditor

@@ -12,10 +12,13 @@ public static class Constants {
 	public static int DwarvesTotal = 4;
 	public static int MonstersTotal = 4;
 
-	public static Color AllyColor = Color.green;
-	public static Color EnemyColor = Color.red;
-
 	public static float OnMoveTolerance = 1f; // actual distance a body needs to travel before OnMove event invoked
+}
+
+
+public static class TeamColors {
+	public static Color DWARVES { get { return new Color(252, 175, 61); } }
+	public static Color MONSTERS { get { return new Color(153, 204, 255); } }
 }
 
 // Projectile types
@@ -31,17 +34,17 @@ public enum CastResults {
 
 // Layers
 public enum LayerBits {
-	PHYSICS_NOCLIP = 9, TERRAIN = 16, TREE = 17, BODY_IGNORINGTREES = 22, BODY = 23, BODY_RAGDOLL = 24, BODY_SELECTABLE = 25
+	TERRAIN = 16, TREE = 17, BODY_NOCLIP = 21, BODY_IGNORINGTREES = 22, BODY = 23, BODY_RAGDOLL = 24, CLICKABLE_HITBOX = 25
 }
 
 public enum LayerMasks {
-	PHYSICS_NOCLIP = 1		<< LayerBits.PHYSICS_NOCLIP,
+	BODY_NOCLIP = 1			<< LayerBits.BODY_NOCLIP,
 	TERRAIN = 1				<< LayerBits.TERRAIN,
 	TREE = 1				<< LayerBits.TREE,
 	BODY_IGNORINGTREES = 1	<< LayerBits.BODY_IGNORINGTREES,
 	BODY = 1				<< LayerBits.BODY,
 	BODY_RAGDOLL = 1		<< LayerBits.BODY_RAGDOLL,
-	BODY_SELECTABLE = 1		<< LayerBits.BODY_SELECTABLE
+	CLICKABLE_HITBOX = 1	<< LayerBits.CLICKABLE_HITBOX
 }
 
 // UI slots

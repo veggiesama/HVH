@@ -14,6 +14,8 @@ public class CameraFollow : MonoBehaviour {
 	private Vector3 mouseOffset;
 	private bool initialized = false;
 
+	private Camera minimapCam;
+	private Vector3 minimapCamOffset;
 	//public bool followTightly = false;
 
 	//public float innerOffsetRingRadius;
@@ -32,14 +34,16 @@ public class CameraFollow : MonoBehaviour {
 	//private string debugStr = "";
 
 	// TODO: recalculations needed whenever resolution changes
-	void Start () {
+	public void Initialize() {
 		cam = GetComponent<Camera>();
 		player = GetComponentInParent<Player>();
-	}
+		minimapCam = GameResources.Instance.miniMapCamera;
+		minimapCam.transform.position = new Vector3(body.transform.position.x, minimapCam.transform.position.y, body.transform.position.z);
 
-	public void Initialize() {
 		transform.position = body.transform.position + transform.localPosition;
 		camOffset = transform.position - body.transform.position;
+		minimapCamOffset = minimapCam.transform.position - body.transform.position;
+		
 		mouseOffset = Vector3.zero;
 		StartCoroutine( SetInitialized() );
 	}
@@ -101,7 +105,10 @@ public class CameraFollow : MonoBehaviour {
 		}
 
 		Vector3 vel = cam.velocity;
+
 		transform.position = Vector3.SmoothDamp(transform.position, target, ref vel, t);
 
+		Vector3 minimapTarget = body.transform.position + minimapCamOffset;
+		minimapCam.transform.position = Vector3.SmoothDamp(minimapCam.transform.position, minimapTarget, ref vel, t);
 	}
 }

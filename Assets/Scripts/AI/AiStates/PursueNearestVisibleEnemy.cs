@@ -29,7 +29,7 @@ public class PursueNearestVisibleEnemy : MoveTo {
 		if (HasDestination() && !ReachedDestination() ) {
 			desire = desireDefault;
 
-			if (currentTarget != null && currentTarget.body.IsVisible())
+			if (currentTarget != null && currentTarget.body.IsVisibleToUnit(this.unit))
 				unit.SetCurrentTarget(currentTarget);
 
 		}
@@ -45,7 +45,7 @@ public class PursueNearestVisibleEnemy : MoveTo {
 		float targetDistance = 0;
 		foreach (Collider col in bodiesInPursuitRadius) {
 			UnitController target = col.gameObject.GetComponent<BodyController>().unit;
-			if (!target.SharesTeamWith(unit) && target.IsAlive() && target.body.IsVisible()) {
+			if (!target.SharesTeamWith(unit) && target.IsAlive() && target.body.IsVisibleToUnit(this.unit)) {
 				Vector3 targ = target.GetBodyPosition();
 				float dist = Util.GetDistanceIn2D(pos, targ);
 				if (targetDistance == 0 || dist < targetDistance) {

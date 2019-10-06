@@ -370,22 +370,18 @@ public class NetworkHelper : NetworkBehaviour {
 	private void Cmd_Respawn() {
 		Transform spawnLoc = GameResources.Instance.GetRandomSpawnPoint();
 		currentHealth = unit.unitInfo.maxHealth;
+		Rpc_Respawn(spawnLoc.position, spawnLoc.rotation);
 
-		if (connectionToClient != null)
-			TargetRpc_RespawnAt(connectionToClient, spawnLoc.position, spawnLoc.rotation);
-		else
-			unit.RespawnAt(spawnLoc.position, spawnLoc.rotation);
+		//if (connectionToClient != null)
+		//	TargetRpc_Respawn(connectionToClient, spawnLoc.position, spawnLoc.rotation);
+		//else
+		//	unit.Respawn(spawnLoc.position, spawnLoc.rotation);
 	}
 
-	[TargetRpc]
-	private void TargetRpc_RespawnAt(NetworkConnection conn, Vector3 position, Quaternion rotation) {
-		unit.RespawnAt(position, rotation);
+	[ClientRpc]
+	private void Rpc_Respawn(Vector3 position, Quaternion rotation) {
+		unit.Respawn(position, rotation);
 	}
-
-	//[ClientRpc]
-	//private void Rpc_RespawnAt(Vector3 position, Quaternion rotation) {
-	//	unit.RespawnAt(position, rotation);
-	//}
 
 	// KNOCKBACK
 	public void ApplyKnockbackTo(UnitController targetUnit, Vector3 velocityVector, Ability ability) {

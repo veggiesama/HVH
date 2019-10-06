@@ -16,7 +16,7 @@ public class DebugStateVisualizer : MonoBehaviour
 	#if UNITY_EDITOR
 	private void OnDrawGizmos() {
 		Vector3 offset = Vector3.up * 1.1f;
-		string str = "VisibilityState: " + body.GetVisibilityState();
+		string str = "VisibilityState: " + body.GetVisibilityStateToString();
 
 		if (Application.IsPlaying(gameObject) && body.unit.aiManager != null) 
 			str += "\n" + "AIState: " + body.unit.aiManager.GetCurrentState();

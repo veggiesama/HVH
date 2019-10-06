@@ -9,7 +9,7 @@ public static class AiUtil {
 
 		foreach (Collider col in bodiesInRadius) {
 			UnitController target = col.gameObject.GetComponent<BodyController>().unit;
-			if (!target.SharesTeamWith(unit) && target.IsAlive() && !target.body.IsVisible()) {
+			if (!target.SharesTeamWith(unit) && target.IsAlive() && !target.body.IsVisibleToUnit(unit)) {
 				return true;
 			}
 		}
