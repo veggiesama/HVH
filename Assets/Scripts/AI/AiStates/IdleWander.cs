@@ -18,7 +18,7 @@ public class IdleWander : MoveTo {
 
 	public override void Execute() {
 		base.Execute();
-		destination = Util.GetRandomVectorAround(unit, wanderDistance);
+		SetDestination(Util.GetRandomVectorAround(unit, wanderDistance));
 	}
 
 

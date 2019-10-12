@@ -78,6 +78,7 @@ public class BodyController : MonoBehaviour {
 
 		BodyLocationFinder finder = anim.GetComponent<BodyLocationFinder>();
 		projectileSpawner = finder.projectileSpawner;
+		clickableHitbox = finder.clickableHitbox;
 		head = finder.head;
 		mouth = finder.mouth;
 		feet = finder.feet;
@@ -126,25 +127,25 @@ public class BodyController : MonoBehaviour {
 
 
 	// performances
-	public void PerformDeath(Vector3 killedFromDirection) {
+	public void PerformDeath(Vector3 killerLocation, float killingDmg) {
 		EnableRagdoll(true);
 		float upwardMagnitude = Random.Range(50f, 150f);
-		float impactMagnitude = 400f;
-		AddForceToRagdoll(killedFromDirection, upwardMagnitude, impactMagnitude);
+		float impactMagnitude = Mathf.Min(killingDmg, 100) * 10f; //  400f
+		AddForceToRagdoll(killerLocation, upwardMagnitude, impactMagnitude);
 	}
 
-	public void AddForceToRagdoll(Vector3 fromDirection, float upwardMagnitude, float impactMagnitude) {
+	public void AddForceToRagdoll(Vector3 killerLocation, float upwardMagnitude, float impactMagnitude) {
 		Vector3 upwardForce = Vector3.up * upwardMagnitude;
 		Vector3 impactForce = default;
 
-		if (fromDirection != default) {
-			Debug.DrawLine(transform.position, fromDirection, Color.green, 3.0f);
-			impactForce = (transform.position - fromDirection).normalized * impactMagnitude;
+		if (killerLocation != default) {
+			Debug.DrawLine(transform.position, killerLocation, Color.green, 3.0f);
+			impactForce = (transform.position - killerLocation).normalized * impactMagnitude;
 		}
 
 		foreach (Rigidbody ragdollRB in ragdollRigidbodies) {
 			ragdollRB.AddForce(upwardForce);
-			if (fromDirection != default) {
+			if (killerLocation != default) {
 				ragdollRB.AddForce(impactForce);
 			}
 		}
@@ -157,6 +158,10 @@ public class BodyController : MonoBehaviour {
 	public void PerformAirborn(Vector3 velocityVector) {
 		rb.isKinematic = false;
 		rb.AddForce(velocityVector, ForceMode.VelocityChange);
+	}
+
+	public void PerformSink() {
+		rb.velocity = rb.velocity * 0.05f;
 	}
 
 	//public void SetTreeClipOnly() {
@@ -231,6 +236,7 @@ public class BodyController : MonoBehaviour {
 			switch (state) {
 
 				case VisibilityState.VISIBLE:
+					EnableMinimapIcon(true);
 					bodyMeshes[i].enabled = true;
 					outlineScripts[i].enabled = true;
 					rend.material = originalBodyMeshMaterials[i];
@@ -241,12 +247,14 @@ public class BodyController : MonoBehaviour {
 					break;
 
 				case VisibilityState.VISIBLE_TO_TEAM_ONLY:
+					EnableMinimapIcon(true);
 					bodyMeshes[i].enabled = true;
 					outlineScripts[i].enabled = false;
 					rend.material = invisMaterial;
 					break;
 
 				case VisibilityState.FADING:
+					EnableMinimapIcon(true);
 					bodyMeshes[i].enabled = true;
 					outlineScripts[i].enabled = true;
 					rend.material = originalBodyMeshMaterials[i];
@@ -256,6 +264,7 @@ public class BodyController : MonoBehaviour {
 					break;
 
 				case VisibilityState.INVISIBLE:
+					EnableMinimapIcon(false);
 					bodyMeshes[i].enabled = false;
 					outlineScripts[i].enabled = false;
 					break;
@@ -390,6 +399,10 @@ public class BodyController : MonoBehaviour {
 	public void EnableClickableHitbox(bool enable) {
 		if (clickableHitbox == null) return;
 		clickableHitbox.SetActive(enable);
+	}
+
+	public void EnableMinimapIcon(bool enable) {
+		minimapIcon.gameObject.SetActive(enable);
 	}
 
 }

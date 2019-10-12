@@ -17,4 +17,5 @@ MonoBehaviour:
   hasDuration: 0
   duration: 0
   stoppingDistance: 1
+  pursuedTeams: 2
   maxPursueDistance: 10

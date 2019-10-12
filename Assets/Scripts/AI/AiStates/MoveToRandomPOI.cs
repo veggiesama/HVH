@@ -7,7 +7,7 @@ public class MoveToRandomPOI : MoveTo {
 
 	public override void Execute() {
 		base.Execute();
-		destination = GameResources.Instance.GetRandomSpawnPoint().position;
+		SetDestination(GameResources.Instance.GetRandomSpawnPoint().position);
 	}
 
 }

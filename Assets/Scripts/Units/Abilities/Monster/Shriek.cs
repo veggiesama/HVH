@@ -7,7 +7,6 @@ public class Shriek : Ability {
 
 	[Header("Shriek")]
 	public StatusEffect silenceStatusEffect;
-	public GameObject particlePrefab;
 
 	public override void Reset()
 	{
@@ -37,8 +36,7 @@ public class Shriek : Ability {
 		enemyTarget = castOrder.enemyTarget;
 
 		networkHelper.ApplyStatusEffectTo(enemyTarget, silenceStatusEffect, this);
-		//networkHelper.CreateProjectile(this, castOrder);
-		InstantiateParticleOnUnit(particlePrefab, enemyTarget, BodyLocations.FEET, duration);
+		//InstantiateParticleOnUnit(particlePrefab, enemyTarget, BodyLocations.FEET, duration);
 		return CastResults.SUCCESS;
 	}
 }

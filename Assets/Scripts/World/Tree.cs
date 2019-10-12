@@ -42,7 +42,10 @@ public class Tree : MonoBehaviour {
 		deadTreeMeshFilter.mesh = sm;
 		
 		deadTreeRenderer.sharedMaterials = meshRenderer.sharedMaterials;
-		deadTreeRenderer.SetPropertyBlock(block, 1); // bark is material 0, leaves/pines are material 1.
+
+		if (deadTreeRenderer.sharedMaterials.Length >= 2) { 
+			deadTreeRenderer.SetPropertyBlock(block, 1); // bark is material 0, leaves/pines are material 1.
+		}
 
 		//deadTreeRenderer.materials = originalTreeMaterials;
 		deadTree = deadTreeGO.GetComponent<DeadTree>();
@@ -123,15 +126,19 @@ public class Tree : MonoBehaviour {
 
 	// usable in edit mode
 	public void SetColors() {
+		Renderer rend = meshGO.GetComponent<Renderer>();
+		if (rend.sharedMaterials.Length < 2) return;
+
 		if (block != null)
 			block.Clear();
 	
 		block = new MaterialPropertyBlock();
 		block.SetColor("_ColorTint", colorTint);
 		block.SetColor("_EmissionColor", emissionColor);
+
 		meshGO.GetComponent<Renderer>().SetPropertyBlock(block, 1); // bark is material 0, leaves/pines are material 1.
 	}
 
 }
 
-}
+} // HVH namespace

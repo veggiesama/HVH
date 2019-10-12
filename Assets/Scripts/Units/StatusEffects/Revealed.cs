@@ -5,6 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Status Effects/Revealed")]
 public class Revealed : StatusEffect {
 
+	[Header("Revealed")]
+	public GameObject particlePrefab;
+
 	 // default field values; called by editor and serialized into asset before Initialize() is called
 	public override void Reset()
 	{
@@ -19,9 +22,9 @@ public class Revealed : StatusEffect {
 		base.Initialize(obj, ability);
 	}
 
-	public override void Apply()
-	{
+	public override void Apply() {
 		base.Apply();
+		InstantiateParticleOnUnit(particlePrefab, unit, BodyLocations.WEAPON, duration);
 	}
 
 	public override void Update() {
@@ -32,6 +35,7 @@ public class Revealed : StatusEffect {
 
 	public override void Stack(StatusEffect status) {
 		base.Stack(status);
+		InstantiateParticleOnUnit(particlePrefab, unit, BodyLocations.WEAPON, duration);
 	}
 
 	public override void End() {

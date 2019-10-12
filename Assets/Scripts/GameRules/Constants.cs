@@ -65,10 +65,11 @@ public enum AbilitySlotTypes {
 // Teams, allies, enemies
 [System.Flags]
 public enum Teams {
-	DWARVES = 0x0,
-	MONSTERS = 0x1,
-	NEUTRALS = 0x2,
-	OBSERVERS = 0x3
+	NONE      = 0,
+	DWARVES   = 1 << 0,
+	MONSTERS  = 1 << 1,
+	NEUTRALS  = 1 << 2,
+	OBSERVERS = 1 << 3
 };
 
 public enum UiPortraitSlots {
@@ -151,5 +152,12 @@ public enum Animations {
 	NONE, ATTACK_A, ATTACK_B, CAST_A, CAST_B, DIE, RESPAWN, IDLE, LAYDOWN, WAKEUP
 }
 
-
+// not used for anything except approximate heights of valid lands
+public enum TerrainHeight {
+	MOUNTAINS = 30,
+	RAISED = 22,
+	GROUND = 20,
+	LOWERED = 18,
+	RIVER = 16
+}
 

@@ -70,7 +70,14 @@ public static class Util {
 	}
 
 	public static bool IsBody(GameObject gameObject) {
-		return (gameObject.layer == (int)LayerBits.BODY || gameObject.layer == (int)LayerBits.BODY_IGNORINGTREES);
+		LayerMasks layerMask = (LayerMasks)(1 << gameObject.layer);
+		return layerMask.HasFlag(LayerMasks.BODY) ||
+			   layerMask.HasFlag(LayerMasks.BODY_IGNORINGTREES) ||
+			   layerMask.HasFlag(LayerMasks.BODY_NOCLIP);
+	}
+
+	public static int GetAllBodyLayerMasks() {
+		return (int)(LayerMasks.BODY | LayerMasks.BODY_IGNORINGTREES | LayerMasks.BODY_NOCLIP);
 	}
 
 	public static bool IsTree(GameObject gameObject) {

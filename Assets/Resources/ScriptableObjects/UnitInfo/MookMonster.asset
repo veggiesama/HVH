@@ -49,7 +49,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
   - {fileID: 11400000, guid: 09094605b850e38448694f2777d291de, type: 2}
-  animationPrefab: {fileID: 2048578494338918473, guid: b4d95473cafa7ab4fbbaebd9ae0302d0,
+  animationPrefab: {fileID: 2048578494338918473, guid: fc2b455a6e58a444b895318e4d62616b,
     type: 3}
   hasAI: 1
   aiStatesDay:

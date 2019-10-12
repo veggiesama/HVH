@@ -25,9 +25,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2510547776363344025}
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 10, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 20, y: 20, z: 20}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 226a63dff652148c2940b0517efe190c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9b4b00e3d09e35a4585d5facdcb1a4e8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -118,11 +118,14 @@ MonoBehaviour:
     reqReferences: {fileID: 0}
     isExpanded: 1
     _keyValues:
-    - Ally
-    - Enemy
+    - Dwarf
+    - Monster
+    - Neutral
     _keys:
-    - Ally
-    - Enemy
+    - Dwarf
+    - Monster
+    - Neutral
     _values:
-    - {fileID: 21300000, guid: 226a63dff652148c2940b0517efe190c, type: 3}
-    - {fileID: 21300000, guid: 0e1916ac3500d4b818caf4660c11f96c, type: 3}
+    - {fileID: 21300000, guid: ae303ffda0149b3449dd1f2434d91bd0, type: 3}
+    - {fileID: 21300000, guid: f88e722e889bc2e4ba38b8b7b931c470, type: 3}
+    - {fileID: 21300000, guid: 9b4b00e3d09e35a4585d5facdcb1a4e8, type: 3}

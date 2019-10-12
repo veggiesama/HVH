@@ -18,7 +18,7 @@ public class UnitController : MonoBehaviour {
 	private OrderQueue orderQueue;
 	private StatusEffectManager statusEffectManager;
 	private AbilityManager abilityManager;
-	private Projector targetProjector;
+	//private Projector targetProjector;
 	private UnitMaterials unitMaterials;
 	private FieldOfView fov;
 
@@ -42,6 +42,10 @@ public class UnitController : MonoBehaviour {
 	private Quaternion wantedRotation;
 	private bool orderRestricted = false;
 
+	private WorldProjector projectorMoveTo;
+	private WorldProjector projectorAllyTarget;
+	private WorldProjector projectorEnemyTarget;
+
 	// Use this for initialization
 	void Awake () {
 		body = GetComponentInChildren<BodyController>();
@@ -53,7 +57,11 @@ public class UnitController : MonoBehaviour {
 		statusEffectManager = GetComponent<StatusEffectManager>();
 		fov = GetComponentInChildren<FieldOfView>(true);
 		unitMaterials = GetComponent<UnitMaterials>();
-		targetProjector = transform.Find("Body/FX/Single Targeting projector").GetComponent<Projector>();
+		//targetProjector = transform.Find("Body/FX/Single Targeting projector").GetComponent<Projector>();
+		projectorAllyTarget = ReferenceLibrary.Instance.allyTargetProjector.GetComponent<WorldProjector>();
+		projectorEnemyTarget = ReferenceLibrary.Instance.enemyTargetProjector.GetComponent<WorldProjector>();
+		projectorMoveTo = ReferenceLibrary.Instance.movementProjector.GetComponent<WorldProjector>();
+
 
 		if (owner is Player) {
 			player = (Player) owner;
@@ -254,20 +262,14 @@ public class UnitController : MonoBehaviour {
 	}
 
 	private void SetPortraitRegistration(UnitController target, UiPortraitSlots slot, bool enabled) {
-		if (enabled)
+		if (enabled) {
 			GameplayCanvas.Instance.uiPortraits[slot].RegisterPortrait(target);
-		else
+			ShowTargetStand(target);
+		}
+		else {
 			GameplayCanvas.Instance.uiPortraits[slot].UnregisterPortrait(target);
-
-		if (slot == UiPortraitSlots.ALLY_TARGET) {
-			target.ShowTargetStand(enabled, AbilityTargetTeams.ALLY);
-			//target.SetTargetPortrait(enabled, AbilityTargetTeams.ALLY);
+			HideTargetStand(target);
 		}
-		else if (slot == UiPortraitSlots.ENEMY_TARGET) {
-			target.ShowTargetStand(enabled, AbilityTargetTeams.ENEMY);
-			//target.SetTargetPortrait(enabled, AbilityTargetTeams.ENEMY);
-		}
-
 	}
 
 	public void RemoveCurrentTarget(AbilityTargetTeams targetTeam, bool doNotRememberLater=false) {
@@ -311,25 +313,25 @@ public class UnitController : MonoBehaviour {
 		}
 	}
 
-	private void ShowTargetStand(bool enable, AbilityTargetTeams targetTeam) {
-		if (targetTeam == AbilityTargetTeams.ALLY)
-			targetProjector.material = unitMaterials.allyTarget;
-		else
-			targetProjector.material = unitMaterials.enemyTarget;
+	private void ShowTargetStand(UnitController target) {
+		if (this.SharesTeamWith(target)) {
+			projectorAllyTarget.gameObject.transform.SetParent(target.body.transform, false);
+			projectorAllyTarget.gameObject.SetActive(true);
+		}
+		else {
+			projectorEnemyTarget.gameObject.transform.SetParent(target.body.transform, false);
+			projectorEnemyTarget.gameObject.SetActive(true);
+		}
 
-		targetProjector.enabled = enable;
 	}
-	/*
-	private void SetTargetPortrait(bool enable, AbilityTargetTeams targetTeam) {
-		UnitController thisUnit = null;
-		if (enable)
-			thisUnit = this;
-		
-		if (targetTeam == AbilityTargetTeams.ALLY)
-			GameplayCanvas.Instance.uiPortraits[UiPortraitSlots.ALLY_TARGET].SetPortraitCamera(thisUnit);
+
+	private void HideTargetStand(UnitController target) {
+		if (this.SharesTeamWith(target))
+			projectorAllyTarget.gameObject.SetActive(false);
 		else
-			GameplayCanvas.Instance.uiPortraits[UiPortraitSlots.ENEMY_TARGET].SetPortraitCamera(thisUnit);
-	}*/
+			projectorEnemyTarget.gameObject.SetActive(false);
+	}
+
 	
 	public UnitController GetTarget(AbilityTargetTeams targetTeam) {
 		switch (targetTeam)	{
@@ -630,12 +632,18 @@ public class UnitController : MonoBehaviour {
 		fov.SetObstacleMask(vision);
 	}
 
-	public void Die(Vector3 killFromDirection, bool serverCalled = false) {
-		if (!serverCalled) networkHelper.Die(killFromDirection);
+	public void Die(Vector3 killerLocation, float killingDmg) {
+		networkHelper.Die(killerLocation, killingDmg);
+	}
+
+	public void ServerDie(Vector3 killerLocation, float killingDmg) {
+		if (networkHelper.HasControllableAuthority())
+			ApplyStatusEffect(unitInfo.onDeathStatusEffect, null);
+
 
 		DetachFromNav();
 		EnableNav(false);
-		body.PerformDeath(killFromDirection);
+		body.PerformDeath(killerLocation, killingDmg);
 		body.EnableClickableHitbox(false);
 		onDeath.Invoke();
 	}
@@ -665,7 +673,7 @@ public class UnitController : MonoBehaviour {
 		AttachToNav();
 		onRespawn.Invoke();
 
-		if (IsLocalPlayer())
+		if (networkHelper.HasControllableAuthority())
 			networkHelper.PlayAnimation(Animations.RESPAWN);
 	}
 
@@ -716,4 +724,52 @@ public class UnitController : MonoBehaviour {
 	public bool IsPlayerOwned() {
 		return (player != null);
 	}
+
+	private bool enteringWater;
+
+	public void OnEnterWater() {
+		if (enteringWater) return;
+		enteringWater = true;
+		body.PerformSink();
+		StartCoroutine( OnEnterWater(1.0f) );
+	}
+
+	private IEnumerator OnEnterWater(float delay) {
+		yield return new WaitForSeconds(delay);
+
+		AttachToNav();
+		//NavMesh.SamplePosition(GetBodyPosition(), out NavMeshHit hit, 100f, -1);
+		//body.transform.position = hit.position;
+		enteringWater = false;		
+	}
+
+
+	// PROJECTORS
+
+	public void ShowMovementProjector() {
+		if (!IsLocalPlayer()) return;
+		Vector3 pos = agent.destination;
+		pos.y += projectorMoveTo.yOffset;
+		projectorMoveTo.transform.position = pos;
+		projectorMoveTo.gameObject.SetActive(true);
+	}
+
+	public void HideMovementProjector() {
+		if (!IsLocalPlayer()) return;
+		projectorMoveTo.gameObject.SetActive(false);
+	}
+
+	public void ShowAoeProjector() {
+		if (!IsLocalPlayer()) return;
+		Vector3 pos = agent.destination;
+		pos.y += projectorMoveTo.yOffset;
+		projectorMoveTo.transform.position = pos;
+		projectorMoveTo.gameObject.SetActive(true);
+	}
+
+	public void HideAoeProjector() {
+		if (!IsLocalPlayer()) return;
+		projectorMoveTo.gameObject.SetActive(false);
+	}
+
 }

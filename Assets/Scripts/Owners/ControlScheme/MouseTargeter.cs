@@ -12,7 +12,7 @@ public class MouseTargeter : MonoBehaviour {
 
 	public Texture2D normalCursor = null;
 	public Texture2D targetCursor;
-	public Projector areaProjector;
+	private WorldProjector areaProjector;
 
 	[HideInInspector] public AbilitySlots storedSlot;
 	[HideInInspector] public Ability storedAbility;
@@ -23,6 +23,7 @@ public class MouseTargeter : MonoBehaviour {
     void Awake() {
         player = GetComponentInParent<Player>();
 		cam = player.cam;
+		areaProjector = ReferenceLibrary.Instance.aoeProjector.GetComponent<WorldProjector>();
     }
 
     // Update is called once per frame
@@ -104,7 +105,7 @@ public class MouseTargeter : MonoBehaviour {
 
 	private void DoAreaChecking() {
 		Vector3 newPos = GetMouseLocationToGround();
-		newPos.y = areaProjector.transform.position.y;
+		newPos.y += areaProjector.yOffset;
 		areaProjector.transform.position = newPos;
 	}
 
@@ -150,9 +151,9 @@ public class MouseTargeter : MonoBehaviour {
 			if (ability != null && ability.targetType == AbilityTargetTypes.AREA) {
 				Cursor.visible = false;
 				DoAreaChecking(); // force it to move before revealing
-				areaProjector.orthographicSize = ability.aoeRadius;
-				//areaProjector.gameObject.SetActive(true);
-				areaProjector.enabled = true;
+				areaProjector.SetSize(ability.aoeRadius);
+				areaProjector.gameObject.SetActive(true);
+				//areaProjector.enabled = true;
 
 			}
 			else
@@ -167,8 +168,8 @@ public class MouseTargeter : MonoBehaviour {
 		else {
 			Cursor.visible = true;
 			Cursor.SetCursor(normalCursor, Vector2.zero, CursorMode.Auto);
-			//areaProjector.gameObject.SetActive(false);
-			areaProjector.enabled = false;
+			areaProjector.gameObject.SetActive(false);
+			//areaProjector.enabled = false;
 
 			targetingEnabled = false;
 			storedSlot = AbilitySlots.NONE;

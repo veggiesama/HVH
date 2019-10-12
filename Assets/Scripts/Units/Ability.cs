@@ -135,6 +135,14 @@ public abstract class Ability : ScriptableObject {
 		return isEmptyAbility;
 	}
 
+	public bool IsPassive() {
+		return isPassive;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Network Helper functions
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	public virtual void PlayAnimation(Animations anim) {
 		networkHelper.PlayAnimation(anim);
 	}
@@ -157,9 +165,7 @@ public abstract class Ability : ScriptableObject {
 		networkHelper.InstantiateParticle(np);
 	}
 
-	public bool IsPassive() {
-		return isPassive;
-	}
+
 
 }
  

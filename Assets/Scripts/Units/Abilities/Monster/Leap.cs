@@ -43,6 +43,10 @@ public class Leap : Ability {
 		Vector3 finalPosition = casterPosition + (casterForward * leapDistance);
 		finalPosition = Util.SnapVectorToTerrain(finalPosition);
 		finalPosition.y += offset_y;
+
+		if (finalPosition.y < (float)TerrainHeight.RIVER)
+			finalPosition.y = (float)TerrainHeight.LOWERED;
+
 		//finalPosition.y = Terrain.activeTerrain.SampleHeight(finalPosition) + Terrain.activeTerrain.GetPosition().y + offset_y;
 		Vector3 velocityVector = Util.CalculateBestLaunchSpeed(casterPosition, finalPosition, duration);
 

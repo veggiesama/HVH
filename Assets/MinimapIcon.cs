@@ -20,9 +20,25 @@ public class MinimapIcon : MonoBehaviour {
     public void Initialize() {
 		localPlayer = GameResources.Instance.GetLocalPlayer();
 
-		if (localPlayer.GetTeam() == owner.GetTeam())
-			rend.sprite = spriteDict["Ally"];
-		else
-			rend.sprite = spriteDict["Enemy"];
-    }
+		switch (owner.GetTeam()) {
+			case Teams.NONE:
+				Debug.Log("None team icon.");
+				break;
+			case Teams.DWARVES:
+				rend.sprite = spriteDict["Dwarf"];
+				break;
+			case Teams.MONSTERS:
+				rend.sprite = spriteDict["Monster"];
+				break;
+			case Teams.NEUTRALS:
+				rend.sprite = spriteDict["Neutral"];
+				break;
+			case Teams.OBSERVERS:
+				Debug.Log("No observer team icon.");
+				break;
+			default:
+				break;
+		}
+
+	}
 }

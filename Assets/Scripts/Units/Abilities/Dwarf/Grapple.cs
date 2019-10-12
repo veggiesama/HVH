@@ -121,16 +121,16 @@ public class Grapple : Ability, IProjectileAbility {
 
 	public bool OnHitEnemy(UnitController enemy)
 	{
-		throw new System.NotImplementedException();
+		return false;
 	}
 
 	public bool OnHitAlly(UnitController ally)
 	{
-		throw new System.NotImplementedException();
+		return false;
 	}
 
 	public bool OnHitTree(Tree tree)
 	{
-		throw new System.NotImplementedException();
+		return false;
 	}
 }

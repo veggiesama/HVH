@@ -5,6 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Status Effects/Dead")]
 public class Dead : StatusEffect {
 
+	private UnitController killer;
+	private float killingDmg;
+
 	 // default field values; called by editor and serialized into asset before Initialize() is called
 	public override void Reset()
 	{
@@ -14,8 +17,10 @@ public class Dead : StatusEffect {
 	}
 	
 	// initializer
-	public override void Initialize(GameObject obj, Ability ability) {
-		base.Initialize(obj, ability);
+	public void Initialize(GameObject obj, UnitController killer, float killingDmg) {
+		base.Initialize(obj, null);
+		this.killer = killer;
+		this.killingDmg = killingDmg;
 	}
 
 	public override void Apply() {
@@ -23,14 +28,14 @@ public class Dead : StatusEffect {
 		unit.CancelAllOrders();
 		unit.SetOrderRestricted(true);
 
-		Vector3 killFromDirection;
+		Vector3 killerLocation = default;
+
 		if (ability != null)
-			killFromDirection = ability.caster.GetBodyPosition();
-		else
-			killFromDirection = unit.GetBodyPosition() + Random.insideUnitSphere * 1.5f;
+			killerLocation = ability.caster.GetBodyPosition();
+		//else
+		//	killerLocation = unit.GetBodyPosition() + Random.insideUnitSphere * 1.5f;
 		
-		unit.Die(killFromDirection);
-		//networkHelper.Die(killFromDirection);
+		unit.Die(killerLocation, killingDmg);
 	}
 
 	public override void Update() {

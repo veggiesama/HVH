@@ -117,14 +117,16 @@ public class GameResources : Singleton<GameResources> {
 	// Get unit references
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public List<UnitController> GetEnemyUnitsOf(UnitController unit, bool visibleOnly) {
+	public List<UnitController> GetEnemyUnitsOf(UnitController unit, bool visibleOnly=true, bool aliveOnly=true) {
 		//UnitController[] units = FindObjectsOfType<UnitController>();
 		List<UnitController> validUnitList = new List<UnitController>();
 
 		foreach(UnitController u in GetAllUnits()) {
-			if (!unit.SharesTeamWith(u))
-				if ((!visibleOnly) || (visibleOnly && u.body.IsVisibleToUnit(unit) ))
-					validUnitList.Add(u);
+			if (unit.SharesTeamWith(u)) continue;
+			if (visibleOnly && !u.body.IsVisibleToUnit(unit)) continue;
+			if (aliveOnly && !u.IsAlive()) continue;
+
+			validUnitList.Add(u);
 		}
 
 		return validUnitList;

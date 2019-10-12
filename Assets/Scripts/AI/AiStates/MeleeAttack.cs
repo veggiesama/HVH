@@ -9,6 +9,7 @@ public class MeleeAttack : AiState {
 	public AbilitySlots abilitySlot;
 	private Ability ability;
 	public float meleeDistance;
+	UnitController target;
 
 	public override void Reset() {
 		base.Reset();
@@ -31,7 +32,7 @@ public class MeleeAttack : AiState {
 			return;
 		}
 
-		UnitController target = unit.GetTarget(AbilityTargetTeams.ENEMY);
+		target = unit.GetTarget(AbilityTargetTeams.ENEMY);
 
 		if (target != null &&
 		  target.body.IsVisibleToUnit(this.unit) &&
@@ -47,7 +48,7 @@ public class MeleeAttack : AiState {
 
 	public override void Execute() {
 		base.Execute();
-		unit.owner.SetVirtualPointerLocation(unit.GetTarget(AbilityTargetTeams.ENEMY).GetBodyPosition());
+		unit.owner.SetVirtualPointerLocation(target.GetBodyPosition());
 		unit.DoAbility(abilitySlot);
 	}
 

@@ -23,3 +23,4 @@ MonoBehaviour:
   overrideAbilityDuration: 1
   hideIcon: 0
   dispellable: 0
+  particlePrefab: {fileID: 189590, guid: 76ec99f1eb3e748439a609f1fe46498b, type: 3}

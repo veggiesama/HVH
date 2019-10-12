@@ -13,6 +13,13 @@ public class ReferenceLibrary : Singleton<ReferenceLibrary> {
 		}
 	}
 
+	[Header("Network")]
 	public NetworkHUD networkHUD;
+
+	[Header("World projectors")]
+	public GameObject allyTargetProjector;
+	public GameObject enemyTargetProjector;
+	public GameObject movementProjector;
+	public GameObject aoeProjector;
 
 }

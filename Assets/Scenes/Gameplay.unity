@@ -4469,7 +4469,7 @@ MonoBehaviour:
   startingTime: 10
   dayBegins: 10
   nightBegins: 22
-  dayDuration: 10
+  dayDuration: 50
   nightDuration: 10
   transitionDuration: 2
   updateEvery: 1

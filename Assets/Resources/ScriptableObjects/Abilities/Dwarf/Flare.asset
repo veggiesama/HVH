@@ -44,6 +44,7 @@ MonoBehaviour:
   projectileGrowthFactor: {x: 1, y: 1, z: 1}
   grenadeTimeToHitTarget: 0
   grenadeLerpTimeByCastRange: 0
+  homingRotationalSpeed: 0
   aoeGeneratorPrefab: {fileID: 2635110162860501582, guid: 048b36c36f0f2ab428f5cef029e931c4,
     type: 3}
   aoeGeneratorParticlePrefab: {fileID: 359356768983722974, guid: 3f42102e23652b64d9cc7584f4f7d7a2,
@@ -53,5 +54,6 @@ MonoBehaviour:
   destroysTrees: 1
   statusEffects:
   - {fileID: 11400000, guid: 2be35b56ea3042d4aad3e91801c131a6, type: 2}
+  - {fileID: 11400000, guid: 59904bb39944ea74c8e14013df9bb8b8, type: 2}
   particleLaunch: {fileID: 1980084233810151752, guid: 22fac6d5d85f0934d80308b63a96d7d8,
     type: 3}

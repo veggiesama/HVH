@@ -26,8 +26,7 @@ public class AOEGenerator : NetworkBehaviour {
 	//public ParticleSystem particleSystem;
 
 	// Start is called before the first frame update
-    public void Start()
-    {
+    public void Start() {
         reappliesEveryTimer = reappliesEvery;
     }
 
@@ -52,7 +51,7 @@ public class AOEGenerator : NetworkBehaviour {
 
 	}
 
-    // Update is called once per frame
+	// update is only called on the server
     private void Update() {
 		if (!isServer || !initialized) return;
 
@@ -105,7 +104,8 @@ public class AOEGenerator : NetworkBehaviour {
 
 	private void ReapplyStatusEffects(UnitController unit) {
 		foreach (StatusEffect effect in statusEffects) {
-			unit.ApplyStatusEffect(effect, sourceAbility);
+			networkHelper.ApplyStatusEffectTo(unit, effect, sourceAbility);
+			//unit.ApplyStatusEffect(effect, sourceAbility);
 		}
 	}
 

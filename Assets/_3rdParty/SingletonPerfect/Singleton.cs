@@ -31,7 +31,7 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T> {
 					if(managers.Length == 1)
 					{
 						_mInstance = managers[0];
-						_mInstance.gameObject.name = typeof(T).Name;
+						//_mInstance.gameObject.name = typeof(T).Name;
 						return _mInstance;
 					} else {
 						Debug.LogError("You have more than one " + typeof(T).Name + " in the scene. You only need 1, it's a singleton!");
@@ -41,9 +41,11 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T> {
 						}
 					}
 				}
-				GameObject gO = new GameObject(typeof(T).Name, typeof(T));
-				_mInstance = gO.GetComponent<T>();
-				DontDestroyOnLoad(gO);
+				//GameObject gO = new GameObject(typeof(T).Name, typeof(T));
+				//_mInstance = gO.GetComponent<T>();
+				
+				// VEG: removing this line
+				//DontDestroyOnLoad(gO);
 			}
 			return _mInstance;
 		} set {

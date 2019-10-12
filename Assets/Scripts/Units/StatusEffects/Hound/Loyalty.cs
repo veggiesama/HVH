@@ -21,7 +21,7 @@ public class Loyalty : StatusEffect {
 
 	public override void Apply() {
 		base.Apply();
-		unit.SetCurrentTarget(ability.caster);
+		//unit.SetCurrentTarget(ability.caster);
 		loyalTo = ability.caster;
 	}
 
@@ -38,5 +38,12 @@ public class Loyalty : StatusEffect {
 
 	public override void End() {
 		base.End();
+	}
+
+
+	//////////////////////
+
+	public UnitController GetLoyaltyTarget() {
+		return loyalTo;
 	}
 }

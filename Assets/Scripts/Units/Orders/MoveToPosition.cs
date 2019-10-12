@@ -17,7 +17,6 @@ public class MoveToPosition : Order {
 		}
 
 		if (unit.IsReadyForNav()) {
-			
 
 			NavMeshPath path = CalculatePath(targetLocation);
 
@@ -25,8 +24,10 @@ public class MoveToPosition : Order {
 				path = CalculateDirectNearestPath(targetLocation, 6);
 			}
 
-			if (path != null)
+			if (path != null) {
 				unit.agent.SetPath(path);
+				unit.ShowMovementProjector();
+			}
 
 			return;
 		}
@@ -85,6 +86,7 @@ public class MoveToPosition : Order {
 
 	public override void End() {
 		unit.ForceStop();
+		unit.HideMovementProjector();
 		base.End();
 	}
 

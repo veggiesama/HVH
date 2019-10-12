@@ -200,11 +200,12 @@ public class NetworkHelper : NetworkBehaviour {
 
 	[Command]
 	private void Cmd_DealDamageTo(NetworkIdentity targetNetIdentity, float dmg) {
-		if (dmg == 0) return;
-
 		UnitController targetUnit = targetNetIdentity.GetComponent<Owner>().unit;
+
+		if (dmg == 0 || targetUnit.HasStatusEffect(StatusEffectTypes.DEAD)) return;
 		if (dmg > 0 && targetUnit.HasStatusEffect(StatusEffectTypes.INVULNERABLE)) return;
 
+		// negative damage is healing
 		if (dmg < 0) {
 			// prevent over-heal
 			if ((targetUnit.networkHelper.currentHealth - dmg) > targetUnit.unitInfo.maxHealth) {
@@ -212,22 +213,21 @@ public class NetworkHelper : NetworkBehaviour {
 			}
 		}
 
-		// apply the damage
+		// apply the damage or healing
 		targetUnit.networkHelper.currentHealth -= dmg;
 
 		// check for death
 		if (targetUnit.networkHelper.currentHealth <= 0) {
 			NetworkConnection conn = targetNetIdentity.connectionToClient; // connectionToServer?
-			if (conn != null)
-				targetUnit.networkHelper.TargetRpc_ApplyOnDeathStatusEffect(conn);
-			else
-				targetUnit.ApplyStatusEffect(targetUnit.unitInfo.onDeathStatusEffect, null);
-		}
-	}
+			targetUnit.Die(unit.GetBodyPosition(), dmg);
 
-	[TargetRpc]
-	private void TargetRpc_ApplyOnDeathStatusEffect(NetworkConnection conn) {
-		unit.ApplyStatusEffect(unit.unitInfo.onDeathStatusEffect, null);
+			//targetUnit.ServerDie(unit.GetBodyPosition(), dmg);
+
+			//if (conn != null)
+			//	targetUnit.networkHelper.TargetRpc_Die(conn);
+			//else
+			//	targetUnit.ServerDie();
+		}
 	}
 
 	// STATUS EFFECTS
@@ -348,18 +348,19 @@ public class NetworkHelper : NetworkBehaviour {
 
 	// DEATH AND RESPAWN
 
-	public void Die(Vector3 killFromDirection) {
-		Cmd_Die(killFromDirection);
+	public void Die(Vector3 killerLocation, float killingDmg) {
+		Cmd_Die(killerLocation, killingDmg);
 	}
 
 	[Command]
-	private void Cmd_Die(Vector3 killFromDirection) {
-		Rpc_Die(killFromDirection);
-	}
+	public void Cmd_Die(Vector3 killerLocation, float killingDmg) {
+		Rpc_Die(killerLocation, killingDmg);
+	}	
 
 	[ClientRpc]
-	private void Rpc_Die(Vector3 killFromDirection) {
-		unit.Die(killFromDirection, true);
+	public void Rpc_Die(Vector3 killerLocation, float killingDmg) {
+		unit.ServerDie(killerLocation, killingDmg);
+
 	}
 
 	public void Respawn() {
@@ -434,6 +435,8 @@ public class NetworkHelper : NetworkBehaviour {
 			Owner o = ownerNetId.GetComponent<Owner>();
 			Transform trans = Util.GetBodyLocationTransform((BodyLocations)np.bodyLocationInt, o.unit);
 			particleSystemGO = Instantiate(prefab, trans.position + prefab.transform.position, trans.rotation * prefab.transform.rotation, trans);
+			// todo: particle systems should have a script that hooks into unit's OnDeath, among other things
+			// todo: combine that with the Shuriken self-destruct script
 		}
 		else if (np.TargetsWorldspace()) {
 			particleSystemGO = Instantiate(prefab, np.location, np.rotation);

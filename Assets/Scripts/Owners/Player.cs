@@ -186,7 +186,6 @@ public class Player : Owner {
 		}
 	}
 
-	
 	public void UpdateTeamVariables() {
 		foreach (UnitController u in GameResources.Instance.GetAllUnits()) {
 			u.body.minimapIcon.Initialize();
@@ -211,7 +210,5 @@ public class Player : Owner {
 			}
 		}
 	}
-
-
 
 }
